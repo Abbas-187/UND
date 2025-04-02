@@ -16,6 +16,7 @@ class InventoryItemModel {
   final Map<String, dynamic>? additionalAttributes;
   final List<String> searchTerms;
   final double? cost;
+  final int lowStockThreshold;
 
   InventoryItemModel({
     required this.id,
@@ -32,6 +33,7 @@ class InventoryItemModel {
     this.additionalAttributes,
     List<String>? searchTerms,
     this.cost,
+    this.lowStockThreshold = 5,
   }) : searchTerms = searchTerms ?? _generateSearchTerms(name, category);
 
   // Convert from Firestore document
@@ -56,6 +58,7 @@ class InventoryItemModel {
           data['additionalAttributes'] as Map<String, dynamic>?,
       searchTerms: List<String>.from(data['searchTerms'] as List? ?? []),
       cost: (data['cost'] as num?)?.toDouble(),
+      lowStockThreshold: (data['lowStockThreshold'] as num?)?.toInt() ?? 5,
     );
   }
 
@@ -75,6 +78,7 @@ class InventoryItemModel {
       expiryDate: item.expiryDate,
       additionalAttributes: item.additionalAttributes,
       cost: item.cost,
+      lowStockThreshold: item.lowStockThreshold,
     );
   }
 
@@ -94,6 +98,7 @@ class InventoryItemModel {
       expiryDate: expiryDate,
       additionalAttributes: additionalAttributes,
       cost: cost,
+      lowStockThreshold: lowStockThreshold,
     );
   }
 
@@ -113,6 +118,7 @@ class InventoryItemModel {
       'additionalAttributes': additionalAttributes,
       'searchTerms': searchTerms,
       'cost': cost,
+      'lowStockThreshold': lowStockThreshold,
     };
   }
 
@@ -131,6 +137,7 @@ class InventoryItemModel {
     Map<String, dynamic>? additionalAttributes,
     List<String>? searchTerms,
     double? cost,
+    int? lowStockThreshold,
   }) {
     return InventoryItemModel(
       id: id ?? this.id,
@@ -147,6 +154,7 @@ class InventoryItemModel {
       additionalAttributes: additionalAttributes ?? this.additionalAttributes,
       searchTerms: searchTerms ?? this.searchTerms,
       cost: cost ?? this.cost,
+      lowStockThreshold: lowStockThreshold ?? this.lowStockThreshold,
     );
   }
 

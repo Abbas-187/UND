@@ -12,6 +12,7 @@ class InventoryItem {
   final DateTime? expiryDate;
   final Map<String, dynamic>? additionalAttributes;
   final double? cost;
+  final int lowStockThreshold;
 
   const InventoryItem({
     required this.id,
@@ -27,6 +28,7 @@ class InventoryItem {
     this.expiryDate,
     this.additionalAttributes,
     this.cost,
+    this.lowStockThreshold = 5,
   });
 
   bool get needsReorder => quantity <= reorderPoint;
@@ -48,6 +50,7 @@ class InventoryItem {
     DateTime? expiryDate,
     Map<String, dynamic>? additionalAttributes,
     double? cost,
+    int? lowStockThreshold,
   }) {
     return InventoryItem(
       id: id ?? this.id,
@@ -63,6 +66,7 @@ class InventoryItem {
       expiryDate: expiryDate ?? this.expiryDate,
       additionalAttributes: additionalAttributes ?? this.additionalAttributes,
       cost: cost ?? this.cost,
+      lowStockThreshold: lowStockThreshold ?? this.lowStockThreshold,
     );
   }
 
@@ -81,6 +85,7 @@ class InventoryItem {
       'expiryDate': expiryDate?.toIso8601String(),
       'additionalAttributes': additionalAttributes,
       'cost': cost,
+      'lowStockThreshold': lowStockThreshold,
     };
   }
 
@@ -102,6 +107,7 @@ class InventoryItem {
       additionalAttributes:
           json['additionalAttributes'] as Map<String, dynamic>?,
       cost: (json['cost'] as num?)?.toDouble(),
+      lowStockThreshold: (json['lowStockThreshold'] as num?)?.toInt() ?? 5,
     );
   }
 }

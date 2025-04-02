@@ -5,11 +5,14 @@ import 'package:printing/printing.dart';
 import 'package:intl/intl.dart';
 import '../../data/models/inventory_item_model.dart';
 
+enum LabelCodeType { barcode, qrCode, both }
+
 class LabelPrintingService {
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
   /// Generate PDF document containing labels for the given inventory items
-  Future<Uint8List> generateLabelsPdf(List<InventoryItemModel> items) async {
+  Future<Uint8List> generateLabelsPdf(List<InventoryItemModel> items,
+      {LabelCodeType codeType = LabelCodeType.barcode}) async {
     final pdf = pw.Document();
 
     // Create a 2x2 grid of labels per page (4 labels per page)
@@ -33,7 +36,7 @@ class LabelPrintingService {
               crossAxisCount: labelsPerRow,
               childAspectRatio: 1.5, // Width to height ratio
               children: List.generate(pageItems.length, (index) {
-                return _buildLabelWidget(pageItems[index]);
+                return _buildLabelWidget(pageItems[index], codeType);
               }),
             );
           },
@@ -45,9 +48,9 @@ class LabelPrintingService {
   }
 
   /// Build a single label widget
-  pw.Widget _buildLabelWidget(InventoryItemModel item) {
-    // Create barcode data - we'll use a format like "ITEM-{id}"
-    final barcodeData = 'ITEM-${item.id}';
+  pw.Widget _buildLabelWidget(InventoryItemModel item, LabelCodeType codeType) {
+    // Create code data - we'll use a format like "ITEM-{id}"
+    final codeData = 'ITEM-${item.id}';
 
     return pw.Container(
       margin: const pw.EdgeInsets.all(5),
@@ -73,21 +76,9 @@ class LabelPrintingService {
           ),
           pw.SizedBox(height: 4),
 
-          // Barcode
-          pw.Center(
-            child: pw.BarcodeWidget(
-              barcode: pw.Barcode.code128(),
-              data: barcodeData,
-              width: 120,
-              height: 50,
-            ),
-          ),
-          pw.Center(
-            child: pw.Text(
-              barcodeData,
-              style: const pw.TextStyle(fontSize: 10),
-            ),
-          ),
+          // Code widget based on selected type
+          _buildCodeWidget(codeData, codeType),
+
           pw.SizedBox(height: 4),
 
           // Item details
@@ -109,9 +100,73 @@ class LabelPrintingService {
     );
   }
 
+  /// Build the appropriate code widget based on selected type
+  pw.Widget _buildCodeWidget(String codeData, LabelCodeType codeType) {
+    switch (codeType) {
+      case LabelCodeType.barcode:
+        return _buildBarcodeWidget(codeData);
+      case LabelCodeType.qrCode:
+        return _buildQrCodeWidget(codeData);
+      case LabelCodeType.both:
+        return pw.Column(
+          children: [
+            _buildQrCodeWidget(codeData, smaller: true),
+            pw.SizedBox(height: 4),
+            _buildBarcodeWidget(codeData, smaller: true),
+          ],
+        );
+    }
+  }
+
+  /// Build a barcode widget
+  pw.Widget _buildBarcodeWidget(String codeData, {bool smaller = false}) {
+    return pw.Column(
+      children: [
+        pw.Center(
+          child: pw.BarcodeWidget(
+            barcode: pw.Barcode.code128(),
+            data: codeData,
+            width: smaller ? 100 : 120,
+            height: smaller ? 40 : 50,
+          ),
+        ),
+        pw.Center(
+          child: pw.Text(
+            codeData,
+            style: pw.TextStyle(fontSize: smaller ? 8 : 10),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Build a QR code widget
+  pw.Widget _buildQrCodeWidget(String codeData, {bool smaller = false}) {
+    return pw.Column(
+      children: [
+        pw.Center(
+          child: pw.BarcodeWidget(
+            barcode: pw.Barcode.qrCode(),
+            data: codeData,
+            width: smaller ? 70 : 90,
+            height: smaller ? 70 : 90,
+          ),
+        ),
+        if (!smaller)
+          pw.Center(
+            child: pw.Text(
+              codeData,
+              style: const pw.TextStyle(fontSize: 10),
+            ),
+          ),
+      ],
+    );
+  }
+
   /// Print the generated PDF
-  Future<void> printLabels(List<InventoryItemModel> items) async {
-    final pdf = await generateLabelsPdf(items);
+  Future<void> printLabels(List<InventoryItemModel> items,
+      {LabelCodeType codeType = LabelCodeType.barcode}) async {
+    final pdf = await generateLabelsPdf(items, codeType: codeType);
     await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => pdf,
       name: 'Inventory_Labels_${DateTime.now().millisecondsSinceEpoch}',
@@ -119,8 +174,9 @@ class LabelPrintingService {
   }
 
   /// Share the generated PDF
-  Future<void> shareLabelsPdf(List<InventoryItemModel> items) async {
-    final pdf = await generateLabelsPdf(items);
+  Future<void> shareLabelsPdf(List<InventoryItemModel> items,
+      {LabelCodeType codeType = LabelCodeType.barcode}) async {
+    final pdf = await generateLabelsPdf(items, codeType: codeType);
     await Printing.sharePdf(
       bytes: pdf,
       filename: 'Inventory_Labels_${DateTime.now().millisecondsSinceEpoch}.pdf',
