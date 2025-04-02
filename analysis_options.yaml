@@ -1,0 +1,25 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  plugins:
+    - custom_lint
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  errors:
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    - sort_constructors_first
+    - prefer_single_quotes
+    - prefer_relative_imports
+    - directives_ordering
+    - avoid_empty_else
+    - unnecessary_brace_in_string_interps
+    - avoid_print
+
+custom_lint:
+  rules:
+    - riverpod_lint:
+        all: true 

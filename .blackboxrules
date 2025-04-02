@@ -1,0 +1,3 @@
+always use immutablke classes
+if you encountered freeze convert it to immutable classes
+use riverpod

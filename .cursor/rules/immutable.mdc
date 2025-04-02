@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+always change freezed model to immutable calsses
+- You can @ files here
+- You can use markdown but dont have to

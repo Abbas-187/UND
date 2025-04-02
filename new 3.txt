@@ -1,0 +1,2113 @@
+
+# PowerShell script to add missing files to the Factory Module
+
+# Define the base directory
+$baseDir = Get-Location
+$factoryDir = Join-Path $baseDir "lib/features/factory"
+
+# Function to write content to a file
+function Write-ContentToFile {
+    param (
+        [string]$RelativePath,
+        [string]$Content
+    )
+    
+    $fullPath = Join-Path $factoryDir $RelativePath
+    $directory = Split-Path -Parent $fullPath
+    
+    # Ensure directory exists
+    if (-not (Test-Path $directory)) {
+        New-Item -Path $directory -ItemType Directory -Force | Out-Null
+    }
+    
+    Set-Content -Path $fullPath -Value $Content -Encoding utf8
+    Write-Host "Created file: features/factory/$RelativePath" -ForegroundColor Green
+}
+
+Write-Host "Adding missing files to Factory Module..." -ForegroundColor Cyan
+
+#------------------------------------------------------------------------------
+# DOMAIN LAYER - PROVIDERS
+#------------------------------------------------------------------------------
+
+# Material Requisition Provider
+$materialRequisitionProviderContent = @"
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../data/models/material_requisition_model.dart';
+import '../../data/repositories/material_requisition_repository.dart';
+
+part 'material_requisition_provider.g.dart';
+
+/// Provider for material requisitions
+@riverpod
+class MaterialRequisitionsState extends _\$MaterialRequisitionsState {
+  late final materialRequisitionRepository = ref.read(materialRequisitionRepositoryProvider);
+
+  @override
+  Future<List<MaterialRequisitionModel>> build() async {
+    return _getMaterialRequisitions();
+  }
+
+  Future<List<MaterialRequisitionModel>> _getMaterialRequisitions() async {
+    return await materialRequisitionRepository.getMaterialRequisitions();
+  }
+
+  Future<List<MaterialRequisitionModel>> getByProductionOrderId(String productionOrderId) async {
+    return await materialRequisitionRepository.getMaterialRequisitionsByProductionOrderId(productionOrderId);
+  }
+
+  Future<void> createMaterialRequisition(MaterialRequisitionModel requisition) async {
+    await materialRequisitionRepository.createMaterialRequisition(requisition);
+    ref.invalidateSelf();
+  }
+
+  Future<void> updateMaterialRequisition(MaterialRequisitionModel requisition) async {
+    await materialRequisitionRepository.updateMaterialRequisition(requisition);
+    ref.invalidateSelf();
+  }
+
+  Future<void> deleteMaterialRequisition(String id) async {
+    await materialRequisitionRepository.deleteMaterialRequisition(id);
+    ref.invalidateSelf();
+  }
+
+  Future<void> approveMaterialRequisition(String id, String approvedByUserId) async {
+    await materialRequisitionRepository.approveMaterialRequisition(id, approvedByUserId);
+    ref.invalidateSelf();
+  }
+}
+
+/// Provider to get a single material requisition by ID
+@riverpod
+Future<MaterialRequisitionModel> materialRequisitionById(
+  MaterialRequisitionByIdRef ref, 
+  String id
+) async {
+  final repository = ref.watch(materialRequisitionRepositoryProvider);
+  return await repository.getMaterialRequisitionById(id);
+}
+
+/// Provider to get material requisitions by production order ID
+@riverpod
+Future<List<MaterialRequisitionModel>> materialRequisitionsByProductionOrderId(
+  MaterialRequisitionsByProductionOrderIdRef ref, 
+  String productionOrderId
+) async {
+  final repository = ref.watch(materialRequisitionRepositoryProvider);
+  return await repository.getMaterialRequisitionsByProductionOrderId(productionOrderId);
+}
+"@
+Write-ContentToFile -RelativePath "domain/providers/material_requisition_provider.dart" -Content $materialRequisitionProviderContent
+
+# Equipment Provider
+$equipmentProviderContent = @"
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../data/models/equipment_model.dart';
+import '../../data/repositories/equipment_repository.dart';
+
+part 'equipment_provider.g.dart';
+
+/// Provider for equipment
+@riverpod
+class EquipmentState extends _\$EquipmentState {
+  late final equipmentRepository = ref.read(equipmentRepositoryProvider);
+
+  @override
+  Future<List<EquipmentModel>> build() async {
+    return _getEquipment();
+  }
+
+  Future<List<EquipmentModel>> _getEquipment() async {
+    return await equipmentRepository.getEquipment();
+  }
+
+  Future<void> createEquipment(EquipmentModel equipment) async {
+    await equipmentRepository.createEquipment(equipment);
+    ref.invalidateSelf();
+  }
+
+  Future<void> updateEquipment(EquipmentModel equipment) async {
+    await equipmentRepository.updateEquipment(equipment);
+    ref.invalidateSelf();
+  }
+
+  Future<void> deleteEquipment(String id) async {
+    await equipmentRepository.deleteEquipment(id);
+    ref.invalidateSelf();
+  }
+
+  Future<void> updateEquipmentStatus(String id, bool isOperational) async {
+    await equipmentRepository.updateEquipmentStatus(id, isOperational);
+    ref.invalidateSelf();
+  }
+
+  Future<void> recordMaintenance(String id, DateTime maintenanceDate, DateTime nextMaintenanceDate) async {
+    await equipmentRepository.recordMaintenance(id, maintenanceDate, nextMaintenanceDate);
+    ref.invalidateSelf();
+  }
+}
+
+/// Provider to get a single equipment by ID
+@riverpod
+Future<EquipmentModel> equipmentById(
+  EquipmentByIdRef ref, 
+  String id
+) async {
+  final repository = ref.watch(equipmentRepositoryProvider);
+  return await repository.getEquipmentById(id);
+}
+"@
+Write-ContentToFile -RelativePath "domain/providers/equipment_provider.dart" -Content $equipmentProviderContent
+
+#------------------------------------------------------------------------------
+# DOMAIN LAYER - USECASES
+#------------------------------------------------------------------------------
+
+# Create Production Order Use Case
+$createProductionOrderUsecaseContent = @"
+import '../../data/models/production_order_model.dart';
+import '../../data/repositories/production_repository.dart';
+
+/// Use case for creating a new production order
+class CreateProductionOrderUseCase {
+  final ProductionRepository _repository;
+
+  CreateProductionOrderUseCase({
+    ProductionRepository? repository,
+  }) : _repository = repository ?? ProductionRepository();
+
+  /// Execute the use case
+  Future<String> execute(ProductionOrderModel order) async {
+    return await _repository.createProductionOrder(order);
+  }
+}
+"@
+Write-ContentToFile -RelativePath "domain/usecases/create_production_order_usecase.dart" -Content $createProductionOrderUsecaseContent
+
+# Create Recipe Use Case
+$createRecipeUsecaseContent = @"
+import '../../data/models/recipe_model.dart';
+import '../../data/repositories/recipe_repository.dart';
+
+/// Use case for creating a new recipe
+class CreateRecipeUseCase {
+  final RecipeRepository _repository;
+
+  CreateRecipeUseCase({
+    RecipeRepository? repository,
+  }) : _repository = repository ?? RecipeRepository();
+
+  /// Execute the use case
+  Future<String> execute(RecipeModel recipe) async {
+    return await _repository.createRecipe(recipe);
+  }
+}
+"@
+Write-ContentToFile -RelativePath "domain/usecases/create_recipe_usecase.dart" -Content $createRecipeUsecaseContent
+
+# Create Material Requisition Use Case
+$createMaterialRequisitionUsecaseContent = @"
+import '../../data/models/material_requisition_model.dart';
+import '../../data/repositories/material_requisition_repository.dart';
+
+/// Use case for creating a new material requisition
+class CreateMaterialRequisitionUseCase {
+  final MaterialRequisitionRepository _repository;
+
+  CreateMaterialRequisitionUseCase({
+    MaterialRequisitionRepository? repository,
+  }) : _repository = repository ?? MaterialRequisitionRepository();
+
+  /// Execute the use case
+  Future<String> execute(MaterialRequisitionModel requisition) async {
+    return await _repository.createMaterialRequisition(requisition);
+  }
+}
+"@
+Write-ContentToFile -RelativePath "domain/usecases/create_material_requisition_usecase.dart" -Content $createMaterialRequisitionUsecaseContent
+
+#------------------------------------------------------------------------------
+# PRESENTATION LAYER - SCREENS
+#------------------------------------------------------------------------------
+
+# Production Detail Screen
+$productionDetailScreenContent = @"
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import '../../../domain/providers/production_provider.dart';
+import '../../../domain/providers/material_requisition_provider.dart';
+
+class ProductionDetailScreen extends ConsumerWidget {
+  final String productionOrderId;
+  
+  const ProductionDetailScreen({
+    Key? key,
+    required this.productionOrderId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final productionOrderAsync = ref.watch(productionOrderByIdProvider(productionOrderId));
+    final materialRequisitionsAsync = ref.watch(
+      materialRequisitionsByProductionOrderIdProvider(productionOrderId)
+    );
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Production Order Details'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () => Navigator.pushNamed(
+              context,
+              '/factory/production/edit',
+              arguments: productionOrderId,
+            ),
+          ),
+        ],
+      ),
+      body: productionOrderAsync.when(
+        data: (order) {
+          final dateFormat = DateFormat('yyyy-MM-dd');
+          
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '#\${order.orderNumber}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text('Product: \${order.productName}'),
+                        Text('Quantity: \${order.quantity} \${order.unit}'),
+                        Text('Scheduled: \${dateFormat.format(order.scheduledDate)}'),
+                        Text('Due: \${dateFormat.format(order.dueDate)}'),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Text(
+                              'Status: ',
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Chip(
+                              label: Text(order.status),
+                              backgroundColor: _getStatusColor(order.status),
+                              labelStyle: const TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        if (order.notes != null && order.notes!.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Notes:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(order.notes!),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+                
+                const SizedBox(height: 24),
+                const Text(
+                  'Material Requisitions',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                
+                materialRequisitionsAsync.when(
+                  data: (requisitions) {
+                    if (requisitions.isEmpty) {
+                      return Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              const Text('No material requisitions yet'),
+                              const SizedBox(height: 8),
+                              ElevatedButton.icon(
+                                onPressed: () => Navigator.pushNamed(
+                                  context,
+                                  '/factory/materials/requisition/create',
+                                  arguments: productionOrderId,
+                                ),
+                                icon: const Icon(Icons.add),
+                                label: const Text('Create Requisition'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                    
+                    return Column(
+                      children: [
+                        for (final requisition in requisitions)
+                          Card(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: ListTile(
+                              title: Text(requisition.requisitionNumber),
+                              subtitle: Text(
+                                'Status: \${requisition.status}\nItems: \${requisition.items.length}',
+                              ),
+                              trailing: Chip(
+                                label: Text(requisition.status),
+                                backgroundColor: _getRequisitionStatusColor(requisition.status),
+                                labelStyle: const TextStyle(color: Colors.white),
+                              ),
+                              onTap: () => Navigator.pushNamed(
+                                context,
+                                '/factory/materials/requisition/detail',
+                                arguments: requisition.id,
+                              ),
+                            ),
+                          ),
+                        ElevatedButton.icon(
+                          onPressed: () => Navigator.pushNamed(
+                            context,
+                            '/factory/materials/requisition/create',
+                            arguments: productionOrderId,
+                          ),
+                          icon: const Icon(Icons.add),
+                          label: const Text('Create New Requisition'),
+                        ),
+                      ],
+                    );
+                  },
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (error, stack) => Text('Error: \$error'),
+                ),
+                
+                const SizedBox(height: 24),
+                const Text(
+                  'Production Actions',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (order.status == 'pending')
+                          ElevatedButton(
+                            onPressed: () => _updateStatus(ref, 'confirmed'),
+                            child: const Text('Confirm Production Order'),
+                          ),
+                        if (order.status == 'confirmed')
+                          ElevatedButton(
+                            onPressed: () => _updateStatus(ref, 'in_progress'),
+                            child: const Text('Start Production'),
+                          ),
+                        if (order.status == 'in_progress')
+                          ElevatedButton(
+                            onPressed: () => _updateStatus(ref, 'completed'),
+                            child: const Text('Complete Production'),
+                          ),
+                        if (order.status != 'cancelled' && order.status != 'completed')
+                          OutlinedButton(
+                            onPressed: () => _updateStatus(ref, 'on_hold'),
+                            child: const Text('Put On Hold'),
+                          ),
+                        if (order.status != 'cancelled' && order.status != 'completed')
+                          TextButton(
+                            onPressed: () => _showCancelDialog(context, ref),
+                            child: const Text('Cancel Production Order'),
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.red,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Text('Error loading production order: \$error'),
+        ),
+      ),
+    );
+  }
+  
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Colors.grey;
+      case 'confirmed':
+        return Colors.blue;
+      case 'in_progress':
+        return Colors.orange;
+      case 'completed':
+        return Colors.green;
+      case 'cancelled':
+        return Colors.red;
+      case 'on_hold':
+        return Colors.purple;
+      default:
+        return Colors.grey;
+    }
+  }
+  
+  Color _getRequisitionStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Colors.amber;
+      case 'approved':
+        return Colors.green;
+      case 'rejected':
+        return Colors.red;
+      case 'partially_fulfilled':
+        return Colors.lightBlue;
+      case 'fulfilled':
+        return Colors.green[700]!;
+      default:
+        return Colors.grey;
+    }
+  }
+  
+  void _updateStatus(WidgetRef ref, String status) {
+    ref
+        .read(productionOrdersStateProvider.notifier)
+        .updateProductionOrderStatus(productionOrderId, status)
+        .then((_) {
+      ref.invalidate(productionOrderByIdProvider(productionOrderId));
+    });
+  }
+  
+  void _showCancelDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Cancel Production Order'),
+        content: const Text(
+          'Are you sure you want to cancel this production order? This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No, Keep It'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _updateStatus(ref, 'cancelled');
+            },
+            child: const Text('Yes, Cancel Order'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+"@
+Write-ContentToFile -RelativePath "presentation/screens/production/production_detail_screen.dart" -Content $productionDetailScreenContent
+
+# Production Create Screen
+$productionCreateScreenContent = @"
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../data/models/production_order_model.dart';
+import '../../../domain/providers/production_provider.dart';
+import '../../widgets/production_order_form.dart';
+
+class ProductionCreateScreen extends ConsumerWidget {
+  const ProductionCreateScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create Production Order'),
+      ),
+      body: ProductionOrderForm(
+        onSubmit: (order) => _createProductionOrder(context, ref, order),
+      ),
+    );
+  }
+
+  void _createProductionOrder(
+    BuildContext context,
+    WidgetRef ref,
+    ProductionOrderModel order,
+  ) async {
+    try {
+      await ref.read(productionOrdersStateProvider.notifier).createProductionOrder(order);
+      
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Production order created successfully')),
+        );
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error creating production order: \${e.toString()}')),
+        );
+      }
+    }
+  }
+}
+"@
+Write-ContentToFile -RelativePath "presentation/screens/production/production_create_screen.dart" -Content $productionCreateScreenContent
+
+# Recipe Detail Screen
+$recipeDetailScreenContent = @"
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import '../../../domain/providers/recipe_provider.dart';
+
+class RecipeDetailScreen extends ConsumerWidget {
+  final String recipeId;
+  
+  const RecipeDetailScreen({
+    Key? key,
+    required this.recipeId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recipeAsync = ref.watch(recipeByIdProvider(recipeId));
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Recipe Details'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () => Navigator.pushNamed(
+              context,
+              '/factory/recipe/edit',
+              arguments: recipeId,
+            ),
+          ),
+        ],
+      ),
+      body: recipeAsync.when(
+        data: (recipe) {
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Recipe Header
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              recipe.name,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Chip(
+                              label: Text('v\${recipe.version}'),
+                              backgroundColor: Colors.blue,
+                              labelStyle: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          recipe.description,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 16),
+                        // Product and Yield Info
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildInfoBox(
+                                'Product',
+                                recipe.productName,
+                                Icons.inventory_2,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: _buildInfoBox(
+                                'Yield',
+                                '\${recipe.yield} \${recipe.unit}',
+                                Icons.scale,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Status Info
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildInfoBox(
+                                'Status',
+                                recipe.isActive ? 'Active' : 'Inactive',
+                                Icons.circle,
+                                iconColor: recipe.isActive
+                                    ? Colors.green
+                                    : Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: _buildInfoBox(
+                                'Approved',
+                                recipe.approvedAt != null
+                                    ? 'Yes'
+                                    : 'Pending',
+                                Icons.check_circle,
+                                iconColor: recipe.approvedAt != null
+                                    ? Colors.green
+                                    : Colors.orange,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                
+                // Ingredients Section
+                const SizedBox(height: 24),
+                const Text(
+                  'Ingredients',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: recipe.ingredients.length,
+                      separatorBuilder: (context, index) => const Divider(),
+                      itemBuilder: (context, index) {
+                        final ingredient = recipe.ingredients[index];
+                        return Row(
+                          children: [
+                            const Icon(Icons.format_list_bulleted),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    ingredient.materialName,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    '\${ingredient.quantity} \${ingredient.unit}',
+                                  ),
+                                  if (ingredient.notes != null &&
+                                      ingredient.notes!.isNotEmpty)
+                                    Text(
+                                      ingredient.notes!,
+                                      style: const TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            if (ingredient.isOptional)
+                              const Chip(
+                                label: Text('Optional'),
+                                backgroundColor: Colors.grey,
+                                labelStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                
+                // Steps Section
+                const SizedBox(height: 24),
+                const Text(
+                  'Preparation Steps',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: recipe.steps.length,
+                      itemBuilder: (context, index) {
+                        final step = recipe.steps[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                child: Text(step.stepNumber.toString()),
+                                backgroundColor: Colors.blue,
+                                foregroundColor: Colors.white,
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      step.description,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.timer,
+                                          size: 16,
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          '\${step.durationMinutes} minutes',
+                                          style: const TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    if (step.equipmentName != null)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 4.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.build,
+                                              size: 16,
+                                              color: Colors.grey,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              'Equipment: \${step.equipmentName}',
+                                              style: const TextStyle(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    if (step.notes != null &&
+                                        step.notes!.isNotEmpty)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 4.0),
+                                        child: Text(
+                                          step.notes!,
+                                          style: const TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                
+                // Approval Section
+                if (recipe.approvedAt == null && !recipe.isActive)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: ElevatedButton.icon(
+                      onPressed: () => _approveRecipe(context, ref),
+                      icon: const Icon(Icons.check_circle),
+                      label: const Text('Approve Recipe'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size.fromHeight(50),
+                      ),
+                    ),
+                  ),
+                
+                // Create Production Order
+                Padding(
+                  padding: const EdgeInsets.only(top: 24.0),
+                  child: OutlinedButton.icon(
+                    onPressed: () => _createProductionOrder(context, recipe),
+                    icon: const Icon(Icons.production_quantity_limits),
+                    label: const Text('Create Production Order'),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Text('Error loading recipe: \$error'),
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildInfoBox(
+    String label,
+    String value,
+    IconData icon, {
+    Color iconColor = Colors.blue,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Icon(icon, color: iconColor),
+              const SizedBox(width: 8),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  
+"@
+Write-ContentToFile -RelativePath "presentation/screens/recipe/recipe_detail_screen.dart" -Content $recipeDetailScreenContent
+
+# Recipe Create Screen
+$recipeCreateScreenContent = @"
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../data/models/recipe_model.dart';
+import '../../../domain/providers/recipe_provider.dart';
+import '../../widgets/recipe_form.dart';
+
+class RecipeCreateScreen extends ConsumerWidget {
+  const RecipeCreateScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create Recipe'),
+      ),
+      body: RecipeForm(
+        onSubmit: (recipe) => _createRecipe(context, ref, recipe),
+      ),
+    );
+  }
+
+  void _createRecipe(
+    BuildContext context,
+    WidgetRef ref,
+    RecipeModel recipe,
+  ) async {
+    try {
+      await ref.read(recipesStateProvider.notifier).createRecipe(recipe);
+      
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Recipe created successfully')),
+        );
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error creating recipe: \${e.toString()}')),
+        );
+      }
+    }
+  }
+}
+"@
+Write-ContentToFile -RelativePath "presentation/screens/recipe/recipe_create_screen.dart" -Content $recipeCreateScreenContent
+
+# Material Requisition List Screen
+$materialRequisitionListScreenContent = @"
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import '../../../domain/providers/material_requisition_provider.dart';
+
+class MaterialRequisitionListScreen extends ConsumerWidget {
+  const MaterialRequisitionListScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final requisitionsAsync = ref.watch(materialRequisitionsStateProvider);
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Material Requisitions'),
+      ),
+      body: requisitionsAsync.when(
+        data: (requisitions) {
+          if (requisitions.isEmpty) {
+            return const Center(
+              child: Text('No material requisitions found'),
+            );
+          }
+          
+          final dateFormat = DateFormat('yyyy-MM-dd');
+          
+          return ListView.builder(
+            itemCount: requisitions.length,
+            itemBuilder: (context, index) {
+              final requisition = requisitions[index];
+              
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: ListTile(
+                  title: Text('#\${requisition.requisitionNumber}'),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Date: \${dateFormat.format(requisition.requestDate)}'),
+                      Text('Items: \${requisition.items.length}'),
+                    ],
+                  ),
+                  trailing: Chip(
+                    label: Text(requisition.status),
+                    backgroundColor: _getStatusColor(requisition.status),
+                    labelStyle: const TextStyle(color: Colors.white),
+                  ),
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/factory/materials/requisition/detail',
+                    arguments: requisition.id,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Text('Error loading requisitions: \$error'),
+        ),
+      ),
+    );
+  }
+  
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return Colors.amber;
+      case 'approved':
+        return Colors.green;
+      case 'rejected':
+        return Colors.red;
+      case 'partially_fulfilled':
+        return Colors.lightBlue;
+      case 'fulfilled':
+        return Colors.green[700]!;
+      default:
+        return Colors.grey;
+    }
+  }
+}
+"@
+Write-ContentToFile -RelativePath "presentation/screens/materials/material_requisition_list_screen.dart" -Content $materialRequisitionListScreenContent
+
+# Equipment List Screen
+$equipmentListScreenContent = @"
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import '../../../domain/providers/equipment_provider.dart';
+
+class EquipmentListScreen extends ConsumerWidget {
+  const EquipmentListScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final equipmentAsync = ref.watch(equipmentStateProvider);
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Equipment'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => Navigator.pushNamed(context, '/factory/equipment/create'),
+          ),
+        ],
+      ),
+      body: equipmentAsync.when(
+        data: (equipmentList) {
+          if (equipmentList.isEmpty) {
+            return const Center(
+              child: Text('No equipment found'),
+            );
+          }
+          
+          return ListView.builder(
+            itemCount: equipmentList.length,
+            itemBuilder: (context, index) {
+              final equipment = equipmentList[index];
+              
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: equipment.isOperational ? Colors.green : Colors.red,
+                    child: Icon(
+                      Icons.build,
+                      color: Colors.white,
+                    ),
+                  ),
+                  title: Text(equipment.name),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Type: \${equipment.type}'),
+                      Text('Serial: \${equipment.serialNumber}'),
+                      if (equipment.nextMaintenanceDate != null)
+                        Text(
+                          'Next Maintenance: \${DateFormat('yyyy-MM-dd').format(equipment.nextMaintenanceDate!)}',
+                          style: TextStyle(
+                            color: _isMaintenanceDueSoon(equipment.nextMaintenanceDate!)
+                                ? Colors.red
+                                : null,
+                            fontWeight: _isMaintenanceDueSoon(equipment.nextMaintenanceDate!)
+                                ? FontWeight.bold
+                                : null,
+                          ),
+                        ),
+                    ],
+                  ),
+                  trailing: equipment.isOperational
+                      ? const Chip(
+                          label: Text('Operational'),
+                          backgroundColor: Colors.green,
+                          labelStyle: TextStyle(color: Colors.white),
+                        )
+                      : const Chip(
+                          label: Text('Out of Service'),
+                          backgroundColor: Colors.red,
+                          labelStyle: TextStyle(color: Colors.white),
+                        ),
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/factory/equipment/detail',
+                    arguments: equipment.id,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Text('Error loading equipment: \$error'),
+        ),
+      ),
+    );
+  }
+  
+  bool _isMaintenanceDueSoon(DateTime maintenanceDate) {
+    final now = DateTime.now();
+    final daysUntilMaintenance = maintenanceDate.difference(now).inDays;
+    return daysUntilMaintenance <= 7 && daysUntilMaintenance >= 0;
+  }
+}
+"@
+Write-ContentToFile -RelativePath "presentation/screens/equipment/equipment_list_screen.dart" -Content $equipmentListScreenContent
+
+#------------------------------------------------------------------------------
+# PRESENTATION LAYER - WIDGETS
+#------------------------------------------------------------------------------
+
+# Material Requisition Form
+$materialRequisitionFormContent = @"
+import 'package:flutter/material.dart';
+import '../../../data/models/material_requisition_model.dart';
+import '../../../data/models/material_requisition_item_model.dart';
+import 'package:intl/intl.dart';
+
+class MaterialRequisitionForm extends StatefulWidget {
+  final MaterialRequisitionModel? initialValue;
+  final String? productionOrderId;
+  final Function(MaterialRequisitionModel) onSubmit;
+  final bool isEditing;
+
+  const MaterialRequisitionForm({
+    Key? key,
+    this.initialValue,
+    this.productionOrderId,
+    required this.onSubmit,
+    this.isEditing = false,
+  }) : super(key: key);
+
+  @override
+  State<MaterialRequisitionForm> createState() => _MaterialRequisitionFormState();
+}
+
+class _MaterialRequisitionFormState extends State<MaterialRequisitionForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _dateFormat = DateFormat('yyyy-MM-dd');
+  
+  late TextEditingController _requisitionNumberController;
+  late DateTime _requestDate;
+  late String _productionOrderId;
+  late List<MaterialRequisitionItemModel> _items;
+  late String _status;
+  late TextEditingController _notesController;
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    // Initialize controllers with existing values or defaults
+    _requisitionNumberController = TextEditingController(
+      text: widget.initialValue?.requisitionNumber ?? 'REQ-\${DateTime.now().millisecondsSinceEpoch.toString().substring(0, 8)}',
+    );
+    _requestDate = widget.initialValue?.requestDate ?? DateTime.now();
+    _productionOrderId = widget.initialValue?.productionOrderId ?? widget.productionOrderId ?? '';
+    _items = List<MaterialRequisitionItemModel>.from(widget.initialValue?.items ?? []);
+    _status = widget.initialValue?.status ?? 'pending';
+    _notesController = TextEditingController(
+      text: widget.initialValue?.notes ?? '',
+    );
+  }
+  
+  @override
+  void dispose() {
+    _requisitionNumberController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _requisitionNumberController,
+              decoration: const InputDecoration(
+                labelText: 'Requisition Number',
+                hintText: 'Enter requisition number',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a requisition number';
+                }
+                return null;
+             
+            
+            OutlinedButton.icon(
+              onPressed: _addItem,
+              icon: const Icon(Icons.add),
+              label: const Text('Add Material'),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+            ),
+            const SizedBox(height: 24),
+            
+            if (widget.isEditing)
+              DropdownButtonFormField<String>(
+                value: _status,
+                decoration: const InputDecoration(
+                  labelText: 'Status',
+                ),
+                items: <String>[
+                  'pending',
+                  'approved',
+                  'rejected',
+                  'partially_fulfilled',
+                  'fulfilled'
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _status = newValue!;
+                  });
+                },
+              ),
+            const SizedBox(height: 16),
+            
+            TextFormField(
+              controller: _notesController,
+              decoration: const InputDecoration(
+                labelText: 'Notes',
+                hintText: 'Enter additional notes',
+              ),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 24),
+            
+            ElevatedButton(
+              onPressed: _items.isEmpty ? null : _submitForm,
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+              child: Text(widget.isEditing
+                  ? 'Update Material Requisition'
+                  : 'Create Material Requisition'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildDateField({
+    required String label,
+    required DateTime value,
+    required Function(DateTime) onChanged,
+  }) {
+    return InkWell(
+      onTap: () async {
+        final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: value,
+          firstDate: DateTime.now().subtract(const Duration(days: 365)),
+          lastDate: DateTime.now().add(const Duration(days: 365)),
+        );
+        if (picked != null && picked != value) {
+          onChanged(picked);
+        }
+      },
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(_dateFormat.format(value)),
+            const Icon(Icons.calendar_today),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  void _addItem() {
+    showDialog(
+      context: context,
+      builder: (context) => _MaterialItemDialog(
+        onSubmit: (item) {
+          setState(() {
+            _items.add(item);
+          });
+        },
+      ),
+    );
+  }
+  
+  void _editItem(int index) {
+    showDialog(
+      context: context,
+      builder: (context) => _MaterialItemDialog(
+        initialValue: _items[index],
+        onSubmit: (item) {
+          setState(() {
+            _items[index] = item;
+          });
+        },
+      ),
+    );
+  }
+  
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      final requisition = MaterialRequisitionModel(
+        id: widget.initialValue?.id,
+        requisitionNumber: _requisitionNumberController.text,
+        productionOrderId: _productionOrderId,
+        items: _items,
+        requestDate: _requestDate,
+        status: _status,
+        approvedByUserId: widget.initialValue?.approvedByUserId,
+        approvedAt: widget.initialValue?.approvedAt,
+        notes: _notesController.text,
+        createdAt: widget.initialValue?.createdAt ?? DateTime.now(),
+        createdByUserId: widget.initialValue?.createdByUserId ?? 'current-user',
+        updatedAt: widget.isEditing ? DateTime.now() : null,
+      );
+      
+      widget.onSubmit(requisition);
+    }
+  }
+}
+
+class _MaterialItemDialog extends StatefulWidget {
+  final MaterialRequisitionItemModel? initialValue;
+  final Function(MaterialRequisitionItemModel) onSubmit;
+
+  const _MaterialItemDialog({
+    Key? key,
+    this.initialValue,
+    required this.onSubmit,
+  }) : super(key: key);
+
+  @override
+  State<_MaterialItemDialog> createState() => _MaterialItemDialogState();
+}
+
+class _MaterialItemDialogState extends State<_MaterialItemDialog> {
+  final _formKey = GlobalKey<FormState>();
+  
+  late TextEditingController _materialIdController;
+  late TextEditingController _materialNameController;
+  late TextEditingController _quantityController;
+  late TextEditingController _unitController;
+  late TextEditingController _warehouseIdController;
+  late TextEditingController _warehouseNameController;
+  late TextEditingController _notesController;
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    _materialIdController = TextEditingController(
+      text: widget.initialValue?.materialId ?? '',
+    );
+    _materialNameController = TextEditingController(
+      text: widget.initialValue?.materialName ?? '',
+    );
+    _quantityController = TextEditingController(
+      text: widget.initialValue?.requestedQuantity.toString() ?? '',
+    );
+    _unitController = TextEditingController(
+      text: widget.initialValue?.unit ?? 'kg',
+    );
+    _warehouseIdController = TextEditingController(
+      text: widget.initialValue?.warehouseId ?? '',
+    );
+    _warehouseNameController = TextEditingController(
+      text: widget.initialValue?.warehouseName ?? '',
+    );
+    _notesController = TextEditingController(
+      text: widget.initialValue?.notes ?? '',
+    );
+  }
+  
+  @override
+  void dispose() {
+    _materialIdController.dispose();
+    _materialNameController.dispose();
+    _quantityController.dispose();
+    _unitController.dispose();
+    _warehouseIdController.dispose();
+    _warehouseNameController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(widget.initialValue == null
+          ? 'Add Material Item'
+          : 'Edit Material Item'),
+      content: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _materialIdController,
+                      decoration: const InputDecoration(
+                        labelText: 'Material ID',
+                        hintText: 'Enter material ID',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: _selectMaterial,
+                  ),
+                ],
+              ),
+              TextFormField(
+                controller: _materialNameController,
+                decoration: const InputDecoration(
+                  labelText: 'Material Name',
+                  hintText: 'Enter material name',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Required';
+                  }
+                  return null;
+                },
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: TextFormField(
+                      controller: _quantityController,
+                      decoration: const InputDecoration(
+                        labelText: 'Quantity',
+                        hintText: 'Enter quantity',
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Invalid number';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      controller: _unitController,
+                      decoration: const InputDecoration(
+                        labelText: 'Unit',
+                        hintText: 'e.g., kg',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _warehouseIdController,
+                      decoration: const InputDecoration(
+                        labelText: 'Warehouse ID',
+                        hintText: 'Enter warehouse ID',
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: _selectWarehouse,
+                  ),
+                ],
+              ),
+              TextFormField(
+                controller: _warehouseNameController,
+                decoration: const InputDecoration(
+                  labelText: 'Warehouse Name',
+                  hintText: 'Enter warehouse name',
+                ),
+              ),
+              TextFormField(
+                controller: _notesController,
+                decoration: const InputDecoration(
+                  labelText: 'Notes',
+                  hintText: 'Enter notes',
+                ),
+                maxLines: 2,
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              final item = MaterialRequisitionItemModel(
+                materialId: _materialIdController.text,
+                materialName: _materialNameController.text,
+                requestedQuantity: double.parse(_quantityController.text),
+                unit: _unitController.text,
+                warehouseId: _warehouseIdController.text.isEmpty
+                    ? null
+                    : _warehouseIdController.text,
+                warehouseName: _warehouseNameController.text.isEmpty
+                    ? null
+                    : _warehouseNameController.text,
+                status: widget.initialValue?.status ?? 'pending',
+                notes: _notesController.text.isEmpty
+                    ? null
+                    : _notesController.text,
+              );
+              
+              widget.onSubmit(item);
+              Navigator.pop(context);
+            }
+          },
+          child: const Text('Save'),
+        ),
+      ],
+    );
+  }
+  
+  void _selectMaterial() {
+    // TODO: Implement material selection
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Material selection not implemented yet')),
+    );
+  }
+  
+  void _selectWarehouse() {
+    // TODO: Implement warehouse selection
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Warehouse selection not implemented yet')),
+    );
+  }
+}
+"@
+Write-ContentToFile -RelativePath "presentation/widgets/material_requisition_form.dart" -Content $materialRequisitionFormContent
+
+# Equipment Form
+$equipmentFormContent = @"
+import 'package:flutter/material.dart';
+import '../../../data/models/equipment_model.dart';
+import 'package:intl/intl.dart';
+
+class EquipmentForm extends StatefulWidget {
+  final EquipmentModel? initialValue;
+  final Function(EquipmentModel) onSubmit;
+  final bool isEditing;
+
+  const EquipmentForm({
+    Key? key,
+    this.initialValue,
+    required this.onSubmit,
+    this.isEditing = false,
+  }) : super(key: key);
+
+  @override
+  State<EquipmentForm> createState() => _EquipmentFormState();
+}
+
+class _EquipmentFormState extends State<EquipmentForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _dateFormat = DateFormat('yyyy-MM-dd');
+  
+  late TextEditingController _nameController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _typeController;
+  late TextEditingController _serialNumberController;
+  late TextEditingController _manufacturerController;
+  late DateTime? _purchaseDate;
+  late TextEditingController _capacityController;
+  late TextEditingController _capacityUnitController;
+  late bool _isOperational;
+  late DateTime? _lastMaintenanceDate;
+  late DateTime? _nextMaintenanceDate;
+  late TextEditingController _locationController;
+  late TextEditingController _notesController;
+  late List<String> _imageUrls;
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    _nameController = TextEditingController(
+      text: widget.initialValue?.name ?? '',
+    );
+    _descriptionController = TextEditingController(
+      text: widget.initialValue?.description ?? '',
+    );
+    _typeController = TextEditingController(
+      text: widget.initialValue?.type ?? '',
+    );
+    _serialNumberController = TextEditingController(
+      text: widget.initialValue?.serialNumber ?? '',
+    );
+    _manufacturerController = TextEditingController(
+      text: widget.initialValue?.manufacturer ?? '',
+    );
+    _purchaseDate = widget.initialValue?.purchaseDate;
+    _capacityController = TextEditingController(
+      text: widget.initialValue?.capacity?.toString() ?? '',
+    );
+    _capacityUnitController = TextEditingController(
+      text: widget.initialValue?.capacityUnit ?? '',
+    );
+    _isOperational = widget.initialValue?.isOperational ?? true;
+    _lastMaintenanceDate = widget.initialValue?.lastMaintenanceDate;
+    _nextMaintenanceDate = widget.initialValue?.nextMaintenanceDate;
+    _locationController = TextEditingController(
+      text: widget.initialValue?.location ?? '',
+    );
+    _notesController = TextEditingController(
+      text: widget.initialValue?.notes ?? '',
+    );
+    _imageUrls = List<String>.from(widget.initialValue?.imageUrls ?? []);
+  }
+  
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    _typeController.dispose();
+    _serialNumberController.dispose();
+    _manufacturerController.dispose();
+    _capacityController.dispose();
+    _capacityUnitController.dispose();
+    _locationController.dispose();
+    _notesController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Equipment Name',
+                hintText: 'Enter equipment name',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter equipment name';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            
+            TextFormField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Description',
+                hintText: 'Enter equipment description',
+              ),
+              maxLines: 3,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter description';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _typeController,
+                    decoration: const InputDecoration(
+                      labelText: 'Equipment Type',
+                      hintText: 'Enter type',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Required';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    controller: _serialNumberController,
+                    decoration: const InputDecoration(
+                      labelText: 'Serial Number',
+                      hintText: 'Enter serial #',
+                    ),
+                    
+            const SizedBox(height: 16),
+            
+            TextFormField(
+              controller: _manufacturerController,
+              decoration: const InputDecoration(
+                labelText: 'Manufacturer',
+                hintText: 'Enter manufacturer',
+              ),
+            ),
+            const SizedBox(height: 16),
+            
+            _buildDateField(
+              label: 'Purchase Date',
+              value: _purchaseDate,
+              onChanged: (date) {
+                setState(() {
+                  _purchaseDate = date;
+                });
+              },
+              allowNull: true,
+            ),
+            const SizedBox(height: 16),
+            
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: TextFormField(
+                    controller: _capacityController,
+                    decoration: const InputDecoration(
+                      labelText: 'Capacity',
+                      hintText: 'Enter capacity',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  flex: 2,
+                  child: TextFormField(
+                    controller: _capacityUnitController,
+                    decoration: const InputDecoration(
+                      labelText: 'Unit',
+                      hintText: 'e.g., kg, L',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            
+            SwitchListTile(
+              title: const Text('Operational Status'),
+              subtitle: Text(_isOperational ? 'Operational' : 'Out of Service'),
+              value: _isOperational,
+              onChanged: (value) {
+                setState(() {
+                  _isOperational = value;
+                });
+              },
+              contentPadding: EdgeInsets.zero,
+            ),
+            const SizedBox(height: 16),
+            
+            _buildDateField(
+              label: 'Last Maintenance Date',
+              value: _lastMaintenanceDate,
+              onChanged: (date) {
+                setState(() {
+                  _lastMaintenanceDate = date;
+                });
+              },
+              allowNull: true,
+            ),
+            const SizedBox(height: 16),
+            
+            _buildDateField(
+              label: 'Next Maintenance Date',
+              value: _nextMaintenanceDate,
+              onChanged: (date) {
+                setState(() {
+                  _nextMaintenanceDate = date;
+                });
+              },
+              allowNull: true,
+            ),
+            const SizedBox(height: 16),
+            
+            TextFormField(
+              controller: _locationController,
+              decoration: const InputDecoration(
+                labelText: 'Location',
+                hintText: 'Enter equipment location',
+              ),
+            ),
+            const SizedBox(height: 16),
+            
+            TextFormField(
+              controller: _notesController,
+              decoration: const InputDecoration(
+                labelText: 'Notes',
+                hintText: 'Enter additional notes',
+              ),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 24),
+            
+            // TODO: Implement image upload
+            const Text(
+              'Equipment Images',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            
+            _imageUrls.isEmpty
+                ? const Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text('No images added yet'),
+                    ),
+                  )
+                : GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                    ),
+                    itemCount: _imageUrls.length,
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          Image.network(
+                            _imageUrls[index],
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _imageUrls.removeAt(index);
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+            
+            OutlinedButton.icon(
+              onPressed: _addImage,
+              icon: const Icon(Icons.add_a_photo),
+              label: const Text('Add Image'),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+            ),
+            const SizedBox(height: 24),
+            
+            ElevatedButton(
+              onPressed: _submitForm,
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+              child: Text(widget.isEditing ? 'Update Equipment' : 'Create Equipment'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildDateField({
+    required String label,
+    required DateTime? value,
+    required Function(DateTime) onChanged,
+    bool allowNull = false,
+  }) {
+    return InkWell(
+      onTap: () async {
+        final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: value ?? DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
+        );
+        if (picked != null && picked != value) {
+          onChanged(picked);
+        }
+      },
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(value != null ? _dateFormat.format(value) : 'Not set'),
+            Row(
+              children: [
+                if (value != null && allowNull)
+                  IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      setState(() {
+                        if (label == 'Purchase Date') {
+                          _purchaseDate = null;
+                        } else if (label == 'Last Maintenance Date') {
+                          _lastMaintenanceDate = null;
+                        } else if (label == 'Next Maintenance Date') {
+                          _nextMaintenanceDate = null;
+                        }
+                      });
+                    },
+                  ),
+                const Icon(Icons.calendar_today),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  void _addImage() {
+    // TODO: Implement image upload
+    // For now, just add a dummy image URL
+    setState(() {
+      _imageUrls.add('https://via.placeholder.com/150');
+    });
+  }
+  
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      final equipment = EquipmentModel(
+        id: widget.initialValue?.id,
+        name: _nameController.text,
+        description: _descriptionController.text,
+        type: _typeController.text,
+        serialNumber: _serialNumberController.text,
+        manufacturer: _manufacturerController.text.isEmpty
+            ? null
+            : _manufacturerController.text,
+        purchaseDate: _purchaseDate,
+        capacity: _capacityController.text.isEmpty
+            ? null
+            : double.parse(_capacityController.text),
+        capacityUnit: _capacityUnitController.text.isEmpty
+            ? null
+            : _capacityUnitController.text,
+        isOperational: _isOperational,
+        lastMaintenanceDate: _lastMaintenanceDate,
+        nextMaintenanceDate: _nextMaintenanceDate,
+        location: _locationController.text.isEmpty
+            ? null
+            : _locationController.text,
+        notes: _notesController.text.isEmpty ? null : _notesController.text,
+        imageUrls: _imageUrls.isEmpty ? null : _imageUrls,
+        createdAt: widget.initialValue?.createdAt ?? DateTime.now(),
+        updatedAt: widget.isEditing ? DateTime.now() : null,
+      );
+      
+      widget.onSubmit(equipment);
+    }
+  }
+}
+"@
+Write-ContentToFile -RelativePath "presentation/widgets/equipment_form.dart" -Content $equipmentFormContent
+
+Write-Host "Missing Factory Module files added successfully!" -ForegroundColor Green
