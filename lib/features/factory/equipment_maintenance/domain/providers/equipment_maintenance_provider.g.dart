@@ -6,7 +6,7 @@ part of 'equipment_maintenance_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$allEquipmentHash() => r'edf419afd7339cbd3bc80ce8cfa72e85eac842a2';
+String _$allEquipmentHash() => r'e1802122b89809fb44fdc94c68473885ccc86f84';
 
 /// See also [allEquipment].
 @ProviderFor(allEquipment)
@@ -24,7 +24,7 @@ final allEquipmentProvider =
 // ignore: unused_element
 typedef AllEquipmentRef = AutoDisposeFutureProviderRef<List<EquipmentModel>>;
 String _$equipmentRequiringMaintenanceHash() =>
-    r'e9ba9a728ebf6f2ccc63ce640ba9d6a13859bcaa';
+    r'b10597d2808fa26a7373b65b69f6e19acc8f0de0';
 
 /// See also [equipmentRequiringMaintenance].
 @ProviderFor(equipmentRequiringMaintenance)
@@ -44,7 +44,7 @@ final equipmentRequiringMaintenanceProvider =
 typedef EquipmentRequiringMaintenanceRef
     = AutoDisposeFutureProviderRef<List<EquipmentModel>>;
 String _$equipmentRequiringSanitizationHash() =>
-    r'de1a9b1bb063266847dbee33a1f96778f63af40e';
+    r'c6f67372b24f988846fb6c4e611cca4c538b312c';
 
 /// See also [equipmentRequiringSanitization].
 @ProviderFor(equipmentRequiringSanitization)
@@ -63,7 +63,7 @@ final equipmentRequiringSanitizationProvider =
 // ignore: unused_element
 typedef EquipmentRequiringSanitizationRef
     = AutoDisposeFutureProviderRef<List<EquipmentModel>>;
-String _$equipmentHash() => r'2f8a11c09f9c72578b63a7f145f128b150c4ea3b';
+String _$equipmentHash() => r'498a7452c95fef9182541d0f950f53ff7e8efdd2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -214,7 +214,7 @@ class _EquipmentProviderElement
 }
 
 String _$equipmentMaintenanceRecordsHash() =>
-    r'217612642663cc074daa010c59a003b498106379';
+    r'afae26fefecdd1cd23aa6ef5bb2143ae498508a2';
 
 /// See also [equipmentMaintenanceRecords].
 @ProviderFor(equipmentMaintenanceRecords)
@@ -354,7 +354,7 @@ class _EquipmentMaintenanceRecordsProviderElement
 }
 
 String _$upcomingMaintenanceRecordsHash() =>
-    r'dd685073b45c355df1093c293f405ac939ffa2bf';
+    r'9db64ef36cdd296469df00600f2cd9f8e1825f82';
 
 /// See also [upcomingMaintenanceRecords].
 @ProviderFor(upcomingMaintenanceRecords)
@@ -373,10 +373,10 @@ final upcomingMaintenanceRecordsProvider =
 // ignore: unused_element
 typedef UpcomingMaintenanceRecordsRef
     = AutoDisposeFutureProviderRef<List<MaintenanceRecordModel>>;
-String _$equipmentStateHash() => r'd53a377ad3a56dd5c83990805d560c0ea02aebbb';
+String _$equipmentStateHash() => r'1a96e8b243647960dae2331b137c22674d26cede';
 
 abstract class _$EquipmentState
-    extends BuildlessAutoDisposeNotifier<AsyncValue<EquipmentModel?>> {
+    extends BuildlessNotifier<AsyncValue<EquipmentModel?>> {
   late final String? equipmentId;
 
   AsyncValue<EquipmentModel?> build(
@@ -427,8 +427,8 @@ class EquipmentStateFamily extends Family<AsyncValue<EquipmentModel?>> {
 }
 
 /// See also [EquipmentState].
-class EquipmentStateProvider extends AutoDisposeNotifierProviderImpl<
-    EquipmentState, AsyncValue<EquipmentModel?>> {
+class EquipmentStateProvider
+    extends NotifierProviderImpl<EquipmentState, AsyncValue<EquipmentModel?>> {
   /// See also [EquipmentState].
   EquipmentStateProvider(
     String? equipmentId,
@@ -484,8 +484,8 @@ class EquipmentStateProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<EquipmentState,
-      AsyncValue<EquipmentModel?>> createElement() {
+  NotifierProviderElement<EquipmentState, AsyncValue<EquipmentModel?>>
+      createElement() {
     return _EquipmentStateProviderElement(this);
   }
 
@@ -505,14 +505,14 @@ class EquipmentStateProvider extends AutoDisposeNotifierProviderImpl<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin EquipmentStateRef
-    on AutoDisposeNotifierProviderRef<AsyncValue<EquipmentModel?>> {
+mixin EquipmentStateRef on NotifierProviderRef<AsyncValue<EquipmentModel?>> {
   /// The parameter `equipmentId` of this provider.
   String? get equipmentId;
 }
 
-class _EquipmentStateProviderElement extends AutoDisposeNotifierProviderElement<
-    EquipmentState, AsyncValue<EquipmentModel?>> with EquipmentStateRef {
+class _EquipmentStateProviderElement
+    extends NotifierProviderElement<EquipmentState, AsyncValue<EquipmentModel?>>
+    with EquipmentStateRef {
   _EquipmentStateProviderElement(super.provider);
 
   @override
@@ -520,10 +520,10 @@ class _EquipmentStateProviderElement extends AutoDisposeNotifierProviderElement<
 }
 
 String _$maintenanceRecordStateHash() =>
-    r'e1886056c68617a4fcc8cb9b50caa484e307b689';
+    r'1640024f606563ad6b6482e89aee40647830947d';
 
 abstract class _$MaintenanceRecordState
-    extends BuildlessAutoDisposeNotifier<AsyncValue<MaintenanceRecordModel?>> {
+    extends BuildlessNotifier<AsyncValue<MaintenanceRecordModel?>> {
   late final String? recordId;
 
   AsyncValue<MaintenanceRecordModel?> build(
@@ -575,7 +575,7 @@ class MaintenanceRecordStateFamily
 }
 
 /// See also [MaintenanceRecordState].
-class MaintenanceRecordStateProvider extends AutoDisposeNotifierProviderImpl<
+class MaintenanceRecordStateProvider extends NotifierProviderImpl<
     MaintenanceRecordState, AsyncValue<MaintenanceRecordModel?>> {
   /// See also [MaintenanceRecordState].
   MaintenanceRecordStateProvider(
@@ -632,7 +632,7 @@ class MaintenanceRecordStateProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<MaintenanceRecordState,
+  NotifierProviderElement<MaintenanceRecordState,
       AsyncValue<MaintenanceRecordModel?>> createElement() {
     return _MaintenanceRecordStateProviderElement(this);
   }
@@ -655,14 +655,14 @@ class MaintenanceRecordStateProvider extends AutoDisposeNotifierProviderImpl<
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin MaintenanceRecordStateRef
-    on AutoDisposeNotifierProviderRef<AsyncValue<MaintenanceRecordModel?>> {
+    on NotifierProviderRef<AsyncValue<MaintenanceRecordModel?>> {
   /// The parameter `recordId` of this provider.
   String? get recordId;
 }
 
-class _MaintenanceRecordStateProviderElement
-    extends AutoDisposeNotifierProviderElement<MaintenanceRecordState,
-        AsyncValue<MaintenanceRecordModel?>> with MaintenanceRecordStateRef {
+class _MaintenanceRecordStateProviderElement extends NotifierProviderElement<
+    MaintenanceRecordState,
+    AsyncValue<MaintenanceRecordModel?>> with MaintenanceRecordStateRef {
   _MaintenanceRecordStateProviderElement(super.provider);
 
   @override
