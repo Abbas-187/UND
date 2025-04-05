@@ -56,8 +56,8 @@ class TemperatureMonitoringRepository {
 
     if (settings != null &&
         settings.alertsEnabled &&
-        (log.temperature < settings.minTemperature ||
-            log.temperature > settings.maxTemperature)) {
+        (log.temperatureValue < settings.minTemperature ||
+            log.temperatureValue > settings.maxTemperature)) {
       // Create alert by updating the log
       await _temperatureLogsCollection.doc(docRef.id).update({'isAlert': true});
 

@@ -22,15 +22,17 @@ class TemperatureLogs extends _$TemperatureLogs {
     String? notes,
   }) async {
     final repository = ref.read(temperatureMonitoringRepositoryProvider);
+
     final log = TemperatureLogModel(
       locationId: locationId,
       locationName: 'Location Name', // Should be fetched from a repository
-      sensorId: sensorId,
-      temperature: temperature,
-      humidity: 0.0, // Default value
-      logDate: DateTime.now(),
       timestamp: DateTime.now(),
+      temperatureValue: temperature,
+      complianceStatus: TemperatureComplianceStatus.notApplicable,
+      deviceId: sensorId,
       notes: notes,
+      createdBy: 'system',
+      createdAt: DateTime.now(),
     );
     return repository.createTemperatureLog(log);
   }
@@ -63,10 +65,11 @@ class TemperatureAlerts extends _$TemperatureAlerts {
           .map((alert) => {
                 'id': alert.id,
                 'locationId': alert.locationId,
-                'sensorId': alert.sensorId,
-                'temperature': alert.temperature,
+                'sensorId': alert.deviceId,
+                'temperature': alert.temperatureValue,
                 'timestamp': alert.timestamp,
-                'isResolved': !alert.isAlert, // Invert isAlert
+                'isResolved': !(alert.additionalData?['isAlert'] ??
+                    true), // Invert isAlert
                 'notes': alert.notes,
               })
           .toList();
