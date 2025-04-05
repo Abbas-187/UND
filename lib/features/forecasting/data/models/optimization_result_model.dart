@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'dart:convert';
 
 /// Model representing an optimization result for inventory levels
 class OptimizationResultModel {

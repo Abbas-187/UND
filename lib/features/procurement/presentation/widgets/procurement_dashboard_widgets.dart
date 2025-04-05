@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../data/models/purchase_order_model.dart';
 import '../../data/models/supplier_model.dart';
 import '../../data/models/supplier_quality_log_model.dart';
+import '../../data/models/supplier_performance_metrics.dart';
 import '../../domain/providers/purchase_order_provider.dart';
 import '../../domain/providers/supplier_provider.dart';
 import '../../domain/providers/supplier_quality_provider.dart';
@@ -71,7 +72,7 @@ class UpcomingDeliveriesWidget extends ConsumerWidget {
 
                     return ListTile(
                       title: Text(
-                        'PO ${delivery.poNumber}',
+                        'PO ${delivery.orderNumber}',
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                         ),
@@ -171,13 +172,13 @@ class PendingApprovalsWidget extends ConsumerWidget {
                         final approval = approvals[index];
                         return ListTile(
                           title: Text(
-                            'PO ${approval.poNumber}',
+                            'PO ${approval.orderNumber}',
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: Text(
-                            'Created ${DateFormat('MMM dd').format(approval.createdAt)} • ${NumberFormat.currency(symbol: '\$').format(approval.totalAmount)}',
+                            'Created ${DateFormat('MMM dd').format(approval.createdAt!)} • ${NumberFormat.currency(symbol: '\$').format(approval.totalAmount)}',
                           ),
                           trailing: OutlinedButton(
                             onPressed: () {
@@ -202,7 +203,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildApprovalSummary(List<PurchaseOrder> approvals) {
+  Widget _buildApprovalSummary(List<PurchaseOrderModel> approvals) {
     final totalAmount = approvals.fold<double>(
         0, (sum, approval) => sum + approval.totalAmount);
 
@@ -222,7 +223,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
             Colors.green,
           ),
           _buildSummaryItem(
-            '${approvals.where((a) => a.createdAt.difference(DateTime.now()).inDays.abs() <= 2).length}',
+            '${approvals.where((a) => a.createdAt != null && a.createdAt!.difference(DateTime.now()).inDays.abs() <= 2).length}',
             'Urgent',
             Colors.red,
           ),
@@ -569,14 +570,64 @@ class RecentQualityIssuesWidget extends ConsumerWidget {
 }
 
 // Providers for the dashboard widgets
+final purchaseOrderProvider =
+    StateNotifierProvider<PurchaseOrderNotifier, List<PurchaseOrderModel>>(
+        (ref) => PurchaseOrderNotifier());
+
+final supplierProvider =
+    StateNotifierProvider<SupplierNotifier, List<Supplier>>(
+        (ref) => SupplierNotifier());
+
+final supplierQualityProvider =
+    StateNotifierProvider<SupplierQualityNotifier, List<SupplierQualityLog>>(
+        (ref) => SupplierQualityNotifier());
+
+// Mock notifiers for the providers
+class PurchaseOrderNotifier extends StateNotifier<List<PurchaseOrderModel>> {
+  PurchaseOrderNotifier() : super([]);
+
+  Future<List<PurchaseOrderModel>> getUpcomingDeliveries(
+      {int limit = 5}) async {
+    // Implementation would fetch from repository
+    return [];
+  }
+
+  Future<List<PurchaseOrderModel>> getPendingApprovals() async {
+    // Implementation would fetch from repository
+    return [];
+  }
+}
+
+class SupplierNotifier extends StateNotifier<List<Supplier>> {
+  SupplierNotifier() : super([]);
+
+  Future<List<Supplier>> getTopSuppliers({int limit = 5}) async {
+    // Implementation would fetch from repository
+    return [];
+  }
+}
+
+class SupplierQualityNotifier extends StateNotifier<List<SupplierQualityLog>> {
+  SupplierQualityNotifier() : super([]);
+
+  Future<List<SupplierQualityLog>> getRecentQualityIssues({
+    int daysBack = 30,
+    int limit = 5,
+    bool onlyFailures = true,
+  }) async {
+    // Implementation would fetch from repository
+    return [];
+  }
+}
+
 final upcomingDeliveriesProvider =
-    FutureProvider.family<List<PurchaseOrder>, int>((ref, limit) async {
+    FutureProvider.family<List<PurchaseOrderModel>, int>((ref, limit) async {
   final purchaseOrderState = ref.read(purchaseOrderProvider.notifier);
   return purchaseOrderState.getUpcomingDeliveries(limit: limit);
 });
 
 final pendingApprovalsProvider =
-    FutureProvider<List<PurchaseOrder>>((ref) async {
+    FutureProvider<List<PurchaseOrderModel>>((ref) async {
   final purchaseOrderState = ref.read(purchaseOrderProvider.notifier);
   return purchaseOrderState.getPendingApprovals();
 });

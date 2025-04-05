@@ -1,17 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InventoryTransferItemModel {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final double quantity;
-  final String unitOfMeasure;
-  final String? batchNumber;
-  final String sourceLocationId;
-  final String destinationLocationId;
-  final String? remarks;
-  final Map<String, dynamic>? customAttributes;
-
   const InventoryTransferItemModel({
     required this.itemId,
     required this.itemCode,
@@ -39,6 +28,16 @@ class InventoryTransferItemModel {
       customAttributes: json['customAttributes'] as Map<String, dynamic>?,
     );
   }
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final double quantity;
+  final String unitOfMeasure;
+  final String? batchNumber;
+  final String sourceLocationId;
+  final String destinationLocationId;
+  final String? remarks;
+  final Map<String, dynamic>? customAttributes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -84,21 +83,6 @@ class InventoryTransferItemModel {
 }
 
 class InventoryTransferModel {
-  final String? id;
-  final String documentNumber;
-  final DateTime transferDate;
-  final String sourceWarehouseId;
-  final String destinationWarehouseId;
-  final String transferredByUserId;
-  final String? remarks;
-  final List<InventoryTransferItemModel> items;
-  final bool isPosted;
-  final DateTime? postedDate;
-  final String? postedByUserId;
-  final String status;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-
   const InventoryTransferModel({
     this.id,
     required this.documentNumber,
@@ -161,6 +145,20 @@ class InventoryTransferModel {
           : null,
     });
   }
+  final String? id;
+  final String documentNumber;
+  final DateTime transferDate;
+  final String sourceWarehouseId;
+  final String destinationWarehouseId;
+  final String transferredByUserId;
+  final String? remarks;
+  final List<InventoryTransferItemModel> items;
+  final bool isPosted;
+  final DateTime? postedDate;
+  final String? postedByUserId;
+  final String status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

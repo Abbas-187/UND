@@ -1,17 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StockCountItemModel {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final double expectedQuantity;
-  final double countedQuantity;
-  final String unitOfMeasure;
-  final String? batchNumber;
-  final String? locationId;
-  final String? remarks;
-  final Map<String, dynamic>? customAttributes;
-
   const StockCountItemModel({
     required this.itemId,
     required this.itemCode,
@@ -39,6 +28,16 @@ class StockCountItemModel {
       customAttributes: json['customAttributes'] as Map<String, dynamic>?,
     );
   }
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final double expectedQuantity;
+  final double countedQuantity;
+  final String unitOfMeasure;
+  final String? batchNumber;
+  final String? locationId;
+  final String? remarks;
+  final Map<String, dynamic>? customAttributes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -83,22 +82,6 @@ class StockCountItemModel {
 }
 
 class StockCountModel {
-  final String? id;
-  final String documentNumber;
-  final DateTime countDate;
-  final String warehouseId;
-  final String? locationId;
-  final String countedByUserId;
-  final String? remarks;
-  final List<StockCountItemModel> items;
-  final bool isPosted;
-  final DateTime? postedDate;
-  final String? postedByUserId;
-  final String countType;
-  final String status;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-
   const StockCountModel({
     this.id,
     required this.documentNumber,
@@ -162,6 +145,21 @@ class StockCountModel {
           : null,
     });
   }
+  final String? id;
+  final String documentNumber;
+  final DateTime countDate;
+  final String warehouseId;
+  final String? locationId;
+  final String countedByUserId;
+  final String? remarks;
+  final List<StockCountItemModel> items;
+  final bool isPosted;
+  final DateTime? postedDate;
+  final String? postedByUserId;
+  final String countType;
+  final String status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

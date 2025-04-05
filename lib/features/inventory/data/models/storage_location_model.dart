@@ -1,13 +1,4 @@
 class StorageLocationModel {
-  final String locationId;
-  final String locationName;
-  final double quantity;
-  final String? zone;
-  final String? aisle;
-  final String? rack;
-  final String? bin;
-  final String? notes;
-
   const StorageLocationModel({
     required this.locationId,
     required this.locationName,
@@ -31,6 +22,14 @@ class StorageLocationModel {
       notes: json['notes'] as String?,
     );
   }
+  final String locationId;
+  final String locationName;
+  final double quantity;
+  final String? zone;
+  final String? aisle;
+  final String? rack;
+  final String? bin;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {

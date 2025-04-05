@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
-import '../models/supplier.dart';
-import '../models/order.dart';
-import '../models/contract.dart';
-import '../models/quality_log.dart';
-import '../widgets/responsive_layout.dart';
-import '../utils/app_colors.dart';
+import 'package:und_app/features/procurement/presentation/models/supplier.dart';
+import 'package:und_app/features/procurement/presentation/models/order.dart';
+import 'package:und_app/features/procurement/presentation/models/contract.dart';
+import 'package:und_app/features/procurement/presentation/models/quality_log.dart';
+import 'package:und_app/features/procurement/presentation/widgets/responsive_layout.dart';
+import 'package:und_app/features/procurement/presentation/utils/app_colors.dart';
 
 class SupplierDetailScreen extends StatefulWidget {
   final Supplier supplier;

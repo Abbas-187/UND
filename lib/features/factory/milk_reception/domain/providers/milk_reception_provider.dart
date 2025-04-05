@@ -74,7 +74,7 @@ class MilkReceptionStateNotifier
     }
 
     try {
-      final reception = await _repository.getMilkReceptionById(_receptionId!);
+      final reception = await _repository.getMilkReceptionById(_receptionId);
       state = AsyncData(reception);
     } catch (e) {
       state = AsyncError(e, StackTrace.current);
@@ -135,18 +135,18 @@ class MilkReceptionStateNotifier
 
     try {
       await _repository.addTestResult(
-        receptionId: _receptionId!,
+        receptionId: _receptionId,
         testResult: testResult,
       );
 
       // Invalidate providers
       _ref.invalidate(todayMilkReceptionsProvider);
       _ref.invalidate(receptionsAwaitingTestingProvider);
-      _ref.invalidate(milkReceptionProvider(_receptionId!));
+      _ref.invalidate(milkReceptionProvider(_receptionId));
 
       // Update state
       final updatedReception =
-          await _repository.getMilkReceptionById(_receptionId!);
+          await _repository.getMilkReceptionById(_receptionId);
       state = AsyncData(updatedReception);
     } catch (e) {
       state = AsyncError(e, StackTrace.current);
@@ -161,7 +161,7 @@ class MilkReceptionStateNotifier
     }
 
     try {
-      return await _repository.calculatePricingTier(_receptionId!);
+      return await _repository.calculatePricingTier(_receptionId);
     } catch (e) {
       rethrow;
     }

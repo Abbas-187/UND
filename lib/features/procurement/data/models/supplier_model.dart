@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/supplier.dart';
+import 'supplier_performance_metrics.dart';
 
 /// Enum representing different types of suppliers in the dairy industry
 enum SupplierType {
@@ -97,6 +98,9 @@ class Supplier {
   /// Delivery reliability rating of the supplier (0-5 scale)
   final double deliveryRating;
 
+  /// Performance metrics of the supplier
+  final SupplierPerformanceMetrics performanceMetrics;
+
   /// List of certifications held by the supplier
   final List<String> certifications;
 
@@ -127,6 +131,7 @@ class Supplier {
     required this.supplierType,
     required this.qualityRating,
     required this.deliveryRating,
+    required this.performanceMetrics,
     required this.certifications,
     required this.paymentTerms,
     required this.isActive,
@@ -147,6 +152,7 @@ class Supplier {
     SupplierType? supplierType,
     double? qualityRating,
     double? deliveryRating,
+    SupplierPerformanceMetrics? performanceMetrics,
     List<String>? certifications,
     String? paymentTerms,
     bool? isActive,
@@ -165,6 +171,7 @@ class Supplier {
       supplierType: supplierType ?? this.supplierType,
       qualityRating: qualityRating ?? this.qualityRating,
       deliveryRating: deliveryRating ?? this.deliveryRating,
+      performanceMetrics: performanceMetrics ?? this.performanceMetrics,
       certifications: certifications ?? List.from(this.certifications),
       paymentTerms: paymentTerms ?? this.paymentTerms,
       isActive: isActive ?? this.isActive,
@@ -187,6 +194,7 @@ class Supplier {
       'supplier_type': supplierTypeToString(supplierType),
       'quality_rating': qualityRating,
       'delivery_rating': deliveryRating,
+      'performance_metrics': performanceMetrics.toJson(),
       'certifications': certifications,
       'payment_terms': paymentTerms,
       'is_active': isActive,
@@ -198,6 +206,18 @@ class Supplier {
 
   /// Creates a [Supplier] instance from a JSON map
   factory Supplier.fromJson(Map<String, dynamic> json) {
+    final performanceMetricsData =
+        json['performance_metrics'] as Map<String, dynamic>? ??
+            {
+              'quality_score': json['quality_rating'] ?? 0.0,
+              'delivery_score': json['delivery_rating'] ?? 0.0,
+              'price_score': 3.0, // Default value if not available
+              'overall_score': ((json['quality_rating'] ?? 0.0) +
+                      (json['delivery_rating'] ?? 0.0) +
+                      3.0) /
+                  3.0,
+            };
+
     return Supplier(
       id: json['id'],
       name: json['name'],
@@ -207,14 +227,20 @@ class Supplier {
       email: json['email'],
       address: json['address'],
       supplierType: supplierTypeFromString(json['supplier_type']),
-      qualityRating: json['quality_rating'],
-      deliveryRating: json['delivery_rating'],
-      certifications: List<String>.from(json['certifications']),
-      paymentTerms: json['payment_terms'],
-      isActive: json['is_active'],
+      qualityRating: (json['quality_rating'] ?? 0.0).toDouble(),
+      deliveryRating: (json['delivery_rating'] ?? 0.0).toDouble(),
+      performanceMetrics:
+          SupplierPerformanceMetrics.fromJson(performanceMetricsData),
+      certifications: List<String>.from(json['certifications'] ?? []),
+      paymentTerms: json['payment_terms'] ?? '',
+      isActive: json['is_active'] ?? true,
       notes: json['notes'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : DateTime.now(),
     );
   }
 
@@ -238,6 +264,7 @@ class Supplier {
         other.supplierType == supplierType &&
         other.qualityRating == qualityRating &&
         other.deliveryRating == deliveryRating &&
+        other.performanceMetrics == performanceMetrics &&
         listEquals(other.certifications, certifications) &&
         other.paymentTerms == paymentTerms &&
         other.isActive == isActive &&
@@ -259,6 +286,7 @@ class Supplier {
       supplierType,
       qualityRating,
       deliveryRating,
+      performanceMetrics.hashCode,
       Object.hashAll(certifications),
       paymentTerms,
       isActive,
@@ -360,12 +388,18 @@ class SupplierModel {
       supplierType: supplierTypeFromString(type),
       qualityRating: 0.0, // Assuming default quality rating
       deliveryRating: 0.0, // Assuming default delivery rating
+      performanceMetrics: SupplierPerformanceMetrics(
+        qualityScore: 0.0,
+        deliveryScore: 0.0,
+        priceScore: 3.0,
+        overallScore: 3.0,
+      ),
       certifications: [],
       paymentTerms: '',
       isActive: status == 'active',
       notes: '',
       createdAt: createdAt ?? DateTime.now(),
-      updatedAt: updatedAt,
+      updatedAt: updatedAt ?? DateTime.now(),
     );
   }
 

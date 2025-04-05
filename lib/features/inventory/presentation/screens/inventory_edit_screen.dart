@@ -60,22 +60,25 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
 
       _originalItem = item;
 
-      _nameController.text = item.name;
-      _categoryController.text = item.category;
-      _unitController.text = item.unit;
-      _quantityController.text = item.quantity.toString();
-      _minimumQuantityController.text = item.minimumQuantity.toString();
-      _reorderPointController.text = item.reorderPoint.toString();
-      _locationController.text = item.location;
+      if (item != null) {
+        _nameController.text = item.name;
+        _categoryController.text = item.category;
+        _unitController.text = item.unit;
+        _quantityController.text = item.quantity.toString();
+        _minimumQuantityController.text = item.minimumQuantity.toString();
+        _reorderPointController.text = item.reorderPoint.toString();
+        _locationController.text = item.location;
 
-      if (item.batchNumber != null) {
-        _batchNumberController.text = item.batchNumber!;
-      }
+        if (item.batchNumber != null) {
+          _batchNumberController.text = item.batchNumber!;
+        }
 
-      _expiryDate = item.expiryDate;
+        _expiryDate = item.expiryDate;
 
-      if (item.additionalAttributes != null) {
-        _additionalAttributes.addAll(item.additionalAttributes!);
+        if (item.additionalAttributes != null) {
+          _additionalAttributes
+              .addAll(Map<String, dynamic>.from(item.additionalAttributes!));
+        }
       }
     } catch (e) {
       if (mounted) {

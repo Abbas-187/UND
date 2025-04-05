@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/models/maintenance_record_model.dart';
-import '../data/repositories/maintenance_record_repository.dart';
 
 final maintenanceRecordProvider = StateNotifierProvider<
     MaintenanceRecordNotifier, AsyncValue<List<MaintenanceRecordModel>>>((ref) {

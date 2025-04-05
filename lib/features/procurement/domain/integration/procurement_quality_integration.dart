@@ -119,22 +119,22 @@ class ProcurementQualityIntegration {
       // Find closest internal check by date
       final matchingChecks = internalChecks.where((check) {
         final difference =
-            check.testDate.difference(log.inspectionDate).inHours.abs();
+            check.testDate!.difference(log.inspectionDate).inHours.abs();
         return difference <= 48; // Within 48 hours
       }).toList();
 
       if (matchingChecks.isNotEmpty) {
-        matchingChecks.sort((a, b) => a.testDate
+        matchingChecks.sort((a, b) => a.testDate!
             .difference(log.inspectionDate)
             .inHours
             .abs()
             .compareTo(
-                b.testDate.difference(log.inspectionDate).inHours.abs()));
+                b.testDate!.difference(log.inspectionDate).inHours.abs()));
 
         matchedRecords.add({
           'supplierLog': log,
           'internalCheck': matchingChecks.first,
-          'timeDifference': matchingChecks.first.testDate
+          'timeDifference': matchingChecks.first.testDate!
               .difference(log.inspectionDate)
               .inHours,
         });
@@ -308,7 +308,7 @@ class ProcurementQualityIntegration {
       final samplingPlan = await _createSamplingPlan(
         materialId: item.materialId,
         quantity: item.quantity,
-        uom: item.uom,
+        uom: item.unit,
       );
 
       samplingPlans.add({

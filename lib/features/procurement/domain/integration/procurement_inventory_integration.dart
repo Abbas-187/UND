@@ -8,6 +8,10 @@ import '../../data/models/purchase_order_item_model.dart';
 import '../providers/purchase_order_provider.dart';
 import '../../../inventory/domain/providers/stock_level_provider.dart';
 import '../../../inventory/domain/providers/forecasting_provider.dart';
+import '../../../inventory/domain/providers/inventory_repository_provider.dart';
+import '../../../inventory/domain/entities/inventory_item.dart';
+import '../../../inventory/domain/entities/stock_level.dart';
+import '../../../inventory/domain/repositories/inventory_repository.dart';
 
 /// Integration service to connect procurement with inventory
 class ProcurementInventoryIntegration {
@@ -17,25 +21,26 @@ class ProcurementInventoryIntegration {
   /// Converts a received purchase order to inventory items
   Future<List<String>> convertPOToInventory(String purchaseOrderId) async {
     final purchaseOrder =
-        await _ref.read(purchaseOrderByIdProvider(purchaseOrderId).future);
+        await _ref.read(purchaseOrderByIdProvider(purchaseOrderId).future)
+            as PurchaseOrderModel?;
     final inventoryState = _ref.read(inventoryProvider.notifier);
     final createdItemIds = <String>[];
 
     // Ensure PO is in completed status
-    if (purchaseOrder.status != PurchaseOrderStatus.completed) {
+    if (purchaseOrder?.status.toString().toLowerCase() != 'received') {
       throw Exception(
-          'Only completed purchase orders can be added to inventory');
+          'Only received purchase orders can be added to inventory');
     }
 
     // Process each PO item and add to inventory
-    for (final item in purchaseOrder.items) {
+    for (final item in purchaseOrder?.items ?? []) {
       final inventoryId = await _addToInventory(
         item: item,
         poId: purchaseOrderId,
-        poNumber: purchaseOrder.poNumber,
-        supplierId: purchaseOrder.supplierId,
-        supplierName: purchaseOrder.supplierName,
-        deliveryDate: purchaseOrder.actualDeliveryDate ?? DateTime.now(),
+        poNumber: purchaseOrder?.orderNumber ?? '',
+        supplierId: purchaseOrder?.supplierId ?? '',
+        supplierName: purchaseOrder?.supplierName ?? '',
+        deliveryDate: purchaseOrder?.expectedDeliveryDate ?? DateTime.now(),
       );
 
       createdItemIds.add(inventoryId);
@@ -49,40 +54,42 @@ class ProcurementInventoryIntegration {
 
   /// Adds specific PO item to inventory
   Future<String> _addToInventory({
-    required PurchaseOrderItem item,
+    required PurchaseOrderItemModel item,
     required String poId,
     required String poNumber,
     required String supplierId,
     required String supplierName,
     required DateTime deliveryDate,
   }) async {
-    final inventoryState = _ref.read(inventoryProvider.notifier);
+    final inventoryRepository = _ref.read(inventoryRepositoryProvider);
 
     // Create the inventory item
-    final inventoryItem = InventoryItemModel(
+    final inventoryItem = InventoryItem(
       id: '', // Will be set by the repository
-      materialId: item.materialId,
-      name: item.materialName,
-      quantity: item.receivedQuantity ?? item.quantity,
-      unit: item.uom,
+      name: item.productName,
+      category: 'procurement',
+      unit: item.unit,
+      quantity: item.quantity,
+      minimumQuantity: 0,
+      reorderPoint: 0,
       location: 'receiving/zone-a', // Default receiving location
-      lotNumber:
-          item.lotNumber ?? 'LOT-${DateTime.now().millisecondsSinceEpoch}',
-      expiryDate: item.expiryDate,
-      supplierInfo: '$supplierId - $supplierName',
-      receivedDate: deliveryDate,
-      status: 'available',
       lastUpdated: DateTime.now(),
+      batchNumber: 'LOT-${DateTime.now().millisecondsSinceEpoch}',
+      additionalAttributes: {
+        'supplierInfo': '$supplierId - $supplierName',
+        'purchaseOrderId': poId,
+        'purchaseOrderNumber': poNumber,
+      },
     );
 
     // Create inventory transaction record
     final transaction = InventoryTransactionModel(
-      materialId: item.materialId,
-      materialName: item.materialName,
+      materialId: item.productId,
+      materialName: item.productName,
       warehouseId: 'receiving',
-      transactionType: TransactionType.purchase,
-      quantity: item.receivedQuantity ?? item.quantity,
-      uom: item.uom,
+      transactionType: TransactionType.receipt,
+      quantity: item.quantity,
+      uom: item.unit,
       referenceNumber: poNumber,
       referenceType: 'purchase_order',
       reason: 'PO Receipt: $poNumber',
@@ -90,9 +97,8 @@ class ProcurementInventoryIntegration {
     );
 
     // Add item to inventory with transaction
-    final itemId =
-        await inventoryState.addInventoryItem(inventoryItem, transaction);
-    return itemId;
+    final addedItem = await inventoryRepository.addItem(inventoryItem);
+    return addedItem.id;
   }
 
   /// Checks stock levels and suggests reordering
@@ -101,7 +107,7 @@ class ProcurementInventoryIntegration {
 
     // Get items below reorder level
     final itemsBelowReorderLevel =
-        await stockLevelState.getItemsBelowReorderLevel();
+        await stockLevelState.getItemsBelowReorderLevel() as List<StockLevel>;
 
     // Format results with reordering suggestion
     final reorderSuggestions = itemsBelowReorderLevel.map((item) {
@@ -146,7 +152,8 @@ class ProcurementInventoryIntegration {
     final notificationIds = <String>[];
 
     // Get critical stock items
-    final criticalItems = await stockLevelState.getItemsAtCriticalLevel();
+    final criticalItems =
+        await stockLevelState.getItemsAtCriticalLevel() as List<StockLevel>;
 
     for (final item in criticalItems) {
       // Generate notification for each critical item
@@ -197,15 +204,15 @@ class ProcurementInventoryIntegration {
     return {
       'materialId': materialId,
       'currentStock': currentStock,
-      'forecastedDemand': forecast.totalDemand,
+      'forecastedDemand': forecast['totalDemand'],
       'suggestedPurchaseQuantity': _calculateSuggestedPurchase(
         currentStock: currentStock,
-        forecastDemand: forecast.totalDemand,
+        forecastDemand: forecast['totalDemand'],
         safetyFactor: 1.2, // 20% safety factor
       ),
-      'dailyForecast': forecast.dailyDemand,
-      'forecastConfidence': forecast.confidenceScore,
-      'dataPoints': forecast.dataPoints,
+      'dailyForecast': forecast['dailyDemand'],
+      'forecastConfidence': forecast['confidenceScore'],
+      'dataPoints': forecast['dataPoints'],
     };
   }
 

@@ -1,13 +1,36 @@
 import '../entities/inventory_item.dart';
 
+/// Repository interface for inventory management
 abstract class InventoryRepository {
-  // Basic CRUD operations
-  Future<InventoryItem> getItem(String id);
-  Future<List<InventoryItem>> getAllItems();
-  Future<List<InventoryItem>> getItemsByCategory(String category);
+  /// Gets all inventory items
+  Future<List<InventoryItem>> getItems();
+
+  /// Gets an inventory item by ID
+  Future<InventoryItem?> getItem(String id);
+
+  /// Adds a new inventory item
   Future<InventoryItem> addItem(InventoryItem item);
-  Future<InventoryItem> updateItem(InventoryItem item);
+
+  /// Updates an existing inventory item
+  Future<void> updateItem(InventoryItem item);
+
+  /// Deletes an inventory item
   Future<void> deleteItem(String id);
+
+  /// Gets items below reorder level
+  Future<List<InventoryItem>> getItemsBelowReorderLevel();
+
+  /// Gets items at critical level
+  Future<List<InventoryItem>> getItemsAtCriticalLevel();
+
+  /// Gets inventory value by category
+  Future<Map<String, double>> getInventoryValueByCategory();
+
+  /// Gets top moving items
+  Future<List<InventoryItem>> getTopMovingItems(int limit);
+
+  /// Gets slow moving items
+  Future<List<InventoryItem>> getSlowMovingItems(int limit);
 
   // Inventory management operations
   Future<InventoryItem> adjustQuantity(
@@ -30,11 +53,6 @@ abstract class InventoryRepository {
   // Batch operations
   Future<void> batchUpdateItems(List<InventoryItem> items);
   Future<void> batchDeleteItems(List<String> ids);
-
-  // Analytics operations
-  Future<Map<String, double>> getInventoryValueByCategory();
-  Future<List<InventoryItem>> getTopMovingItems(int limit);
-  Future<List<InventoryItem>> getSlowMovingItems(int limit);
 
   // Real-time operations
   Stream<List<InventoryItem>> watchAllItems();

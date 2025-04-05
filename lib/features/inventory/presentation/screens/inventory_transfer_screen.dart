@@ -19,7 +19,7 @@ class InventoryTransferScreen extends ConsumerStatefulWidget {
 
 class _InventoryTransferScreenState
     extends ConsumerState<InventoryTransferScreen> {
-  late InventoryItem _sourceItem;
+  InventoryItem? _sourceItem;
   InventoryItem? _destinationItem;
   List<InventoryItem> _compatibleItems = [];
   bool _isLoading = true;
@@ -54,14 +54,14 @@ class _InventoryTransferScreenState
       _sourceItem = await repository.getItem(widget.sourceItemId);
 
       // Load all items of the same type (same name, category, and unit)
-      final allItems = await repository.getAllItems();
+      final allItems = await repository.getItems();
 
       _compatibleItems = allItems
           .where((item) =>
               item.id != widget.sourceItemId &&
-              item.name == _sourceItem.name &&
-              item.category == _sourceItem.category &&
-              item.unit == _sourceItem.unit)
+              item.name == _sourceItem!.name &&
+              item.category == _sourceItem!.category &&
+              item.unit == _sourceItem!.unit)
           .toList();
     } catch (e) {
       if (mounted) {
@@ -148,18 +148,18 @@ class _InventoryTransferScreenState
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              _sourceItem.name,
+                              _sourceItem!.name,
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 4),
-                            Text('Category: ${_sourceItem.category}'),
-                            Text('Location: ${_sourceItem.location}'),
+                            Text('Category: ${_sourceItem!.category}'),
+                            Text('Location: ${_sourceItem!.location}'),
                             const SizedBox(height: 8),
                             Row(
                               children: [
                                 const Text('Available: '),
                                 Text(
-                                  '${_sourceItem.quantity} ${_sourceItem.unit}',
+                                  '${_sourceItem!.quantity} ${_sourceItem!.unit}',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -248,7 +248,7 @@ class _InventoryTransferScreenState
                                 controller: _quantityController,
                                 decoration: InputDecoration(
                                   labelText:
-                                      'Quantity to Transfer (${_sourceItem.unit})',
+                                      'Quantity to Transfer (${_sourceItem!.unit})',
                                   border: const OutlineInputBorder(),
                                 ),
                                 keyboardType:
@@ -268,7 +268,7 @@ class _InventoryTransferScreenState
                                     return 'Quantity must be greater than zero';
                                   }
 
-                                  if (quantity > _sourceItem.quantity) {
+                                  if (quantity > _sourceItem!.quantity) {
                                     return 'Cannot transfer more than available quantity';
                                   }
 

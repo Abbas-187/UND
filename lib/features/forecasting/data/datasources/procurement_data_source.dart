@@ -10,9 +10,7 @@ class ProcurementDataSource {
     try {
       final snapshot = await _firestore.collection('procurementPlans').get();
       return snapshot.docs
-          .map((doc) => ProcurementPlanModel.fromJson(
-              doc.data() as Map<String, dynamic>,
-              id: doc.id))
+          .map((doc) => ProcurementPlanModel.fromJson(doc.data(), id: doc.id))
           .toList();
     } catch (e) {
       throw Exception(

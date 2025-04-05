@@ -139,6 +139,7 @@ class _SupplierContractDetailScreenState
         attachments: _attachments,
         pricingSchedule: _pricingSchedule,
         terms: _terms,
+        notes: '',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );

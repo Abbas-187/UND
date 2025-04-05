@@ -1,30 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:und_app/core/exceptions/failure.dart';
 import 'package:und_app/core/exceptions/result.dart';
+import 'package:und_app/features/procurement/data/datasources/supplier_remote_datasource.dart';
 import 'package:und_app/features/procurement/data/repositories/supplier_repository_impl.dart';
 import 'package:und_app/features/procurement/domain/entities/supplier.dart';
 
-// Define the interface similar to the real implementation
-class SupplierRemoteDataSource {
-  Future<List<Map<String, dynamic>>> getSuppliers({
-    String? type,
-    String? status,
-    String? searchQuery,
-  }) async =>
-      throw UnimplementedError();
+// Define exceptions for testing
+class SupplierDataSourceException implements Exception {
+  final String message;
+  final String code;
 
-  Future<Map<String, dynamic>> getSupplierById(String id) async =>
-      throw UnimplementedError();
+  SupplierDataSourceException(this.message, {this.code = 'unknown'});
 
-  Future<Map<String, dynamic>> createSupplier(
-          Map<String, dynamic> data) async =>
-      throw UnimplementedError();
-
-  Future<Map<String, dynamic>> updateSupplier(
-          String id, Map<String, dynamic> data) async =>
-      throw UnimplementedError();
-
-  Future<void> deleteSupplier(String id) async => throw UnimplementedError();
+  @override
+  String toString() => message;
 }
 
 // Custom mock implementation
@@ -106,17 +95,6 @@ class MockSupplierDataSource implements SupplierRemoteDataSource {
 
   @override
   Future<void> deleteSupplier(String id) async {}
-}
-
-// Define exceptions for testing
-class SupplierDataSourceException implements Exception {
-  final String message;
-  final String code;
-
-  SupplierDataSourceException(this.message, {this.code = 'unknown'});
-
-  @override
-  String toString() => message;
 }
 
 void main() {

@@ -12,28 +12,6 @@ enum TransactionType {
 }
 
 class InventoryTransactionModel {
-  final String? id;
-  final String materialId;
-  final String materialName;
-  final String warehouseId;
-  final TransactionType transactionType;
-  final double quantity;
-  final String uom;
-  final String? batchNumber;
-  final String? sourceLocationId;
-  final String? destinationLocationId;
-  final String? referenceNumber;
-  final String? referenceType;
-  final String? reason;
-  final String? notes;
-  final DateTime? transactionDate;
-  final String? performedBy;
-  final String? approvedBy;
-  final DateTime? approvedAt;
-  final bool isApproved;
-  final bool isPending;
-  final DateTime? createdAt;
-
   const InventoryTransactionModel({
     this.id,
     required this.materialId,
@@ -92,6 +70,27 @@ class InventoryTransactionModel {
           : null,
     );
   }
+  final String? id;
+  final String materialId;
+  final String materialName;
+  final String warehouseId;
+  final TransactionType transactionType;
+  final double quantity;
+  final String uom;
+  final String? batchNumber;
+  final String? sourceLocationId;
+  final String? destinationLocationId;
+  final String? referenceNumber;
+  final String? referenceType;
+  final String? reason;
+  final String? notes;
+  final DateTime? transactionDate;
+  final String? performedBy;
+  final String? approvedBy;
+  final DateTime? approvedAt;
+  final bool isApproved;
+  final bool isPending;
+  final DateTime? createdAt;
 
   Map<String, dynamic> toJson() {
     return {

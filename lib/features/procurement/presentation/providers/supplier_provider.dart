@@ -64,15 +64,23 @@ class SupplierListProvider extends _$SupplierListProvider {
 
   Future<List<Supplier>> _getFilteredSuppliers(SupplierFilter filter) async {
     final repository = ref.read(supplierRepositoryProvider);
+    List<Supplier> suppliers = [];
 
     if (filter.searchQuery != null && filter.searchQuery!.isNotEmpty) {
-      return await repository.filterSuppliersByName(filter.searchQuery!);
+      // Convert the stream to a list of suppliers
+      final snapshot =
+          await repository.filterSuppliersByName(filter.searchQuery!).first;
+      suppliers =
+          snapshot.docs.map((doc) => Supplier.fromJson(doc.data())).toList();
+    } else {
+      // Get all suppliers and convert to a list
+      final snapshot = await repository.getAllSuppliers().first;
+      suppliers =
+          snapshot.docs.map((doc) => Supplier.fromJson(doc.data())).toList();
     }
 
     // Apply other filters
-    List<Supplier> suppliers = await repository.getAllSuppliers();
-
-    suppliers = suppliers.where((supplier) {
+    return suppliers.where((supplier) {
       bool match = true;
 
       if (filter.supplierType != null) {
@@ -99,8 +107,6 @@ class SupplierListProvider extends _$SupplierListProvider {
 
       return match;
     }).toList();
-
-    return suppliers;
   }
 
   // CRUD operations
@@ -128,7 +134,6 @@ class SupplierListProvider extends _$SupplierListProvider {
     // Implement integration with quality tracking
     // This would need a separate repository for quality logs
     // For now we'll assume it's part of the supplier repository
-    final repository = ref.read(supplierRepositoryProvider);
 
     // Add quality log implementation
     // This would update the supplier's quality rating based on the new log

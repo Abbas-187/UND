@@ -29,14 +29,6 @@ enum UserRole {
 }
 
 class UserModel {
-  final String uid;
-  final String email;
-  final String? displayName;
-  final String? photoUrl;
-  final UserRole role;
-  final String? warehouseId;
-  final bool isEmailVerified;
-
   const UserModel({
     required this.uid,
     required this.email,
@@ -74,6 +66,13 @@ class UserModel {
       isEmailVerified: json['isEmailVerified'] as bool,
     );
   }
+  final String uid;
+  final String email;
+  final String? displayName;
+  final String? photoUrl;
+  final UserRole role;
+  final String? warehouseId;
+  final bool isEmailVerified;
 
   Map<String, dynamic> toJson() {
     return {

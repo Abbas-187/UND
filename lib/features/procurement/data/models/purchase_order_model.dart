@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'purchase_order_item_model.dart';
+import 'purchase_order_item_model.dart' as model;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../domain/entities/purchase_order.dart';
+import '../../domain/entities/purchase_order.dart' as entity;
 
 /// Enum representing different statuses a purchase order can have
 enum PurchaseOrderStatus {
@@ -9,7 +9,7 @@ enum PurchaseOrderStatus {
   submitted,
   approved,
   rejected,
-  completed,
+  received,
   cancelled
 }
 
@@ -100,7 +100,7 @@ class PurchaseOrderItemModel {
   }
 
   /// Convert from domain entity
-  factory PurchaseOrderItemModel.fromEntity(PurchaseOrderItem entity) {
+  factory PurchaseOrderItemModel.fromEntity(entity.PurchaseOrderItem entity) {
     return PurchaseOrderItemModel(
       id: entity.id,
       productId: entity.productId,
@@ -115,8 +115,8 @@ class PurchaseOrderItemModel {
   }
 
   /// Convert to domain entity
-  PurchaseOrderItem toEntity() {
-    return PurchaseOrderItem(
+  entity.PurchaseOrderItem toEntity() {
+    return entity.PurchaseOrderItem(
       id: id ?? '',
       productId: productId,
       productName: productName,
@@ -220,7 +220,7 @@ class PurchaseOrderModel {
   }
 
   /// Convert from Domain Entity to Model
-  factory PurchaseOrderModel.fromEntity(PurchaseOrder entity) {
+  factory PurchaseOrderModel.fromEntity(entity.PurchaseOrder entity) {
     return PurchaseOrderModel(
       id: entity.id,
       orderNumber: entity.orderNumber,
@@ -244,8 +244,8 @@ class PurchaseOrderModel {
   }
 
   /// Convert to Domain Entity
-  PurchaseOrder toEntity() {
-    return PurchaseOrder(
+  entity.PurchaseOrder toEntity() {
+    return entity.PurchaseOrder(
       id: id ?? '',
       orderNumber: orderNumber,
       supplierId: supplierId,
@@ -266,22 +266,22 @@ class PurchaseOrderModel {
   }
 
   /// Map string to PurchaseOrderStatus enum
-  PurchaseOrderStatus _mapStringToPurchaseOrderStatus(String status) {
+  entity.PurchaseOrderStatus _mapStringToPurchaseOrderStatus(String status) {
     switch (status.toLowerCase()) {
       case 'draft':
-        return PurchaseOrderStatus.draft;
+        return entity.PurchaseOrderStatus.draft;
       case 'submitted':
-        return PurchaseOrderStatus.submitted;
+        return entity.PurchaseOrderStatus.submitted;
       case 'approved':
-        return PurchaseOrderStatus.approved;
+        return entity.PurchaseOrderStatus.approved;
       case 'rejected':
-        return PurchaseOrderStatus.rejected;
-      case 'completed':
-        return PurchaseOrderStatus.completed;
+        return entity.PurchaseOrderStatus.rejected;
+      case 'received':
+        return entity.PurchaseOrderStatus.received;
       case 'cancelled':
-        return PurchaseOrderStatus.cancelled;
+        return entity.PurchaseOrderStatus.cancelled;
       default:
-        return PurchaseOrderStatus.draft;
+        return entity.PurchaseOrderStatus.draft;
     }
   }
 

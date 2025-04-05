@@ -1,16 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GoodsIssueItemModel {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final double quantity;
-  final String unitOfMeasure;
-  final String? batchNumber;
-  final String? locationId;
-  final String? remarks;
-  final Map<String, dynamic>? customAttributes;
-
   const GoodsIssueItemModel({
     required this.itemId,
     required this.itemCode,
@@ -36,6 +26,15 @@ class GoodsIssueItemModel {
       customAttributes: json['customAttributes'] as Map<String, dynamic>?,
     );
   }
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final double quantity;
+  final String unitOfMeasure;
+  final String? batchNumber;
+  final String? locationId;
+  final String? remarks;
+  final Map<String, dynamic>? customAttributes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -77,22 +76,6 @@ class GoodsIssueItemModel {
 }
 
 class GoodsIssueModel {
-  final String? id;
-  final String documentNumber;
-  final DateTime issueDate;
-  final String requestedByDepartment;
-  final String? requestReference;
-  final String warehouseId;
-  final String issuedByUserId;
-  final String? remarks;
-  final List<GoodsIssueItemModel> items;
-  final bool isPosted;
-  final DateTime? postedDate;
-  final String? postedByUserId;
-  final String status;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-
   const GoodsIssueModel({
     this.id,
     required this.documentNumber,
@@ -156,6 +139,21 @@ class GoodsIssueModel {
           : null,
     });
   }
+  final String? id;
+  final String documentNumber;
+  final DateTime issueDate;
+  final String requestedByDepartment;
+  final String? requestReference;
+  final String warehouseId;
+  final String issuedByUserId;
+  final String? remarks;
+  final List<GoodsIssueItemModel> items;
+  final bool isPosted;
+  final DateTime? postedDate;
+  final String? postedByUserId;
+  final String status;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

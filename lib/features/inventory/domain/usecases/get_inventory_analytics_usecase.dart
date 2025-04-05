@@ -32,7 +32,7 @@ class GetInventoryAnalyticsUseCase {
       repository.getInventoryValueByCategory(),
       repository.getTopMovingItems(movingItemsLimit),
       repository.getSlowMovingItems(movingItemsLimit),
-      repository.getAllItems(),
+      repository.getItems(),
       repository.getLowStockItems(),
       repository.getExpiringItems(DateTime.now().add(const Duration(days: 30))),
     ]);

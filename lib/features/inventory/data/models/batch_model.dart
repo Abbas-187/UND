@@ -1,14 +1,4 @@
 class BatchModel {
-  final String batchNumber;
-  final double quantity;
-  final DateTime? manufacturingDate;
-  final DateTime? expiryDate;
-  final String? supplierName;
-  final String? supplierBatch;
-  final String? notes;
-  final String? qualityStatus;
-  final bool isQuarantined;
-
   const BatchModel({
     required this.batchNumber,
     required this.quantity,
@@ -38,6 +28,15 @@ class BatchModel {
       isQuarantined: json['isQuarantined'] as bool? ?? false,
     );
   }
+  final String batchNumber;
+  final double quantity;
+  final DateTime? manufacturingDate;
+  final DateTime? expiryDate;
+  final String? supplierName;
+  final String? supplierBatch;
+  final String? notes;
+  final String? qualityStatus;
+  final bool isQuarantined;
 
   Map<String, dynamic> toJson() {
     return {

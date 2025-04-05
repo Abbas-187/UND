@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../data/models/purchase_order_model.dart';
+import '../../data/models/purchase_order_model.dart' as model;
 import '../../data/repositories/purchase_order_repository.dart';
+import '../../domain/entities/purchase_order.dart' as entity;
 
 part 'purchase_order_provider.g.dart';
 
@@ -16,13 +17,13 @@ final purchaseOrderRepositoryProvider =
 // Filter/Sort class for Purchase Orders
 class PurchaseOrderFilter {
   final String? searchQuery;
-  final PurchaseOrderStatus? status;
+  final entity.PurchaseOrderStatus? status;
   final String? supplierId;
   final DateTime? startDate;
   final DateTime? endDate;
   final double? minAmount;
   final double? maxAmount;
-  final PaymentStatus? paymentStatus;
+  final model.PaymentStatus? paymentStatus;
   final String? sortField;
   final bool sortAscending;
 
@@ -41,13 +42,13 @@ class PurchaseOrderFilter {
 
   PurchaseOrderFilter copyWith({
     String? searchQuery,
-    PurchaseOrderStatus? status,
+    entity.PurchaseOrderStatus? status,
     String? supplierId,
     DateTime? startDate,
     DateTime? endDate,
     double? minAmount,
     double? maxAmount,
-    PaymentStatus? paymentStatus,
+    model.PaymentStatus? paymentStatus,
     String? sortField,
     bool? sortAscending,
   }) {
@@ -74,45 +75,45 @@ final poFilterProvider = StateProvider<PurchaseOrderFilter>((ref) {
 @riverpod
 class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
   @override
-  Future<List<PurchaseOrder>> build() async {
+  Future<List<entity.PurchaseOrder>> build() async {
     final filter = ref.watch(poFilterProvider);
-    return _getFilteredPurchaseOrders(filter);
+    final models = await _getFilteredPurchaseOrders(filter);
+    return models.map((model) => model.toEntity()).toList();
   }
 
-  Future<List<PurchaseOrder>> _getFilteredPurchaseOrders(
+  Future<List<model.PurchaseOrderModel>> _getFilteredPurchaseOrders(
       PurchaseOrderFilter filter) async {
     final repository = ref.read(purchaseOrderRepositoryProvider);
 
     // Start with all purchase orders
-    List<PurchaseOrder> purchaseOrders = [];
+    List<model.PurchaseOrderModel> purchaseOrders = [];
 
     // Apply filters based on available filter options
     if (filter.status != null) {
       final snapshot = await repository
-          .getPurchaseOrdersByStatus(filter.status.toString().split('.').last);
+          .getPurchaseOrdersByStatus(filter.status.toString().split('.').last)
+          .first;
       purchaseOrders = snapshot.docs
-          .map((doc) =>
-              PurchaseOrder.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => model.PurchaseOrderModel.fromMap(doc.data(), doc.id))
           .toList();
     } else if (filter.supplierId != null) {
-      final snapshot =
-          await repository.getPurchaseOrdersBySupplier(filter.supplierId!);
+      final snapshot = await repository
+          .getPurchaseOrdersBySupplier(filter.supplierId!)
+          .first;
       purchaseOrders = snapshot.docs
-          .map((doc) =>
-              PurchaseOrder.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => model.PurchaseOrderModel.fromMap(doc.data(), doc.id))
           .toList();
     } else if (filter.startDate != null && filter.endDate != null) {
-      final snapshot = await repository.getPurchaseOrdersByDateRange(
-          filter.startDate!, filter.endDate!);
+      final snapshot = await repository
+          .getPurchaseOrdersByDateRange(filter.startDate!, filter.endDate!)
+          .first;
       purchaseOrders = snapshot.docs
-          .map((doc) =>
-              PurchaseOrder.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => model.PurchaseOrderModel.fromMap(doc.data(), doc.id))
           .toList();
     } else {
       final snapshot = await repository.getAllPurchaseOrders().first;
       purchaseOrders = snapshot.docs
-          .map((doc) =>
-              PurchaseOrder.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => model.PurchaseOrderModel.fromMap(doc.data(), doc.id))
           .toList();
     }
 
@@ -122,7 +123,7 @@ class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
 
       if (filter.searchQuery != null && filter.searchQuery!.isNotEmpty) {
         match = match &&
-            (po.poNumber.contains(filter.searchQuery!) ||
+            (po.orderNumber.contains(filter.searchQuery!) ||
                 po.supplierName.contains(filter.searchQuery!));
       }
 
@@ -135,7 +136,7 @@ class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
       }
 
       if (filter.paymentStatus != null) {
-        match = match && po.paymentStatus == filter.paymentStatus;
+        match = match && po.status == filter.paymentStatus.toString();
       }
 
       return match;
@@ -148,9 +149,9 @@ class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
         dynamic valueB;
 
         switch (filter.sortField) {
-          case 'poNumber':
-            valueA = a.poNumber;
-            valueB = b.poNumber;
+          case 'orderNumber':
+            valueA = a.orderNumber;
+            valueB = b.orderNumber;
             break;
           case 'supplierName':
             valueA = a.supplierName;
@@ -203,7 +204,7 @@ class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
 
   // Workflow state management
   Future<void> updatePurchaseOrderStatus(
-      String poId, PurchaseOrderStatus status) async {
+      String poId, entity.PurchaseOrderStatus status) async {
     final repository = ref.read(purchaseOrderRepositoryProvider);
     await repository.transitionPurchaseOrderStatus(
         poId, status.toString().split('.').last);
@@ -251,7 +252,7 @@ class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
 
     final repository = ref.read(purchaseOrderRepositoryProvider);
     final poDoc = await repository.getPurchaseOrder(poId);
-    final po = PurchaseOrder.fromJson(poDoc.data() as Map<String, dynamic>);
+    final po = model.PurchaseOrderModel.fromMap(poDoc.data()!, poDoc.id);
 
     // Here you would call the inventory system to update it
     // For example:
@@ -263,10 +264,8 @@ class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
 
   Future<void> registerDelivery(String poId, DateTime deliveryDate) async {
     final repository = ref.read(purchaseOrderRepositoryProvider);
-    await repository.updatePurchaseOrder(poId, {
-      'actualDeliveryDate': deliveryDate,
-      'status': PurchaseOrderStatus.delivered.toString().split('.').last
-    });
+    await repository.updatePurchaseOrder(
+        poId, {'actualDeliveryDate': deliveryDate, 'status': 'completed'});
 
     // Update inventory with actual received items
     // This would be implemented in coordination with your inventory system
@@ -277,20 +276,21 @@ class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
 
 // Single purchase order provider
 final purchaseOrderProvider =
-    FutureProvider.family<PurchaseOrder, String>((ref, poId) async {
+    FutureProvider.family<entity.PurchaseOrder, String>((ref, poId) async {
   final repository = ref.read(purchaseOrderRepositoryProvider);
   final poDoc = await repository.getPurchaseOrder(poId);
-  return PurchaseOrder.fromJson(poDoc.data() as Map<String, dynamic>);
+  final poModel = model.PurchaseOrderModel.fromMap(poDoc.data()!, poDoc.id);
+  return poModel.toEntity();
 });
 
 // Purchase order items provider
 final purchaseOrderItemsProvider =
-    StreamProvider.family<List<PurchaseOrderItem>, String>((ref, poId) {
+    StreamProvider.family<List<model.PurchaseOrderItemModel>, String>(
+        (ref, poId) {
   final repository = ref.read(purchaseOrderRepositoryProvider);
   return repository.getAllPurchaseOrderItems(poId).map((snapshot) => snapshot
       .docs
-      .map((doc) =>
-          PurchaseOrderItem.fromJson(doc.data() as Map<String, dynamic>))
+      .map((doc) => model.PurchaseOrderItemModel.fromMap(doc.data()))
       .toList());
 });
 

@@ -20,6 +20,15 @@ class TransferStockUseCase {
     final sourceItem = await repository.getItem(sourceItemId);
     final destinationItem = await repository.getItem(destinationItemId);
 
+    // Check for null items
+    if (sourceItem == null) {
+      throw Exception('Source item not found');
+    }
+
+    if (destinationItem == null) {
+      throw Exception('Destination item not found');
+    }
+
     // Validate items are the same type
     if (sourceItem.name != destinationItem.name ||
         sourceItem.category != destinationItem.category ||

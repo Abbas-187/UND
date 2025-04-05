@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/repositories/inventory_repository.dart';
 import '../models/inventory_item_model.dart';
@@ -26,7 +27,6 @@ class InventoryRepositoryImpl implements InventoryRepository {
     return InventoryItemModel.fromFirestore(doc).toDomain();
   }
 
-  @override
   Future<List<InventoryItem>> getAllItems() async {
     final snapshot = await _inventoryCollection.get();
     return snapshot.docs
@@ -34,7 +34,6 @@ class InventoryRepositoryImpl implements InventoryRepository {
         .toList();
   }
 
-  @override
   Future<List<InventoryItem>> getItemsByCategory(String category) async {
     final snapshot =
         await _inventoryCollection.where('category', isEqualTo: category).get();
@@ -45,20 +44,43 @@ class InventoryRepositoryImpl implements InventoryRepository {
 
   @override
   Future<InventoryItem> addItem(InventoryItem item) async {
-    final model = InventoryItemModel.fromDomain(item);
-    final docRef = _inventoryCollection.doc();
-    final modelWithId = model.copyWith(id: docRef.id);
-    await docRef.set(modelWithId.toJson());
+    // Generate an ID if not provided
+    final id = item.id.isEmpty
+        ? _firestore.collection('inventory_items').doc().id
+        : item.id;
 
-    // Record initial stock as a movement
-    await _recordMovement(
-      docRef.id,
-      item.quantity,
-      'Initial stock',
-      DateTime.now(),
+    // Create a new item with the ID
+    final newItem = InventoryItem(
+      id: id,
+      name: item.name,
+      category: item.category,
+      unit: item.unit,
+      quantity: item.quantity,
+      minimumQuantity: item.minimumQuantity,
+      reorderPoint: item.reorderPoint,
+      location: item.location,
+      lastUpdated: item.lastUpdated,
+      batchNumber: item.batchNumber,
+      additionalAttributes: item.additionalAttributes,
     );
 
-    return modelWithId.toDomain();
+    // Convert to Map and save in Firestore
+    final Map<String, dynamic> itemMap = {
+      'name': newItem.name,
+      'category': newItem.category,
+      'unit': newItem.unit,
+      'quantity': newItem.quantity,
+      'minimumQuantity': newItem.minimumQuantity,
+      'reorderPoint': newItem.reorderPoint,
+      'location': newItem.location,
+      'lastUpdated': newItem.lastUpdated,
+      'batchNumber': newItem.batchNumber,
+      'additionalAttributes': newItem.additionalAttributes,
+    };
+
+    await _firestore.collection('inventory_items').doc(id).set(itemMap);
+
+    return newItem;
   }
 
   @override
@@ -308,4 +330,44 @@ class InventoryRepositoryImpl implements InventoryRepository {
             .map((doc) => InventoryItemModel.fromFirestore(doc).toDomain())
             .toList());
   }
+
+  @override
+  Future<List<InventoryItem>> getItems() async {
+    final snapshot = await _inventoryCollection.get();
+    return snapshot.docs
+        .map((doc) => InventoryItemModel.fromFirestore(doc).toDomain())
+        .toList();
+  }
+
+  @override
+  Future<List<InventoryItem>> getItemsAtCriticalLevel() async {
+    final snapshot = await _inventoryCollection
+        .where('quantity', isLessThanOrEqualTo: 'minimumQuantity')
+        .get();
+
+    final items = snapshot.docs
+        .map((doc) => InventoryItemModel.fromFirestore(doc).toDomain())
+        .toList();
+
+    // Filter to only include truly critical items (50% of minimum quantity)
+    return items
+        .where((item) => item.quantity <= item.minimumQuantity * 0.5)
+        .toList();
+  }
+
+  @override
+  Future<List<InventoryItem>> getItemsBelowReorderLevel() async {
+    final snapshot = await _inventoryCollection
+        .where('quantity', isLessThanOrEqualTo: 'reorderPoint')
+        .get();
+
+    return snapshot.docs
+        .map((doc) => InventoryItemModel.fromFirestore(doc).toDomain())
+        .toList();
+  }
 }
+
+// Provider for the implementation
+final inventoryRepositoryImplProvider = Provider<InventoryRepository>((ref) {
+  return InventoryRepositoryImpl();
+});

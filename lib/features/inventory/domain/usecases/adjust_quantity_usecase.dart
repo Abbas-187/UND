@@ -15,6 +15,10 @@ class AdjustQuantityUseCase {
     // Get current item to validate adjustment
     final item = await repository.getItem(itemId);
 
+    if (item == null) {
+      throw Exception('Item not found');
+    }
+
     // Validate resulting quantity won't be negative
     if (item.quantity + adjustment < 0) {
       throw Exception('Cannot adjust quantity below zero');

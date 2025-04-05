@@ -48,3 +48,62 @@ class PendingQualityTests extends _$PendingQualityTests {
     return repository.getPendingQualityTests();
   }
 }
+
+/// Provider for quality parameters state
+final qualityParametersProvider =
+    StateNotifierProvider<QualityParametersNotifier, QualityParametersState>(
+        (ref) {
+  return QualityParametersNotifier();
+});
+
+/// State for quality parameters
+class QualityParametersState {
+  final List<DairyQualityParametersModel> parameters;
+  final bool isLoading;
+  final String? error;
+
+  QualityParametersState({
+    this.parameters = const [],
+    this.isLoading = false,
+    this.error,
+  });
+
+  QualityParametersState copyWith({
+    List<DairyQualityParametersModel>? parameters,
+    bool? isLoading,
+    String? error,
+  }) {
+    return QualityParametersState(
+      parameters: parameters ?? this.parameters,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+    );
+  }
+}
+
+/// Notifier for quality parameters
+class QualityParametersNotifier extends StateNotifier<QualityParametersState> {
+  QualityParametersNotifier() : super(QualityParametersState());
+
+  /// Gets quality checks by supplier
+  Future<List<DairyQualityParametersModel>> getQualityChecksBySupplier({
+    required String supplierId,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    // This would fetch from a repository in a real implementation
+    // Mock implementation for now
+    return [];
+  }
+
+  /// Gets quality parameters for an item
+  Future<Map<String, dynamic>> getQualityParameters(String itemId) async {
+    // This would fetch from a repository in a real implementation
+    // Mock implementation for now
+    return {
+      'fatContent': 3.8,
+      'proteinContent': 3.2,
+      'bacterialCount': 80000,
+    };
+  }
+}

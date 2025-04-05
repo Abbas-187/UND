@@ -99,7 +99,7 @@ class MilkReceptionScreen extends ConsumerWidget {
                 '${reception.supplierName} - ${reception.quantityLiters}L'),
             subtitle: Text(
               'Received: ${_formatDateTime(reception.receptionDate)}\n'
-              'Status: ${_formatStatus(reception.status)}',
+              'Status: ${_getStatusText(reception.status)}',
             ),
             trailing: _buildStatusIcon(reception.status),
             isThreeLine: true,
@@ -124,7 +124,7 @@ class MilkReceptionScreen extends ConsumerWidget {
         '${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
-  String _formatStatus(ReceptionStatus status) {
+  String _getStatusText(ReceptionStatus status) {
     switch (status) {
       case ReceptionStatus.received:
         return 'Received';
@@ -134,8 +134,6 @@ class MilkReceptionScreen extends ConsumerWidget {
         return 'Accepted';
       case ReceptionStatus.rejected:
         return 'Rejected';
-      default:
-        return status.toString().split('.').last;
     }
   }
 
@@ -160,9 +158,6 @@ class MilkReceptionScreen extends ConsumerWidget {
         iconData = Icons.cancel;
         color = Colors.red;
         break;
-      default:
-        iconData = Icons.help;
-        color = Colors.grey;
     }
 
     return Icon(iconData, color: color);

@@ -1,42 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WarehouseLocationModel {
-  final String? id;
-  final String warehouseId;
-  final String locationCode;
-  final String locationName;
-  final String locationType;
-  final String? zone;
-  final String? aisle;
-  final String? rack;
-  final String? level;
-  final String? bin;
-  final String? parentLocationId;
-  final double? maxWeight;
-  final double? maxVolume;
-  final double? currentWeight;
-  final double? currentVolume;
-  final int? currentItemCount;
-  final List<String>? specialHandling;
-  final List<String>? restrictedMaterials;
-  final String? temperatureZone;
-  final double? minTemperature;
-  final double? maxTemperature;
-  final bool? requiresHumidityControl;
-  final double? minHumidity;
-  final double? maxHumidity;
-  final bool isActive;
-  final bool isQuarantine;
-  final bool isStaging;
-  final bool isReceiving;
-  final bool isShipping;
-  final String? notes;
-  final String? barcode;
-  final String? createdBy;
-  final DateTime? createdAt;
-  final String? updatedBy;
-  final DateTime? updatedAt;
-
   const WarehouseLocationModel({
     this.id,
     required this.warehouseId,
@@ -150,6 +114,41 @@ class WarehouseLocationModel {
           : null,
     });
   }
+  final String? id;
+  final String warehouseId;
+  final String locationCode;
+  final String locationName;
+  final String locationType;
+  final String? zone;
+  final String? aisle;
+  final String? rack;
+  final String? level;
+  final String? bin;
+  final String? parentLocationId;
+  final double? maxWeight;
+  final double? maxVolume;
+  final double? currentWeight;
+  final double? currentVolume;
+  final int? currentItemCount;
+  final List<String>? specialHandling;
+  final List<String>? restrictedMaterials;
+  final String? temperatureZone;
+  final double? minTemperature;
+  final double? maxTemperature;
+  final bool? requiresHumidityControl;
+  final double? minHumidity;
+  final double? maxHumidity;
+  final bool isActive;
+  final bool isQuarantine;
+  final bool isStaging;
+  final bool isReceiving;
+  final bool isShipping;
+  final String? notes;
+  final String? barcode;
+  final String? createdBy;
+  final DateTime? createdAt;
+  final String? updatedBy;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
