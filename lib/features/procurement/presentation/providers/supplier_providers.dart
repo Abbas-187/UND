@@ -14,14 +14,6 @@ part 'supplier_providers.g.dart';
 /// Represents the state of a supplier list
 @immutable
 class SuppliersState {
-  final bool isLoading;
-  final bool hasError;
-  final String? errorMessage;
-  final List<Supplier> suppliers;
-  final bool hasMore;
-  final SupplierType? selectedType;
-  final SupplierStatus? selectedStatus;
-  final String? searchQuery;
 
   const SuppliersState({
     this.isLoading = false,
@@ -33,6 +25,14 @@ class SuppliersState {
     this.selectedStatus,
     this.searchQuery,
   });
+  final bool isLoading;
+  final bool hasError;
+  final String? errorMessage;
+  final List<Supplier> suppliers;
+  final bool hasMore;
+  final SupplierType? selectedType;
+  final SupplierStatus? selectedStatus;
+  final String? searchQuery;
 
   SuppliersState copyWith({
     bool? isLoading,
@@ -66,10 +66,6 @@ class SuppliersState {
 /// Represents the state of a supplier detail
 @immutable
 class SupplierDetailState {
-  final bool isLoading;
-  final bool hasError;
-  final String? errorMessage;
-  final Supplier? supplier;
 
   const SupplierDetailState({
     this.isLoading = false,
@@ -77,6 +73,10 @@ class SupplierDetailState {
     this.errorMessage,
     this.supplier,
   });
+  final bool isLoading;
+  final bool hasError;
+  final String? errorMessage;
+  final Supplier? supplier;
 
   SupplierDetailState copyWith({
     bool? isLoading,

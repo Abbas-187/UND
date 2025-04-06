@@ -4,26 +4,6 @@ import 'resource_allocation_model.dart';
 
 /// Model representing a production plan
 class ProductionPlanModel {
-  final String? id;
-  final String name;
-  final String description;
-  final DateTime createdDate;
-  final String? createdBy;
-  final String createdByUserId;
-  final DateTime startDate;
-  final DateTime endDate;
-  final List<ProductionItemModel> productionItems;
-  final List<String>? productIds;
-  final List<ProductionSlotModel>? slots;
-  final List<ResourceAllocationModel>? resourceAllocation;
-  final Map<String, dynamic>? constraints;
-  final String status;
-  final DateTime? approvedDate;
-  final String? approvedByUserId;
-  final String? approvedBy;
-  final bool? isActive;
-  final DateTime? lastModifiedDate;
-  final String? lastModifiedBy;
 
   const ProductionPlanModel({
     this.id,
@@ -99,6 +79,26 @@ class ProductionPlanModel {
       lastModifiedBy: json['lastModifiedBy'] as String?,
     );
   }
+  final String? id;
+  final String name;
+  final String description;
+  final DateTime createdDate;
+  final String? createdBy;
+  final String createdByUserId;
+  final DateTime startDate;
+  final DateTime endDate;
+  final List<ProductionItemModel> productionItems;
+  final List<String>? productIds;
+  final List<ProductionSlotModel>? slots;
+  final List<ResourceAllocationModel>? resourceAllocation;
+  final Map<String, dynamic>? constraints;
+  final String status;
+  final DateTime? approvedDate;
+  final String? approvedByUserId;
+  final String? approvedBy;
+  final bool? isActive;
+  final DateTime? lastModifiedDate;
+  final String? lastModifiedBy;
 
   Map<String, dynamic> toJson() {
     return {
@@ -176,13 +176,6 @@ class ProductionPlanModel {
 
 /// Model representing an item in a production plan
 class ProductionItemModel {
-  final String productId;
-  final String productName;
-  final double quantity;
-  final String unitOfMeasure;
-  final DateTime scheduledDate;
-  final Map<String, double>? resourceRequirements;
-  final String status;
 
   const ProductionItemModel({
     required this.productId,
@@ -209,6 +202,13 @@ class ProductionItemModel {
       status: json['status'] as String? ?? 'pending',
     );
   }
+  final String productId;
+  final String productName;
+  final double quantity;
+  final String unitOfMeasure;
+  final DateTime scheduledDate;
+  final Map<String, double>? resourceRequirements;
+  final String status;
 
   Map<String, dynamic> toJson() {
     return {

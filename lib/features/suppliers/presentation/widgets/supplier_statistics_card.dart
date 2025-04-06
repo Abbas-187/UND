@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/supplier_provider.dart';
 
 class SupplierStatisticsCard extends ConsumerWidget {
-  const SupplierStatisticsCard({Key? key}) : super(key: key);
+  const SupplierStatisticsCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

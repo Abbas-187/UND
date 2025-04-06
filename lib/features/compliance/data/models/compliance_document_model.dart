@@ -28,13 +28,6 @@ enum ApprovalStatus {
 
 /// Information about document approver
 class ApproverInfo {
-  final String approverId;
-  final String approverName;
-  final String role;
-  final DateTime approvalDate;
-  final String? comments;
-  final String? digitalSignature;
-  final bool approved;
 
   const ApproverInfo({
     required this.approverId,
@@ -59,6 +52,13 @@ class ApproverInfo {
       approved: json['approved'] as bool,
     );
   }
+  final String approverId;
+  final String approverName;
+  final String role;
+  final DateTime approvalDate;
+  final String? comments;
+  final String? digitalSignature;
+  final bool approved;
 
   Map<String, dynamic> toJson() {
     return {
@@ -103,15 +103,6 @@ class ApproverInfo {
 
 /// Version information for document control
 class DocumentVersion {
-  final String versionNumber;
-  final DateTime effectiveDate;
-  final DateTime? obsoleteDate;
-  final String modifiedBy;
-  final String? changeReason;
-  final String? changeSummary;
-  final String documentUrl;
-  final bool isCurrent;
-  final List<ApproverInfo>? approvals;
 
   const DocumentVersion({
     required this.versionNumber,
@@ -159,6 +150,15 @@ class DocumentVersion {
       approvals: approvals,
     );
   }
+  final String versionNumber;
+  final DateTime effectiveDate;
+  final DateTime? obsoleteDate;
+  final String modifiedBy;
+  final String? changeReason;
+  final String? changeSummary;
+  final String documentUrl;
+  final bool isCurrent;
+  final List<ApproverInfo>? approvals;
 
   Map<String, dynamic> toJson() {
     // Convert approvals list if present
@@ -230,13 +230,6 @@ class DocumentVersion {
 
 /// Regulatory authority information
 class RegulatoryReference {
-  final String authorityName;
-  final String? authorityCode;
-  final String? regulationTitle;
-  final String? regulationNumber;
-  final String? section;
-  final String? details;
-  final String? complianceRequirements;
 
   const RegulatoryReference({
     required this.authorityName,
@@ -259,6 +252,13 @@ class RegulatoryReference {
       complianceRequirements: json['complianceRequirements'] as String?,
     );
   }
+  final String authorityName;
+  final String? authorityCode;
+  final String? regulationTitle;
+  final String? regulationNumber;
+  final String? section;
+  final String? details;
+  final String? complianceRequirements;
 
   Map<String, dynamic> toJson() {
     return {
@@ -296,18 +296,6 @@ class RegulatoryReference {
 
 /// Audit record for compliance document
 class AuditRecord {
-  final String auditId;
-  final DateTime auditDate;
-  final String auditorId;
-  final String auditorName;
-  final String? auditType;
-  final String? findings;
-  final bool compliant;
-  final String? nonComplianceDetails;
-  final List<String>? correctiveActions;
-  final DateTime? followUpDate;
-  final String? resolution;
-  final String? auditReport;
 
   const AuditRecord({
     required this.auditId,
@@ -358,6 +346,18 @@ class AuditRecord {
       auditReport: json['auditReport'] as String?,
     );
   }
+  final String auditId;
+  final DateTime auditDate;
+  final String auditorId;
+  final String auditorName;
+  final String? auditType;
+  final String? findings;
+  final bool compliant;
+  final String? nonComplianceDetails;
+  final List<String>? correctiveActions;
+  final DateTime? followUpDate;
+  final String? resolution;
+  final String? auditReport;
 
   Map<String, dynamic> toJson() {
     return {
@@ -424,34 +424,6 @@ class AuditRecord {
 
 /// Main compliance document model for dairy factory
 class ComplianceDocumentModel {
-  final String? id;
-  final String documentCode;
-  final String title;
-  final DocumentType documentType;
-  final String description;
-  final String? owner;
-  final String? department;
-  final DateTime issueDate;
-  final DateTime? expiryDate;
-  final ApprovalStatus approvalStatus;
-  final List<DocumentVersion> versions;
-  final DocumentVersion? currentVersion;
-  final List<String>? applicableProductIds;
-  final List<String>? applicableProcessIds;
-  final List<RegulatoryReference>? regulatoryReferences;
-  final List<String>? relatedDocuments;
-  final List<AuditRecord>? auditHistory;
-  final bool confidential;
-  final String? accessLevel;
-  final String? storageLocation;
-  final String? notes;
-  final DateTime createdAt;
-  final String createdBy;
-  final DateTime? updatedAt;
-  final String? updatedBy;
-  final int reviewCycleMonths;
-  final DateTime? nextReviewDate;
-  final String? reviewReminder;
 
   const ComplianceDocumentModel({
     this.id,
@@ -626,6 +598,34 @@ class ComplianceDocumentModel {
 
     return ComplianceDocumentModel.fromJson(jsonWithId);
   }
+  final String? id;
+  final String documentCode;
+  final String title;
+  final DocumentType documentType;
+  final String description;
+  final String? owner;
+  final String? department;
+  final DateTime issueDate;
+  final DateTime? expiryDate;
+  final ApprovalStatus approvalStatus;
+  final List<DocumentVersion> versions;
+  final DocumentVersion? currentVersion;
+  final List<String>? applicableProductIds;
+  final List<String>? applicableProcessIds;
+  final List<RegulatoryReference>? regulatoryReferences;
+  final List<String>? relatedDocuments;
+  final List<AuditRecord>? auditHistory;
+  final bool confidential;
+  final String? accessLevel;
+  final String? storageLocation;
+  final String? notes;
+  final DateTime createdAt;
+  final String createdBy;
+  final DateTime? updatedAt;
+  final String? updatedBy;
+  final int reviewCycleMonths;
+  final DateTime? nextReviewDate;
+  final String? reviewReminder;
 
   Map<String, dynamic> toJson() {
     // Convert versions list

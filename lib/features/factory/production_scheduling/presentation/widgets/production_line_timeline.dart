@@ -5,10 +5,10 @@ import '../../data/models/production_line_allocation_model.dart';
 
 class ProductionLineTimeline extends ConsumerWidget {
   const ProductionLineTimeline({
-    Key? key,
+    super.key,
     required this.lineAllocation,
     this.onTimeBlockSelected,
-  }) : super(key: key);
+  });
   final ProductionLineAllocationModel lineAllocation;
   final Function(DateTime startTime, DateTime endTime)? onTimeBlockSelected;
 

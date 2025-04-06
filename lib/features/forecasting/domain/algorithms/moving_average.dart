@@ -1,4 +1,4 @@
-import 'package:und_app/features/forecasting/domain/entities/time_series_point.dart';
+import '../entities/time_series_point.dart';
 
 /// Implementation of Moving Average algorithm for time series forecasting
 class MovingAverage {

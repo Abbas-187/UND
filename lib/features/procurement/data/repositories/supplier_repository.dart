@@ -1,6 +1,6 @@
 // lib/features/procurement/data/repositories/supplier_repository.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:und_app/core/services/firestore_service.dart'; // Assuming firestore_service.dart exists
+// Assuming firestore_service.dart exists
 
 class SupplierRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

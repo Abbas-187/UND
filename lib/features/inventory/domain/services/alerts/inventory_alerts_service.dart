@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../entities/inventory_alert.dart';
+
 import '../../../data/models/inventory_item_model.dart';
+import '../../entities/inventory_alert.dart';
 
 /// Service responsible for managing inventory alerts such as low stock and expiring items
 class InventoryAlertsService {

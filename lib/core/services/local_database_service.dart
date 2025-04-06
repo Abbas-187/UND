@@ -1,11 +1,12 @@
 import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
+
 import '../auth/models/app_user.dart';
-import '../network/connectivity_service.dart';
 
 /// Provider for the local database service
 final localDatabaseServiceProvider = Provider<LocalDatabaseService>((ref) {

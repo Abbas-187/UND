@@ -3,26 +3,6 @@ import '../entities/time_series_point.dart';
 
 /// Implementation of ARIMA (Autoregressive Integrated Moving Average) algorithm for time series forecasting
 class ArimaForecaster {
-  /// Non-seasonal autoregressive order
-  final int p;
-
-  /// Non-seasonal differencing order
-  final int d;
-
-  /// Non-seasonal moving average order
-  final int q;
-
-  /// Seasonal autoregressive order
-  final int P;
-
-  /// Seasonal differencing order
-  final int D;
-
-  /// Seasonal moving average order
-  final int Q;
-
-  /// Length of the seasonal period
-  final int seasonalPeriod;
 
   /// Creates an ARIMA model with the specified parameters
   ArimaForecaster({
@@ -44,6 +24,26 @@ class ArimaForecaster {
       throw ArgumentError('Seasonal period must be non-negative');
     }
   }
+  /// Non-seasonal autoregressive order
+  final int p;
+
+  /// Non-seasonal differencing order
+  final int d;
+
+  /// Non-seasonal moving average order
+  final int q;
+
+  /// Seasonal autoregressive order
+  final int P;
+
+  /// Seasonal differencing order
+  final int D;
+
+  /// Seasonal moving average order
+  final int Q;
+
+  /// Length of the seasonal period
+  final int seasonalPeriod;
 
   /// Calculates forecast using ARIMA model
   ///

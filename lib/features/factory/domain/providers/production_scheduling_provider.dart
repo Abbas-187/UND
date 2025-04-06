@@ -1,11 +1,10 @@
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../production_scheduling/data/models/production_line_allocation_model.dart';
 import '../../production_scheduling/data/models/production_schedule_model.dart';
 import '../../production_scheduling/data/models/production_slot_model.dart';
-import '../../production_scheduling/data/models/production_line_allocation_model.dart';
 import '../../production_scheduling/data/repositories/production_scheduling_repository_impl.dart';
 import '../../production_scheduling/domain/repositories/production_scheduling_repository.dart';
 

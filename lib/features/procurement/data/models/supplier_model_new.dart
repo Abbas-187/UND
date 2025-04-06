@@ -3,17 +3,6 @@ import '../../domain/entities/supplier.dart';
 
 /// Data model for Supplier
 class SupplierModel {
-  final String? id;
-  final String name;
-  final String code;
-  final String type;
-  final String status;
-  final String? address;
-  final String? contactPerson;
-  final String? contactEmail;
-  final String? contactPhone;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
 
   const SupplierModel({
     this.id,
@@ -46,22 +35,6 @@ class SupplierModel {
     );
   }
 
-  /// Convert to Map for Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'code': code,
-      'type': type,
-      'status': status,
-      'address': address,
-      'contactPerson': contactPerson,
-      'contactEmail': contactEmail,
-      'contactPhone': contactPhone,
-      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
-      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
-    };
-  }
-
   /// Convert from Domain Entity to Model
   factory SupplierModel.fromEntity(Supplier entity) {
     return SupplierModel(
@@ -77,6 +50,33 @@ class SupplierModel {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     );
+  }
+  final String? id;
+  final String name;
+  final String code;
+  final String type;
+  final String status;
+  final String? address;
+  final String? contactPerson;
+  final String? contactEmail;
+  final String? contactPhone;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  /// Convert to Map for Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'code': code,
+      'type': type,
+      'status': status,
+      'address': address,
+      'contactPerson': contactPerson,
+      'contactEmail': contactEmail,
+      'contactPhone': contactPhone,
+      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
+      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+    };
   }
 
   /// Convert to Domain Entity

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:und_app/common/widgets/app_loading_indicator.dart';
-import 'package:und_app/common/widgets/error_view.dart';
-import 'package:und_app/core/routes/app_router.dart';
-import 'package:und_app/features/forecasting/domain/services/forecasting_service.dart';
-import 'package:und_app/features/forecasting/data/models/sales_forecast_model.dart';
+
+import '../../../../common/widgets/app_loading_indicator.dart';
+import '../../../../common/widgets/error_view.dart';
+import '../../../../core/routes/app_router.dart';
+import '../../data/models/sales_forecast_model.dart';
+import '../../domain/services/forecasting_service.dart';
 
 /// Provider for fetching all saved forecasts
 final savedForecastsProvider =
@@ -14,7 +15,7 @@ final savedForecastsProvider =
   // In a real app, we would fetch all forecasts or filter by product
   // For now, we'll assume we're getting all forecasts for a demo product
   try {
-    return forecastingService.getForecastsForProduct("demo-product-id");
+    return forecastingService.getForecastsForProduct('demo-product-id');
   } catch (e) {
     // Return empty list in case of errors for now
     return [];
@@ -22,7 +23,7 @@ final savedForecastsProvider =
 });
 
 class ForecastingListScreen extends ConsumerWidget {
-  const ForecastingListScreen({Key? key}) : super(key: key);
+  const ForecastingListScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -124,14 +125,14 @@ class ForecastingListScreen extends ConsumerWidget {
 }
 
 class ForecastListItem extends StatelessWidget {
-  final SalesForecastModel forecast;
-  final VoidCallback onTap;
 
   const ForecastListItem({
-    Key? key,
+    super.key,
     required this.forecast,
     required this.onTap,
-  }) : super(key: key);
+  });
+  final SalesForecastModel forecast;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {

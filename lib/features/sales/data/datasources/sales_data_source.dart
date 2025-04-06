@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/product_catalog_model.dart';
+
 import '../models/customer_model.dart';
 import '../models/order_model.dart';
+import '../models/product_catalog_model.dart';
 import '../models/sales_analytics_model.dart';
-import '../models/order_item_model.dart';
 
 // --- Interface (Abstract Class) ---
 abstract class SalesDataSource {
@@ -193,7 +193,7 @@ class FirestoreSalesDataSource implements SalesDataSource {
 
     return snapshot.docs
         .map((doc) =>
-            ProductCatalogModel.fromJson(doc.data() as Map<String, dynamic>))
+            ProductCatalogModel.fromJson(doc.data()))
         .toList();
   }
 
@@ -212,7 +212,7 @@ class FirestoreSalesDataSource implements SalesDataSource {
 
     return snapshot.docs
         .map((doc) =>
-            ProductCatalogModel.fromJson(doc.data() as Map<String, dynamic>))
+            ProductCatalogModel.fromJson(doc.data()))
         .toList();
   }
 
@@ -292,7 +292,7 @@ class FirestoreSalesDataSource implements SalesDataSource {
         .limit(20)
         .get();
     return snapshot.docs
-        .map((doc) => CustomerModel.fromJson(doc.data() as Map<String, dynamic>)
+        .map((doc) => CustomerModel.fromJson(doc.data())
             .copyWith(id: doc.id))
         .toList();
   }
@@ -354,9 +354,6 @@ class FirestoreSalesDataSource implements SalesDataSource {
 
   @override
   Future<void> updateOrder(OrderModel order) async {
-    if (order.id == null) {
-      throw ArgumentError('Order ID cannot be null for update');
-    }
     final data = order.toJson();
     await _firestore.collection(_ordersCollection).doc(order.id).update(data);
   }
@@ -393,7 +390,7 @@ class FirestoreSalesDataSource implements SalesDataSource {
     final queryByOrderNum = _firestore
         .collection(_ordersCollection)
         .where('orderNumber', isGreaterThanOrEqualTo: lowerCaseQuery)
-        .where('orderNumber', isLessThanOrEqualTo: lowerCaseQuery + '\uf8ff')
+        .where('orderNumber', isLessThanOrEqualTo: '$lowerCaseQuery\uf8ff')
         .limit(10);
 
     final queryByCustName = _firestore
@@ -401,7 +398,7 @@ class FirestoreSalesDataSource implements SalesDataSource {
         .where('customerName',
             isGreaterThanOrEqualTo:
                 lowerCaseQuery) // Case-sensitive search might be better with dedicated search field
-        .where('customerName', isLessThanOrEqualTo: lowerCaseQuery + '\uf8ff')
+        .where('customerName', isLessThanOrEqualTo: '$lowerCaseQuery\uf8ff')
         .limit(10);
 
     final results = await Future.wait([
@@ -684,9 +681,7 @@ class FirestoreSalesDataSource implements SalesDataSource {
     // Process orders
     for (final order in orders) {
       // Skip orders without dates
-      if (order.orderDate == null) continue;
-
-      final orderDate = order.orderDate!;
+      final orderDate = order.orderDate;
       final dateString = orderDate.toIso8601String().split('T')[0];
 
       // Skip if date is outside range (shouldn't happen due to query, but just in case)
@@ -894,16 +889,16 @@ class FirestoreSalesDataSource implements SalesDataSource {
         .get();
 
     final orders = snapshot.docs
-        .map((doc) => OrderModel.fromJson(doc.data() as Map<String, dynamic>)
+        .map((doc) => OrderModel.fromJson(doc.data())
             .copyWith(id: doc.id))
         .toList();
 
     final Map<String, DateTime> firstOrderDates = {};
 
     for (final order in orders) {
-      if (order.orderDate != null && order.customerId.isNotEmpty) {
+      if (order.customerId.isNotEmpty) {
         if (!firstOrderDates.containsKey(order.customerId)) {
-          firstOrderDates[order.customerId] = order.orderDate!;
+          firstOrderDates[order.customerId] = order.orderDate;
         }
       }
     }

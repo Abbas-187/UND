@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+
 import '../models/user_model.dart';
+import '../services/auth_service.dart';
 
 class RoleBasedWidget extends StatelessWidget {
+
+  RoleBasedWidget({
+    super.key,
+    required this.allowedRoles,
+    required this.child,
+    this.fallback,
+  });
   final List<String> allowedRoles;
   final Widget child;
   final Widget? fallback;
   final AuthService _authService = AuthService();
-
-  RoleBasedWidget({
-    Key? key,
-    required this.allowedRoles,
-    required this.child,
-    this.fallback,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

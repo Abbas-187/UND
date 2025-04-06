@@ -5,11 +5,11 @@ import '../../domain/repositories/supplier_contract_repository.dart';
 import '../models/supplier_contract_model.dart';
 
 class SupplierContractRepositoryImpl implements SupplierContractRepository {
+
+  SupplierContractRepositoryImpl(this._firestore, this._storage);
   final FirebaseFirestore _firestore;
   final FirebaseStorage _storage;
   final String _collection = 'supplierContracts';
-
-  SupplierContractRepositoryImpl(this._firestore, this._storage);
 
   CollectionReference<Map<String, dynamic>> get _contractsCollection =>
       _firestore.collection(_collection);

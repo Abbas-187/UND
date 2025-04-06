@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../routes/app_router.dart';
 import '../models/permission.dart';
 import '../services/auth_service.dart';
-import '../../routes/app_router.dart';
 
 /// Middleware to check if a user is authenticated before accessing a route
 class AuthMiddleware {
@@ -90,9 +91,9 @@ class AuthMiddleware {
 
 /// Helper widget to handle redirects
 class _AuthRedirect extends ConsumerWidget {
-  final String destination;
 
   const _AuthRedirect({required this.destination});
+  final String destination;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

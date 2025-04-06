@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../data/models/purchase_order_model.dart' as model;
 import '../../data/repositories/purchase_order_repository.dart';
@@ -16,16 +15,6 @@ final purchaseOrderRepositoryProvider =
 
 // Filter/Sort class for Purchase Orders
 class PurchaseOrderFilter {
-  final String? searchQuery;
-  final entity.PurchaseOrderStatus? status;
-  final String? supplierId;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final double? minAmount;
-  final double? maxAmount;
-  final model.PaymentStatus? paymentStatus;
-  final String? sortField;
-  final bool sortAscending;
 
   const PurchaseOrderFilter({
     this.searchQuery,
@@ -39,6 +28,16 @@ class PurchaseOrderFilter {
     this.sortField,
     this.sortAscending = true,
   });
+  final String? searchQuery;
+  final entity.PurchaseOrderStatus? status;
+  final String? supplierId;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final double? minAmount;
+  final double? maxAmount;
+  final model.PaymentStatus? paymentStatus;
+  final String? sortField;
+  final bool sortAscending;
 
   PurchaseOrderFilter copyWith({
     String? searchQuery,
@@ -213,7 +212,7 @@ class PurchaseOrderListProvider extends _$PurchaseOrderListProvider {
     await repository.trackPurchaseOrderHistory(
         poId,
         "Status changed to ${status.toString().split('.').last}",
-        "currentUserId" // This should come from authentication
+        'currentUserId' // This should come from authentication
         );
 
     ref.invalidateSelf();

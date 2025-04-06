@@ -5,12 +5,12 @@ import '../../domain/usecases/transfer_stock_usecase.dart';
 import '../providers/inventory_provider.dart';
 
 class InventoryTransferScreen extends ConsumerStatefulWidget {
-  final String sourceItemId;
 
   const InventoryTransferScreen({
-    Key? key,
+    super.key,
     required this.sourceItemId,
-  }) : super(key: key);
+  });
+  final String sourceItemId;
 
   @override
   ConsumerState<InventoryTransferScreen> createState() =>

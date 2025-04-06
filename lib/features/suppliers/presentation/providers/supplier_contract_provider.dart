@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/entities/supplier_contract.dart';
 import '../../domain/repositories/supplier_contract_repository.dart';
@@ -33,13 +32,6 @@ Future<List<SupplierContract>> supplierContracts(
 
 // Filter class
 class ContractFilter {
-  final String searchQuery;
-  final bool? isActive;
-  final DateTime? startDateFrom;
-  final DateTime? startDateTo;
-  final DateTime? endDateFrom;
-  final DateTime? endDateTo;
-  final List<String>? contractTypes;
 
   const ContractFilter({
     this.searchQuery = '',
@@ -50,6 +42,13 @@ class ContractFilter {
     this.endDateTo,
     this.contractTypes,
   });
+  final String searchQuery;
+  final bool? isActive;
+  final DateTime? startDateFrom;
+  final DateTime? startDateTo;
+  final DateTime? endDateFrom;
+  final DateTime? endDateTo;
+  final List<String>? contractTypes;
 
   ContractFilter copyWith({
     String? searchQuery,

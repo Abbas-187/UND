@@ -4,9 +4,9 @@ import '../models/user_model.dart';
 import '../services/auth_service.dart';
 
 class RoleBasedDrawer extends StatelessWidget {
-  final AuthService _authService = AuthService();
 
-  RoleBasedDrawer({Key? key}) : super(key: key);
+  RoleBasedDrawer({super.key});
+  final AuthService _authService = AuthService();
 
   final List<NavigationItem> _navigationItems = [
     // Warehouse Section
@@ -90,6 +90,16 @@ class RoleBasedDrawer extends StatelessWidget {
           title: 'Production Orders',
           route: '/factory/orders',
           icon: Icons.assignment,
+          allowedRoles: [
+            'system_admin',
+            'factory_admin',
+            'production_operator'
+          ],
+        ),
+        NavigationItem(
+          title: 'Production Execution',
+          route: '/factory/production/executions',
+          icon: Icons.settings_applications,
           allowedRoles: [
             'system_admin',
             'factory_admin',

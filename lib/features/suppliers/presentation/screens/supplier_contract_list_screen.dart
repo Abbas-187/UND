@@ -6,10 +6,9 @@ import '../providers/supplier_contract_provider.dart';
 import 'supplier_contract_detail_screen.dart';
 
 class SupplierContractListScreen extends ConsumerStatefulWidget {
-  final String? supplierId;
 
-  const SupplierContractListScreen({Key? key, this.supplierId})
-      : super(key: key);
+  const SupplierContractListScreen({super.key, this.supplierId});
+  final String? supplierId;
 
   @override
   ConsumerState<SupplierContractListScreen> createState() =>
@@ -369,6 +368,8 @@ class _SupplierContractListScreenState
 }
 
 class ContractFilterBottomSheet extends ConsumerStatefulWidget {
+  const ContractFilterBottomSheet({super.key});
+
   @override
   ConsumerState<ContractFilterBottomSheet> createState() =>
       _ContractFilterBottomSheetState();
@@ -593,7 +594,7 @@ class _ContractFilterBottomSheetState
 }
 
 class ContractNotificationsDialog extends ConsumerWidget {
-  const ContractNotificationsDialog({Key? key}) : super(key: key);
+  const ContractNotificationsDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

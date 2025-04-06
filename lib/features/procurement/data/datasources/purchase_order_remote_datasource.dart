@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Exception for purchase order data source operations
 class PurchaseOrderDataSourceException implements Exception {
-  final String message;
-  final String? code;
-  final dynamic originalError;
 
   PurchaseOrderDataSourceException(this.message,
       {this.code, this.originalError});
+  final String message;
+  final String? code;
+  final dynamic originalError;
 
   @override
   String toString() =>
@@ -16,12 +16,12 @@ class PurchaseOrderDataSourceException implements Exception {
 
 /// Remote data source for purchase order operations using Firestore
 class PurchaseOrderRemoteDataSource {
-  final FirebaseFirestore _firestore;
-  final String _collection = 'purchaseOrders';
 
   /// Creates a new instance with the given Firestore instance
   PurchaseOrderRemoteDataSource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+  final String _collection = 'purchaseOrders';
 
   /// Get collection reference
   CollectionReference<Map<String, dynamic>> get _ordersCollection =>
@@ -62,7 +62,7 @@ class PurchaseOrderRemoteDataSource {
       if (searchQuery != null && searchQuery.isNotEmpty) {
         query = query
             .where('orderNumber', isGreaterThanOrEqualTo: searchQuery)
-            .where('orderNumber', isLessThanOrEqualTo: searchQuery + '\uf8ff');
+            .where('orderNumber', isLessThanOrEqualTo: '$searchQuery\uf8ff');
       }
 
       final snapshot = await query.get();

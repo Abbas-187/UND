@@ -30,16 +30,6 @@ enum NotificationType {
 
 /// Affected product in recall
 class AffectedProduct {
-  final String productId;
-  final String productName;
-  final List<String> lotNumbers;
-  final String? batchIds;
-  final DateTime? productionDateStart;
-  final DateTime? productionDateEnd;
-  final double? estimatedQuantity;
-  final String? unit;
-  final String? details;
-  final bool criticalProduct;
 
   const AffectedProduct({
     required this.productId,
@@ -88,6 +78,16 @@ class AffectedProduct {
       criticalProduct: json['criticalProduct'] as bool,
     );
   }
+  final String productId;
+  final String productName;
+  final List<String> lotNumbers;
+  final String? batchIds;
+  final DateTime? productionDateStart;
+  final DateTime? productionDateEnd;
+  final double? estimatedQuantity;
+  final String? unit;
+  final String? details;
+  final bool criticalProduct;
 
   Map<String, dynamic> toJson() {
     return {
@@ -125,20 +125,6 @@ class AffectedProduct {
 
 /// Customer distribution information for recall
 class CustomerDistribution {
-  final String customerId;
-  final String customerName;
-  final String? contactPerson;
-  final String? contactInfo;
-  final List<String> distributedLotNumbers;
-  final DateTime? distributionDate;
-  final double? quantity;
-  final String? unit;
-  final bool notified;
-  final DateTime? notificationDate;
-  final NotificationType? notificationType;
-  final bool responseReceived;
-  final DateTime? responseDate;
-  final String? responseDetails;
 
   const CustomerDistribution({
     required this.customerId,
@@ -213,6 +199,20 @@ class CustomerDistribution {
       responseDetails: json['responseDetails'] as String?,
     );
   }
+  final String customerId;
+  final String customerName;
+  final String? contactPerson;
+  final String? contactInfo;
+  final List<String> distributedLotNumbers;
+  final DateTime? distributionDate;
+  final double? quantity;
+  final String? unit;
+  final bool notified;
+  final DateTime? notificationDate;
+  final NotificationType? notificationType;
+  final bool responseReceived;
+  final DateTime? responseDate;
+  final String? responseDetails;
 
   Map<String, dynamic> toJson() {
     return {
@@ -255,19 +255,6 @@ class CustomerDistribution {
 
 /// Regulatory notification for recall
 class RegulatoryNotification {
-  final String authorityName;
-  final String? authorityCode;
-  final String? contactPerson;
-  final String? contactInfo;
-  final DateTime notificationDate;
-  final String? notificationMethod;
-  final String? notificationContent;
-  final String? reportNumber;
-  final bool responseRequired;
-  final DateTime? responseDeadline;
-  final bool responseSubmitted;
-  final DateTime? responseDate;
-  final String? responseDetails;
 
   const RegulatoryNotification({
     required this.authorityName,
@@ -321,6 +308,19 @@ class RegulatoryNotification {
       responseDetails: json['responseDetails'] as String?,
     );
   }
+  final String authorityName;
+  final String? authorityCode;
+  final String? contactPerson;
+  final String? contactInfo;
+  final DateTime notificationDate;
+  final String? notificationMethod;
+  final String? notificationContent;
+  final String? reportNumber;
+  final bool responseRequired;
+  final DateTime? responseDeadline;
+  final bool responseSubmitted;
+  final DateTime? responseDate;
+  final String? responseDetails;
 
   Map<String, dynamic> toJson() {
     return {
@@ -361,36 +361,6 @@ class RegulatoryNotification {
 
 /// Main recall management model
 class RecallManagementModel {
-  final String? id;
-  final String recallNumber;
-  final String title;
-  final String description;
-  final RecallRiskLevel riskLevel;
-  final String? reason;
-  final DateTime initiationDate;
-  final String initiatedBy;
-  final String? approvedBy;
-  final RecallStatus status;
-  final DateTime? closedDate;
-  final List<AffectedProduct> affectedProducts;
-  final List<CustomerDistribution>? customerDistributions;
-  final List<RegulatoryNotification>? regulatoryNotifications;
-  final double? totalProductQuantity;
-  final double? recoveredQuantity;
-  final double? disposedQuantity;
-  final String? rootCause;
-  final String? rootCauseAnalysis;
-  final List<String>? correctiveActions;
-  final List<String>? preventiveActions;
-  final String? correctiveActionStatus;
-  final bool publicNotification;
-  final String? publicNotificationDetails;
-  final List<String>? documentIds;
-  final String? notes;
-  final DateTime createdAt;
-  final String createdBy;
-  final DateTime? updatedAt;
-  final String? updatedBy;
 
   const RecallManagementModel({
     this.id,
@@ -552,6 +522,36 @@ class RecallManagementModel {
 
     return RecallManagementModel.fromJson(jsonWithId);
   }
+  final String? id;
+  final String recallNumber;
+  final String title;
+  final String description;
+  final RecallRiskLevel riskLevel;
+  final String? reason;
+  final DateTime initiationDate;
+  final String initiatedBy;
+  final String? approvedBy;
+  final RecallStatus status;
+  final DateTime? closedDate;
+  final List<AffectedProduct> affectedProducts;
+  final List<CustomerDistribution>? customerDistributions;
+  final List<RegulatoryNotification>? regulatoryNotifications;
+  final double? totalProductQuantity;
+  final double? recoveredQuantity;
+  final double? disposedQuantity;
+  final String? rootCause;
+  final String? rootCauseAnalysis;
+  final List<String>? correctiveActions;
+  final List<String>? preventiveActions;
+  final String? correctiveActionStatus;
+  final bool publicNotification;
+  final String? publicNotificationDetails;
+  final List<String>? documentIds;
+  final String? notes;
+  final DateTime createdAt;
+  final String createdBy;
+  final DateTime? updatedAt;
+  final String? updatedBy;
 
   Map<String, dynamic> toJson() {
     // Convert affected products

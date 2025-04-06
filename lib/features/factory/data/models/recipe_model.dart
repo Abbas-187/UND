@@ -1,14 +1,5 @@
-import 'recipe_ingredient_model.dart';
 
 class RecipeModel {
-  final String id;
-  final String name;
-  final String productId;
-  final Map<String, double> ingredients;
-  final String? approvedByUserId;
-  final DateTime? approvedAt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   RecipeModel({
     required this.id,
@@ -35,6 +26,14 @@ class RecipeModel {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  final String id;
+  final String name;
+  final String productId;
+  final Map<String, double> ingredients;
+  final String? approvedByUserId;
+  final DateTime? approvedAt;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

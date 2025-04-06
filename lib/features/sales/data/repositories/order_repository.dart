@@ -24,8 +24,8 @@ abstract class OrderRepository {
 
 // Implementation
 class OrderRepositoryImpl implements OrderRepository {
-  final SalesDataSource _dataSource;
   OrderRepositoryImpl(this._dataSource);
+  final SalesDataSource _dataSource;
 
   @override
   Future<List<OrderModel>> getOrders({

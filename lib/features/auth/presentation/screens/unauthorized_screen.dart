@@ -4,7 +4,7 @@ import '../../../../core/widgets/primary_button.dart';
 
 /// Screen shown when a user attempts to access a page they don't have permission for
 class UnauthorizedScreen extends StatelessWidget {
-  const UnauthorizedScreen({Key? key}) : super(key: key);
+  const UnauthorizedScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

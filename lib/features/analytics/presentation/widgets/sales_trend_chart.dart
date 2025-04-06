@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SalesTrendChart extends StatelessWidget {
-  final bool isDetailed;
 
-  const SalesTrendChart({Key? key, this.isDetailed = false}) : super(key: key);
+  const SalesTrendChart({super.key, this.isDetailed = false});
+  final bool isDetailed;
 
   @override
   Widget build(BuildContext context) {

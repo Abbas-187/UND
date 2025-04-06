@@ -5,6 +5,13 @@ import '../../../domain/services/alerts/inventory_alerts_service.dart';
 
 /// Widget to display inventory alerts
 class InventoryAlertsWidget extends StatelessWidget {
+
+  InventoryAlertsWidget({
+    super.key,
+    required this.alerts,
+    this.onAcknowledge,
+    this.onAlertTap,
+  });
   /// List of alerts to display
   final List<InventoryAlert> alerts;
 
@@ -19,13 +26,6 @@ class InventoryAlertsWidget extends StatelessWidget {
 
   /// DateFormat for formatting timestamps
   final DateFormat _dateFormat = DateFormat('MMM d, yyyy HH:mm');
-
-  InventoryAlertsWidget({
-    Key? key,
-    required this.alerts,
-    this.onAcknowledge,
-    this.onAlertTap,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

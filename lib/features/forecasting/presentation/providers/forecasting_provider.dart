@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:und_app/features/forecasting/domain/entities/time_series_point.dart';
-import 'package:und_app/features/forecasting/domain/services/forecasting_service.dart';
-import 'package:und_app/features/inventory/data/models/inventory_item_model.dart';
-import 'package:und_app/features/inventory/data/repositories/inventory_repository.dart';
-import 'package:und_app/features/sales/data/models/sales_order_model.dart';
-import 'package:und_app/features/sales/data/repositories/sales_repository.dart';
+
+import '../../../inventory/data/models/inventory_item_model.dart';
+import '../../../inventory/data/repositories/inventory_repository.dart';
+import '../../../sales/data/repositories/sales_repository.dart';
+import '../../domain/entities/time_series_point.dart';
+import '../../domain/services/forecasting_service.dart';
 
 /// States for the forecasting feature
 abstract class ForecastingState {}

@@ -2,28 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/supplier_contract.dart';
 
 class SupplierContractModel {
-  final String id;
-  final String supplierId;
-  final String supplierName;
-  final String contractNumber;
-  final String contractType;
-  final String title;
-  final String description;
-  final DateTime startDate;
-  final DateTime endDate;
-  final double value;
-  final String currency;
-  final bool isActive;
-  final bool autoRenew;
-  final int renewalNoticeDays;
-  final Map<String, dynamic>? terms;
-  final List<Map<String, dynamic>> attachments;
-  final List<Map<String, dynamic>> pricingSchedule;
-  final List<String> tags;
-  final String notes;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final List<String> searchTerms;
 
   SupplierContractModel({
     required this.id,
@@ -112,6 +90,28 @@ class SupplierContractModel {
       ),
     );
   }
+  final String id;
+  final String supplierId;
+  final String supplierName;
+  final String contractNumber;
+  final String contractType;
+  final String title;
+  final String description;
+  final DateTime startDate;
+  final DateTime endDate;
+  final double value;
+  final String currency;
+  final bool isActive;
+  final bool autoRenew;
+  final int renewalNoticeDays;
+  final Map<String, dynamic>? terms;
+  final List<Map<String, dynamic>> attachments;
+  final List<Map<String, dynamic>> pricingSchedule;
+  final List<String> tags;
+  final String notes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final List<String> searchTerms;
 
   // Convert data model to domain entity
   SupplierContract toDomain() {

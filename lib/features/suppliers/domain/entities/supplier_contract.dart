@@ -1,25 +1,4 @@
 class SupplierContract {
-  final String id;
-  final String supplierId;
-  final String supplierName;
-  final String contractNumber;
-  final String contractType;
-  final String title;
-  final String description;
-  final DateTime startDate;
-  final DateTime endDate;
-  final double value;
-  final String currency;
-  final bool isActive;
-  final bool autoRenew;
-  final int renewalNoticeDays;
-  final Map<String, dynamic>? terms;
-  final List<Map<String, dynamic>> attachments;
-  final List<Map<String, dynamic>> pricingSchedule;
-  final List<String> tags;
-  final String notes;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   const SupplierContract({
     required this.id,
@@ -44,6 +23,27 @@ class SupplierContract {
     required this.createdAt,
     required this.updatedAt,
   });
+  final String id;
+  final String supplierId;
+  final String supplierName;
+  final String contractNumber;
+  final String contractType;
+  final String title;
+  final String description;
+  final DateTime startDate;
+  final DateTime endDate;
+  final double value;
+  final String currency;
+  final bool isActive;
+  final bool autoRenew;
+  final int renewalNoticeDays;
+  final Map<String, dynamic>? terms;
+  final List<Map<String, dynamic>> attachments;
+  final List<Map<String, dynamic>> pricingSchedule;
+  final List<String> tags;
+  final String notes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   // Calculate if the contract is expiring soon
   bool isExpiringSoon(int daysThreshold) {

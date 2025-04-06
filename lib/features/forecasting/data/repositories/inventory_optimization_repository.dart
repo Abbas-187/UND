@@ -34,7 +34,7 @@ class InventoryOptimizationRepository {
       }
 
       return InventoryOptimizationModel.fromJson(
-          docSnap.data()! as Map<String, dynamic>);
+          docSnap.data()!);
     } catch (e) {
       throw Exception('Failed to fetch inventory optimization: $e');
     }

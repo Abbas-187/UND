@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../models/app_user.dart';
-import '../models/user_role.dart';
 import '../models/permission.dart';
+import '../models/user_role.dart';
 
 /// Provider for the authentication service
 final authServiceProvider = Provider<AuthService>((ref) {
@@ -33,10 +35,10 @@ final hasPermissionProvider =
 
 /// Service for handling authentication related functionality
 class AuthService {
-  final FirebaseAuth _firebaseAuth;
-  final FirebaseFirestore _firestore;
 
   AuthService(this._firebaseAuth, this._firestore);
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
 
   /// Collection reference for users
   CollectionReference<Map<String, dynamic>> get _usersCollection =>

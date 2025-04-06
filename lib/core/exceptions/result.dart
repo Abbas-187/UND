@@ -2,24 +2,24 @@ import 'failure.dart';
 
 /// A class that represents either a successful result with data or a failure.
 class Result<T> {
-  final T? _data;
-  final Failure? _failure;
 
   const Result._({T? data, Failure? failure})
       : _data = data,
         _failure = failure;
-
-  /// Returns true if the result was a success
-  bool get isSuccess => _failure == null;
-
-  /// Returns true if the result was a failure
-  bool get isFailure => _failure != null;
 
   /// Creates a successful result with the given data
   factory Result.success(T data) => Result._(data: data);
 
   /// Creates a failure result with the given failure
   factory Result.failure(Failure failure) => Result._(failure: failure);
+  final T? _data;
+  final Failure? _failure;
+
+  /// Returns true if the result was a success
+  bool get isSuccess => _failure == null;
+
+  /// Returns true if the result was a failure
+  bool get isFailure => _failure != null;
 
   /// If the result is a success, returns the data
   /// If the result is a failure, throws an exception

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../common/widgets/barcode_scanner_widget.dart';
-import '../../domain/services/barcode_scanner_service.dart';
 import '../../domain/providers/batch_operations_provider.dart';
 import '../../domain/providers/inventory_provider.dart';
+import '../../domain/services/barcode_scanner_service.dart';
 
 class BatchBarcodeScanScreen extends ConsumerWidget {
   const BatchBarcodeScanScreen({super.key});
@@ -24,7 +25,7 @@ class BatchBarcodeScanScreen extends ConsumerWidget {
 
           // Get the current state of itemExists
           bool itemExists = false;
-          await inventoryItemAsync.when(
+          inventoryItemAsync.when(
             data: (item) {
               itemExists = item != null;
             },

@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Exception for supplier data source operations
 class SupplierDataSourceException implements Exception {
+
+  SupplierDataSourceException(this.message, {this.code, this.originalError});
   final String message;
   final String? code;
   final dynamic originalError;
-
-  SupplierDataSourceException(this.message, {this.code, this.originalError});
 
   @override
   String toString() =>
@@ -15,12 +15,12 @@ class SupplierDataSourceException implements Exception {
 
 /// Remote data source for supplier operations using Firestore
 class SupplierRemoteDataSource {
-  final FirebaseFirestore _firestore;
-  final String _collection = 'suppliers';
 
   /// Creates a new instance with the given Firestore instance
   SupplierRemoteDataSource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+  final String _collection = 'suppliers';
 
   /// Get collection reference
   CollectionReference<Map<String, dynamic>> get _suppliersCollection =>
@@ -51,7 +51,7 @@ class SupplierRemoteDataSource {
         // For simplicity we'll use a startsWith query on name (limited but works for demo)
         query = query
             .where('name', isGreaterThanOrEqualTo: searchQuery)
-            .where('name', isLessThanOrEqualTo: searchQuery + '\uf8ff');
+            .where('name', isLessThanOrEqualTo: '$searchQuery\uf8ff');
       }
 
       final snapshot = await query.get();

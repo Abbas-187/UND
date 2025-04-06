@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../providers/inventory_provider.dart';
 
 class InventoryFilterBar extends StatelessWidget {
-  final InventoryFilter filter;
-  final ValueChanged<InventoryFilter> onFilterChanged;
 
   const InventoryFilterBar({
-    Key? key,
+    super.key,
     required this.filter,
     required this.onFilterChanged,
-  }) : super(key: key);
+  });
+  final InventoryFilter filter;
+  final ValueChanged<InventoryFilter> onFilterChanged;
 
   @override
   Widget build(BuildContext context) {

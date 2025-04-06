@@ -1,24 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/material_requisition_model.dart';
-import '../models/material_model.dart';
 import '../../factory/data/models/material_requisition_item_model.dart';
 import '../../factory/data/models/material_requisition_model.dart'
     as factory_model;
 import '../domain/providers/inventory_provider.dart';
+import '../models/material_model.dart';
+import '../models/material_requisition_model.dart';
 
 class MaterialRequisitionProvider
     extends StateNotifier<List<MaterialRequisitionModel>> {
-  final FirebaseFirestore _firestore;
-  final Ref _ref;
 
   MaterialRequisitionProvider(this._ref)
       : _firestore = FirebaseFirestore.instance,
         super([]) {
     _loadMaterialRequisitions();
   }
+  final FirebaseFirestore _firestore;
+  final Ref _ref;
 
   /// Load all material requisitions
   Future<void> _loadMaterialRequisitions() async {

@@ -48,15 +48,6 @@ enum ProductionStatus {
 
 /// Source of raw milk used in production
 class RawMilkSource {
-  final String farmId;
-  final String? farmName;
-  final DateTime collectionDate;
-  final String? tankerId;
-  final double quantity;
-  final String quantityUnit;
-  final DateTime receivedDate;
-  final Map<String, double>? initialQualityParameters;
-  final String? storageLocationId;
 
   const RawMilkSource({
     required this.farmId,
@@ -89,6 +80,15 @@ class RawMilkSource {
       storageLocationId: json['storageLocationId'] as String?,
     );
   }
+  final String farmId;
+  final String? farmName;
+  final DateTime collectionDate;
+  final String? tankerId;
+  final double quantity;
+  final String quantityUnit;
+  final DateTime receivedDate;
+  final Map<String, double>? initialQualityParameters;
+  final String? storageLocationId;
 
   Map<String, dynamic> toJson() {
     return {
@@ -141,16 +141,6 @@ class RawMilkSource {
 
 /// Pasteurization details for dairy processing
 class PasteurizationDetails {
-  final PasteurizationMethod method;
-  final DateTime startTime;
-  final DateTime endTime;
-  final double temperature;
-  final double holdingTime; // in seconds
-  final String? equipmentId;
-  final String? operatorId;
-  final Map<String, dynamic>? processParameters;
-  final bool isVerified;
-  final String? verificationNote;
 
   const PasteurizationDetails({
     required this.method,
@@ -189,6 +179,16 @@ class PasteurizationDetails {
       verificationNote: json['verificationNote'] as String?,
     );
   }
+  final PasteurizationMethod method;
+  final DateTime startTime;
+  final DateTime endTime;
+  final double temperature;
+  final double holdingTime; // in seconds
+  final String? equipmentId;
+  final String? operatorId;
+  final Map<String, dynamic>? processParameters;
+  final bool isVerified;
+  final String? verificationNote;
 
   Map<String, dynamic> toJson() {
     return {
@@ -243,18 +243,6 @@ class PasteurizationDetails {
 
 /// Standardization parameters for milk components
 class StandardizationParameters {
-  final StandardizationMethod method;
-  final double targetFatPercentage;
-  final double? actualFatPercentage;
-  final double? targetProteinPercentage;
-  final double? actualProteinPercentage;
-  final double? targetTotalSolids;
-  final double? actualTotalSolids;
-  final bool homogenized;
-  final double? homogenizationPressure;
-  final Map<String, dynamic>? additionalParameters;
-  final String? equipmentId;
-  final String? operatorId;
 
   const StandardizationParameters({
     required this.method,
@@ -297,6 +285,18 @@ class StandardizationParameters {
       operatorId: json['operatorId'] as String?,
     );
   }
+  final StandardizationMethod method;
+  final double targetFatPercentage;
+  final double? actualFatPercentage;
+  final double? targetProteinPercentage;
+  final double? actualProteinPercentage;
+  final double? targetTotalSolids;
+  final double? actualTotalSolids;
+  final bool homogenized;
+  final double? homogenizationPressure;
+  final Map<String, dynamic>? additionalParameters;
+  final String? equipmentId;
+  final String? operatorId;
 
   Map<String, dynamic> toJson() {
     return {
@@ -351,18 +351,6 @@ class StandardizationParameters {
 
 /// Culture addition details for fermented dairy products
 class CultureAdditionDetails {
-  final CultureType cultureType;
-  final String cultureName;
-  final String? supplierCode;
-  final String? lotNumber;
-  final double amount;
-  final String amountUnit;
-  final DateTime additionTime;
-  final double milkTemperature;
-  final double? targetpH;
-  final double? initialMilkpH;
-  final String? operatorId;
-  final Map<String, dynamic>? additionalParameters;
 
   const CultureAdditionDetails({
     required this.cultureType,
@@ -404,6 +392,18 @@ class CultureAdditionDetails {
           json['additionalParameters'] as Map<String, dynamic>?,
     );
   }
+  final CultureType cultureType;
+  final String cultureName;
+  final String? supplierCode;
+  final String? lotNumber;
+  final double amount;
+  final String amountUnit;
+  final DateTime additionTime;
+  final double milkTemperature;
+  final double? targetpH;
+  final double? initialMilkpH;
+  final String? operatorId;
+  final Map<String, dynamic>? additionalParameters;
 
   Map<String, dynamic> toJson() {
     return {
@@ -463,13 +463,6 @@ class CultureAdditionDetails {
 
 /// pH and acidity measurements during production
 class AcidityMeasurement {
-  final DateTime timestamp;
-  final double pHValue;
-  final double? titratable; // Titratable acidity
-  final double? lacticAcid; // Lactic acid percentage
-  final String? stage; // Production stage when measured
-  final String? measuredBy;
-  final String? comments;
 
   const AcidityMeasurement({
     required this.timestamp,
@@ -494,6 +487,13 @@ class AcidityMeasurement {
       comments: json['comments'] as String?,
     );
   }
+  final DateTime timestamp;
+  final double pHValue;
+  final double? titratable; // Titratable acidity
+  final double? lacticAcid; // Lactic acid percentage
+  final String? stage; // Production stage when measured
+  final String? measuredBy;
+  final String? comments;
 
   Map<String, dynamic> toJson() {
     return {
@@ -538,12 +538,6 @@ class AcidityMeasurement {
 
 /// Temperature reading during cooling process
 class CoolingCurvePoint {
-  final DateTime timestamp;
-  final double temperature;
-  final String? stage;
-  final String? equipmentId;
-  final bool isCompliant;
-  final String? comments;
 
   const CoolingCurvePoint({
     required this.timestamp,
@@ -566,6 +560,12 @@ class CoolingCurvePoint {
       comments: json['comments'] as String?,
     );
   }
+  final DateTime timestamp;
+  final double temperature;
+  final String? stage;
+  final String? equipmentId;
+  final bool isCompliant;
+  final String? comments;
 
   Map<String, dynamic> toJson() {
     return {
@@ -607,34 +607,6 @@ class CoolingCurvePoint {
 
 /// Main production batch model for dairy processing
 class ProductionBatchModel {
-  final String? id;
-  final String batchCode;
-  final String productId;
-  final String productName;
-  final double batchSize;
-  final String batchUnit;
-  final ProductionStatus status;
-  final DateTime scheduledStartTime;
-  final DateTime? actualStartTime;
-  final DateTime? completionTime;
-  final String? productionLineId;
-  final String? responsibleUserId;
-  final String? supervisorId;
-
-  // Dairy-specific fields
-  final List<RawMilkSource> rawMilkSources;
-  final Map<String, double>? prePasteurizationQualityParams;
-  final PasteurizationDetails? pasteurizationDetails;
-  final StandardizationParameters? standardizationParameters;
-  final CultureAdditionDetails? cultureAdditionDetails;
-  final List<AcidityMeasurement>? acidityMeasurements;
-  final List<CoolingCurvePoint>? coolingCurvePoints;
-  final Map<String, double>? finalQualityParameters;
-  final String? qualityGrade;
-  final bool isApproved;
-  final String? approvedBy;
-  final DateTime? approvalTime;
-  final String? notes;
 
   const ProductionBatchModel({
     this.id,
@@ -795,6 +767,34 @@ class ProductionBatchModel {
 
     return ProductionBatchModel.fromJson(jsonWithId);
   }
+  final String? id;
+  final String batchCode;
+  final String productId;
+  final String productName;
+  final double batchSize;
+  final String batchUnit;
+  final ProductionStatus status;
+  final DateTime scheduledStartTime;
+  final DateTime? actualStartTime;
+  final DateTime? completionTime;
+  final String? productionLineId;
+  final String? responsibleUserId;
+  final String? supervisorId;
+
+  // Dairy-specific fields
+  final List<RawMilkSource> rawMilkSources;
+  final Map<String, double>? prePasteurizationQualityParams;
+  final PasteurizationDetails? pasteurizationDetails;
+  final StandardizationParameters? standardizationParameters;
+  final CultureAdditionDetails? cultureAdditionDetails;
+  final List<AcidityMeasurement>? acidityMeasurements;
+  final List<CoolingCurvePoint>? coolingCurvePoints;
+  final Map<String, double>? finalQualityParameters;
+  final String? qualityGrade;
+  final bool isApproved;
+  final String? approvedBy;
+  final DateTime? approvalTime;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     // Convert raw milk sources list

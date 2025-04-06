@@ -9,17 +9,6 @@ enum SupplierType {
 enum SupplierStatus { active, inactive, pending, blacklisted, onHold }
 
 class Supplier {
-  final String id;
-  final String name;
-  final String code;
-  final SupplierType type;
-  final SupplierStatus status;
-  final String? address;
-  final String? contactPerson;
-  final String? contactEmail;
-  final String? contactPhone;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
 
   const Supplier({
     required this.id,
@@ -34,6 +23,17 @@ class Supplier {
     required this.createdAt,
     this.updatedAt,
   });
+  final String id;
+  final String name;
+  final String code;
+  final SupplierType type;
+  final SupplierStatus status;
+  final String? address;
+  final String? contactPerson;
+  final String? contactEmail;
+  final String? contactPhone;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
 
   @override
   bool operator ==(Object other) =>

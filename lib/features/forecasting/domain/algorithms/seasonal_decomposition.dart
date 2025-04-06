@@ -1,6 +1,5 @@
-import 'dart:math' as math;
-import 'package:und_app/features/forecasting/domain/entities/time_series_point.dart';
-import 'package:und_app/features/forecasting/domain/algorithms/linear_regression.dart';
+import '../entities/time_series_point.dart';
+import 'linear_regression.dart';
 
 /// Implementation of Seasonal Decomposition algorithm for time series forecasting
 ///

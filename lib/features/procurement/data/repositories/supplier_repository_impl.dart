@@ -1,16 +1,16 @@
+import '../../../../core/exceptions/failure.dart';
+import '../../../../core/exceptions/result.dart';
 import '../../domain/entities/supplier.dart';
 import '../../domain/repositories/supplier_repository.dart';
 import '../datasources/supplier_remote_datasource.dart';
 import '../models/supplier_model_new.dart';
-import '../../../../core/exceptions/failure.dart';
-import '../../../../core/exceptions/result.dart';
 
 /// Implementation of [SupplierRepository] that works with Firestore
 class SupplierRepositoryImpl implements SupplierRepository {
-  final SupplierRemoteDataSource _dataSource;
 
   /// Creates a new instance with the given data source
   SupplierRepositoryImpl(this._dataSource);
+  final SupplierRemoteDataSource _dataSource;
 
   @override
   Future<Result<List<Supplier>>> getSuppliers({
@@ -20,9 +20,9 @@ class SupplierRepositoryImpl implements SupplierRepository {
   }) async {
     try {
       // Convert enums to strings for the data source
-      final typeStr = type != null ? type.toString().split('.').last : null;
+      final typeStr = type?.toString().split('.').last;
       final statusStr =
-          status != null ? status.toString().split('.').last : null;
+          status?.toString().split('.').last;
 
       final supplierMaps = await _dataSource.getSuppliers(
         type: typeStr,

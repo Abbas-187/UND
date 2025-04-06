@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/repositories/production_scheduling_repository.dart';
+import '../models/production_line_allocation_model.dart';
 import '../models/production_schedule_model.dart';
 import '../models/production_slot_model.dart';
-import '../models/production_line_allocation_model.dart';
 
 class ProductionSchedulingRepositoryImpl
     implements ProductionSchedulingRepository {

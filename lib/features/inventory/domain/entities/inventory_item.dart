@@ -1,18 +1,4 @@
 class InventoryItem {
-  final String id;
-  final String name;
-  final String category;
-  final String unit;
-  final double quantity;
-  final double minimumQuantity;
-  final double reorderPoint;
-  final String location;
-  final DateTime lastUpdated;
-  final String? batchNumber;
-  final DateTime? expiryDate;
-  final Map<String, dynamic>? additionalAttributes;
-  final double? cost;
-  final int lowStockThreshold;
 
   const InventoryItem({
     required this.id,
@@ -30,6 +16,42 @@ class InventoryItem {
     this.cost,
     this.lowStockThreshold = 5,
   });
+
+  factory InventoryItem.fromJson(Map<String, dynamic> json) {
+    return InventoryItem(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      category: json['category'] as String,
+      unit: json['unit'] as String,
+      quantity: (json['quantity'] as num).toDouble(),
+      minimumQuantity: (json['minimumQuantity'] as num).toDouble(),
+      reorderPoint: (json['reorderPoint'] as num).toDouble(),
+      location: json['location'] as String,
+      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
+      batchNumber: json['batchNumber'] as String?,
+      expiryDate: json['expiryDate'] != null
+          ? DateTime.parse(json['expiryDate'] as String)
+          : null,
+      additionalAttributes:
+          json['additionalAttributes'] as Map<String, dynamic>?,
+      cost: (json['cost'] as num?)?.toDouble(),
+      lowStockThreshold: (json['lowStockThreshold'] as num?)?.toInt() ?? 5,
+    );
+  }
+  final String id;
+  final String name;
+  final String category;
+  final String unit;
+  final double quantity;
+  final double minimumQuantity;
+  final double reorderPoint;
+  final String location;
+  final DateTime lastUpdated;
+  final String? batchNumber;
+  final DateTime? expiryDate;
+  final Map<String, dynamic>? additionalAttributes;
+  final double? cost;
+  final int lowStockThreshold;
 
   bool get needsReorder => quantity <= reorderPoint;
   bool get isLowStock => quantity <= minimumQuantity;
@@ -87,27 +109,5 @@ class InventoryItem {
       'cost': cost,
       'lowStockThreshold': lowStockThreshold,
     };
-  }
-
-  factory InventoryItem.fromJson(Map<String, dynamic> json) {
-    return InventoryItem(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      category: json['category'] as String,
-      unit: json['unit'] as String,
-      quantity: (json['quantity'] as num).toDouble(),
-      minimumQuantity: (json['minimumQuantity'] as num).toDouble(),
-      reorderPoint: (json['reorderPoint'] as num).toDouble(),
-      location: json['location'] as String,
-      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
-      batchNumber: json['batchNumber'] as String?,
-      expiryDate: json['expiryDate'] != null
-          ? DateTime.parse(json['expiryDate'] as String)
-          : null,
-      additionalAttributes:
-          json['additionalAttributes'] as Map<String, dynamic>?,
-      cost: (json['cost'] as num?)?.toDouble(),
-      lowStockThreshold: (json['lowStockThreshold'] as num?)?.toInt() ?? 5,
-    );
   }
 }

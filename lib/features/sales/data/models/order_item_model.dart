@@ -1,19 +1,4 @@
 class OrderItemModel {
-  final String? id;
-  final String productId;
-  final String productName;
-  final String productCode;
-  final String? productCategory;
-  final double quantity;
-  final String uom; // Unit of Measure
-  final double unitPrice;
-  final double? discountPercent;
-  final double? discountAmount;
-  final double? taxPercent;
-  final double? taxAmount;
-  final String? notes;
-  final String? batchNumber;
-  final DateTime? expiryDate;
 
   const OrderItemModel({
     this.id,
@@ -62,6 +47,21 @@ class OrderItemModel {
           : null,
     );
   }
+  final String? id;
+  final String productId;
+  final String productName;
+  final String productCode;
+  final String? productCategory;
+  final double quantity;
+  final String uom; // Unit of Measure
+  final double unitPrice;
+  final double? discountPercent;
+  final double? discountAmount;
+  final double? taxPercent;
+  final double? taxAmount;
+  final String? notes;
+  final String? batchNumber;
+  final DateTime? expiryDate;
 
   Map<String, dynamic> toJson() {
     return {

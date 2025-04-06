@@ -1,7 +1,8 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/repositories/quality_parameters_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import '../../data/models/dairy_quality_parameters_model.dart';
+import '../../data/repositories/quality_parameters_repository.dart';
 
 part 'quality_parameters_provider.g.dart';
 
@@ -58,15 +59,15 @@ final qualityParametersProvider =
 
 /// State for quality parameters
 class QualityParametersState {
-  final List<DairyQualityParametersModel> parameters;
-  final bool isLoading;
-  final String? error;
 
   QualityParametersState({
     this.parameters = const [],
     this.isLoading = false,
     this.error,
   });
+  final List<DairyQualityParametersModel> parameters;
+  final bool isLoading;
+  final String? error;
 
   QualityParametersState copyWith({
     List<DairyQualityParametersModel>? parameters,

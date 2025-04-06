@@ -6,7 +6,7 @@ import '../../../../core/widgets/primary_button.dart';
 
 /// Screen for displaying and editing the current user's profile
 class UserProfileScreen extends ConsumerWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
+  const UserProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

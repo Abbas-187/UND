@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 /// Types of inventory alerts
 enum AlertType {
@@ -26,6 +25,28 @@ enum AlertSeverity {
 
 /// Represents an inventory alert
 class InventoryAlert {
+
+  const InventoryAlert({
+    required this.id,
+    required this.itemId,
+    required this.itemName,
+    required this.alertType,
+    required this.message,
+    required this.severity,
+    required this.timestamp,
+    this.isAcknowledged = false,
+  });
+
+  factory InventoryAlert.fromJson(Map<String, dynamic> json) => InventoryAlert(
+        id: json['id'] as String,
+        itemId: json['itemId'] as String,
+        itemName: json['itemName'] as String,
+        alertType: AlertType.values[json['alertType'] as int],
+        message: json['message'] as String,
+        severity: AlertSeverity.values[json['severity'] as int],
+        timestamp: DateTime.parse(json['timestamp'] as String),
+        isAcknowledged: json['isAcknowledged'] as bool? ?? false,
+      );
   /// Unique identifier for this alert
   final String id;
 
@@ -49,17 +70,6 @@ class InventoryAlert {
 
   /// Whether the alert has been acknowledged
   final bool isAcknowledged;
-
-  const InventoryAlert({
-    required this.id,
-    required this.itemId,
-    required this.itemName,
-    required this.alertType,
-    required this.message,
-    required this.severity,
-    required this.timestamp,
-    this.isAcknowledged = false,
-  });
 
   InventoryAlert copyWith({
     String? id,
@@ -93,17 +103,6 @@ class InventoryAlert {
         'timestamp': timestamp.toIso8601String(),
         'isAcknowledged': isAcknowledged,
       };
-
-  factory InventoryAlert.fromJson(Map<String, dynamic> json) => InventoryAlert(
-        id: json['id'] as String,
-        itemId: json['itemId'] as String,
-        itemName: json['itemName'] as String,
-        alertType: AlertType.values[json['alertType'] as int],
-        message: json['message'] as String,
-        severity: AlertSeverity.values[json['severity'] as int],
-        timestamp: DateTime.parse(json['timestamp'] as String),
-        isAcknowledged: json['isAcknowledged'] as bool? ?? false,
-      );
 
   @override
   bool operator ==(Object other) =>

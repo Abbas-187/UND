@@ -1,16 +1,16 @@
+import '../../../../core/exceptions/failure.dart';
+import '../../../../core/exceptions/result.dart';
 import '../../domain/entities/purchase_order.dart';
 import '../../domain/repositories/purchase_order_repository.dart';
 import '../datasources/purchase_order_remote_datasource.dart';
-import '../../../../core/exceptions/failure.dart';
-import '../../../../core/exceptions/result.dart';
 import '../models/purchase_order_model.dart' as models;
 
 /// Implementation of [PurchaseOrderRepository] that works with Firestore
 class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
-  final PurchaseOrderRemoteDataSource _dataSource;
 
   /// Creates a new instance with the given data source
   PurchaseOrderRepositoryImpl(this._dataSource);
+  final PurchaseOrderRemoteDataSource _dataSource;
 
   @override
   Future<Result<List<PurchaseOrder>>> getPurchaseOrders({
@@ -23,7 +23,7 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
     try {
       // Convert enum to string for the data source
       final statusStr =
-          status != null ? status.toString().split('.').last : null;
+          status?.toString().split('.').last;
 
       final orderMaps = await _dataSource.getPurchaseOrders(
         supplierId: supplierId,

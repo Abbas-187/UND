@@ -9,24 +9,6 @@ enum ContractStatus {
 }
 
 class SupplierContract {
-  final String id;
-  final String contractNumber;
-  final String supplierId;
-  final String supplierName;
-  final DateTime startDate;
-  final DateTime endDate;
-  final ContractStatus status;
-  final String contractType;
-  final String? terms;
-  final double? value;
-  final String? paymentTerms;
-  final String? deliveryTerms;
-  final String? qualityRequirements;
-  final List<String>? attachments;
-  final String? signedBy;
-  final DateTime? signedDate;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
 
   const SupplierContract({
     required this.id,
@@ -48,6 +30,24 @@ class SupplierContract {
     required this.createdAt,
     this.updatedAt,
   });
+  final String id;
+  final String contractNumber;
+  final String supplierId;
+  final String supplierName;
+  final DateTime startDate;
+  final DateTime endDate;
+  final ContractStatus status;
+  final String contractType;
+  final String? terms;
+  final double? value;
+  final String? paymentTerms;
+  final String? deliveryTerms;
+  final String? qualityRequirements;
+  final List<String>? attachments;
+  final String? signedBy;
+  final DateTime? signedDate;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
 
   bool get isExpired => DateTime.now().isAfter(endDate);
 

@@ -24,13 +24,7 @@ enum RegulatoryClassification {
 }
 
 /// Storage requirements for dairy materials
-class StorageRequirements {
-  final double minTemperature;
-  final double maxTemperature;
-  final double? minHumidity;
-  final double? maxHumidity;
-  final String? specialInstructions;
-  final String storageZone; // e.g., refrigerated, frozen, ambient
+class StorageRequirements { // e.g., refrigerated, frozen, ambient
 
   const StorageRequirements({
     required this.minTemperature,
@@ -51,6 +45,12 @@ class StorageRequirements {
       storageZone: json['storageZone'] as String,
     );
   }
+  final double minTemperature;
+  final double maxTemperature;
+  final double? minHumidity;
+  final double? maxHumidity;
+  final String? specialInstructions;
+  final String storageZone;
 
   Map<String, dynamic> toJson() {
     return {
@@ -84,16 +84,6 @@ class StorageRequirements {
 
 /// Nutritional parameters for dairy materials
 class NutritionalParameters {
-  final double fatContent;
-  final double proteinContent;
-  final double lactoseContent;
-  final double? totalSolids;
-  final double? calcium;
-  final double? sodium;
-  final double? potassium;
-  final Map<String, double>? vitamins;
-  final Map<String, double>? minerals;
-  final double? calories;
 
   const NutritionalParameters({
     required this.fatContent,
@@ -126,6 +116,16 @@ class NutritionalParameters {
       calories: (json['calories'] as num?)?.toDouble(),
     );
   }
+  final double fatContent;
+  final double proteinContent;
+  final double lactoseContent;
+  final double? totalSolids;
+  final double? calcium;
+  final double? sodium;
+  final double? potassium;
+  final Map<String, double>? vitamins;
+  final Map<String, double>? minerals;
+  final double? calories;
 
   Map<String, dynamic> toJson() {
     return {
@@ -171,11 +171,6 @@ class NutritionalParameters {
 
 /// Testing requirements for dairy materials
 class TestingRequirements {
-  final List<String> requiredTests;
-  final Map<String, Map<String, double>> thresholds; // test name -> {min, max}
-  final int testingFrequency; // in hours
-  final String? testingProtocol;
-  final bool microbiologicalTestingRequired;
 
   const TestingRequirements({
     required this.requiredTests,
@@ -203,6 +198,11 @@ class TestingRequirements {
           json['microbiologicalTestingRequired'] as bool,
     );
   }
+  final List<String> requiredTests;
+  final Map<String, Map<String, double>> thresholds; // test name -> {min, max}
+  final int testingFrequency; // in hours
+  final String? testingProtocol;
+  final bool microbiologicalTestingRequired;
 
   Map<String, dynamic> toJson() {
     return {
@@ -234,57 +234,6 @@ class TestingRequirements {
 
 /// Immutable Material Model with dairy industry specific fields
 class MaterialModel {
-  final String? id;
-  final String materialCode;
-  final String materialName;
-  final MaterialType materialType;
-  final String? description;
-  final String? category;
-  final String? subCategory;
-  final String defaultUom;
-  final Map<String, double>? uomConversions;
-  final String? defaultWarehouseId;
-  final String? defaultLocationId;
-  final double? reorderPoint;
-  final double? minimumOrderQuantity;
-  final double? standardCost;
-  final String? costCurrency;
-  final double? weight;
-  final String? weightUom;
-  final double? volume;
-  final String? volumeUom;
-  final Map<String, double>? dimensions;
-  final String? dimensionUom;
-  final String? barcode;
-  final List<String>? alternativeBarcodes;
-  final bool requiresBatchManagement;
-  final bool requiresExpiryDate;
-  final bool requiresSerialNumbers;
-  final bool isHazardous;
-  final bool isActive;
-  final String? imageUrl;
-  final String? safetyDataSheetUrl;
-  final Map<String, dynamic>? specifications;
-  final List<String>? tags;
-  final Map<String, dynamic>? additionalAttributes;
-  final String? createdBy;
-  final DateTime createdAt;
-  final String? updatedBy;
-  final DateTime? updatedAt;
-
-  // Dairy-specific fields
-  final NutritionalParameters? nutritionalParameters;
-  final List<RegulatoryClassification>? regulatoryClassifications;
-  final StorageRequirements? storageRequirements;
-  final TestingRequirements? testingRequirements;
-  final String? milkType; // cow, goat, sheep, etc.
-  final String? originFarm;
-  final String? processingFacility;
-  final DateTime? milkingDate;
-  final double? shelfLifeDays;
-  final List<String>? allergens;
-  final List<String>? ingredients;
-  final Map<String, String>? certifications;
 
   const MaterialModel({
     this.id,
@@ -590,6 +539,57 @@ class MaterialModel {
           : null,
     );
   }
+  final String? id;
+  final String materialCode;
+  final String materialName;
+  final MaterialType materialType;
+  final String? description;
+  final String? category;
+  final String? subCategory;
+  final String defaultUom;
+  final Map<String, double>? uomConversions;
+  final String? defaultWarehouseId;
+  final String? defaultLocationId;
+  final double? reorderPoint;
+  final double? minimumOrderQuantity;
+  final double? standardCost;
+  final String? costCurrency;
+  final double? weight;
+  final String? weightUom;
+  final double? volume;
+  final String? volumeUom;
+  final Map<String, double>? dimensions;
+  final String? dimensionUom;
+  final String? barcode;
+  final List<String>? alternativeBarcodes;
+  final bool requiresBatchManagement;
+  final bool requiresExpiryDate;
+  final bool requiresSerialNumbers;
+  final bool isHazardous;
+  final bool isActive;
+  final String? imageUrl;
+  final String? safetyDataSheetUrl;
+  final Map<String, dynamic>? specifications;
+  final List<String>? tags;
+  final Map<String, dynamic>? additionalAttributes;
+  final String? createdBy;
+  final DateTime createdAt;
+  final String? updatedBy;
+  final DateTime? updatedAt;
+
+  // Dairy-specific fields
+  final NutritionalParameters? nutritionalParameters;
+  final List<RegulatoryClassification>? regulatoryClassifications;
+  final StorageRequirements? storageRequirements;
+  final TestingRequirements? testingRequirements;
+  final String? milkType; // cow, goat, sheep, etc.
+  final String? originFarm;
+  final String? processingFacility;
+  final DateTime? milkingDate;
+  final double? shelfLifeDays;
+  final List<String>? allergens;
+  final List<String>? ingredients;
+  final Map<String, String>? certifications;
 
   Map<String, dynamic> toJson() {
     final materialTypeString = materialType.toString().split('.').last;

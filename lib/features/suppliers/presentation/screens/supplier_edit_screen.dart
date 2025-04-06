@@ -4,12 +4,12 @@ import '../../domain/entities/supplier.dart';
 import '../providers/supplier_provider.dart';
 
 class SupplierEditScreen extends ConsumerStatefulWidget {
-  final Supplier? supplier;
 
   const SupplierEditScreen({
-    Key? key,
+    super.key,
     this.supplier,
-  }) : super(key: key);
+  });
+  final Supplier? supplier;
 
   @override
   ConsumerState<SupplierEditScreen> createState() => _SupplierEditScreenState();
@@ -537,10 +537,10 @@ class _SupplierEditScreenState extends ConsumerState<SupplierEditScreen> {
               Navigator.pop(context);
               _deleteSupplier();
             },
-            child: const Text('Delete'),
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
             ),
+            child: const Text('Delete'),
           ),
         ],
       ),

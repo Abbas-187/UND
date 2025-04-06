@@ -1,15 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Model representing a resource allocation
 class ResourceAllocationModel {
-  final String? id;
-  final String name;
-  final String type;
-  final double? dailyCapacity;
-  final String? capacityUnit;
-  final Map<String, double>? productEfficiency;
-  final bool isActive;
-  final Map<String, dynamic>? constraints;
 
   const ResourceAllocationModel({
     this.id,
@@ -38,6 +29,14 @@ class ResourceAllocationModel {
       constraints: json['constraints'] as Map<String, dynamic>?,
     );
   }
+  final String? id;
+  final String name;
+  final String type;
+  final double? dailyCapacity;
+  final String? capacityUnit;
+  final Map<String, double>? productEfficiency;
+  final bool isActive;
+  final Map<String, dynamic>? constraints;
 
   Map<String, dynamic> toJson() {
     return {

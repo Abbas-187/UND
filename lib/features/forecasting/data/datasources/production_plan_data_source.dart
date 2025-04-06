@@ -69,7 +69,7 @@ class ProductionPlanDataSource {
       throw Exception('Production plan data is null for ID: $id');
     }
 
-    final Map<String, dynamic> dataMap = data as Map<String, dynamic>;
+    final Map<String, dynamic> dataMap = data;
     return ProductionPlanModel.fromJson({...dataMap, 'id': doc.id});
   }
 
@@ -274,7 +274,7 @@ class ProductionPlanDataSource {
     final snapshot = await _firestore.collection(_resourcesCollection).get();
 
     return snapshot.docs.map((doc) {
-      final data = doc.data()!;
+      final data = doc.data();
       return ResourceAllocationModel.fromJson({...data, 'id': doc.id});
     }).toList();
   }

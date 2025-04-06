@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
-  final String text;
-  final VoidCallback? onPressed;
-  final bool isLoading;
-  final bool isFullWidth;
-  final Color? backgroundColor;
-  final Color? textColor;
-  final double height;
-  final double? width;
-  final double borderRadius;
-  final IconData? icon;
-  final EdgeInsetsGeometry? padding;
 
   const PrimaryButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     this.isLoading = false,
@@ -26,7 +15,18 @@ class PrimaryButton extends StatelessWidget {
     this.borderRadius = 8,
     this.icon,
     this.padding,
-  }) : super(key: key);
+  });
+  final String text;
+  final VoidCallback? onPressed;
+  final bool isLoading;
+  final bool isFullWidth;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final double height;
+  final double? width;
+  final double borderRadius;
+  final IconData? icon;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {

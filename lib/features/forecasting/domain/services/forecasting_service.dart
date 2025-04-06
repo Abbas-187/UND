@@ -1,13 +1,14 @@
-import '../algorithms/moving_average.dart';
-import '../algorithms/exponential_smoothing.dart';
-import '../algorithms/linear_regression.dart';
-import '../algorithms/seasonal_decomposition.dart';
-import '../algorithms/arima.dart';
-import '../entities/time_series_point.dart';
-import '../../data/repositories/sales_forecast_repository.dart';
-import '../../data/models/sales_forecast_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../data/models/sales_forecast_model.dart';
+import '../../data/repositories/sales_forecast_repository.dart';
+import '../algorithms/arima.dart';
+import '../algorithms/exponential_smoothing.dart';
+import '../algorithms/linear_regression.dart';
+import '../algorithms/moving_average.dart';
+import '../algorithms/seasonal_decomposition.dart';
+import '../entities/time_series_point.dart';
 
 /// Forecasting methods supported by the service
 enum ForecastingMethod {
@@ -272,13 +273,6 @@ class ForecastingService {
 
 /// Represents a saved forecast
 class ForecastModel {
-  final String id;
-  final String name;
-  final String productId;
-  final ForecastingMethod method;
-  final DateTime createdAt;
-  final List<TimeSeriesPoint> historicalData;
-  final List<TimeSeriesPoint> forecastData;
 
   ForecastModel({
     required this.id,
@@ -307,6 +301,13 @@ class ForecastModel {
           .toList(),
     );
   }
+  final String id;
+  final String name;
+  final String productId;
+  final ForecastingMethod method;
+  final DateTime createdAt;
+  final List<TimeSeriesPoint> historicalData;
+  final List<TimeSeriesPoint> forecastData;
 
   static ForecastingMethod _methodFromString(String methodString) {
     switch (methodString) {

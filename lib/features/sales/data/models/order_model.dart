@@ -1,5 +1,5 @@
-import 'order_item_model.dart';
 import 'customer_model.dart';
+import 'order_item_model.dart';
 
 // --- Order Status Enum ---
 enum OrderStatus {
@@ -17,29 +17,6 @@ enum OrderStatus {
 
 // --- Main Order Model ---
 class OrderModel {
-  final String id;
-  final String orderNumber; // e.g., SO-2024-00123
-  final DateTime orderDate;
-  final String customerId;
-  final String customerName;
-  final AddressModel billingAddress;
-  final AddressModel shippingAddress;
-  final OrderStatus status;
-  final List<OrderItemModel> items;
-  final double subtotal;
-  final double taxAmount;
-  final double shippingCost;
-  final double totalAmount;
-  final String? notes;
-  final String? createdByUserId;
-  final DateTime? requiredDeliveryDate;
-  final DateTime? actualShipmentDate;
-  final DateTime? actualDeliveryDate;
-  final String? shippingMethod;
-  final String? trackingNumber;
-  final String? paymentMethod;
-  final String? paymentStatus; // e.g., 'pending', 'paid', 'failed'
-  final List<OrderStatusHistoryModel>? statusHistory;
 
   const OrderModel({
     required this.id,
@@ -112,6 +89,29 @@ class OrderModel {
           : null,
     );
   }
+  final String id;
+  final String orderNumber; // e.g., SO-2024-00123
+  final DateTime orderDate;
+  final String customerId;
+  final String customerName;
+  final AddressModel billingAddress;
+  final AddressModel shippingAddress;
+  final OrderStatus status;
+  final List<OrderItemModel> items;
+  final double subtotal;
+  final double taxAmount;
+  final double shippingCost;
+  final double totalAmount;
+  final String? notes;
+  final String? createdByUserId;
+  final DateTime? requiredDeliveryDate;
+  final DateTime? actualShipmentDate;
+  final DateTime? actualDeliveryDate;
+  final String? shippingMethod;
+  final String? trackingNumber;
+  final String? paymentMethod;
+  final String? paymentStatus; // e.g., 'pending', 'paid', 'failed'
+  final List<OrderStatusHistoryModel>? statusHistory;
 
   Map<String, dynamic> toJson() {
     return {
@@ -201,10 +201,6 @@ class OrderModel {
 
 // --- Status History Model ---
 class OrderStatusHistoryModel {
-  final OrderStatus status;
-  final DateTime timestamp;
-  final String? userId;
-  final String? notes;
 
   const OrderStatusHistoryModel({
     required this.status,
@@ -224,6 +220,10 @@ class OrderStatusHistoryModel {
       notes: json['notes'] as String?,
     );
   }
+  final OrderStatus status;
+  final DateTime timestamp;
+  final String? userId;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {

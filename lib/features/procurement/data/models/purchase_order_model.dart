@@ -1,6 +1,5 @@
-import 'package:flutter/foundation.dart';
-import 'purchase_order_item_model.dart' as model;
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../domain/entities/purchase_order.dart' as entity;
 
 /// Enum representing different statuses a purchase order can have
@@ -44,15 +43,6 @@ PaymentStatus paymentStatusFromString(String status) {
 
 /// Data model for PurchaseOrderItem
 class PurchaseOrderItemModel {
-  final String? id;
-  final String productId;
-  final String productName;
-  final double quantity;
-  final String unit;
-  final double unitPrice;
-  final double totalPrice;
-  final DateTime? expectedDeliveryDate;
-  final String? notes;
 
   const PurchaseOrderItemModel({
     this.id,
@@ -82,6 +72,30 @@ class PurchaseOrderItemModel {
     );
   }
 
+  /// Convert from domain entity
+  factory PurchaseOrderItemModel.fromEntity(entity.PurchaseOrderItem entity) {
+    return PurchaseOrderItemModel(
+      id: entity.id,
+      productId: entity.productId,
+      productName: entity.productName,
+      quantity: entity.quantity,
+      unit: entity.unit,
+      unitPrice: entity.unitPrice,
+      totalPrice: entity.totalPrice,
+      expectedDeliveryDate: entity.expectedDeliveryDate,
+      notes: entity.notes,
+    );
+  }
+  final String? id;
+  final String productId;
+  final String productName;
+  final double quantity;
+  final String unit;
+  final double unitPrice;
+  final double totalPrice;
+  final DateTime? expectedDeliveryDate;
+  final String? notes;
+
   /// Convert to Map
   Map<String, dynamic> toMap() {
     return {
@@ -97,21 +111,6 @@ class PurchaseOrderItemModel {
           : null,
       'notes': notes,
     };
-  }
-
-  /// Convert from domain entity
-  factory PurchaseOrderItemModel.fromEntity(entity.PurchaseOrderItem entity) {
-    return PurchaseOrderItemModel(
-      id: entity.id,
-      productId: entity.productId,
-      productName: entity.productName,
-      quantity: entity.quantity,
-      unit: entity.unit,
-      unitPrice: entity.unitPrice,
-      totalPrice: entity.totalPrice,
-      expectedDeliveryDate: entity.expectedDeliveryDate,
-      notes: entity.notes,
-    );
   }
 
   /// Convert to domain entity
@@ -132,22 +131,6 @@ class PurchaseOrderItemModel {
 
 /// Data model for PurchaseOrder
 class PurchaseOrderModel {
-  final String? id;
-  final String orderNumber;
-  final String supplierId;
-  final String supplierName;
-  final DateTime orderDate;
-  final DateTime? approvalDate;
-  final DateTime expectedDeliveryDate;
-  final String status;
-  final List<PurchaseOrderItemModel> items;
-  final double totalAmount;
-  final String? paymentTerms;
-  final String? shippingTerms;
-  final String? notes;
-  final String? approvedBy;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
 
   const PurchaseOrderModel({
     this.id,
@@ -197,28 +180,6 @@ class PurchaseOrderModel {
     );
   }
 
-  /// Convert to Map for Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      'orderNumber': orderNumber,
-      'supplierId': supplierId,
-      'supplierName': supplierName,
-      'orderDate': Timestamp.fromDate(orderDate),
-      'approvalDate':
-          approvalDate != null ? Timestamp.fromDate(approvalDate!) : null,
-      'expectedDeliveryDate': Timestamp.fromDate(expectedDeliveryDate),
-      'status': status,
-      'items': items.map((item) => item.toMap()).toList(),
-      'totalAmount': totalAmount,
-      'paymentTerms': paymentTerms,
-      'shippingTerms': shippingTerms,
-      'notes': notes,
-      'approvedBy': approvedBy,
-      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
-      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
-    };
-  }
-
   /// Convert from Domain Entity to Model
   factory PurchaseOrderModel.fromEntity(entity.PurchaseOrder entity) {
     return PurchaseOrderModel(
@@ -241,6 +202,44 @@ class PurchaseOrderModel {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     );
+  }
+  final String? id;
+  final String orderNumber;
+  final String supplierId;
+  final String supplierName;
+  final DateTime orderDate;
+  final DateTime? approvalDate;
+  final DateTime expectedDeliveryDate;
+  final String status;
+  final List<PurchaseOrderItemModel> items;
+  final double totalAmount;
+  final String? paymentTerms;
+  final String? shippingTerms;
+  final String? notes;
+  final String? approvedBy;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  /// Convert to Map for Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'orderNumber': orderNumber,
+      'supplierId': supplierId,
+      'supplierName': supplierName,
+      'orderDate': Timestamp.fromDate(orderDate),
+      'approvalDate':
+          approvalDate != null ? Timestamp.fromDate(approvalDate!) : null,
+      'expectedDeliveryDate': Timestamp.fromDate(expectedDeliveryDate),
+      'status': status,
+      'items': items.map((item) => item.toMap()).toList(),
+      'totalAmount': totalAmount,
+      'paymentTerms': paymentTerms,
+      'shippingTerms': shippingTerms,
+      'notes': notes,
+      'approvedBy': approvedBy,
+      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
+      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+    };
   }
 
   /// Convert to Domain Entity

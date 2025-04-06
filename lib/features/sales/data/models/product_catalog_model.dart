@@ -1,32 +1,4 @@
 class ProductCatalogModel {
-  final String? id;
-  final String name;
-  final String code;
-  final String category;
-  final String description;
-  final String uom; // Unit of Measure
-  final double basePrice;
-  final String? imageUrl;
-  final String? packagingType;
-  final double? weightPerUnit;
-  final String? weightUom;
-  final List<String>? allergens;
-  final bool isActive;
-  final int? minOrderQuantity;
-  final int? multipleOrderQuantity;
-  final DateTime? availableFrom;
-  final DateTime? availableTo;
-  final Map<String, double>? priceTiers;
-  final Map<String, double>? customerSpecificPrices;
-  final int? shelfLifeDays;
-  final String? storageInstructions;
-  final List<String>? tags;
-  final bool isSeasonal;
-  final double? reorderPoint;
-  final double? targetStockLevel;
-  final String? nutritionalInfo;
-  final String? ingredients;
-  final List<String> searchTerms;
 
   ProductCatalogModel({
     this.id,
@@ -58,6 +30,94 @@ class ProductCatalogModel {
     this.ingredients,
     this.searchTerms = const [],
   });
+
+  factory ProductCatalogModel.fromJson(Map<String, dynamic> json) {
+    return ProductCatalogModel(
+      id: json['id'] as String?,
+      name: json['name'] as String,
+      code: json['code'] as String,
+      category: json['category'] as String,
+      description: json['description'] as String,
+      uom: json['uom'] as String,
+      basePrice: (json['basePrice'] as num).toDouble(),
+      imageUrl: json['imageUrl'] as String?,
+      packagingType: json['packagingType'] as String?,
+      weightPerUnit: json['weightPerUnit'] != null
+          ? (json['weightPerUnit'] as num).toDouble()
+          : null,
+      weightUom: json['weightUom'] as String?,
+      allergens: json['allergens'] != null
+          ? List<String>.from(json['allergens'] as List)
+          : null,
+      isActive: json['isActive'] as bool? ?? true,
+      minOrderQuantity: json['minOrderQuantity'] as int?,
+      multipleOrderQuantity: json['multipleOrderQuantity'] as int?,
+      availableFrom: json['availableFrom'] != null
+          ? DateTime.parse(json['availableFrom'] as String)
+          : null,
+      availableTo: json['availableTo'] != null
+          ? DateTime.parse(json['availableTo'] as String)
+          : null,
+      priceTiers: json['priceTiers'] != null
+          ? Map<String, double>.from(
+              (json['priceTiers'] as Map<String, dynamic>).map(
+                (k, v) => MapEntry(k, (v as num).toDouble()),
+              ),
+            )
+          : null,
+      customerSpecificPrices: json['customerSpecificPrices'] != null
+          ? Map<String, double>.from(
+              (json['customerSpecificPrices'] as Map<String, dynamic>).map(
+                (k, v) => MapEntry(k, (v as num).toDouble()),
+              ),
+            )
+          : null,
+      shelfLifeDays: json['shelfLifeDays'] as int?,
+      storageInstructions: json['storageInstructions'] as String?,
+      tags:
+          json['tags'] != null ? List<String>.from(json['tags'] as List) : null,
+      isSeasonal: json['isSeasonal'] as bool? ?? false,
+      reorderPoint: json['reorderPoint'] != null
+          ? (json['reorderPoint'] as num).toDouble()
+          : null,
+      targetStockLevel: json['targetStockLevel'] != null
+          ? (json['targetStockLevel'] as num).toDouble()
+          : null,
+      nutritionalInfo: json['nutritionalInfo'] as String?,
+      ingredients: json['ingredients'] as String?,
+      searchTerms: json['searchTerms'] != null
+          ? List<String>.from(json['searchTerms'] as List)
+          : const [],
+    );
+  }
+  final String? id;
+  final String name;
+  final String code;
+  final String category;
+  final String description;
+  final String uom; // Unit of Measure
+  final double basePrice;
+  final String? imageUrl;
+  final String? packagingType;
+  final double? weightPerUnit;
+  final String? weightUom;
+  final List<String>? allergens;
+  final bool isActive;
+  final int? minOrderQuantity;
+  final int? multipleOrderQuantity;
+  final DateTime? availableFrom;
+  final DateTime? availableTo;
+  final Map<String, double>? priceTiers;
+  final Map<String, double>? customerSpecificPrices;
+  final int? shelfLifeDays;
+  final String? storageInstructions;
+  final List<String>? tags;
+  final bool isSeasonal;
+  final double? reorderPoint;
+  final double? targetStockLevel;
+  final String? nutritionalInfo;
+  final String? ingredients;
+  final List<String> searchTerms;
 
   ProductCatalogModel copyWith({
     String? id,
@@ -120,66 +180,6 @@ class ProductCatalogModel {
       nutritionalInfo: nutritionalInfo ?? this.nutritionalInfo,
       ingredients: ingredients ?? this.ingredients,
       searchTerms: searchTerms ?? this.searchTerms,
-    );
-  }
-
-  factory ProductCatalogModel.fromJson(Map<String, dynamic> json) {
-    return ProductCatalogModel(
-      id: json['id'] as String?,
-      name: json['name'] as String,
-      code: json['code'] as String,
-      category: json['category'] as String,
-      description: json['description'] as String,
-      uom: json['uom'] as String,
-      basePrice: (json['basePrice'] as num).toDouble(),
-      imageUrl: json['imageUrl'] as String?,
-      packagingType: json['packagingType'] as String?,
-      weightPerUnit: json['weightPerUnit'] != null
-          ? (json['weightPerUnit'] as num).toDouble()
-          : null,
-      weightUom: json['weightUom'] as String?,
-      allergens: json['allergens'] != null
-          ? List<String>.from(json['allergens'] as List)
-          : null,
-      isActive: json['isActive'] as bool? ?? true,
-      minOrderQuantity: json['minOrderQuantity'] as int?,
-      multipleOrderQuantity: json['multipleOrderQuantity'] as int?,
-      availableFrom: json['availableFrom'] != null
-          ? DateTime.parse(json['availableFrom'] as String)
-          : null,
-      availableTo: json['availableTo'] != null
-          ? DateTime.parse(json['availableTo'] as String)
-          : null,
-      priceTiers: json['priceTiers'] != null
-          ? Map<String, double>.from(
-              (json['priceTiers'] as Map<String, dynamic>).map(
-                (k, v) => MapEntry(k, (v as num).toDouble()),
-              ),
-            )
-          : null,
-      customerSpecificPrices: json['customerSpecificPrices'] != null
-          ? Map<String, double>.from(
-              (json['customerSpecificPrices'] as Map<String, dynamic>).map(
-                (k, v) => MapEntry(k, (v as num).toDouble()),
-              ),
-            )
-          : null,
-      shelfLifeDays: json['shelfLifeDays'] as int?,
-      storageInstructions: json['storageInstructions'] as String?,
-      tags:
-          json['tags'] != null ? List<String>.from(json['tags'] as List) : null,
-      isSeasonal: json['isSeasonal'] as bool? ?? false,
-      reorderPoint: json['reorderPoint'] != null
-          ? (json['reorderPoint'] as num).toDouble()
-          : null,
-      targetStockLevel: json['targetStockLevel'] != null
-          ? (json['targetStockLevel'] as num).toDouble()
-          : null,
-      nutritionalInfo: json['nutritionalInfo'] as String?,
-      ingredients: json['ingredients'] as String?,
-      searchTerms: json['searchTerms'] != null
-          ? List<String>.from(json['searchTerms'] as List)
-          : const [],
     );
   }
 

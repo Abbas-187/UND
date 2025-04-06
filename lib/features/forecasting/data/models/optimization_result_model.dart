@@ -2,6 +2,39 @@ import 'package:flutter/foundation.dart';
 
 /// Model representing an optimization result for inventory levels
 class OptimizationResultModel {
+
+  const OptimizationResultModel({
+    required this.optimalLevel,
+    required this.minLevel,
+    required this.maxLevel,
+    required this.reorderPoint,
+    required this.orderQuantity,
+    required this.safetyStock,
+    required this.serviceLevel,
+    required this.turnoverRate,
+    required this.holdingCost,
+    required this.stockoutCost,
+    required this.totalCost,
+    this.parameters,
+  });
+
+  /// Create an instance from JSON
+  factory OptimizationResultModel.fromJson(Map<String, dynamic> json) {
+    return OptimizationResultModel(
+      optimalLevel: json['optimalLevel'] as double,
+      minLevel: json['minLevel'] as double,
+      maxLevel: json['maxLevel'] as double,
+      reorderPoint: json['reorderPoint'] as double,
+      orderQuantity: json['orderQuantity'] as double,
+      safetyStock: json['safetyStock'] as double,
+      serviceLevel: json['serviceLevel'] as double,
+      turnoverRate: json['turnoverRate'] as double,
+      holdingCost: json['holdingCost'] as double,
+      stockoutCost: json['stockoutCost'] as double,
+      totalCost: json['totalCost'] as double,
+      parameters: json['parameters'] as Map<String, dynamic>?,
+    );
+  }
   /// Optimal inventory level
   final double optimalLevel;
 
@@ -37,39 +70,6 @@ class OptimizationResultModel {
 
   /// Calculation parameters used
   final Map<String, dynamic>? parameters;
-
-  const OptimizationResultModel({
-    required this.optimalLevel,
-    required this.minLevel,
-    required this.maxLevel,
-    required this.reorderPoint,
-    required this.orderQuantity,
-    required this.safetyStock,
-    required this.serviceLevel,
-    required this.turnoverRate,
-    required this.holdingCost,
-    required this.stockoutCost,
-    required this.totalCost,
-    this.parameters,
-  });
-
-  /// Create an instance from JSON
-  factory OptimizationResultModel.fromJson(Map<String, dynamic> json) {
-    return OptimizationResultModel(
-      optimalLevel: json['optimalLevel'] as double,
-      minLevel: json['minLevel'] as double,
-      maxLevel: json['maxLevel'] as double,
-      reorderPoint: json['reorderPoint'] as double,
-      orderQuantity: json['orderQuantity'] as double,
-      safetyStock: json['safetyStock'] as double,
-      serviceLevel: json['serviceLevel'] as double,
-      turnoverRate: json['turnoverRate'] as double,
-      holdingCost: json['holdingCost'] as double,
-      stockoutCost: json['stockoutCost'] as double,
-      totalCost: json['totalCost'] as double,
-      parameters: json['parameters'] as Map<String, dynamic>?,
-    );
-  }
 
   /// Convert instance to JSON
   Map<String, dynamic> toJson() {

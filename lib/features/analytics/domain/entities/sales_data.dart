@@ -1,13 +1,5 @@
-import 'package:flutter/foundation.dart';
 
 class SalesData {
-  final String id;
-  final DateTime date;
-  final double amount;
-  final String productId;
-  final String productName;
-  final String category;
-  final int? quantity;
 
   const SalesData({
     required this.id,
@@ -18,6 +10,23 @@ class SalesData {
     required this.category,
     this.quantity,
   });
+
+  factory SalesData.fromJson(Map<String, dynamic> json) => SalesData(
+        id: json['id'] as String,
+        date: DateTime.parse(json['date'] as String),
+        amount: json['amount'] as double,
+        productId: json['productId'] as String,
+        productName: json['productName'] as String,
+        category: json['category'] as String,
+        quantity: json['quantity'] as int?,
+      );
+  final String id;
+  final DateTime date;
+  final double amount;
+  final String productId;
+  final String productName;
+  final String category;
+  final int? quantity;
 
   SalesData copyWith({
     String? id,
@@ -49,16 +58,6 @@ class SalesData {
         'quantity': quantity,
       };
 
-  factory SalesData.fromJson(Map<String, dynamic> json) => SalesData(
-        id: json['id'] as String,
-        date: DateTime.parse(json['date'] as String),
-        amount: json['amount'] as double,
-        productId: json['productId'] as String,
-        productName: json['productName'] as String,
-        category: json['category'] as String,
-        quantity: json['quantity'] as int?,
-      );
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -84,15 +83,22 @@ class SalesData {
 }
 
 class MonthlySalesData {
-  final DateTime month;
-  final double totalSales;
-  final int orderCount;
 
   const MonthlySalesData({
     required this.month,
     required this.totalSales,
     required this.orderCount,
   });
+
+  factory MonthlySalesData.fromJson(Map<String, dynamic> json) =>
+      MonthlySalesData(
+        month: DateTime.parse(json['month'] as String),
+        totalSales: json['totalSales'] as double,
+        orderCount: json['orderCount'] as int,
+      );
+  final DateTime month;
+  final double totalSales;
+  final int orderCount;
 
   MonthlySalesData copyWith({
     DateTime? month,
@@ -112,13 +118,6 @@ class MonthlySalesData {
         'orderCount': orderCount,
       };
 
-  factory MonthlySalesData.fromJson(Map<String, dynamic> json) =>
-      MonthlySalesData(
-        month: DateTime.parse(json['month'] as String),
-        totalSales: json['totalSales'] as double,
-        orderCount: json['orderCount'] as int,
-      );
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -134,15 +133,22 @@ class MonthlySalesData {
 }
 
 class CategorySalesData {
-  final String category;
-  final double totalSales;
-  final double percentage;
 
   const CategorySalesData({
     required this.category,
     required this.totalSales,
     required this.percentage,
   });
+
+  factory CategorySalesData.fromJson(Map<String, dynamic> json) =>
+      CategorySalesData(
+        category: json['category'] as String,
+        totalSales: json['totalSales'] as double,
+        percentage: json['percentage'] as double,
+      );
+  final String category;
+  final double totalSales;
+  final double percentage;
 
   CategorySalesData copyWith({
     String? category,
@@ -162,13 +168,6 @@ class CategorySalesData {
         'percentage': percentage,
       };
 
-  factory CategorySalesData.fromJson(Map<String, dynamic> json) =>
-      CategorySalesData(
-        category: json['category'] as String,
-        totalSales: json['totalSales'] as double,
-        percentage: json['percentage'] as double,
-      );
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -184,11 +183,6 @@ class CategorySalesData {
 }
 
 class TopProductData {
-  final String productId;
-  final String productName;
-  final double totalSales;
-  final int quantity;
-  final String category;
 
   const TopProductData({
     required this.productId,
@@ -197,6 +191,19 @@ class TopProductData {
     required this.quantity,
     required this.category,
   });
+
+  factory TopProductData.fromJson(Map<String, dynamic> json) => TopProductData(
+        productId: json['productId'] as String,
+        productName: json['productName'] as String,
+        totalSales: json['totalSales'] as double,
+        quantity: json['quantity'] as int,
+        category: json['category'] as String,
+      );
+  final String productId;
+  final String productName;
+  final double totalSales;
+  final int quantity;
+  final String category;
 
   TopProductData copyWith({
     String? productId,
@@ -221,14 +228,6 @@ class TopProductData {
         'quantity': quantity,
         'category': category,
       };
-
-  factory TopProductData.fromJson(Map<String, dynamic> json) => TopProductData(
-        productId: json['productId'] as String,
-        productName: json['productName'] as String,
-        totalSales: json['totalSales'] as double,
-        quantity: json['quantity'] as int,
-        category: json['category'] as String,
-      );
 
   @override
   bool operator ==(Object other) =>

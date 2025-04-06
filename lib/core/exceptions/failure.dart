@@ -1,9 +1,9 @@
 // lib/core/exceptions/failure.dart
 abstract class Failure {
-  final String message;
-  final String? details;
 
   const Failure(this.message, {this.details});
+  final String message;
+  final String? details;
 
   @override
   String toString() =>
@@ -11,26 +11,21 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  const ServerFailure(String message, {String? details})
-      : super(message, details: details);
+  const ServerFailure(super.message, {super.details});
 }
 
 class NotFoundFailure extends Failure {
-  const NotFoundFailure(String message, {String? details})
-      : super(message, details: details);
+  const NotFoundFailure(super.message, {super.details});
 }
 
 class ValidationFailure extends Failure {
-  const ValidationFailure(String message, {String? details})
-      : super(message, details: details);
+  const ValidationFailure(super.message, {super.details});
 }
 
 class UnknownFailure extends Failure {
-  const UnknownFailure(String message, {String? details})
-      : super(message, details: details);
+  const UnknownFailure(super.message, {super.details});
 }
 
 class AuthFailure extends Failure {
-  const AuthFailure(String message, {String? details})
-      : super(message, details: details);
+  const AuthFailure(super.message, {super.details});
 }

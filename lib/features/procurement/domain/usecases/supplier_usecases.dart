@@ -1,5 +1,5 @@
-import 'package:und_app/core/exceptions/app_exception.dart';
-import 'package:und_app/features/procurement/domain/entities/supplier.dart';
+import '../../../../core/exceptions/app_exception.dart';
+import '../entities/supplier.dart';
 
 // Repository interface
 abstract class SupplierRepository {
@@ -19,9 +19,9 @@ abstract class SupplierRepository {
 }
 
 class GetSuppliersUseCase {
-  final SupplierRepository repository;
 
   GetSuppliersUseCase(this.repository);
+  final SupplierRepository repository;
 
   Future<List<Supplier>> execute({
     SupplierType? type,
@@ -41,9 +41,9 @@ class GetSuppliersUseCase {
 }
 
 class GetSupplierByIdUseCase {
-  final SupplierRepository repository;
 
   GetSupplierByIdUseCase(this.repository);
+  final SupplierRepository repository;
 
   Future<Supplier> execute(String id) async {
     try {
@@ -55,9 +55,9 @@ class GetSupplierByIdUseCase {
 }
 
 class CreateSupplierUseCase {
-  final SupplierRepository repository;
 
   CreateSupplierUseCase(this.repository);
+  final SupplierRepository repository;
 
   Future<Supplier> execute(Supplier supplier) async {
     try {
@@ -69,9 +69,9 @@ class CreateSupplierUseCase {
 }
 
 class UpdateSupplierUseCase {
-  final SupplierRepository repository;
 
   UpdateSupplierUseCase(this.repository);
+  final SupplierRepository repository;
 
   Future<Supplier> execute(Supplier supplier) async {
     try {
@@ -83,9 +83,9 @@ class UpdateSupplierUseCase {
 }
 
 class DeleteSupplierUseCase {
-  final SupplierRepository repository;
 
   DeleteSupplierUseCase(this.repository);
+  final SupplierRepository repository;
 
   Future<void> execute(String id) async {
     try {

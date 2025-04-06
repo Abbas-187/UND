@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
 
-class InventoryEditScreen extends ConsumerStatefulWidget {
-  final String? itemId; // Null for adding new item, non-null for editing
+class InventoryEditScreen extends ConsumerStatefulWidget { // Null for adding new item, non-null for editing
 
   const InventoryEditScreen({
-    Key? key,
+    super.key,
     this.itemId,
-  }) : super(key: key);
+  });
+  final String? itemId;
 
   @override
   ConsumerState<InventoryEditScreen> createState() =>
@@ -342,7 +342,7 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
                           ],
                         ),
                       );
-                    }).toList(),
+                    }),
                     // Add new attribute button
                     OutlinedButton.icon(
                       onPressed: _addAttribute,

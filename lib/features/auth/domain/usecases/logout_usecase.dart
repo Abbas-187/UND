@@ -1,13 +1,13 @@
 import '../repositories/auth_repository.dart';
 
 class LogoutUseCase {
+
+  LogoutUseCase(this.repository);
   final AuthRepository repository;
 
   // Track logout operations for analytics or debugging
   static int _logoutCount = 0;
   static DateTime? _lastLogoutTime;
-
-  LogoutUseCase(this.repository);
 
   Future<void> execute() async {
     try {

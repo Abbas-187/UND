@@ -1,15 +1,15 @@
+import '../../../../core/exceptions/failure.dart';
+import '../../../../core/exceptions/result.dart';
 import '../../domain/entities/supplier_contract.dart';
 import '../../domain/repositories/supplier_contract_repository.dart';
 import '../datasources/supplier_contract_remote_datasource.dart';
-import '../../../../core/exceptions/failure.dart';
-import '../../../../core/exceptions/result.dart';
 
 /// Implementation of [SupplierContractRepository] that works with Firestore
 class SupplierContractRepositoryImpl implements SupplierContractRepository {
-  final SupplierContractRemoteDataSource _dataSource;
 
   /// Creates a new instance with the given data source
   SupplierContractRepositoryImpl(this._dataSource);
+  final SupplierContractRemoteDataSource _dataSource;
 
   @override
   Future<Result<List<SupplierContract>>> getSupplierContracts({
@@ -21,7 +21,7 @@ class SupplierContractRepositoryImpl implements SupplierContractRepository {
     try {
       // Convert enum to string for the data source
       final statusStr =
-          status != null ? status.toString().split('.').last : null;
+          status?.toString().split('.').last;
 
       final contractMaps = await _dataSource.getSupplierContracts(
         supplierId: supplierId,

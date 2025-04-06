@@ -2,10 +2,6 @@ import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
 
 class LowStockAlert {
-  final InventoryItem item;
-  final String alertType;
-  final String message;
-  final DateTime timestamp;
 
   LowStockAlert({
     required this.item,
@@ -13,12 +9,16 @@ class LowStockAlert {
     required this.message,
     required this.timestamp,
   });
+  final InventoryItem item;
+  final String alertType;
+  final String message;
+  final DateTime timestamp;
 }
 
 class GetLowStockAlertsUseCase {
-  final InventoryRepository repository;
 
   GetLowStockAlertsUseCase(this.repository);
+  final InventoryRepository repository;
 
   Future<List<LowStockAlert>> execute() async {
     final alerts = <LowStockAlert>[];

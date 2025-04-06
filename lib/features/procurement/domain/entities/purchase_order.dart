@@ -10,15 +10,6 @@ enum PurchaseOrderStatus {
 }
 
 class PurchaseOrderItem {
-  final String id;
-  final String productId;
-  final String productName;
-  final double quantity;
-  final String unit;
-  final double unitPrice;
-  final double totalPrice;
-  final DateTime? expectedDeliveryDate;
-  final String? notes;
 
   const PurchaseOrderItem({
     required this.id,
@@ -31,6 +22,15 @@ class PurchaseOrderItem {
     this.expectedDeliveryDate,
     this.notes,
   });
+  final String id;
+  final String productId;
+  final String productName;
+  final double quantity;
+  final String unit;
+  final double unitPrice;
+  final double totalPrice;
+  final DateTime? expectedDeliveryDate;
+  final String? notes;
 
   @override
   bool operator ==(Object other) =>
@@ -44,22 +44,6 @@ class PurchaseOrderItem {
 }
 
 class PurchaseOrder {
-  final String id;
-  final String orderNumber;
-  final String supplierId;
-  final String supplierName;
-  final DateTime orderDate;
-  final DateTime? approvalDate;
-  final DateTime expectedDeliveryDate;
-  final PurchaseOrderStatus status;
-  final List<PurchaseOrderItem> items;
-  final double totalAmount;
-  final String? paymentTerms;
-  final String? shippingTerms;
-  final String? notes;
-  final String? approvedBy;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
 
   const PurchaseOrder({
     required this.id,
@@ -79,6 +63,22 @@ class PurchaseOrder {
     required this.createdAt,
     this.updatedAt,
   });
+  final String id;
+  final String orderNumber;
+  final String supplierId;
+  final String supplierName;
+  final DateTime orderDate;
+  final DateTime? approvalDate;
+  final DateTime expectedDeliveryDate;
+  final PurchaseOrderStatus status;
+  final List<PurchaseOrderItem> items;
+  final double totalAmount;
+  final String? paymentTerms;
+  final String? shippingTerms;
+  final String? notes;
+  final String? approvedBy;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
 
   @override
   bool operator ==(Object other) =>

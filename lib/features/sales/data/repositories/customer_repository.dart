@@ -19,8 +19,8 @@ abstract class CustomerRepository {
 
 // Implementation
 class CustomerRepositoryImpl implements CustomerRepository {
-  final SalesDataSource _dataSource;
   CustomerRepositoryImpl(this._dataSource);
+  final SalesDataSource _dataSource;
 
   @override
   Future<List<CustomerModel>> getCustomers({

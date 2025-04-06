@@ -17,15 +17,6 @@ enum TestResultStatus { pass, fail, warning, pending, invalid, not_performed }
 
 /// Model for representing a single test parameter within a quality test
 class TestParameter {
-  final String parameterName;
-  final double? numericValue;
-  final String? stringValue; // For qualitative results
-  final String unit;
-  final double? minThreshold;
-  final double? maxThreshold;
-  final double? targetValue;
-  final TestResultStatus status;
-  final String? comments;
 
   const TestParameter({
     required this.parameterName,
@@ -59,6 +50,15 @@ class TestParameter {
       comments: json['comments'] as String?,
     );
   }
+  final String parameterName;
+  final double? numericValue;
+  final String? stringValue; // For qualitative results
+  final String unit;
+  final double? minThreshold;
+  final double? maxThreshold;
+  final double? targetValue;
+  final TestResultStatus status;
+  final String? comments;
 
   Map<String, dynamic> toJson() {
     return {
@@ -101,15 +101,6 @@ class TestParameter {
 
 /// Information about laboratory equipment used for testing
 class EquipmentInfo {
-  final String equipmentId;
-  final String equipmentName;
-  final String? model;
-  final String? serialNumber;
-  final DateTime? lastCalibrationDate;
-  final DateTime? nextCalibrationDate;
-  final bool calibrationCurrent;
-  final String? calibrationBy;
-  final Map<String, dynamic>? specifications;
 
   const EquipmentInfo({
     required this.equipmentId,
@@ -151,6 +142,15 @@ class EquipmentInfo {
       specifications: json['specifications'] as Map<String, dynamic>?,
     );
   }
+  final String equipmentId;
+  final String equipmentName;
+  final String? model;
+  final String? serialNumber;
+  final DateTime? lastCalibrationDate;
+  final DateTime? nextCalibrationDate;
+  final bool calibrationCurrent;
+  final String? calibrationBy;
+  final Map<String, dynamic>? specifications;
 
   Map<String, dynamic> toJson() {
     return {
@@ -211,14 +211,6 @@ class EquipmentInfo {
 
 /// Information about laboratory technician who performed testing
 class TechnicianInfo {
-  final String technicianId;
-  final String technicianName;
-  final String? qualification;
-  final String? certification;
-  final String? department;
-  final String? position;
-  final String? contactEmail;
-  final String? contactPhone;
 
   const TechnicianInfo({
     required this.technicianId,
@@ -243,6 +235,14 @@ class TechnicianInfo {
       contactPhone: json['contactPhone'] as String?,
     );
   }
+  final String technicianId;
+  final String technicianName;
+  final String? qualification;
+  final String? certification;
+  final String? department;
+  final String? position;
+  final String? contactEmail;
+  final String? contactPhone;
 
   Map<String, dynamic> toJson() {
     return {
@@ -282,37 +282,6 @@ class TechnicianInfo {
 
 /// Main model for quality test results
 class QualityTestResultModel {
-  final String? id;
-  final String testCode;
-  final TestType testType;
-  final String testName;
-  final String testMethod;
-  final String? standardReference;
-  final DateTime testDateTime;
-  final Map<String, TestParameter> parameters;
-  final TestResultStatus overallStatus;
-  final EquipmentInfo? equipmentInfo;
-  final TechnicianInfo? technicianInfo;
-  final String? sampleId;
-  final String? lotNumber;
-  final String? batchId;
-  final String? productionOrderId;
-  final String? materialId;
-  final String? inventoryItemId;
-  final String? milkReceptionId;
-  final Map<String, dynamic>? sampleInfo;
-  final String? testLocation; // Laboratory, production floor, etc.
-  final DateTime sampleCollectionTime;
-  final String? sampleCollectedBy;
-  final String? verifiedBy;
-  final DateTime? verificationTime;
-  final String? rejectionReason;
-  final List<String>? attachments;
-  final String? notes;
-  final String createdBy;
-  final DateTime createdAt;
-  final String? updatedBy;
-  final DateTime? updatedAt;
 
   const QualityTestResultModel({
     this.id,
@@ -462,6 +431,37 @@ class QualityTestResultModel {
 
     return QualityTestResultModel.fromJson(jsonWithId);
   }
+  final String? id;
+  final String testCode;
+  final TestType testType;
+  final String testName;
+  final String testMethod;
+  final String? standardReference;
+  final DateTime testDateTime;
+  final Map<String, TestParameter> parameters;
+  final TestResultStatus overallStatus;
+  final EquipmentInfo? equipmentInfo;
+  final TechnicianInfo? technicianInfo;
+  final String? sampleId;
+  final String? lotNumber;
+  final String? batchId;
+  final String? productionOrderId;
+  final String? materialId;
+  final String? inventoryItemId;
+  final String? milkReceptionId;
+  final Map<String, dynamic>? sampleInfo;
+  final String? testLocation; // Laboratory, production floor, etc.
+  final DateTime sampleCollectionTime;
+  final String? sampleCollectedBy;
+  final String? verifiedBy;
+  final DateTime? verificationTime;
+  final String? rejectionReason;
+  final List<String>? attachments;
+  final String? notes;
+  final String createdBy;
+  final DateTime createdAt;
+  final String? updatedBy;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     // Convert test parameters map

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({Key? key, this.redirectTo}) : super(key: key);
+  const LoginScreen({super.key, this.redirectTo});
   final String? redirectTo;
 
   @override

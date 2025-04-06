@@ -1,6 +1,6 @@
+import '../../data/models/production_line_allocation_model.dart';
 import '../../data/models/production_schedule_model.dart';
 import '../../data/models/production_slot_model.dart';
-import '../../data/models/production_line_allocation_model.dart';
 
 abstract class ProductionSchedulingRepository {
   Future<List<ProductionScheduleModel>> getSchedules(

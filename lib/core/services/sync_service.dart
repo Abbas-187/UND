@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../network/connectivity_service.dart';
-import 'local_database_service.dart';
 import 'firestore_service.dart';
+import 'local_database_service.dart';
 
 /// Provider for the sync service
 final syncServiceProvider = Provider<SyncService>((ref) {
@@ -19,13 +21,6 @@ final syncServiceProvider = Provider<SyncService>((ref) {
 
 /// Service for synchronizing data between local database and Firestore
 class SyncService {
-  final ConnectivityService _connectivityService;
-  final LocalDatabaseService _localDatabaseService;
-  final FirestoreService _firestoreService;
-
-  StreamSubscription<ConnectivityStatus>? _connectivitySubscription;
-  Timer? _syncTimer;
-  bool _isSyncing = false;
 
   /// Constructor
   SyncService(
@@ -45,6 +40,13 @@ class SyncService {
     // Start periodic sync (every 5 minutes)
     _startPeriodicSync();
   }
+  final ConnectivityService _connectivityService;
+  final LocalDatabaseService _localDatabaseService;
+  final FirestoreService _firestoreService;
+
+  StreamSubscription<ConnectivityStatus>? _connectivitySubscription;
+  Timer? _syncTimer;
+  bool _isSyncing = false;
 
   /// Start periodic synchronization
   void _startPeriodicSync() {

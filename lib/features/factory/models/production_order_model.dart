@@ -3,16 +3,6 @@ import 'material_model.dart'; // Importing MaterialModel
 
 @immutable
 class ProductionOrderModel {
-  const ProductionOrderModel({
-    required this.id,
-    required this.requiredMaterials,
-    required this.scheduledDate,
-  });
-
-  final String id;
-  final List<MaterialModel> requiredMaterials;
-
-  final DateTime scheduledDate;
 
   factory ProductionOrderModel.fromJson(Map<String, dynamic> json) {
     final materials = (json['requiredMaterials'] as List<dynamic>)
@@ -25,6 +15,16 @@ class ProductionOrderModel {
       scheduledDate: DateTime.parse(json['scheduledDate'] as String),
     );
   }
+  const ProductionOrderModel({
+    required this.id,
+    required this.requiredMaterials,
+    required this.scheduledDate,
+  });
+
+  final String id;
+  final List<MaterialModel> requiredMaterials;
+
+  final DateTime scheduledDate;
 
   Map<String, dynamic> toJson() {
     return {

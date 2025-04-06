@@ -1,24 +1,6 @@
 // Non-freezed model implementation to avoid generation issues
 
 class CustomerModel {
-  final String? id;
-  final String name;
-  final String code;
-  final String customerType;
-  final String status;
-  final String email;
-  final String phoneNumber;
-  final AddressModel billingAddress;
-  final AddressModel shippingAddress;
-  final String? contactPerson;
-  final String? taxId;
-  final String? paymentTerms;
-  final double? creditLimit;
-  final double? currentBalance;
-  final DateTime? lastOrderDate;
-  final DateTime? createdDate;
-  final DateTime? lastUpdatedDate;
-  final List<String> searchTerms;
 
   CustomerModel({
     this.id,
@@ -78,6 +60,24 @@ class CustomerModel {
           [],
     );
   }
+  final String? id;
+  final String name;
+  final String code;
+  final String customerType;
+  final String status;
+  final String email;
+  final String phoneNumber;
+  final AddressModel billingAddress;
+  final AddressModel shippingAddress;
+  final String? contactPerson;
+  final String? taxId;
+  final String? paymentTerms;
+  final double? creditLimit;
+  final double? currentBalance;
+  final DateTime? lastOrderDate;
+  final DateTime? createdDate;
+  final DateTime? lastUpdatedDate;
+  final List<String> searchTerms;
 
   Map<String, dynamic> toJson() {
     return {
@@ -172,11 +172,6 @@ class CustomerModel {
 }
 
 class AddressModel {
-  final String street;
-  final String city;
-  final String state;
-  final String postalCode;
-  final String country;
 
   AddressModel({
     required this.street,
@@ -195,6 +190,11 @@ class AddressModel {
       country: json['country'] as String,
     );
   }
+  final String street;
+  final String city;
+  final String state;
+  final String postalCode;
+  final String country;
 
   Map<String, dynamic> toJson() {
     return {

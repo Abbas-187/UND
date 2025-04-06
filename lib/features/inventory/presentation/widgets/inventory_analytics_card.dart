@@ -4,7 +4,7 @@ import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
 
 class InventoryAnalyticsCard extends ConsumerWidget {
-  const InventoryAnalyticsCard({Key? key}) : super(key: key);
+  const InventoryAnalyticsCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -2,22 +2,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../factory/data/models/production_order_model.dart';
-import '../../../factory/data/repositories/production_repository.dart';
 import '../../../factory/domain/providers/production_provider.dart';
 import '../../../logistics/domain/providers/delivery_provider.dart';
 import '../../../sales/data/models/order_model.dart';
 import '../../../sales/domain/providers/order_provider.dart';
 import '../../data/repositories/inventory_repository.dart';
 import '../../domain/providers/inventory_provider.dart';
-import '../../domain/repositories/inventory_repository.dart' as domain;
 import '../entities/inventory_item.dart';
 
 /// Service that handles integration between Inventory and other modules
 class ModuleIntegrationService {
-  final Ref _ref;
-  final InventoryRepository _repository;
 
   ModuleIntegrationService(this._ref, this._repository);
+  final Ref _ref;
+  final InventoryRepository _repository;
 
   /// Updates inventory based on production completion
   Future<void> handleProductionCompletion(String productionOrderId) async {
@@ -57,7 +55,7 @@ class ModuleIntegrationService {
       await _reserveInventory(
         item['productId'],
         item['quantity'],
-        'Shipment reservation: ${shipmentId}',
+        'Shipment reservation: $shipmentId',
         referenceId: shipmentId,
       );
     }
@@ -73,7 +71,7 @@ class ModuleIntegrationService {
       await _adjustInventoryQuantity(
         item['productId'],
         -item['quantity'],
-        'Shipment completion: ${shipmentId}',
+        'Shipment completion: $shipmentId',
         referenceId: shipmentId,
       );
     }
@@ -82,7 +80,6 @@ class ModuleIntegrationService {
   /// Updates inventory and material planning based on sales order creation
   Future<void> handleSalesOrderCreation(String orderId) async {
     final order = await _ref.read(orderDetailsProvider(orderId).future);
-    if (order == null) return;
 
     // Check inventory availability for order items
     bool needsProduction = false;

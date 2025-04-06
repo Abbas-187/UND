@@ -5,7 +5,7 @@ import '../../domain/entities/supplier.dart';
 import '../providers/supplier_provider.dart';
 
 class SuppliersScreen extends ConsumerWidget {
-  const SuppliersScreen({Key? key}) : super(key: key);
+  const SuppliersScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -215,7 +215,7 @@ class SuppliersScreen extends ConsumerWidget {
                     padding: EdgeInsets.zero,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     backgroundColor:
-                        Theme.of(context).colorScheme.surfaceVariant,
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
                   );
                 }).toList(),
               ),

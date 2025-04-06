@@ -1,12 +1,6 @@
 enum QualityStatus { passed, failed, conditionalPass, underReview }
 
 class QualityParameter {
-  final String id;
-  final String name;
-  final String criteria;
-  final String? value;
-  final bool isPassed;
-  final String? notes;
 
   const QualityParameter({
     required this.id,
@@ -16,6 +10,12 @@ class QualityParameter {
     required this.isPassed,
     this.notes,
   });
+  final String id;
+  final String name;
+  final String criteria;
+  final String? value;
+  final bool isPassed;
+  final String? notes;
 
   @override
   bool operator ==(Object other) =>
@@ -29,23 +29,6 @@ class QualityParameter {
 }
 
 class SupplierQualityLog {
-  final String id;
-  final String supplierId;
-  final String supplierName;
-  final String? purchaseOrderId;
-  final String? purchaseOrderNumber;
-  final DateTime inspectionDate;
-  final String inspectedBy;
-  final String inspectionType;
-  final QualityStatus status;
-  final List<QualityParameter> parameters;
-  final String? defectDescription;
-  final String? actionTaken;
-  final DateTime? followUpDate;
-  final String? followUpBy;
-  final List<String>? evidenceAttachments;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
 
   const SupplierQualityLog({
     required this.id,
@@ -66,6 +49,23 @@ class SupplierQualityLog {
     required this.createdAt,
     this.updatedAt,
   });
+  final String id;
+  final String supplierId;
+  final String supplierName;
+  final String? purchaseOrderId;
+  final String? purchaseOrderNumber;
+  final DateTime inspectionDate;
+  final String inspectedBy;
+  final String inspectionType;
+  final QualityStatus status;
+  final List<QualityParameter> parameters;
+  final String? defectDescription;
+  final String? actionTaken;
+  final DateTime? followUpDate;
+  final String? followUpBy;
+  final List<String>? evidenceAttachments;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
 
   bool get requiresFollowUp =>
       status == QualityStatus.failed || status == QualityStatus.conditionalPass;

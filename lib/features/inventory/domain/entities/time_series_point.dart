@@ -1,6 +1,4 @@
 class TimeSeriesPoint {
-  final DateTime date;
-  final double value;
 
   TimeSeriesPoint({
     required this.date,
@@ -13,6 +11,8 @@ class TimeSeriesPoint {
       value: json['value'].toDouble(),
     );
   }
+  final DateTime date;
+  final double value;
 
   @override
   String toString() => 'TimeSeriesPoint(date: $date, value: $value)';

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:und_app/features/logistics/data/models/delivery_model.dart';
-import 'package:und_app/features/logistics/domain/providers/delivery_provider.dart';
+import '../../../logistics/data/models/delivery_model.dart';
+import '../../../logistics/domain/providers/delivery_provider.dart';
 import '../providers/inventory_provider.dart';
 
 /// Handles the specific integration between Inventory and Logistics modules
@@ -40,7 +40,7 @@ class LogisticsIntegration {
     }
 
     // Check each shipment item
-    for (final item in delivery.items!) {
+    for (final item in delivery.items) {
       // Null safety check here
       final available = await inventoryState.getAvailableStock(item.productId);
       final isAvailable = available >= item.quantity;
@@ -90,7 +90,7 @@ class LogisticsIntegration {
     final pickingLocations = <String, List<Map<String, dynamic>>>{};
 
     // Generate optimal picking locations for each item
-    for (final item in delivery.items!) {
+    for (final item in delivery.items) {
       // Null safety check here
       final locations = await inventoryState.getOptimalPickingLocations(
           itemId: item.productId,
@@ -102,12 +102,12 @@ class LogisticsIntegration {
     }
 
     pickingList['shipmentId'] = shipmentId;
-    pickingList['shipmentNumber'] = delivery.id!; // Null safety check here
+    pickingList['shipmentNumber'] = delivery.id; // Null safety check here
     pickingList['customerName'] =
-        delivery.customerName!; // Null safety check here
+        delivery.customerName; // Null safety check here
     pickingList['scheduledDate'] =
-        delivery.scheduledDate!.toIso8601String(); // Null safety check here
-    pickingList['items'] = delivery.items! // Null safety check here
+        delivery.scheduledDate.toIso8601String(); // Null safety check here
+    pickingList['items'] = delivery.items // Null safety check here
         .map((item) => {
               'productId': item.productId,
               'productName': item.productName,

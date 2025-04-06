@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../routes/app_router.dart';
 import '../models/permission.dart';
 import '../services/auth_service.dart';
-import '../../routes/app_router.dart';
 
 /// A widget that checks if the current user has the required permission to view the content
 /// If not, it shows either a custom unauthorized widget or redirects to the unauthorized screen
 class PermissionWrapper extends ConsumerWidget {
+
+  /// Constructor
+  const PermissionWrapper({
+    super.key,
+    required this.child,
+    required this.requiredPermission,
+    this.unauthorizedWidget,
+    this.redirectWhenUnauthorized = true,
+  });
   /// The child widget to display if the user has permission
   final Widget child;
 
@@ -18,15 +28,6 @@ class PermissionWrapper extends ConsumerWidget {
 
   /// Whether to redirect to the unauthorized screen when unauthorized
   final bool redirectWhenUnauthorized;
-
-  /// Constructor
-  const PermissionWrapper({
-    Key? key,
-    required this.child,
-    required this.requiredPermission,
-    this.unauthorizedWidget,
-    this.redirectWhenUnauthorized = true,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -120,14 +121,14 @@ class PermissionWrapper extends ConsumerWidget {
 /// A widget that checks if the user is logged in
 /// If not, it redirects to the login screen
 class AuthenticationWrapper extends ConsumerWidget {
-  /// The child widget to display if the user is authenticated
-  final Widget child;
 
   /// Constructor
   const AuthenticationWrapper({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
+  /// The child widget to display if the user is authenticated
+  final Widget child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

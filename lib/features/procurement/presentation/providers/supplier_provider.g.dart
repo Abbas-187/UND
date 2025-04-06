@@ -7,7 +7,7 @@ part of 'supplier_provider.dart';
 // **************************************************************************
 
 String _$supplierListProviderHash() =>
-    r'2d5518b7b8c041679260b32e68222825cd5821ec';
+    r'894fad16594a65b74f0f24dd6b3925bbc4ee452d';
 
 /// See also [SupplierListProvider].
 @ProviderFor(SupplierListProvider)

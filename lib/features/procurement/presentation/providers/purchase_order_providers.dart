@@ -14,17 +14,6 @@ part 'purchase_order_providers.g.dart';
 /// Represents the state of a purchase order list
 @immutable
 class PurchaseOrdersState {
-  final bool isLoading;
-  final bool hasError;
-  final String? errorMessage;
-  final List<PurchaseOrder> purchaseOrders;
-  final bool hasMore;
-  final String? supplierId;
-  final PurchaseOrderStatus? selectedStatus;
-  final DateTime? fromDate;
-  final DateTime? toDate;
-  final String? searchQuery;
-  final SortOption sortBy;
 
   const PurchaseOrdersState({
     this.isLoading = false,
@@ -39,6 +28,17 @@ class PurchaseOrdersState {
     this.searchQuery,
     this.sortBy = SortOption.dateDesc,
   });
+  final bool isLoading;
+  final bool hasError;
+  final String? errorMessage;
+  final List<PurchaseOrder> purchaseOrders;
+  final bool hasMore;
+  final String? supplierId;
+  final PurchaseOrderStatus? selectedStatus;
+  final DateTime? fromDate;
+  final DateTime? toDate;
+  final String? searchQuery;
+  final SortOption sortBy;
 
   PurchaseOrdersState copyWith({
     bool? isLoading,
@@ -79,10 +79,6 @@ class PurchaseOrdersState {
 /// Represents the state of a purchase order detail
 @immutable
 class PurchaseOrderDetailState {
-  final bool isLoading;
-  final bool hasError;
-  final String? errorMessage;
-  final PurchaseOrder? purchaseOrder;
 
   const PurchaseOrderDetailState({
     this.isLoading = false,
@@ -90,6 +86,10 @@ class PurchaseOrderDetailState {
     this.errorMessage,
     this.purchaseOrder,
   });
+  final bool isLoading;
+  final bool hasError;
+  final String? errorMessage;
+  final PurchaseOrder? purchaseOrder;
 
   PurchaseOrderDetailState copyWith({
     bool? isLoading,

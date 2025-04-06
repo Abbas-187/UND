@@ -1,14 +1,14 @@
 import '../repositories/auth_repository.dart';
 
 class ResetPasswordUseCase {
+
+  ResetPasswordUseCase(this.repository);
   final AuthRepository repository;
   static final _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
   // Rate limiting: store last reset attempt time per email
   final Map<String, DateTime> _lastResetAttempts = {};
   static const _resetCooldown = Duration(minutes: 5);
-
-  ResetPasswordUseCase(this.repository);
 
   Future<void> execute(String email) async {
     // Email validation

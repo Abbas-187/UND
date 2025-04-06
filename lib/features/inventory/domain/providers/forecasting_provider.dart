@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../forecasting/domain/services/forecasting_service.dart';
+
 import '../../../forecasting/domain/entities/time_series_point.dart';
-import '../../../forecasting/domain/entities/forecast_method.dart';
+import '../../../forecasting/domain/services/forecasting_service.dart';
 
 /// State notifier for forecasting
 class ForecastingNotifier extends StateNotifier<void> {

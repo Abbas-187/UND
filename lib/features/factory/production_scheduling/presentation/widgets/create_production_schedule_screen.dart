@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../domain/providers/production_scheduling_provider.dart';
 import '../../data/models/production_line_allocation_model.dart';
 import '../../data/models/production_schedule_model.dart';
 import '../../data/models/production_slot_model.dart';
-import '../../../domain/providers/production_scheduling_provider.dart';
 
 class CreateProductionScheduleScreen extends ConsumerStatefulWidget {
   const CreateProductionScheduleScreen({super.key});

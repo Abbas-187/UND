@@ -4,11 +4,6 @@ import 'package:intl/intl.dart';
 typedef DateRangeSelectedCallback = void Function(DateTime start, DateTime end);
 
 class DateRangePicker extends StatelessWidget {
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final DateRangeSelectedCallback onDateRangeSelected;
-  final String? label;
-  final bool compact;
 
   const DateRangePicker({
     super.key,
@@ -18,6 +13,11 @@ class DateRangePicker extends StatelessWidget {
     this.label,
     this.compact = false,
   });
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final DateRangeSelectedCallback onDateRangeSelected;
+  final String? label;
+  final bool compact;
 
   Future<void> _selectDateRange(BuildContext context) async {
     final initialDateRange = startDate != null && endDate != null

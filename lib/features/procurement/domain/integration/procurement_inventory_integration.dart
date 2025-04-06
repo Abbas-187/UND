@@ -1,17 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../inventory/domain/providers/inventory_provider.dart';
-import '../../../inventory/data/models/inventory_item_model.dart';
 import '../../../inventory/data/models/inventory_transaction_model.dart';
-import '../../data/models/purchase_order_model.dart';
-import '../../data/models/purchase_order_item_model.dart';
-import '../providers/purchase_order_provider.dart';
-import '../../../inventory/domain/providers/stock_level_provider.dart';
-import '../../../inventory/domain/providers/forecasting_provider.dart';
-import '../../../inventory/domain/providers/inventory_repository_provider.dart';
 import '../../../inventory/domain/entities/inventory_item.dart';
 import '../../../inventory/domain/entities/stock_level.dart';
-import '../../../inventory/domain/repositories/inventory_repository.dart';
+import '../../../inventory/domain/providers/forecasting_provider.dart';
+import '../../../inventory/domain/providers/inventory_provider.dart';
+import '../../../inventory/domain/providers/inventory_repository_provider.dart';
+import '../../../inventory/domain/providers/stock_level_provider.dart';
+import '../../data/models/purchase_order_model.dart';
+import '../providers/purchase_order_provider.dart';
 
 /// Integration service to connect procurement with inventory
 class ProcurementInventoryIntegration {
@@ -21,8 +18,7 @@ class ProcurementInventoryIntegration {
   /// Converts a received purchase order to inventory items
   Future<List<String>> convertPOToInventory(String purchaseOrderId) async {
     final purchaseOrder =
-        await _ref.read(purchaseOrderByIdProvider(purchaseOrderId).future)
-            as PurchaseOrderModel?;
+        await _ref.read(purchaseOrderByIdProvider(purchaseOrderId).future);
     final inventoryState = _ref.read(inventoryProvider.notifier);
     final createdItemIds = <String>[];
 

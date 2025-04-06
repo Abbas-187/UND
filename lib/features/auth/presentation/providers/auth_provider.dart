@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/usecases/login_usecase.dart';
-import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
+import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/reset_password_usecase.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
@@ -35,11 +36,6 @@ enum AuthState {
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  final AuthRepository _authRepository;
-  final LoginUseCase _loginUseCase;
-  final RegisterUseCase _registerUseCase;
-  final LogoutUseCase _logoutUseCase;
-  final ResetPasswordUseCase _resetPasswordUseCase;
 
   AuthNotifier({
     required AuthRepository authRepository,
@@ -64,6 +60,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     });
   }
+  final AuthRepository _authRepository;
+  final LoginUseCase _loginUseCase;
+  final RegisterUseCase _registerUseCase;
+  final LogoutUseCase _logoutUseCase;
+  final ResetPasswordUseCase _resetPasswordUseCase;
 
   Future<void> _checkCurrentUser() async {
     try {

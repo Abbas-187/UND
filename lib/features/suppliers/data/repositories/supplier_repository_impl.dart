@@ -4,10 +4,10 @@ import '../../domain/repositories/supplier_repository.dart';
 import '../models/supplier_model.dart';
 
 class SupplierRepositoryImpl implements SupplierRepository {
-  final FirebaseFirestore _firestore;
-  final String _collection = 'suppliers';
 
   SupplierRepositoryImpl(this._firestore);
+  final FirebaseFirestore _firestore;
+  final String _collection = 'suppliers';
 
   CollectionReference<Map<String, dynamic>> get _suppliersCollection =>
       _firestore.collection(_collection);

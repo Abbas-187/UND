@@ -2,30 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final String? hintText;
-  final IconData? prefixIcon;
-  final Widget? suffix;
-  final bool isPassword;
-  final bool isReadOnly;
-  final bool isEnabled;
-  final int maxLines;
-  final int? maxLength;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter>? inputFormatters;
-  final String? Function(String?)? validator;
-  final void Function(String)? onChanged;
-  final void Function()? onTap;
-  final void Function(String)? onFieldSubmitted;
-  final FocusNode? focusNode;
-  final TextInputAction? textInputAction;
-  final String? initialValue;
-  final EdgeInsetsGeometry? contentPadding;
-  final bool autofocus;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.labelText,
     this.hintText,
@@ -47,7 +26,28 @@ class CustomTextField extends StatefulWidget {
     this.initialValue,
     this.contentPadding,
     this.autofocus = false,
-  }) : super(key: key);
+  });
+  final TextEditingController controller;
+  final String labelText;
+  final String? hintText;
+  final IconData? prefixIcon;
+  final Widget? suffix;
+  final bool isPassword;
+  final bool isReadOnly;
+  final bool isEnabled;
+  final int maxLines;
+  final int? maxLength;
+  final TextInputType keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final void Function()? onTap;
+  final void Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final String? initialValue;
+  final EdgeInsetsGeometry? contentPadding;
+  final bool autofocus;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();

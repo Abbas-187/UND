@@ -9,12 +9,12 @@ final maintenanceRecordProvider = StateNotifierProvider<
 
 class MaintenanceRecordNotifier
     extends StateNotifier<AsyncValue<List<MaintenanceRecordModel>>> {
-  final MaintenanceRecordRepository _repository;
 
   MaintenanceRecordNotifier(this._repository)
       : super(const AsyncValue.loading()) {
     _loadMaintenanceRecords();
   }
+  final MaintenanceRecordRepository _repository;
 
   Future<void> _loadMaintenanceRecords() async {
     try {

@@ -16,26 +16,6 @@ enum LocationType {
 
 /// Immutable temperature log model for dairy factory
 class TemperatureLogModel {
-  final String? id;
-  final DateTime timestamp;
-  final double temperatureValue;
-  final String locationId;
-  final LocationType? locationType;
-  final String? locationName;
-  final String? userId;
-  final String? deviceId;
-  final TemperatureComplianceStatus complianceStatus;
-  final double? minThreshold;
-  final double? maxThreshold;
-  final double? targetTemperature;
-  final String? notes;
-  final Map<String, dynamic>? additionalData;
-  final String? productBatchId;
-  final String? materialId;
-  final String? alertId;
-  final bool? alertsGenerated;
-  final String createdBy;
-  final DateTime createdAt;
 
   const TemperatureLogModel({
     this.id,
@@ -172,6 +152,26 @@ class TemperatureLogModel {
       createdAt: createdAt,
     );
   }
+  final String? id;
+  final DateTime timestamp;
+  final double temperatureValue;
+  final String locationId;
+  final LocationType? locationType;
+  final String? locationName;
+  final String? userId;
+  final String? deviceId;
+  final TemperatureComplianceStatus complianceStatus;
+  final double? minThreshold;
+  final double? maxThreshold;
+  final double? targetTemperature;
+  final String? notes;
+  final Map<String, dynamic>? additionalData;
+  final String? productBatchId;
+  final String? materialId;
+  final String? alertId;
+  final bool? alertsGenerated;
+  final String createdBy;
+  final DateTime createdAt;
 
   /// Convert to JSON for serialization
   Map<String, dynamic> toJson() {

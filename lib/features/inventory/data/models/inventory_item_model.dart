@@ -9,33 +9,6 @@ enum CertificationStatus { pending, approved, expired, revoked, notApplicable }
 
 /// Immutable class for dairy inventory items
 class InventoryItemModel {
-  final String id;
-  final String name;
-  final String category;
-  final String unit;
-  final double quantity;
-  final double minimumQuantity;
-  final double reorderPoint;
-  final String location;
-  final DateTime lastUpdated;
-  final String? batchNumber;
-  final DateTime? expiryDate;
-  final Map<String, dynamic>? additionalAttributes;
-  final List<String> searchTerms;
-  final double? cost;
-  final int lowStockThreshold;
-
-  // Dairy-specific fields
-  final List<TemperatureReading>? temperatureHistory;
-  final Map<String, QualityParameterMeasurement>? qualityParameters;
-  final BatchInformation? batchInformation;
-  final Map<String, ComplianceCertification>? complianceCertifications;
-  final Map<String, double>? crossContaminationRiskFactors;
-  final double? currentTemperature;
-  final DateTime? lastQualityCheck;
-  final String? storageCondition; // e.g., "refrigerated", "frozen", "ambient"
-  final Map<String, String>? allergenInfo;
-  final QualityStatus? overallQualityStatus;
 
   InventoryItemModel({
     required this.id,
@@ -174,6 +147,33 @@ class InventoryItemModel {
       lowStockThreshold: item.lowStockThreshold,
     );
   }
+  final String id;
+  final String name;
+  final String category;
+  final String unit;
+  final double quantity;
+  final double minimumQuantity;
+  final double reorderPoint;
+  final String location;
+  final DateTime lastUpdated;
+  final String? batchNumber;
+  final DateTime? expiryDate;
+  final Map<String, dynamic>? additionalAttributes;
+  final List<String> searchTerms;
+  final double? cost;
+  final int lowStockThreshold;
+
+  // Dairy-specific fields
+  final List<TemperatureReading>? temperatureHistory;
+  final Map<String, QualityParameterMeasurement>? qualityParameters;
+  final BatchInformation? batchInformation;
+  final Map<String, ComplianceCertification>? complianceCertifications;
+  final Map<String, double>? crossContaminationRiskFactors;
+  final double? currentTemperature;
+  final DateTime? lastQualityCheck;
+  final String? storageCondition; // e.g., "refrigerated", "frozen", "ambient"
+  final Map<String, String>? allergenInfo;
+  final QualityStatus? overallQualityStatus;
 
   // Convert to domain entity
   InventoryItem toDomain() {
@@ -341,13 +341,6 @@ class InventoryItemModel {
 
 /// Temperature reading for tracking inventory item storage conditions
 class TemperatureReading {
-  final DateTime timestamp;
-  final double temperature;
-  final String? recordedBy;
-  final String? deviceId;
-  final String? location;
-  final bool isCompliant;
-  final String? notes;
 
   const TemperatureReading({
     required this.timestamp,
@@ -370,6 +363,13 @@ class TemperatureReading {
       notes: json['notes'] as String?,
     );
   }
+  final DateTime timestamp;
+  final double temperature;
+  final String? recordedBy;
+  final String? deviceId;
+  final String? location;
+  final bool isCompliant;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -406,15 +406,6 @@ class TemperatureReading {
 
 /// Quality parameter measurement for dairy products
 class QualityParameterMeasurement {
-  final String parameterName;
-  final double value;
-  final String unit;
-  final double? minThreshold;
-  final double? maxThreshold;
-  final DateTime timestamp;
-  final String? recordedBy;
-  final QualityStatus status;
-  final String? notes;
 
   const QualityParameterMeasurement({
     required this.parameterName,
@@ -447,6 +438,15 @@ class QualityParameterMeasurement {
       notes: json['notes'] as String?,
     );
   }
+  final String parameterName;
+  final double value;
+  final String unit;
+  final double? minThreshold;
+  final double? maxThreshold;
+  final DateTime timestamp;
+  final String? recordedBy;
+  final QualityStatus status;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -489,16 +489,6 @@ class QualityParameterMeasurement {
 
 /// Detailed batch information for dairy products
 class BatchInformation {
-  final String batchId;
-  final DateTime productionDate;
-  final String sourceId; // Farm ID or supplier ID
-  final Map<String, dynamic>? sourceDetails;
-  final Map<String, dynamic>? processingDetails;
-  final List<String>? testResults;
-  final bool isApproved;
-  final String? approvedBy;
-  final DateTime? approvalDate;
-  final String? notes;
 
   const BatchInformation({
     required this.batchId,
@@ -531,6 +521,16 @@ class BatchInformation {
       notes: json['notes'] as String?,
     );
   }
+  final String batchId;
+  final DateTime productionDate;
+  final String sourceId; // Farm ID or supplier ID
+  final Map<String, dynamic>? sourceDetails;
+  final Map<String, dynamic>? processingDetails;
+  final List<String>? testResults;
+  final bool isApproved;
+  final String? approvedBy;
+  final DateTime? approvalDate;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -577,15 +577,6 @@ class BatchInformation {
 
 /// Compliance certification for dairy products
 class ComplianceCertification {
-  final String certificationName;
-  final String issuingAuthority;
-  final DateTime issueDate;
-  final DateTime expiryDate;
-  final String? certificateNumber;
-  final CertificationStatus status;
-  final String? documents;
-  final List<String>? conditions;
-  final String? notes;
 
   const ComplianceCertification({
     required this.certificationName,
@@ -620,6 +611,15 @@ class ComplianceCertification {
       notes: json['notes'] as String?,
     );
   }
+  final String certificationName;
+  final String issuingAuthority;
+  final DateTime issueDate;
+  final DateTime expiryDate;
+  final String? certificateNumber;
+  final CertificationStatus status;
+  final String? documents;
+  final List<String>? conditions;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {

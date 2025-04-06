@@ -6,7 +6,7 @@ part of 'temperature_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$temperatureLogsHash() => r'f87b715822899547ecb9815bb06d8060f06dba6d';
+String _$temperatureLogsHash() => r'69ecd86ead6ffc92859dbee12d931364656cb29b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -325,7 +325,7 @@ class _TemperatureSettingsProviderElement
   String get locationId => (origin as TemperatureSettingsProvider).locationId;
 }
 
-String _$temperatureAlertsHash() => r'8c34ffae04d8faf086062e23ac21d240d3e9f0c3';
+String _$temperatureAlertsHash() => r'76d3b4e2cead5e37a175ba0cdcbb64f3714f91fa';
 
 abstract class _$TemperatureAlerts
     extends BuildlessAutoDisposeStreamNotifier<List<Map<String, dynamic>>> {

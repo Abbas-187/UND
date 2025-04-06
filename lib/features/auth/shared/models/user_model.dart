@@ -1,12 +1,7 @@
 import 'package:meta/meta.dart';
-import 'dart:convert';
 
 @immutable
 class UserModel {
-  final String id;
-  final String email;
-  final String? displayName;
-  final String? photoURL;
 
   const UserModel({
     required this.id,
@@ -14,6 +9,19 @@ class UserModel {
     this.displayName,
     this.photoURL,
   });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] as String,
+      email: json['email'] as String,
+      displayName: json['displayName'] as String?,
+      photoURL: json['photoURL'] as String?,
+    );
+  }
+  final String id;
+  final String email;
+  final String? displayName;
+  final String? photoURL;
 
   UserModel copyWith({
     String? id,
@@ -36,15 +44,6 @@ class UserModel {
       'displayName': displayName,
       'photoURL': photoURL,
     };
-  }
-
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'] as String,
-      email: json['email'] as String,
-      displayName: json['displayName'] as String?,
-      photoURL: json['photoURL'] as String?,
-    );
   }
 
   @override

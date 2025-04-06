@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
 
 class ResetPasswordScreen extends ConsumerWidget {
-  ResetPasswordScreen({Key? key}) : super(key: key);
+  ResetPasswordScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();

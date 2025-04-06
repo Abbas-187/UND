@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../usecases/calculate_inventory_aging_usecase.dart';
+
 import '../../data/models/inventory_item_model.dart';
+import '../usecases/calculate_inventory_aging_usecase.dart';
 
 part 'inventory_aging_provider.g.dart';
 

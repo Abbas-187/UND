@@ -1,9 +1,4 @@
 class SupplierAddress {
-  final String street;
-  final String city;
-  final String state;
-  final String zipCode;
-  final String country;
 
   const SupplierAddress({
     required this.street,
@@ -12,6 +7,21 @@ class SupplierAddress {
     required this.zipCode,
     required this.country,
   });
+
+  factory SupplierAddress.fromJson(Map<String, dynamic> json) {
+    return SupplierAddress(
+      street: json['street'] as String,
+      city: json['city'] as String,
+      state: json['state'] as String,
+      zipCode: json['zipCode'] as String,
+      country: json['country'] as String,
+    );
+  }
+  final String street;
+  final String city;
+  final String state;
+  final String zipCode;
+  final String country;
 
   SupplierAddress copyWith({
     String? street,
@@ -38,35 +48,9 @@ class SupplierAddress {
       'country': country,
     };
   }
-
-  factory SupplierAddress.fromJson(Map<String, dynamic> json) {
-    return SupplierAddress(
-      street: json['street'] as String,
-      city: json['city'] as String,
-      state: json['state'] as String,
-      zipCode: json['zipCode'] as String,
-      country: json['country'] as String,
-    );
-  }
 }
 
 class Supplier {
-  final String id;
-  final String name;
-  final String contactPerson;
-  final String email;
-  final String phone;
-  final SupplierAddress address;
-  final List<String> productCategories;
-  final Map<String, dynamic>? additionalAttributes;
-  final DateTime lastOrderDate;
-  final bool isActive;
-  final double rating; // 1-5 scale
-  final String notes;
-  final String taxId;
-  final String paymentTerms;
-  final String website;
-  final DateTime lastUpdated;
 
   Supplier({
     required this.id,
@@ -87,6 +71,45 @@ class Supplier {
     DateTime? lastUpdated,
   })  : lastOrderDate = lastOrderDate ?? DateTime.now(),
         lastUpdated = lastUpdated ?? DateTime.now();
+
+  factory Supplier.fromJson(Map<String, dynamic> json) {
+    return Supplier(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      contactPerson: json['contactPerson'] as String,
+      email: json['email'] as String,
+      phone: json['phone'] as String,
+      address:
+          SupplierAddress.fromJson(json['address'] as Map<String, dynamic>),
+      productCategories: List<String>.from(json['productCategories'] as List),
+      additionalAttributes:
+          json['additionalAttributes'] as Map<String, dynamic>?,
+      lastOrderDate: DateTime.parse(json['lastOrderDate'] as String),
+      isActive: json['isActive'] as bool,
+      rating: (json['rating'] as num).toDouble(),
+      notes: json['notes'] as String? ?? '',
+      taxId: json['taxId'] as String? ?? '',
+      paymentTerms: json['paymentTerms'] as String? ?? '',
+      website: json['website'] as String? ?? '',
+      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
+    );
+  }
+  final String id;
+  final String name;
+  final String contactPerson;
+  final String email;
+  final String phone;
+  final SupplierAddress address;
+  final List<String> productCategories;
+  final Map<String, dynamic>? additionalAttributes;
+  final DateTime lastOrderDate;
+  final bool isActive;
+  final double rating; // 1-5 scale
+  final String notes;
+  final String taxId;
+  final String paymentTerms;
+  final String website;
+  final DateTime lastUpdated;
 
   Supplier copyWith({
     String? id,
@@ -145,28 +168,5 @@ class Supplier {
       'website': website,
       'lastUpdated': lastUpdated.toIso8601String(),
     };
-  }
-
-  factory Supplier.fromJson(Map<String, dynamic> json) {
-    return Supplier(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      contactPerson: json['contactPerson'] as String,
-      email: json['email'] as String,
-      phone: json['phone'] as String,
-      address:
-          SupplierAddress.fromJson(json['address'] as Map<String, dynamic>),
-      productCategories: List<String>.from(json['productCategories'] as List),
-      additionalAttributes:
-          json['additionalAttributes'] as Map<String, dynamic>?,
-      lastOrderDate: DateTime.parse(json['lastOrderDate'] as String),
-      isActive: json['isActive'] as bool,
-      rating: (json['rating'] as num).toDouble(),
-      notes: json['notes'] as String? ?? '',
-      taxId: json['taxId'] as String? ?? '',
-      paymentTerms: json['paymentTerms'] as String? ?? '',
-      website: json['website'] as String? ?? '',
-      lastUpdated: DateTime.parse(json['lastUpdated'] as String),
-    );
   }
 }

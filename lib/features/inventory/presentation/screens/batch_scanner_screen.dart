@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../../domain/services/barcode_scanning_service.dart';
-import '../../domain/entities/scan_result.dart';
+
 import '../../data/models/inventory_item_model.dart';
+import '../../domain/entities/scan_result.dart';
+import '../../domain/services/barcode_scanning_service.dart';
 import '../../domain/services/label_printing_service.dart';
 
 final barcodeScanningServiceProvider = Provider<BarcodeScanningService>((ref) {
@@ -13,7 +14,7 @@ final barcodeScanningServiceProvider = Provider<BarcodeScanningService>((ref) {
 });
 
 class BatchScannerScreen extends ConsumerStatefulWidget {
-  const BatchScannerScreen({Key? key}) : super(key: key);
+  const BatchScannerScreen({super.key});
 
   @override
   ConsumerState<BatchScannerScreen> createState() => _BatchScannerScreenState();

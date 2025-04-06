@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/repositories/inventory_repository.dart';
+
 import '../../data/models/inventory_item_model.dart';
+import '../../data/repositories/inventory_repository.dart';
 import '../services/label_printing_service.dart';
 import 'inventory_provider.dart';
 

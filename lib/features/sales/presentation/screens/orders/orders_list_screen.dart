@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../../common/widgets/custom_search_bar.dart';
 import '../../../../../common/widgets/date_range_picker.dart';
 import '../../../../../common/widgets/order_status_chip.dart';
-import '../../../domain/providers/order_provider.dart';
 import '../../../data/models/order_model.dart';
+import '../../../domain/providers/order_provider.dart';
 
 class OrdersListScreen extends ConsumerStatefulWidget {
   const OrdersListScreen({super.key});

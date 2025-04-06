@@ -1,5 +1,5 @@
-import '../entities/supplier_quality_log.dart';
 import '../../../../core/exceptions/result.dart';
+import '../entities/supplier_quality_log.dart';
 
 /// Repository interface for supplier quality log operations
 abstract class SupplierQualityLogRepository {

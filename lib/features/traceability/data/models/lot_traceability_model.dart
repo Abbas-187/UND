@@ -12,15 +12,6 @@ enum ReleaseStatus {
 
 /// Component material used in a production lot
 class ComponentMaterial {
-  final String materialId;
-  final String materialName;
-  final String lotId;
-  final double quantity;
-  final String unit;
-  final DateTime addedAt;
-  final String? addedBy;
-  final Map<String, dynamic>? materialAttributes;
-  final bool isCritical;
 
   const ComponentMaterial({
     required this.materialId,
@@ -49,6 +40,15 @@ class ComponentMaterial {
       isCritical: json['isCritical'] as bool,
     );
   }
+  final String materialId;
+  final String materialName;
+  final String lotId;
+  final double quantity;
+  final String unit;
+  final DateTime addedAt;
+  final String? addedBy;
+  final Map<String, dynamic>? materialAttributes;
+  final bool isCritical;
 
   Map<String, dynamic> toJson() {
     return {
@@ -99,17 +99,6 @@ class ComponentMaterial {
 
 /// Equipment used in production
 class ProductionEquipment {
-  final String equipmentId;
-  final String equipmentName;
-  final String? equipmentType;
-  final DateTime usedFrom;
-  final DateTime usedUntil;
-  final String? operatorId;
-  final String? operatorName;
-  final Map<String, dynamic>? parameters;
-  final String? cleaningRecordId;
-  final String? maintenanceStatus;
-  final bool validated;
 
   const ProductionEquipment({
     required this.equipmentId,
@@ -144,6 +133,17 @@ class ProductionEquipment {
       validated: json['validated'] as bool,
     );
   }
+  final String equipmentId;
+  final String equipmentName;
+  final String? equipmentType;
+  final DateTime usedFrom;
+  final DateTime usedUntil;
+  final String? operatorId;
+  final String? operatorName;
+  final Map<String, dynamic>? parameters;
+  final String? cleaningRecordId;
+  final String? maintenanceStatus;
+  final bool validated;
 
   Map<String, dynamic> toJson() {
     return {
@@ -201,14 +201,6 @@ class ProductionEquipment {
 
 /// Personnel involved in production
 class ProductionPersonnel {
-  final String personnelId;
-  final String name;
-  final String role;
-  final String? certification;
-  final DateTime timestamp;
-  final String? activity;
-  final Map<String, dynamic>? responsibilities;
-  final String? verifiedBy;
 
   const ProductionPersonnel({
     required this.personnelId,
@@ -235,6 +227,14 @@ class ProductionPersonnel {
       verifiedBy: json['verifiedBy'] as String?,
     );
   }
+  final String personnelId;
+  final String name;
+  final String role;
+  final String? certification;
+  final DateTime timestamp;
+  final String? activity;
+  final Map<String, dynamic>? responsibilities;
+  final String? verifiedBy;
 
   Map<String, dynamic> toJson() {
     return {
@@ -282,20 +282,6 @@ class ProductionPersonnel {
 
 /// Distribution information for lot tracking
 class DistributionInfo {
-  final String? shipmentId;
-  final DateTime? shipmentDate;
-  final String customerId;
-  final String customerName;
-  final double quantity;
-  final String unit;
-  final String? transporterId;
-  final String? carrierInfo;
-  final String? deliveryAddress;
-  final String? invoiceNumber;
-  final bool delivered;
-  final DateTime? deliveryDate;
-  final String? deliveryConfirmation;
-  final String? notes;
 
   const DistributionInfo({
     this.shipmentId,
@@ -346,6 +332,20 @@ class DistributionInfo {
       notes: json['notes'] as String?,
     );
   }
+  final String? shipmentId;
+  final DateTime? shipmentDate;
+  final String customerId;
+  final String customerName;
+  final double quantity;
+  final String unit;
+  final String? transporterId;
+  final String? carrierInfo;
+  final String? deliveryAddress;
+  final String? invoiceNumber;
+  final bool delivered;
+  final DateTime? deliveryDate;
+  final String? deliveryConfirmation;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -419,38 +419,6 @@ class DistributionInfo {
 
 /// Main lot traceability model for dairy production
 class LotTraceabilityModel {
-  final String? id;
-  final String lotNumber;
-  final String productId;
-  final String productName;
-  final String productCode;
-  final DateTime creationDate;
-  final DateTime expiryDate;
-  final String? batchId;
-  final double quantity;
-  final String unit;
-  final String? parentLotId;
-  final List<String>? childLotIds;
-  final Map<String, dynamic>? productAttributes;
-  final List<ComponentMaterial> componentMaterials;
-  final List<ProductionEquipment>? equipmentUsed;
-  final List<ProductionPersonnel>? personnelInvolved;
-  final List<String>? qualityTestIds;
-  final String? productionRecordId;
-  final ReleaseStatus releaseStatus;
-  final String? releaseApprovedBy;
-  final DateTime? releaseApprovalDate;
-  final List<DistributionInfo>? distributionRecords;
-  final bool allergenControlled;
-  final bool criticalControl;
-  final String? storageLocation;
-  final String? storageConditions;
-  final Map<String, dynamic>? processingParameters;
-  final String? notes;
-  final DateTime createdAt;
-  final String createdBy;
-  final DateTime? updatedAt;
-  final String? updatedBy;
 
   const LotTraceabilityModel({
     this.id,
@@ -618,6 +586,38 @@ class LotTraceabilityModel {
 
     return LotTraceabilityModel.fromJson(jsonWithId);
   }
+  final String? id;
+  final String lotNumber;
+  final String productId;
+  final String productName;
+  final String productCode;
+  final DateTime creationDate;
+  final DateTime expiryDate;
+  final String? batchId;
+  final double quantity;
+  final String unit;
+  final String? parentLotId;
+  final List<String>? childLotIds;
+  final Map<String, dynamic>? productAttributes;
+  final List<ComponentMaterial> componentMaterials;
+  final List<ProductionEquipment>? equipmentUsed;
+  final List<ProductionPersonnel>? personnelInvolved;
+  final List<String>? qualityTestIds;
+  final String? productionRecordId;
+  final ReleaseStatus releaseStatus;
+  final String? releaseApprovedBy;
+  final DateTime? releaseApprovalDate;
+  final List<DistributionInfo>? distributionRecords;
+  final bool allergenControlled;
+  final bool criticalControl;
+  final String? storageLocation;
+  final String? storageConditions;
+  final Map<String, dynamic>? processingParameters;
+  final String? notes;
+  final DateTime createdAt;
+  final String createdBy;
+  final DateTime? updatedAt;
+  final String? updatedBy;
 
   Map<String, dynamic> toJson() {
     // Convert component materials
@@ -866,8 +866,9 @@ extension LotTraceabilityExtension on LotTraceabilityModel {
     if (productionRecordId == null) return false;
 
     // Check if there are critical components without lot traceability
-    if (componentMaterials.any((m) => m.isCritical && m.lotId.isEmpty))
+    if (componentMaterials.any((m) => m.isCritical && m.lotId.isEmpty)) {
       return false;
+    }
 
     return true;
   }

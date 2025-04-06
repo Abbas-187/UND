@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../data/models/temperature_log_model.dart';
 import '../../data/models/temperature_settings_model.dart';
 import '../../data/repositories/temperature_monitoring_repository.dart';

@@ -24,6 +24,12 @@ final connectivityStatusProvider = StreamProvider<ConnectivityStatus>((ref) {
 
 /// Service to monitor network connectivity
 class ConnectivityService {
+
+  /// Constructor
+  ConnectivityService() {
+    // Subscribe to connectivity changes
+    _initConnectivity();
+  }
   /// Stream controller for connectivity status
   final _controller = StreamController<ConnectivityStatus>.broadcast();
 
@@ -32,12 +38,6 @@ class ConnectivityService {
 
   /// Stream subscription for connectivity changes
   StreamSubscription? _subscription;
-
-  /// Constructor
-  ConnectivityService() {
-    // Subscribe to connectivity changes
-    _initConnectivity();
-  }
 
   /// Initialize connectivity monitoring
   Future<void> _initConnectivity() async {

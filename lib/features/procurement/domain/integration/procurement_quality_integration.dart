@@ -1,10 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../inventory/domain/providers/quality_parameters_provider.dart';
 import '../../../inventory/data/models/dairy_quality_parameters_model.dart';
+import '../../../inventory/domain/providers/quality_parameters_provider.dart';
 import '../../data/models/supplier_quality_log_model.dart';
-import '../../data/models/purchase_order_model.dart';
-import '../../data/models/purchase_order_item_model.dart';
 import '../providers/supplier_quality_provider.dart';
 
 /// Integration service to connect procurement with quality control

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+
 import '../services/auth_service.dart';
-import '../models/user_model.dart';
 
 enum PermissionCheckType {
   any, // User needs at least one of the permissions
@@ -8,20 +8,20 @@ enum PermissionCheckType {
 }
 
 class PermissionWidget extends StatefulWidget {
-  final List<String> permissions;
-  final PermissionCheckType checkType;
-  final Widget child;
-  final Widget? fallback;
-  final bool hideIfNoPermission;
 
   const PermissionWidget({
-    Key? key,
+    super.key,
     required this.permissions,
     this.checkType = PermissionCheckType.any,
     required this.child,
     this.fallback,
     this.hideIfNoPermission = true,
-  }) : super(key: key);
+  });
+  final List<String> permissions;
+  final PermissionCheckType checkType;
+  final Widget child;
+  final Widget? fallback;
+  final bool hideIfNoPermission;
 
   @override
   _PermissionWidgetState createState() => _PermissionWidgetState();

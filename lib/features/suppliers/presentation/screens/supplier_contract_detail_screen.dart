@@ -5,10 +5,9 @@ import '../../domain/entities/supplier_contract.dart';
 import '../providers/supplier_contract_provider.dart';
 
 class SupplierContractDetailScreen extends ConsumerStatefulWidget {
-  final String? contractId;
 
-  const SupplierContractDetailScreen({Key? key, this.contractId})
-      : super(key: key);
+  const SupplierContractDetailScreen({super.key, this.contractId});
+  final String? contractId;
 
   @override
   ConsumerState<SupplierContractDetailScreen> createState() =>

@@ -1,7 +1,7 @@
-import '../../domain/entities/supplier_quality_log.dart';
-import '../../domain/repositories/supplier_quality_log_repository.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/exceptions/result.dart';
+import '../../domain/entities/supplier_quality_log.dart';
+import '../../domain/repositories/supplier_quality_log_repository.dart';
 
 /// Mock implementation of [SupplierQualityLogRepository] to demonstrate structure
 /// In a real application, this would communicate with a data source

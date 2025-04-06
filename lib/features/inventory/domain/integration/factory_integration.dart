@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Importing Riverpod for Ref
 
-import '../../../factory/domain/providers/production_provider.dart';
 import '../../../factory/data/models/production_order_model.dart'; // Updated import path
+import '../../../factory/domain/providers/production_provider.dart';
+import '../../models/material_model.dart'; // Import MaterialModel
 import '../../providers/material_requisition_provider.dart';
 import '../providers/inventory_provider.dart';
-import '../../models/material_model.dart'; // Import MaterialModel
 
 /// Handles the specific integration between Inventory and Factory modules
 class FactoryIntegration {

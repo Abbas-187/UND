@@ -1,16 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/sales_data.dart';
-import '../../domain/entities/inventory_status.dart';
+
 import '../widgets/inventory_distribution_chart.dart';
-import '../widgets/sales_trend_chart.dart';
 import '../widgets/inventory_value_chart.dart';
+import '../widgets/sales_trend_chart.dart';
 import '../widgets/top_products_chart.dart';
 
 class AnalyticsDashboardScreen extends ConsumerStatefulWidget {
-  const AnalyticsDashboardScreen({Key? key}) : super(key: key);
+  const AnalyticsDashboardScreen({super.key});
 
   @override
   ConsumerState<AnalyticsDashboardScreen> createState() =>
@@ -301,7 +299,7 @@ class _AnalyticsDashboardScreenState
 }
 
 class SalesByCategoryChart extends StatelessWidget {
-  const SalesByCategoryChart({Key? key}) : super(key: key);
+  const SalesByCategoryChart({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -351,7 +349,7 @@ class SalesByCategoryChart extends StatelessWidget {
 }
 
 class StockLevelsByCategoryChart extends StatelessWidget {
-  const StockLevelsByCategoryChart({Key? key}) : super(key: key);
+  const StockLevelsByCategoryChart({super.key});
 
   @override
   Widget build(BuildContext context) {

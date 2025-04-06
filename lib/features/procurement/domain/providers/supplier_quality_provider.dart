@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/models/supplier_quality_log_model.dart';
+
 import '../../data/models/purchase_order_item_model.dart';
+import '../../data/models/supplier_quality_log_model.dart';
 
 /// Provider for supplier quality state
 final supplierQualityProvider =
@@ -10,15 +11,15 @@ final supplierQualityProvider =
 
 /// State for supplier quality
 class SupplierQualityState {
-  final List<SupplierQualityLog> qualityLogs;
-  final bool isLoading;
-  final String? error;
 
   SupplierQualityState({
     this.qualityLogs = const [],
     this.isLoading = false,
     this.error,
   });
+  final List<SupplierQualityLog> qualityLogs;
+  final bool isLoading;
+  final String? error;
 
   SupplierQualityState copyWith({
     List<SupplierQualityLog>? qualityLogs,

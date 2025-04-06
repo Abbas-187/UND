@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:und_app/common/widgets/app_loading_indicator.dart';
-import 'package:und_app/common/widgets/error_view.dart';
-import 'package:und_app/core/routes/app_router.dart';
-import 'package:und_app/features/inventory/data/models/inventory_item_model.dart';
-import 'package:und_app/features/inventory/domain/providers/inventory_provider.dart';
+import '../../../../common/widgets/app_loading_indicator.dart';
+import '../../../../common/widgets/error_view.dart';
+import '../../../../core/routes/app_router.dart';
+import '../../../inventory/data/models/inventory_item_model.dart';
+import '../../../inventory/domain/providers/inventory_provider.dart';
 
 class ForecastingDashboardScreen extends ConsumerWidget {
-  const ForecastingDashboardScreen({Key? key}) : super(key: key);
+  const ForecastingDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

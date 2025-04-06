@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../domain/providers/customer_provider.dart';
 import '../../../../../common/widgets/custom_search_bar.dart';
-import '../../../../sales/data/models/customer_model.dart';
+import '../../../domain/providers/customer_provider.dart';
 
 class CustomerListScreen extends ConsumerStatefulWidget {
   const CustomerListScreen({super.key});

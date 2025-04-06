@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../data/models/production_slot_model.dart';
+
 import '../../../domain/providers/production_scheduling_provider.dart';
+import '../../data/models/production_slot_model.dart';
 
 class ProductionSlotDetailScreen extends ConsumerWidget {
   const ProductionSlotDetailScreen({
-    Key? key,
+    super.key,
     required this.slot,
     required this.scheduleId,
-  }) : super(key: key);
+  });
 
   final ProductionSlotModel slot;
   final String scheduleId;

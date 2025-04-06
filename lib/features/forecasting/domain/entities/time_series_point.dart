@@ -1,5 +1,13 @@
 /// A data point in a time series.
 class TimeSeriesPoint {
+
+  /// Create a TimeSeriesPoint from a map.
+  factory TimeSeriesPoint.fromJson(Map<String, dynamic> json) {
+    return TimeSeriesPoint(
+      timestamp: DateTime.fromMillisecondsSinceEpoch(json['timestamp'] as int),
+      value: (json['value'] as num).toDouble(),
+    );
+  }
   /// Creates a new [TimeSeriesPoint].
   TimeSeriesPoint({
     required this.timestamp,
@@ -18,14 +26,6 @@ class TimeSeriesPoint {
       'timestamp': timestamp.millisecondsSinceEpoch,
       'value': value,
     };
-  }
-
-  /// Create a TimeSeriesPoint from a map.
-  factory TimeSeriesPoint.fromJson(Map<String, dynamic> json) {
-    return TimeSeriesPoint(
-      timestamp: DateTime.fromMillisecondsSinceEpoch(json['timestamp'] as int),
-      value: (json['value'] as num).toDouble(),
-    );
   }
 
   @override

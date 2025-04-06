@@ -5,11 +5,11 @@ import '../../domain/repositories/inventory_repository.dart';
 import '../models/inventory_item_model.dart';
 
 class InventoryRepositoryImpl implements InventoryRepository {
-  final FirebaseFirestore _firestore;
-  final String _collection = 'inventory';
 
   InventoryRepositoryImpl({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+  final String _collection = 'inventory';
 
   CollectionReference<Map<String, dynamic>> get _inventoryCollection =>
       _firestore.collection(_collection);

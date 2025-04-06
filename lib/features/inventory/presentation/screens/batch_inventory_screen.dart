@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/providers/inventory_provider.dart';
+
 import '../../domain/providers/batch_operations_provider.dart';
+import '../../domain/providers/inventory_provider.dart';
 import 'batch_barcode_scan_screen.dart';
 
 class BatchInventoryScreen extends ConsumerStatefulWidget {

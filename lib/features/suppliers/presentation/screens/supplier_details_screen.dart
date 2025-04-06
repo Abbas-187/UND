@@ -6,12 +6,12 @@ import '../../domain/entities/supplier.dart';
 import '../providers/supplier_provider.dart';
 
 class SupplierDetailsScreen extends ConsumerWidget {
-  final String supplierId;
 
   const SupplierDetailsScreen({
-    Key? key,
+    super.key,
     required this.supplierId,
-  }) : super(key: key);
+  });
+  final String supplierId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -187,7 +187,7 @@ class SupplierDetailsScreen extends ConsumerWidget {
           children: supplier.productCategories.map((category) {
             return Chip(
               label: Text(category),
-              backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+              backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
             );
           }).toList(),
         ),

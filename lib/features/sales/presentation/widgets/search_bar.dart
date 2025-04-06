@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SalesSearchBar extends StatefulWidget {
-  final String hint;
-  final Function(String) onSearch;
-  final Duration debounceDuration;
 
   const SalesSearchBar({
     super.key,
@@ -11,6 +8,9 @@ class SalesSearchBar extends StatefulWidget {
     required this.onSearch,
     this.debounceDuration = const Duration(milliseconds: 500),
   });
+  final String hint;
+  final Function(String) onSearch;
+  final Duration debounceDuration;
 
   @override
   State<SalesSearchBar> createState() => _SalesSearchBarState();

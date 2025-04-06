@@ -2,23 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/supplier.dart';
 
 class SupplierModel {
-  final String id;
-  final String name;
-  final String contactPerson;
-  final String email;
-  final String phone;
-  final Map<String, String> address;
-  final List<String> productCategories;
-  final Map<String, dynamic>? additionalAttributes;
-  final DateTime lastOrderDate;
-  final bool isActive;
-  final double rating;
-  final String notes;
-  final String taxId;
-  final String paymentTerms;
-  final String website;
-  final DateTime lastUpdated;
-  final List<String> searchTerms;
 
   SupplierModel({
     required this.id,
@@ -95,6 +78,23 @@ class SupplierModel {
           supplier.name, supplier.contactPerson, supplier.productCategories),
     );
   }
+  final String id;
+  final String name;
+  final String contactPerson;
+  final String email;
+  final String phone;
+  final Map<String, String> address;
+  final List<String> productCategories;
+  final Map<String, dynamic>? additionalAttributes;
+  final DateTime lastOrderDate;
+  final bool isActive;
+  final double rating;
+  final String notes;
+  final String taxId;
+  final String paymentTerms;
+  final String website;
+  final DateTime lastUpdated;
+  final List<String> searchTerms;
 
   // Convert data model to domain entity
   Supplier toDomain() {

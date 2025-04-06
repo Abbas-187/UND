@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class ResponsiveLayout extends StatelessWidget {
-  final Widget mobile;
-  final Widget tablet;
-  final Widget desktop;
 
   const ResponsiveLayout({
-    Key? key,
+    super.key,
     required this.mobile,
     required this.tablet,
     required this.desktop,
-  }) : super(key: key);
+  });
+  final Widget mobile;
+  final Widget tablet;
+  final Widget desktop;
 
   static bool isMobile(BuildContext context) =>
       MediaQuery.of(context).size.width < 650;

@@ -4,12 +4,12 @@ import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
 
 class InventoryMovementHistoryScreen extends ConsumerStatefulWidget {
-  final String itemId;
 
   const InventoryMovementHistoryScreen({
-    Key? key,
+    super.key,
     required this.itemId,
-  }) : super(key: key);
+  });
+  final String itemId;
 
   @override
   ConsumerState<InventoryMovementHistoryScreen> createState() =>
@@ -231,7 +231,7 @@ class _InventoryMovementHistoryScreenState
                   ],
                 ),
                 Text(
-                  '${isAddition ? '+' : ''}${quantity} ${_item?.unit ?? ''}',
+                  '${isAddition ? '+' : ''}$quantity ${_item?.unit ?? ''}',
                   style: TextStyle(
                     color: isAddition ? Colors.green : Colors.red,
                     fontWeight: FontWeight.bold,

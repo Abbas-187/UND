@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/models/purchase_order_model.dart';
-import '../repositories/purchase_order_repository.dart';
-import '../../data/repositories/purchase_order_repository_impl.dart';
 import '../../data/datasources/purchase_order_remote_datasource.dart';
+import '../../data/models/purchase_order_model.dart';
+import '../../data/repositories/purchase_order_repository_impl.dart';
+import '../repositories/purchase_order_repository.dart';
 
 final purchaseOrderDataSourceProvider =
     Provider<PurchaseOrderRemoteDataSource>((ref) {

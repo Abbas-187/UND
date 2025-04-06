@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
 
 class RegisterScreen extends ConsumerWidget {
-  RegisterScreen({Key? key}) : super(key: key);
+  RegisterScreen({super.key});
 
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();

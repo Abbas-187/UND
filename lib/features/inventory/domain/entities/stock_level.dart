@@ -1,12 +1,4 @@
 class StockLevel {
-  final String materialId;
-  final String materialName;
-  final double currentLevel;
-  final double minLevel;
-  final double maxLevel;
-  final double criticalLevel;
-  final int leadTimeDays;
-  final String unit;
 
   StockLevel({
     required this.materialId,
@@ -31,6 +23,14 @@ class StockLevel {
       unit: json['unit'] as String,
     );
   }
+  final String materialId;
+  final String materialName;
+  final double currentLevel;
+  final double minLevel;
+  final double maxLevel;
+  final double criticalLevel;
+  final int leadTimeDays;
+  final String unit;
 
   Map<String, dynamic> toJson() {
     return {

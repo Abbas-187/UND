@@ -1,5 +1,5 @@
-import '../entities/supplier_contract.dart';
 import '../../../../core/exceptions/result.dart';
+import '../entities/supplier_contract.dart';
 
 /// Repository interface for supplier contract operations
 abstract class SupplierContractRepository {

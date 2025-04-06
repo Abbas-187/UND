@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:und_app/features/forecasting/domain/entities/time_series_point.dart';
+import '../entities/time_series_point.dart';
 
 /// Implementation of Exponential Smoothing algorithm for time series forecasting
 class ExponentialSmoothing {

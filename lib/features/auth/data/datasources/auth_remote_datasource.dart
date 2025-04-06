@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import '../../domain/entities/user.dart';
 
 class AuthRemoteDataSource {
-  final firebase_auth.FirebaseAuth _firebaseAuth;
 
   AuthRemoteDataSource({firebase_auth.FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
+  final firebase_auth.FirebaseAuth _firebaseAuth;
 
   Future<User> login(String email, String password) async {
     final credential = await _firebaseAuth.signInWithEmailAndPassword(

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 /// Enum representing the inspection result of a supplier quality log
 enum InspectionResult { pass, fail }
@@ -18,6 +17,46 @@ InspectionResult inspectionResultFromString(String result) {
 
 /// Model class for tracking supplier quality logs
 class SupplierQualityLog {
+
+  /// Creates a new [SupplierQualityLog] instance
+  SupplierQualityLog({
+    required this.id,
+    required this.supplierId,
+    required this.supplierName,
+    required this.inspectionDate,
+    this.lotNumber,
+    this.fatContent,
+    this.proteinContent,
+    this.bacterialCount,
+    required this.inspectionResult,
+    this.correctiveActions,
+    required this.inspectorId,
+    required this.inspectorName,
+    this.notes,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  /// Creates a [SupplierQualityLog] instance from a JSON map
+  factory SupplierQualityLog.fromJson(Map<String, dynamic> json) {
+    return SupplierQualityLog(
+      id: json['id'],
+      supplierId: json['supplier_id'],
+      supplierName: json['supplier_name'],
+      inspectionDate: DateTime.parse(json['inspection_date']),
+      lotNumber: json['lot_number'],
+      fatContent: json['fat_content'],
+      proteinContent: json['protein_content'],
+      bacterialCount: json['bacterial_count'],
+      inspectionResult: inspectionResultFromString(json['inspection_result']),
+      correctiveActions: json['corrective_actions'],
+      inspectorId: json['inspector_id'],
+      inspectorName: json['inspector_name'],
+      notes: json['notes'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+    );
+  }
   /// Unique identifier for the quality log entry
   final String id;
 
@@ -58,25 +97,6 @@ class SupplierQualityLog {
 
   /// Date and time when this log was last updated
   final DateTime updatedAt;
-
-  /// Creates a new [SupplierQualityLog] instance
-  SupplierQualityLog({
-    required this.id,
-    required this.supplierId,
-    required this.supplierName,
-    required this.inspectionDate,
-    this.lotNumber,
-    this.fatContent,
-    this.proteinContent,
-    this.bacterialCount,
-    required this.inspectionResult,
-    this.correctiveActions,
-    required this.inspectorId,
-    required this.inspectorName,
-    this.notes,
-    required this.createdAt,
-    required this.updatedAt,
-  });
 
   /// Creates a copy of this [SupplierQualityLog] instance with the given fields replaced
   SupplierQualityLog copyWith({
@@ -134,27 +154,6 @@ class SupplierQualityLog {
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
-  }
-
-  /// Creates a [SupplierQualityLog] instance from a JSON map
-  factory SupplierQualityLog.fromJson(Map<String, dynamic> json) {
-    return SupplierQualityLog(
-      id: json['id'],
-      supplierId: json['supplier_id'],
-      supplierName: json['supplier_name'],
-      inspectionDate: DateTime.parse(json['inspection_date']),
-      lotNumber: json['lot_number'],
-      fatContent: json['fat_content'],
-      proteinContent: json['protein_content'],
-      bacterialCount: json['bacterial_count'],
-      inspectionResult: inspectionResultFromString(json['inspection_result']),
-      correctiveActions: json['corrective_actions'],
-      inspectorId: json['inspector_id'],
-      inspectorName: json['inspector_name'],
-      notes: json['notes'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-    );
   }
 
   @override

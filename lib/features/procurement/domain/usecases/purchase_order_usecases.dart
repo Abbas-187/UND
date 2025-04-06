@@ -1,5 +1,5 @@
-import 'package:und_app/core/exceptions/app_exception.dart';
-import 'package:und_app/features/procurement/domain/entities/purchase_order.dart';
+import '../../../../core/exceptions/app_exception.dart';
+import '../entities/purchase_order.dart';
 
 // Repository interface
 abstract class PurchaseOrderRepository {
@@ -24,9 +24,9 @@ abstract class PurchaseOrderRepository {
 }
 
 class GetPurchaseOrdersUseCase {
-  final PurchaseOrderRepository repository;
 
   GetPurchaseOrdersUseCase(this.repository);
+  final PurchaseOrderRepository repository;
 
   Future<List<PurchaseOrder>> execute({
     String? supplierId,
@@ -51,9 +51,9 @@ class GetPurchaseOrdersUseCase {
 }
 
 class GetPurchaseOrderByIdUseCase {
-  final PurchaseOrderRepository repository;
 
   GetPurchaseOrderByIdUseCase(this.repository);
+  final PurchaseOrderRepository repository;
 
   Future<PurchaseOrder> execute(String id) async {
     try {
@@ -66,9 +66,9 @@ class GetPurchaseOrderByIdUseCase {
 }
 
 class CreatePurchaseOrderUseCase {
-  final PurchaseOrderRepository repository;
 
   CreatePurchaseOrderUseCase(this.repository);
+  final PurchaseOrderRepository repository;
 
   Future<PurchaseOrder> execute(PurchaseOrder order) async {
     try {
@@ -90,7 +90,7 @@ class CreatePurchaseOrderUseCase {
       return await repository.createPurchaseOrder(order);
     } catch (e) {
       if (e is AppException) {
-        throw e;
+        rethrow;
       }
       throw AppException('Failed to create purchase order',
           details: e.toString());
@@ -99,9 +99,9 @@ class CreatePurchaseOrderUseCase {
 }
 
 class UpdatePurchaseOrderUseCase {
-  final PurchaseOrderRepository repository;
 
   UpdatePurchaseOrderUseCase(this.repository);
+  final PurchaseOrderRepository repository;
 
   Future<PurchaseOrder> execute(PurchaseOrder order) async {
     try {
@@ -114,9 +114,9 @@ class UpdatePurchaseOrderUseCase {
 }
 
 class UpdatePurchaseOrderStatusUseCase {
-  final PurchaseOrderRepository repository;
 
   UpdatePurchaseOrderStatusUseCase(this.repository);
+  final PurchaseOrderRepository repository;
 
   Future<PurchaseOrder> execute(String id, PurchaseOrderStatus status) async {
     try {
@@ -132,7 +132,7 @@ class UpdatePurchaseOrderStatusUseCase {
       return await repository.updatePurchaseOrderStatus(id, status);
     } catch (e) {
       if (e is AppException) {
-        throw e;
+        rethrow;
       }
       throw AppException('Failed to update purchase order status',
           details: e.toString());
@@ -176,9 +176,9 @@ class UpdatePurchaseOrderStatusUseCase {
 }
 
 class DeletePurchaseOrderUseCase {
-  final PurchaseOrderRepository repository;
 
   DeletePurchaseOrderUseCase(this.repository);
+  final PurchaseOrderRepository repository;
 
   Future<void> execute(String id) async {
     try {
@@ -186,7 +186,7 @@ class DeletePurchaseOrderUseCase {
       await repository.deleteOrder(id);
     } catch (e) {
       if (e is AppException) {
-        throw e;
+        rethrow;
       }
       throw AppException('Failed to delete purchase order',
           details: e.toString());

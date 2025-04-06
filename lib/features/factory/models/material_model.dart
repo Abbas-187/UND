@@ -2,13 +2,6 @@ import 'package:meta/meta.dart';
 
 @immutable
 class MaterialModel {
-  const MaterialModel({
-    required this.materialId,
-    required this.requiredQuantity,
-  });
-
-  final String materialId;
-  final double requiredQuantity;
 
   factory MaterialModel.fromJson(Map<String, dynamic> json) {
     return MaterialModel(
@@ -16,6 +9,13 @@ class MaterialModel {
       requiredQuantity: (json['requiredQuantity'] as num).toDouble(),
     );
   }
+  const MaterialModel({
+    required this.materialId,
+    required this.requiredQuantity,
+  });
+
+  final String materialId;
+  final double requiredQuantity;
 
   Map<String, dynamic> toJson() {
     return {

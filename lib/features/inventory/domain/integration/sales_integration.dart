@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../forecasting/domain/providers/production_planning_provider.dart';
 import '../../../sales/domain/providers/order_provider.dart';
-import '../../../sales/data/models/order_model.dart';
 import '../providers/inventory_provider.dart';
 
 /// Handles the specific integration between Inventory and Sales modules

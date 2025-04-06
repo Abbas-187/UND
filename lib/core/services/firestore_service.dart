@@ -8,10 +8,10 @@ final firestoreServiceProvider = Provider<FirestoreService>((ref) {
 
 /// Service for handling Firestore database operations
 class FirestoreService {
-  final FirebaseFirestore _firestore;
 
   /// Constructor
   FirestoreService(this._firestore);
+  final FirebaseFirestore _firestore;
 
   /// Get a collection reference
   CollectionReference<Map<String, dynamic>> collection(String path) {
@@ -191,15 +191,15 @@ class FirestoreService {
 
 /// Filter for Firestore queries
 class QueryFilter {
-  final String field;
-  final dynamic value;
-  final FilterOperator operator;
 
   QueryFilter({
     required this.field,
     required this.value,
     required this.operator,
   });
+  final String field;
+  final dynamic value;
+  final FilterOperator operator;
 
   Query<Map<String, dynamic>> apply(Query<Map<String, dynamic>> query) {
     switch (operator) {
@@ -246,13 +246,13 @@ enum FilterOperator {
 
 /// Order for Firestore queries
 class QueryOrder {
-  final String field;
-  final bool descending;
 
   QueryOrder({
     required this.field,
     this.descending = false,
   });
+  final String field;
+  final bool descending;
 
   Query<Map<String, dynamic>> apply(Query<Map<String, dynamic>> query) {
     return query.orderBy(field, descending: descending);

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../../data/models/order_model.dart';
 
 class OrderStatusChip extends StatelessWidget {
-  final OrderStatus status;
-  final bool miniSize;
 
   const OrderStatusChip({
     super.key,
     required this.status,
     this.miniSize = false,
   });
+  final OrderStatus status;
+  final bool miniSize;
 
   Color _getStatusColor(OrderStatus status) {
     switch (status) {

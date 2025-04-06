@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class InventoryValueChart extends StatelessWidget {
-  const InventoryValueChart({Key? key}) : super(key: key);
+  const InventoryValueChart({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +57,8 @@ class InventoryValueChart extends StatelessWidget {
 }
 
 class InventoryValueData {
-  final DateTime date;
-  final double value;
 
   InventoryValueData(this.date, this.value);
+  final DateTime date;
+  final double value;
 }

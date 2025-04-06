@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/inventory_item.dart';
 
 class InventoryItemCard extends StatelessWidget {
-  final InventoryItem item;
-  final VoidCallback? onTap;
 
   const InventoryItemCard({
-    Key? key,
+    super.key,
     required this.item,
     this.onTap,
-  }) : super(key: key);
+  });
+  final InventoryItem item;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

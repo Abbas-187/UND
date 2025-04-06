@@ -1,13 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../data/models/forecast_model.dart';
 import '../../data/repositories/forecast_repository.dart';
-import '../algorithms/arima.dart';
 import '../algorithms/exponential_smoothing.dart';
 import '../algorithms/linear_regression.dart';
 import '../algorithms/moving_average.dart';
 import '../algorithms/seasonal_decomposition.dart';
-import '../entities/forecast_granularity.dart';
 import '../entities/forecast_method.dart';
 import '../entities/time_series_point.dart';
 

@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Exception for supplier contract data source operations
 class SupplierContractDataSourceException implements Exception {
-  final String message;
-  final String? code;
-  final dynamic originalError;
 
   SupplierContractDataSourceException(this.message,
       {this.code, this.originalError});
+  final String message;
+  final String? code;
+  final dynamic originalError;
 
   @override
   String toString() =>
@@ -16,12 +16,12 @@ class SupplierContractDataSourceException implements Exception {
 
 /// Remote data source for supplier contract operations using Firestore
 class SupplierContractRemoteDataSource {
-  final FirebaseFirestore _firestore;
-  final String _collection = 'supplierContracts';
 
   /// Creates a new instance with the given Firestore instance
   SupplierContractRemoteDataSource({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+  final String _collection = 'supplierContracts';
 
   /// Get collection reference
   CollectionReference<Map<String, dynamic>> get _contractsCollection =>

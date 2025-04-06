@@ -1,10 +1,4 @@
 class ProductionScheduleModel {
-  final String id;
-  final DateTime date;
-  final String productionOrderId;
-  final String status;
-  final DateTime? startTime;
-  final DateTime? endTime;
 
   ProductionScheduleModel({
     required this.id,
@@ -29,6 +23,12 @@ class ProductionScheduleModel {
           : null,
     );
   }
+  final String id;
+  final DateTime date;
+  final String productionOrderId;
+  final String status;
+  final DateTime? startTime;
+  final DateTime? endTime;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,10 +1,4 @@
 class DeliveryItemModel {
-  final String id;
-  final String productId;
-  final String productName;
-  final double quantity;
-  final String unit;
-  final double weightKg;
 
   DeliveryItemModel({
     required this.id,
@@ -25,6 +19,12 @@ class DeliveryItemModel {
       weightKg: (json['weightKg'] as num).toDouble(),
     );
   }
+  final String id;
+  final String productId;
+  final String productName;
+  final double quantity;
+  final String unit;
+  final double weightKg;
 
   Map<String, dynamic> toJson() {
     return {
@@ -39,11 +39,11 @@ class DeliveryItemModel {
 }
 
 class DeliveryModel {
+
+  DeliveryModel(
+      {required this.id, this.customerName, this.scheduledDate, this.items});
   final String id;
   final String? customerName;
   final DateTime? scheduledDate;
   final List<DeliveryItemModel>? items;
-
-  DeliveryModel(
-      {required this.id, this.customerName, this.scheduledDate, this.items});
 }

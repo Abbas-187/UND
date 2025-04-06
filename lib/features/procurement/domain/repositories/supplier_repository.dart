@@ -1,5 +1,5 @@
-import '../entities/supplier.dart';
 import '../../../../core/exceptions/result.dart';
+import '../entities/supplier.dart';
 
 /// Repository interface for supplier operations
 abstract class SupplierRepository {

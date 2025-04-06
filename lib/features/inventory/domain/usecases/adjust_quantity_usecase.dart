@@ -2,9 +2,9 @@ import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
 
 class AdjustQuantityUseCase {
-  final InventoryRepository repository;
 
   AdjustQuantityUseCase(this.repository);
+  final InventoryRepository repository;
 
   Future<InventoryItem> execute(
       String itemId, double adjustment, String reason) async {

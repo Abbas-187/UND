@@ -2,20 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Model class for forecasts
 class ForecastModel {
-  final String? id;
-  final String name;
-  final String description;
-  final DateTime createdDate;
-  final String createdByUserId;
-  final List<String> productIds;
-  final String? categoryId;
-  final String? warehouseId;
-  final DateTime startDate;
-  final DateTime endDate;
-  final String forecastMethod;
-  final Map<String, dynamic> methodParameters;
-  final List<ForecastItemModel> forecastItems;
-  final double? accuracyMetric;
 
   const ForecastModel({
     this.id,
@@ -54,6 +40,20 @@ class ForecastModel {
       accuracyMetric: (json['accuracyMetric'] as num?)?.toDouble(),
     );
   }
+  final String? id;
+  final String name;
+  final String description;
+  final DateTime createdDate;
+  final String createdByUserId;
+  final List<String> productIds;
+  final String? categoryId;
+  final String? warehouseId;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String forecastMethod;
+  final Map<String, dynamic> methodParameters;
+  final List<ForecastItemModel> forecastItems;
+  final double? accuracyMetric;
 
   Map<String, dynamic> toJson() {
     return {
@@ -77,11 +77,6 @@ class ForecastModel {
 
 /// Model class for forecast items
 class ForecastItemModel {
-  final String productId;
-  final DateTime date;
-  final double forecastedValue;
-  final double? actualValue;
-  final double? deviation;
 
   const ForecastItemModel({
     required this.productId,
@@ -100,6 +95,11 @@ class ForecastItemModel {
       deviation: (json['deviation'] as num?)?.toDouble(),
     );
   }
+  final String productId;
+  final DateTime date;
+  final double forecastedValue;
+  final double? actualValue;
+  final double? deviation;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,6 +1,8 @@
-import 'package:mobile_scanner/mobile_scanner.dart' as scanner;
-import '../entities/scan_result.dart';
 import 'dart:async';
+
+import 'package:mobile_scanner/mobile_scanner.dart' as scanner;
+
+import '../entities/scan_result.dart';
 
 /// Service for managing barcode and QR code scanning
 class BarcodeScanningService {

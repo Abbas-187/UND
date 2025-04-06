@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
 
 class LowStockAlertsBanner extends ConsumerWidget {
-  const LowStockAlertsBanner({Key? key}) : super(key: key);
+  const LowStockAlertsBanner({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

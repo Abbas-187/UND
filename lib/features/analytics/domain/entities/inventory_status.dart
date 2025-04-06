@@ -1,11 +1,5 @@
-import 'package:flutter/foundation.dart';
 
 class InventoryStatus {
-  final String category;
-  final int totalItems;
-  final int lowStockItems;
-  final int outOfStockItems;
-  final double inventoryValue;
 
   const InventoryStatus({
     required this.category,
@@ -14,6 +8,20 @@ class InventoryStatus {
     required this.outOfStockItems,
     required this.inventoryValue,
   });
+
+  factory InventoryStatus.fromJson(Map<String, dynamic> json) =>
+      InventoryStatus(
+        category: json['category'] as String,
+        totalItems: json['totalItems'] as int,
+        lowStockItems: json['lowStockItems'] as int,
+        outOfStockItems: json['outOfStockItems'] as int,
+        inventoryValue: json['inventoryValue'] as double,
+      );
+  final String category;
+  final int totalItems;
+  final int lowStockItems;
+  final int outOfStockItems;
+  final double inventoryValue;
 
   InventoryStatus copyWith({
     String? category,
@@ -39,15 +47,6 @@ class InventoryStatus {
         'inventoryValue': inventoryValue,
       };
 
-  factory InventoryStatus.fromJson(Map<String, dynamic> json) =>
-      InventoryStatus(
-        category: json['category'] as String,
-        totalItems: json['totalItems'] as int,
-        lowStockItems: json['lowStockItems'] as int,
-        outOfStockItems: json['outOfStockItems'] as int,
-        inventoryValue: json['inventoryValue'] as double,
-      );
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -69,15 +68,21 @@ class InventoryStatus {
 }
 
 class InventoryTrend {
-  final DateTime date;
-  final double totalValue;
-  final int totalItems;
 
   const InventoryTrend({
     required this.date,
     required this.totalValue,
     required this.totalItems,
   });
+
+  factory InventoryTrend.fromJson(Map<String, dynamic> json) => InventoryTrend(
+        date: DateTime.parse(json['date'] as String),
+        totalValue: json['totalValue'] as double,
+        totalItems: json['totalItems'] as int,
+      );
+  final DateTime date;
+  final double totalValue;
+  final int totalItems;
 
   InventoryTrend copyWith({
     DateTime? date,
@@ -97,12 +102,6 @@ class InventoryTrend {
         'totalItems': totalItems,
       };
 
-  factory InventoryTrend.fromJson(Map<String, dynamic> json) => InventoryTrend(
-        date: DateTime.parse(json['date'] as String),
-        totalValue: json['totalValue'] as double,
-        totalItems: json['totalItems'] as int,
-      );
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -117,15 +116,22 @@ class InventoryTrend {
 }
 
 class CategoryDistribution {
-  final String category;
-  final int itemCount;
-  final double percentage;
 
   const CategoryDistribution({
     required this.category,
     required this.itemCount,
     required this.percentage,
   });
+
+  factory CategoryDistribution.fromJson(Map<String, dynamic> json) =>
+      CategoryDistribution(
+        category: json['category'] as String,
+        itemCount: json['itemCount'] as int,
+        percentage: json['percentage'] as double,
+      );
+  final String category;
+  final int itemCount;
+  final double percentage;
 
   CategoryDistribution copyWith({
     String? category,
@@ -144,13 +150,6 @@ class CategoryDistribution {
         'itemCount': itemCount,
         'percentage': percentage,
       };
-
-  factory CategoryDistribution.fromJson(Map<String, dynamic> json) =>
-      CategoryDistribution(
-        category: json['category'] as String,
-        itemCount: json['itemCount'] as int,
-        percentage: json['percentage'] as double,
-      );
 
   @override
   bool operator ==(Object other) =>

@@ -2,13 +2,6 @@ import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
 
 class InventoryAnalytics {
-  final Map<String, double> valueByCategory;
-  final List<InventoryItem> topMovingItems;
-  final List<InventoryItem> slowMovingItems;
-  final int totalItems;
-  final int lowStockItems;
-  final int expiringItems;
-  final double totalValue;
 
   InventoryAnalytics({
     required this.valueByCategory,
@@ -19,12 +12,19 @@ class InventoryAnalytics {
     required this.expiringItems,
     required this.totalValue,
   });
+  final Map<String, double> valueByCategory;
+  final List<InventoryItem> topMovingItems;
+  final List<InventoryItem> slowMovingItems;
+  final int totalItems;
+  final int lowStockItems;
+  final int expiringItems;
+  final double totalValue;
 }
 
 class GetInventoryAnalyticsUseCase {
-  final InventoryRepository repository;
 
   GetInventoryAnalyticsUseCase(this.repository);
+  final InventoryRepository repository;
 
   Future<InventoryAnalytics> execute({int movingItemsLimit = 10}) async {
     // Get all required data in parallel

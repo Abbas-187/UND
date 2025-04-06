@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 /// Types of barcodes
 enum BarcodeType {
@@ -11,6 +10,15 @@ enum BarcodeType {
 
 /// Represents a barcode or QR code scan result
 class ScanResult {
+
+  const ScanResult({
+    required this.code,
+    required this.type,
+    required this.format,
+    required this.timestamp,
+    this.itemId,
+    this.itemName,
+  });
   /// The data content of the scanned code
   final String code;
 
@@ -28,15 +36,6 @@ class ScanResult {
 
   /// Optional associated item name if found in the system
   final String? itemName;
-
-  const ScanResult({
-    required this.code,
-    required this.type,
-    required this.format,
-    required this.timestamp,
-    this.itemId,
-    this.itemName,
-  });
 
   /// Create a copy of this scan result with optional new values
   ScanResult copyWith({

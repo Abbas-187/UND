@@ -2,10 +2,10 @@ import '../datasources/logistics_datasource.dart';
 import '../models/delivery_model.dart';
 
 class DeliveryRepository {
-  final LogisticsDataSource _dataSource;
 
   DeliveryRepository({LogisticsDataSource? dataSource})
       : _dataSource = dataSource ?? LogisticsDataSource();
+  final LogisticsDataSource _dataSource;
 
   Future<List<DeliveryModel>> getAllDeliveries() async {
     try {

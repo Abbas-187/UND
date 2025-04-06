@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../providers/supplier_provider.dart';
 
 class SupplierFilterBar extends StatefulWidget {
-  final SupplierFilter filter;
-  final Function(SupplierFilter) onFilterChanged;
 
   const SupplierFilterBar({
-    Key? key,
+    super.key,
     required this.filter,
     required this.onFilterChanged,
-  }) : super(key: key);
+  });
+  final SupplierFilter filter;
+  final Function(SupplierFilter) onFilterChanged;
 
   @override
   State<SupplierFilterBar> createState() => _SupplierFilterBarState();

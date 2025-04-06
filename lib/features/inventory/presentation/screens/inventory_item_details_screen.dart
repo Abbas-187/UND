@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
-import 'inventory_transfer_screen.dart';
 import 'inventory_edit_screen.dart';
 import 'inventory_movement_history_screen.dart';
+import 'inventory_transfer_screen.dart';
 
 class InventoryItemDetailsScreen extends ConsumerWidget {
-  final String itemId;
 
   const InventoryItemDetailsScreen({
-    Key? key,
+    super.key,
     required this.itemId,
-  }) : super(key: key);
+  });
+  final String itemId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,9 +47,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
         final isLowStock = item.quantity <= item.minimumQuantity;
         final needsReorder = item.quantity <= item.reorderPoint;
 
-        final daysUntilExpiry = item.expiryDate != null
-            ? item.expiryDate!.difference(DateTime.now()).inDays
-            : null;
+        final daysUntilExpiry = item.expiryDate?.difference(DateTime.now()).inDays;
 
         final isExpiringSoon = daysUntilExpiry != null && daysUntilExpiry <= 30;
 
@@ -257,7 +256,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                                 ],
                               ),
                             );
-                          }).toList(),
+                          }),
                         ],
                       ),
                     ),

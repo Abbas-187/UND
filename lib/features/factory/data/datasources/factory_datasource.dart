@@ -120,7 +120,7 @@ class FactoryDatasource {
   }
 
   Future<void> updateRecipe(RecipeModel recipe) async {
-    if (recipe.id == null || recipe.id!.isEmpty) {
+    if (recipe.id.isEmpty) {
       throw Exception('Recipe ID cannot be empty');
     }
     final recipeData = recipe.toJson();

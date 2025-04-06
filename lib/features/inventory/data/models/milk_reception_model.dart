@@ -22,12 +22,6 @@ enum OrganolepticParameter {
 
 /// Organoleptic evaluation result
 class OrganolepticEvaluation {
-  final Map<OrganolepticParameter, int> scores; // 1-5 scoring
-  final Map<OrganolepticParameter, String>? comments;
-  final String? overallComment;
-  final bool passed;
-  final String? evaluatedBy;
-  final DateTime evaluationTimestamp;
 
   const OrganolepticEvaluation({
     required this.scores,
@@ -77,6 +71,12 @@ class OrganolepticEvaluation {
           : DateTime.parse(json['evaluationTimestamp'] as String),
     );
   }
+  final Map<OrganolepticParameter, int> scores; // 1-5 scoring
+  final Map<OrganolepticParameter, String>? comments;
+  final String? overallComment;
+  final bool passed;
+  final String? evaluatedBy;
+  final DateTime evaluationTimestamp;
 
   Map<String, dynamic> toJson() {
     // Convert the scores map
@@ -133,17 +133,6 @@ class OrganolepticEvaluation {
 
 /// Quality test result for received milk
 class MilkQualityTest {
-  final String testName;
-  final double value;
-  final String unit;
-  final double? minThreshold;
-  final double? maxThreshold;
-  final bool passed;
-  final String? testedBy;
-  final DateTime testTimestamp;
-  final String? testMethod;
-  final String? testEquipment;
-  final String? comments;
 
   const MilkQualityTest({
     required this.testName,
@@ -176,6 +165,17 @@ class MilkQualityTest {
       comments: json['comments'] as String?,
     );
   }
+  final String testName;
+  final double value;
+  final String unit;
+  final double? minThreshold;
+  final double? maxThreshold;
+  final bool passed;
+  final String? testedBy;
+  final DateTime testTimestamp;
+  final String? testMethod;
+  final String? testEquipment;
+  final String? comments;
 
   Map<String, dynamic> toJson() {
     return {
@@ -232,16 +232,6 @@ class MilkQualityTest {
 
 /// Supplier information for milk reception
 class SupplierInfo {
-  final String supplierId;
-  final String supplierName;
-  final String? contactPerson;
-  final String? contactPhone;
-  final String? supplierCode;
-  final bool certified;
-  final Map<String, dynamic>? certifications;
-  final String? farmType; // Organic, conventional, etc.
-  final String? supplierCategory; // Quality tier, etc.
-  final String? supplierNotes;
 
   const SupplierInfo({
     required this.supplierId,
@@ -270,6 +260,16 @@ class SupplierInfo {
       supplierNotes: json['supplierNotes'] as String?,
     );
   }
+  final String supplierId;
+  final String supplierName;
+  final String? contactPerson;
+  final String? contactPhone;
+  final String? supplierCode;
+  final bool certified;
+  final Map<String, dynamic>? certifications;
+  final String? farmType; // Organic, conventional, etc.
+  final String? supplierCategory; // Quality tier, etc.
+  final String? supplierNotes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -315,33 +315,6 @@ class SupplierInfo {
 
 /// Main model for milk reception at the dairy factory
 class MilkReceptionModel {
-  final String? id;
-  final String receptionCode;
-  final DateTime receptionTimestamp;
-  final SupplierInfo supplierInfo;
-  final String tankerId;
-  final String? driverName;
-  final String? transportCompany;
-  final double volume;
-  final String volumeUnit;
-  final double? weight;
-  final String? weightUnit;
-  final double temperatureAtReception;
-  final Map<String, MilkQualityTest> qualityTests;
-  final OrganolepticEvaluation? organolepticEvaluation;
-  final MilkAcceptanceStatus acceptanceStatus;
-  final String? acceptanceDecisionBy;
-  final DateTime? acceptanceTimestamp;
-  final Map<String, dynamic>? conditionalParameters;
-  final String? storageLocationId;
-  final String? storageLocationName;
-  final String? batchAssignment;
-  final List<String>? images;
-  final String? notes;
-  final String receivedBy;
-  final DateTime createdAt;
-  final String? updatedBy;
-  final DateTime? updatedAt;
 
   const MilkReceptionModel({
     this.id,
@@ -471,6 +444,33 @@ class MilkReceptionModel {
 
     return MilkReceptionModel.fromJson(jsonWithId);
   }
+  final String? id;
+  final String receptionCode;
+  final DateTime receptionTimestamp;
+  final SupplierInfo supplierInfo;
+  final String tankerId;
+  final String? driverName;
+  final String? transportCompany;
+  final double volume;
+  final String volumeUnit;
+  final double? weight;
+  final String? weightUnit;
+  final double temperatureAtReception;
+  final Map<String, MilkQualityTest> qualityTests;
+  final OrganolepticEvaluation? organolepticEvaluation;
+  final MilkAcceptanceStatus acceptanceStatus;
+  final String? acceptanceDecisionBy;
+  final DateTime? acceptanceTimestamp;
+  final Map<String, dynamic>? conditionalParameters;
+  final String? storageLocationId;
+  final String? storageLocationName;
+  final String? batchAssignment;
+  final List<String>? images;
+  final String? notes;
+  final String receivedBy;
+  final DateTime createdAt;
+  final String? updatedBy;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     // Convert complex objects

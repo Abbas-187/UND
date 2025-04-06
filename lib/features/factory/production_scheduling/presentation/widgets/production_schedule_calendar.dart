@@ -6,11 +6,11 @@ import '../../data/models/production_schedule_model.dart';
 
 class ProductionScheduleCalendar extends StatefulWidget {
   const ProductionScheduleCalendar({
-    Key? key,
+    super.key,
     required this.schedules,
     required this.onScheduleTap,
     required this.onDayTap,
-  }) : super(key: key);
+  });
 
   final List<ProductionScheduleModel> schedules;
   final Function(ProductionScheduleModel) onScheduleTap;

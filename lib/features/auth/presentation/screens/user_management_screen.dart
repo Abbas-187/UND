@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/auth/services/auth_service.dart';
+
 import '../../../../core/auth/models/app_user.dart';
-import '../../../../core/auth/models/user_role.dart';
 import '../../../../core/auth/models/permission.dart';
+import '../../../../core/auth/models/user_role.dart';
+import '../../../../core/auth/services/auth_service.dart';
 import '../../../../core/auth/widgets/permission_wrapper.dart';
-import '../../../../core/widgets/primary_button.dart';
 
 /// Provider to get all users from the auth service
 final usersProvider = FutureProvider<List<AppUser>>((ref) {
@@ -15,7 +15,7 @@ final usersProvider = FutureProvider<List<AppUser>>((ref) {
 
 /// Screen for managing users
 class UserManagementScreen extends ConsumerStatefulWidget {
-  const UserManagementScreen({Key? key}) : super(key: key);
+  const UserManagementScreen({super.key});
 
   @override
   ConsumerState<UserManagementScreen> createState() =>
@@ -177,7 +177,7 @@ class _UserManagementScreenState extends ConsumerState<UserManagementScreen> {
                         _updateUserRole(user, role);
                       },
               );
-            }).toList(),
+            }),
           ],
         ),
         actions: [

@@ -1,17 +1,4 @@
 class PriceListModel {
-  String? id;
-  final String name;
-  final String description;
-  final DateTime effectiveFrom;
-  final DateTime? effectiveTo;
-  final String status;
-  final Map<String, Map<String, double>> prices;
-  final String? customerCategory;
-  final List<String>? applicableCustomerIds;
-  final String? createdBy;
-  final DateTime? createdDate;
-  final String? approvedBy;
-  final DateTime? approvalDate;
 
   PriceListModel({
     this.id,
@@ -54,6 +41,19 @@ class PriceListModel {
           : null,
     );
   }
+  String? id;
+  final String name;
+  final String description;
+  final DateTime effectiveFrom;
+  final DateTime? effectiveTo;
+  final String status;
+  final Map<String, Map<String, double>> prices;
+  final String? customerCategory;
+  final List<String>? applicableCustomerIds;
+  final String? createdBy;
+  final DateTime? createdDate;
+  final String? approvedBy;
+  final DateTime? approvalDate;
 
   static Map<String, Map<String, double>> _parsePrices(
       Map<String, dynamic> json) {

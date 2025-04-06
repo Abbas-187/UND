@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'user_role.dart';
 
 /// Defines the available permissions in the system

@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+
 import '../../domain/entities/supplier.dart';
 import 'supplier_performance_metrics.dart';
 
@@ -68,6 +69,67 @@ SupplierType supplierTypeFromString(String type) {
 
 /// Model class representing a supplier in the dairy factory system
 class Supplier {
+
+  /// Creates a new [Supplier] instance
+  Supplier({
+    required this.id,
+    required this.name,
+    required this.code,
+    required this.contactName,
+    required this.phoneNumber,
+    required this.email,
+    required this.address,
+    required this.supplierType,
+    required this.qualityRating,
+    required this.deliveryRating,
+    required this.performanceMetrics,
+    required this.certifications,
+    required this.paymentTerms,
+    required this.isActive,
+    this.notes,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  /// Creates a [Supplier] instance from a JSON map
+  factory Supplier.fromJson(Map<String, dynamic> json) {
+    final performanceMetricsData =
+        json['performance_metrics'] as Map<String, dynamic>? ??
+            {
+              'quality_score': json['quality_rating'] ?? 0.0,
+              'delivery_score': json['delivery_rating'] ?? 0.0,
+              'price_score': 3.0, // Default value if not available
+              'overall_score': ((json['quality_rating'] ?? 0.0) +
+                      (json['delivery_rating'] ?? 0.0) +
+                      3.0) /
+                  3.0,
+            };
+
+    return Supplier(
+      id: json['id'],
+      name: json['name'],
+      code: json['code'],
+      contactName: json['contact_name'],
+      phoneNumber: json['phone_number'],
+      email: json['email'],
+      address: json['address'],
+      supplierType: supplierTypeFromString(json['supplier_type']),
+      qualityRating: (json['quality_rating'] ?? 0.0).toDouble(),
+      deliveryRating: (json['delivery_rating'] ?? 0.0).toDouble(),
+      performanceMetrics:
+          SupplierPerformanceMetrics.fromJson(performanceMetricsData),
+      certifications: List<String>.from(json['certifications'] ?? []),
+      paymentTerms: json['payment_terms'] ?? '',
+      isActive: json['is_active'] ?? true,
+      notes: json['notes'],
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : DateTime.now(),
+    );
+  }
   /// Unique identifier for the supplier
   final String id;
 
@@ -118,27 +180,6 @@ class Supplier {
 
   /// DateTime when the supplier information was last updated
   final DateTime updatedAt;
-
-  /// Creates a new [Supplier] instance
-  Supplier({
-    required this.id,
-    required this.name,
-    required this.code,
-    required this.contactName,
-    required this.phoneNumber,
-    required this.email,
-    required this.address,
-    required this.supplierType,
-    required this.qualityRating,
-    required this.deliveryRating,
-    required this.performanceMetrics,
-    required this.certifications,
-    required this.paymentTerms,
-    required this.isActive,
-    this.notes,
-    required this.createdAt,
-    required this.updatedAt,
-  });
 
   /// Creates a copy of this [Supplier] instance with the given fields replaced
   Supplier copyWith({
@@ -204,46 +245,6 @@ class Supplier {
     };
   }
 
-  /// Creates a [Supplier] instance from a JSON map
-  factory Supplier.fromJson(Map<String, dynamic> json) {
-    final performanceMetricsData =
-        json['performance_metrics'] as Map<String, dynamic>? ??
-            {
-              'quality_score': json['quality_rating'] ?? 0.0,
-              'delivery_score': json['delivery_rating'] ?? 0.0,
-              'price_score': 3.0, // Default value if not available
-              'overall_score': ((json['quality_rating'] ?? 0.0) +
-                      (json['delivery_rating'] ?? 0.0) +
-                      3.0) /
-                  3.0,
-            };
-
-    return Supplier(
-      id: json['id'],
-      name: json['name'],
-      code: json['code'],
-      contactName: json['contact_name'],
-      phoneNumber: json['phone_number'],
-      email: json['email'],
-      address: json['address'],
-      supplierType: supplierTypeFromString(json['supplier_type']),
-      qualityRating: (json['quality_rating'] ?? 0.0).toDouble(),
-      deliveryRating: (json['delivery_rating'] ?? 0.0).toDouble(),
-      performanceMetrics:
-          SupplierPerformanceMetrics.fromJson(performanceMetricsData),
-      certifications: List<String>.from(json['certifications'] ?? []),
-      paymentTerms: json['payment_terms'] ?? '',
-      isActive: json['is_active'] ?? true,
-      notes: json['notes'],
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : DateTime.now(),
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'])
-          : DateTime.now(),
-    );
-  }
-
   @override
   String toString() {
     return 'Supplier(id: $id, name: $name, code: $code, supplierType: $supplierType)';
@@ -299,17 +300,6 @@ class Supplier {
 
 /// Data model for Supplier
 class SupplierModel {
-  final String? id;
-  final String name;
-  final String code;
-  final String type;
-  final String status;
-  final String? address;
-  final String? contactPerson;
-  final String? contactEmail;
-  final String? contactPhone;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
 
   const SupplierModel({
     this.id,
@@ -342,22 +332,6 @@ class SupplierModel {
     );
   }
 
-  /// Convert to Map for Firestore
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'code': code,
-      'type': type,
-      'status': status,
-      'address': address,
-      'contactPerson': contactPerson,
-      'contactEmail': contactEmail,
-      'contactPhone': contactPhone,
-      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
-      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
-    };
-  }
-
   /// Convert from Domain Entity to Model
   factory SupplierModel.fromEntity(Supplier entity) {
     return SupplierModel(
@@ -373,6 +347,33 @@ class SupplierModel {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     );
+  }
+  final String? id;
+  final String name;
+  final String code;
+  final String type;
+  final String status;
+  final String? address;
+  final String? contactPerson;
+  final String? contactEmail;
+  final String? contactPhone;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  /// Convert to Map for Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'code': code,
+      'type': type,
+      'status': status,
+      'address': address,
+      'contactPerson': contactPerson,
+      'contactEmail': contactEmail,
+      'contactPhone': contactPhone,
+      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
+      'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+    };
   }
 
   /// Convert to Domain Entity

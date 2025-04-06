@@ -1,20 +1,4 @@
 class SalesAnalyticsModel {
-  final DateTime periodStart;
-  final DateTime periodEnd;
-  final double totalSales;
-  final int orderCount;
-  final Map<String, double> salesByCategory;
-  final Map<String, double> salesByProduct;
-  final Map<String, double> salesByCustomer;
-  final List<DailySalesData> dailySales;
-  final double? averageOrderValue;
-  final double? previousPeriodSales;
-  final double? salesGrowth;
-  final Map<String, double>? categoryGrowth;
-  final Map<String, int>? productUnitsSold;
-  final Map<String, double>? customerGrowth;
-  final int? newCustomerCount;
-  final double? newCustomerSales;
 
   SalesAnalyticsModel({
     required this.periodStart,
@@ -74,6 +58,22 @@ class SalesAnalyticsModel {
           : null,
     );
   }
+  final DateTime periodStart;
+  final DateTime periodEnd;
+  final double totalSales;
+  final int orderCount;
+  final Map<String, double> salesByCategory;
+  final Map<String, double> salesByProduct;
+  final Map<String, double> salesByCustomer;
+  final List<DailySalesData> dailySales;
+  final double? averageOrderValue;
+  final double? previousPeriodSales;
+  final double? salesGrowth;
+  final Map<String, double>? categoryGrowth;
+  final Map<String, int>? productUnitsSold;
+  final Map<String, double>? customerGrowth;
+  final int? newCustomerCount;
+  final double? newCustomerSales;
 
   static Map<String, double> _parseDoubleMap(Map<String, dynamic> json) {
     return json.map((key, value) => MapEntry(key, (value as num).toDouble()));
@@ -107,10 +107,6 @@ class SalesAnalyticsModel {
 }
 
 class DailySalesData {
-  final DateTime date;
-  final double sales;
-  final int orderCount;
-  final double? averageOrderValue;
 
   DailySalesData({
     required this.date,
@@ -129,6 +125,10 @@ class DailySalesData {
           : null,
     );
   }
+  final DateTime date;
+  final double sales;
+  final int orderCount;
+  final double? averageOrderValue;
 
   Map<String, dynamic> toJson() {
     return {

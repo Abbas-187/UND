@@ -5,7 +5,7 @@ import '../widgets/alerts/inventory_alerts_widget.dart';
 
 /// Screen to display all inventory alerts
 class InventoryAlertsScreen extends ConsumerWidget {
-  const InventoryAlertsScreen({Key? key}) : super(key: key);
+  const InventoryAlertsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

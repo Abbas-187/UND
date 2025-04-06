@@ -2,12 +2,6 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class QualityLog {
-  final String id;
-  final String title;
-  final String description;
-  final DateTime date;
-  final String issueType;
-  final int severity;
 
   const QualityLog({
     required this.id,
@@ -17,4 +11,10 @@ class QualityLog {
     required this.issueType,
     required this.severity,
   });
+  final String id;
+  final String title;
+  final String description;
+  final DateTime date;
+  final String issueType;
+  final int severity;
 }

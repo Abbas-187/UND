@@ -2,12 +2,12 @@ import '../entities/user.dart';
 import '../repositories/auth_repository.dart';
 
 class RegisterUseCase {
+
+  RegisterUseCase(this.repository);
   final AuthRepository repository;
   static final _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
   static final _passwordRegex =
       RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$&*~]).{8,}$');
-
-  RegisterUseCase(this.repository);
 
   Future<User> execute(String email, String password, String name) async {
     // Name validation

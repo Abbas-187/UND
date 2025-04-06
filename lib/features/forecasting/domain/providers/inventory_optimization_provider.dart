@@ -1,9 +1,11 @@
+import 'dart:math' as math;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../data/models/inventory_optimization_model.dart';
 import '../../data/repositories/inventory_optimization_repository.dart';
 import '../algorithms/safety_stock_calculator.dart';
 import '../entities/time_series_point.dart';
-import '../../data/models/inventory_optimization_model.dart';
-import 'dart:math' as math;
 
 /// Provider for inventory optimization repository
 final inventoryOptimizationRepositoryProvider =

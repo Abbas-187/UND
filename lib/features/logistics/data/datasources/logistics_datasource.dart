@@ -252,7 +252,7 @@ class LogisticsDataSource {
 
       if (updatedItems != null) {
         final List<Map<String, dynamic>> itemsData = updatedItems
-            .map((item) => item.toJson() as Map<String, dynamic>)
+            .map((item) => item.toJson())
             .toList();
         updateData['itemsData'] = itemsData;
       }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TopProductsChart extends StatelessWidget {
-  const TopProductsChart({Key? key}) : super(key: key);
+  const TopProductsChart({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +60,8 @@ class TopProductsChart extends StatelessWidget {
 }
 
 class ProductSalesData {
-  final String product;
-  final double sales;
 
   ProductSalesData(this.product, this.sales);
+  final String product;
+  final double sales;
 }

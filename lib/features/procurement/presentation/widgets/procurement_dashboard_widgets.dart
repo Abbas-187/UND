@@ -5,16 +5,10 @@ import 'package:intl/intl.dart';
 import '../../data/models/purchase_order_model.dart';
 import '../../data/models/supplier_model.dart';
 import '../../data/models/supplier_quality_log_model.dart';
-import '../../data/models/supplier_performance_metrics.dart';
-import '../../domain/providers/purchase_order_provider.dart';
-import '../../domain/providers/supplier_provider.dart';
-import '../../domain/providers/supplier_quality_provider.dart';
-import '../../domain/integration/procurement_inventory_integration.dart';
-import '../../domain/integration/procurement_quality_integration.dart';
 
 /// Widget for displaying upcoming deliveries on the dashboard
 class UpcomingDeliveriesWidget extends ConsumerWidget {
-  const UpcomingDeliveriesWidget({Key? key, this.limit = 5}) : super(key: key);
+  const UpcomingDeliveriesWidget({super.key, this.limit = 5});
 
   final int limit;
 
@@ -116,7 +110,7 @@ class UpcomingDeliveriesWidget extends ConsumerWidget {
 
 /// Widget for displaying pending approvals on the dashboard
 class PendingApprovalsWidget extends ConsumerWidget {
-  const PendingApprovalsWidget({Key? key}) : super(key: key);
+  const PendingApprovalsWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -257,7 +251,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
 
 /// Widget for displaying supplier performance metrics
 class SupplierPerformanceWidget extends ConsumerWidget {
-  const SupplierPerformanceWidget({Key? key, this.limit = 5}) : super(key: key);
+  const SupplierPerformanceWidget({super.key, this.limit = 5});
 
   final int limit;
 
@@ -428,7 +422,7 @@ class SupplierPerformanceWidget extends ConsumerWidget {
 
 /// Widget for displaying recent quality issues
 class RecentQualityIssuesWidget extends ConsumerWidget {
-  const RecentQualityIssuesWidget({Key? key}) : super(key: key);
+  const RecentQualityIssuesWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

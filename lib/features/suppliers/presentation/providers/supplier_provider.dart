@@ -20,11 +20,6 @@ final supplierProvider = StreamProvider.family<Supplier, String>((ref, id) {
 
 // Filter class
 class SupplierFilter {
-  final String searchQuery;
-  final bool? isActive;
-  final double? minRating;
-  final List<String>? selectedCategories;
-  final List<String> availableCategories;
 
   const SupplierFilter({
     this.searchQuery = '',
@@ -33,6 +28,11 @@ class SupplierFilter {
     this.selectedCategories,
     this.availableCategories = const [],
   });
+  final String searchQuery;
+  final bool? isActive;
+  final double? minRating;
+  final List<String>? selectedCategories;
+  final List<String> availableCategories;
 
   SupplierFilter copyWith({
     String? searchQuery,

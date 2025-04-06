@@ -1,5 +1,5 @@
-import '../../data/repositories/forecast_repository.dart';
 import '../../data/models/forecast_model.dart';
+import '../../data/repositories/forecast_repository.dart';
 import '../algorithms/arima.dart';
 import '../algorithms/exponential_smoothing.dart';
 import '../algorithms/linear_regression.dart';

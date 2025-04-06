@@ -17,6 +17,46 @@ PurchaseOrderItemStatus purchaseOrderItemStatusFromString(String status) {
 
 /// Model class representing a line item in a purchase order
 class PurchaseOrderItem {
+
+  /// Creates a new [PurchaseOrderItem] instance
+  PurchaseOrderItem({
+    required this.id,
+    required this.purchaseOrderId,
+    required this.materialId,
+    required this.materialName,
+    required this.materialCode,
+    required this.quantity,
+    required this.unit,
+    required this.unitPrice,
+    required this.totalPrice,
+    required this.expectedDeliveryDate,
+    this.actualDeliveryDate,
+    required this.qualityParameters,
+    this.notes,
+    required this.status,
+  });
+
+  /// Creates a [PurchaseOrderItem] instance from a JSON map
+  factory PurchaseOrderItem.fromJson(Map<String, dynamic> json) {
+    return PurchaseOrderItem(
+      id: json['id'],
+      purchaseOrderId: json['purchase_order_id'],
+      materialId: json['material_id'],
+      materialName: json['material_name'],
+      materialCode: json['material_code'],
+      quantity: json['quantity'],
+      unit: json['unit'],
+      unitPrice: json['unit_price'],
+      totalPrice: json['total_price'],
+      expectedDeliveryDate: DateTime.parse(json['expected_delivery_date']),
+      actualDeliveryDate: json['actual_delivery_date'] != null
+          ? DateTime.parse(json['actual_delivery_date'])
+          : null,
+      qualityParameters: Map<String, dynamic>.from(json['quality_parameters']),
+      notes: json['notes'],
+      status: purchaseOrderItemStatusFromString(json['status']),
+    );
+  }
   /// Unique identifier for the purchase order item
   final String id;
 
@@ -58,24 +98,6 @@ class PurchaseOrderItem {
 
   /// Current status of this item
   final PurchaseOrderItemStatus status;
-
-  /// Creates a new [PurchaseOrderItem] instance
-  PurchaseOrderItem({
-    required this.id,
-    required this.purchaseOrderId,
-    required this.materialId,
-    required this.materialName,
-    required this.materialCode,
-    required this.quantity,
-    required this.unit,
-    required this.unitPrice,
-    required this.totalPrice,
-    required this.expectedDeliveryDate,
-    this.actualDeliveryDate,
-    required this.qualityParameters,
-    this.notes,
-    required this.status,
-  });
 
   /// Creates a copy of this [PurchaseOrderItem] instance with the given fields replaced
   PurchaseOrderItem copyWith({
@@ -130,28 +152,6 @@ class PurchaseOrderItem {
       'notes': notes,
       'status': purchaseOrderItemStatusToString(status),
     };
-  }
-
-  /// Creates a [PurchaseOrderItem] instance from a JSON map
-  factory PurchaseOrderItem.fromJson(Map<String, dynamic> json) {
-    return PurchaseOrderItem(
-      id: json['id'],
-      purchaseOrderId: json['purchase_order_id'],
-      materialId: json['material_id'],
-      materialName: json['material_name'],
-      materialCode: json['material_code'],
-      quantity: json['quantity'],
-      unit: json['unit'],
-      unitPrice: json['unit_price'],
-      totalPrice: json['total_price'],
-      expectedDeliveryDate: DateTime.parse(json['expected_delivery_date']),
-      actualDeliveryDate: json['actual_delivery_date'] != null
-          ? DateTime.parse(json['actual_delivery_date'])
-          : null,
-      qualityParameters: Map<String, dynamic>.from(json['quality_parameters']),
-      notes: json['notes'],
-      status: purchaseOrderItemStatusFromString(json['status']),
-    );
   }
 
   @override

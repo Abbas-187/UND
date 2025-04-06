@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:und_app/common/widgets/app_loading_indicator.dart';
-import 'package:und_app/common/widgets/error_view.dart';
-import 'package:und_app/features/forecasting/domain/entities/time_series_point.dart';
-import 'package:und_app/features/forecasting/domain/services/forecasting_service.dart';
-import 'package:und_app/features/forecasting/presentation/providers/forecasting_provider.dart';
-import 'package:und_app/features/inventory/data/models/inventory_item_model.dart';
-import 'package:und_app/features/inventory/domain/providers/inventory_provider.dart';
-import 'package:und_app/features/sales/data/models/sales_order_model.dart';
+
+import '../../../../common/widgets/app_loading_indicator.dart';
+import '../../../../common/widgets/error_view.dart';
+import '../../../inventory/data/models/inventory_item_model.dart';
+import '../../../inventory/domain/providers/inventory_provider.dart';
+import '../../domain/entities/time_series_point.dart';
+import '../../domain/services/forecasting_service.dart';
+import '../providers/forecasting_provider.dart';
 
 /// Screen for generating and viewing sales forecasts
 class ForecastingScreen extends ConsumerStatefulWidget {
-  final String? forecastId;
 
-  const ForecastingScreen({Key? key, this.forecastId}) : super(key: key);
+  const ForecastingScreen({super.key, this.forecastId});
+  final String? forecastId;
 
   @override
   ConsumerState<ForecastingScreen> createState() => _ForecastingScreenState();

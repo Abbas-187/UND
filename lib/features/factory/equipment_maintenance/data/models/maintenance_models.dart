@@ -1,4 +1,5 @@
 /// Maintenance related enums for the equipment maintenance module
+library;
 
 /// Type of maintenance activity
 enum MaintenanceType {

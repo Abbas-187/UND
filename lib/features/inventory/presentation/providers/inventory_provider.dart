@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/repositories/inventory_repository.dart';
 import '../../domain/usecases/adjust_quantity_usecase.dart';
-import '../../domain/usecases/get_low_stock_alerts_usecase.dart';
 import '../../domain/usecases/get_inventory_analytics_usecase.dart';
+import '../../domain/usecases/get_low_stock_alerts_usecase.dart';
 
 // Repository provider
 final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
@@ -30,14 +31,6 @@ final getInventoryAnalyticsUseCaseProvider =
 
 // Filter class
 class InventoryFilter {
-  final String searchQuery;
-  final bool showLowStock;
-  final bool showNeedsReorder;
-  final bool showExpiringSoon;
-  final String? selectedCategory;
-  final String? selectedLocation;
-  final List<String> availableCategories;
-  final List<String> availableLocations;
 
   const InventoryFilter({
     this.searchQuery = '',
@@ -49,6 +42,14 @@ class InventoryFilter {
     this.availableCategories = const [],
     this.availableLocations = const [],
   });
+  final String searchQuery;
+  final bool showLowStock;
+  final bool showNeedsReorder;
+  final bool showExpiringSoon;
+  final String? selectedCategory;
+  final String? selectedLocation;
+  final List<String> availableCategories;
+  final List<String> availableLocations;
 
   InventoryFilter copyWith({
     String? searchQuery,

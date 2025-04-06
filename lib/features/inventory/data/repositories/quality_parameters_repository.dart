@@ -1,6 +1,7 @@
-import '../models/dairy_quality_parameters_model.dart';
-import 'package:und_app/core/network/api_client.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/network/api_client.dart';
+import '../models/dairy_quality_parameters_model.dart';
 
 /// Repository for managing dairy quality parameters
 class QualityParametersRepository {

@@ -16,11 +16,11 @@ final deliveryProvider =
 });
 
 class DeliveryNotifier extends StateNotifier<AsyncValue<List<DeliveryModel>>> {
-  final DeliveryRepository _repository;
 
   DeliveryNotifier(this._repository) : super(const AsyncValue.loading()) {
     _loadDeliveries();
   }
+  final DeliveryRepository _repository;
 
   Future<void> _loadDeliveries() async {
     try {

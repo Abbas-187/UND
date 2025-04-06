@@ -14,12 +14,6 @@ final supplierRepositoryProvider = Provider<SupplierRepository>((ref) {
 
 // Filter class for suppliers
 class SupplierFilter {
-  final String? searchQuery;
-  final SupplierType? supplierType;
-  final bool? isActive;
-  final double? minQualityRating;
-  final double? minDeliveryRating;
-  final List<String>? certifications;
 
   const SupplierFilter({
     this.searchQuery,
@@ -29,6 +23,12 @@ class SupplierFilter {
     this.minDeliveryRating,
     this.certifications,
   });
+  final String? searchQuery;
+  final SupplierType? supplierType;
+  final bool? isActive;
+  final double? minQualityRating;
+  final double? minDeliveryRating;
+  final List<String>? certifications;
 
   SupplierFilter copyWith({
     String? searchQuery,

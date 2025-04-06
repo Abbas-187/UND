@@ -10,7 +10,7 @@ import 'inventory_edit_screen.dart';
 import 'inventory_item_details_screen.dart';
 
 class InventoryScreen extends ConsumerWidget {
-  const InventoryScreen({Key? key}) : super(key: key);
+  const InventoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

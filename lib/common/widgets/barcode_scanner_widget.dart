@@ -6,9 +6,6 @@ import '../../features/inventory/domain/services/barcode_scanner_service.dart';
 typedef BarcodeResultCallback = void Function(String value);
 
 class BarcodeScannerWidget extends StatefulWidget {
-  final BarcodeResultCallback onBarcodeDetected;
-  final ScanMode scanMode;
-  final String instructionText;
 
   const BarcodeScannerWidget({
     super.key,
@@ -16,6 +13,9 @@ class BarcodeScannerWidget extends StatefulWidget {
     required this.scanMode,
     this.instructionText = 'Align the barcode within the frame',
   });
+  final BarcodeResultCallback onBarcodeDetected;
+  final ScanMode scanMode;
+  final String instructionText;
 
   @override
   State<BarcodeScannerWidget> createState() => _BarcodeScannerWidgetState();
