@@ -5,6 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../common/widgets/app_loading_indicator.dart';
 import '../../../../common/widgets/error_view.dart';
+import '../../../../common/widgets/detail_appbar.dart';
 import '../../../inventory/data/models/inventory_item_model.dart';
 import '../../../inventory/domain/providers/inventory_provider.dart';
 import '../../domain/entities/time_series_point.dart';
@@ -13,7 +14,6 @@ import '../providers/forecasting_provider.dart';
 
 /// Screen for generating and viewing sales forecasts
 class ForecastingScreen extends ConsumerStatefulWidget {
-
   const ForecastingScreen({super.key, this.forecastId});
   final String? forecastId;
 
@@ -24,7 +24,7 @@ class ForecastingScreen extends ConsumerStatefulWidget {
 class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _selectedProductId;
-  ForecastingMethod _selectedMethod = ForecastingMethod.linearRegression;
+  String _selectedMethod = 'linearRegression';
   int _forecastPeriods = 6;
   int _movingAverageWindow = 3;
   double _smoothingAlpha = 0.3;
@@ -51,8 +51,8 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
     final forecastingState = ref.watch(forecastingProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sales Forecasting'),
+      appBar: DetailAppBar(
+        title: 'Sales Forecasting',
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -120,28 +120,28 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
               const SizedBox(height: 16),
 
               // Forecasting method selection
-              DropdownButtonFormField<ForecastingMethod>(
+              DropdownButtonFormField<String>(
                 value: _selectedMethod,
                 decoration: const InputDecoration(
                   labelText: 'Forecasting Method',
                   border: OutlineInputBorder(),
                 ),
-                items: [
+                items: const [
                   DropdownMenuItem(
-                    value: ForecastingMethod.linearRegression,
-                    child: const Text('Linear Regression'),
+                    value: 'linearRegression',
+                    child: Text('Linear Regression'),
                   ),
                   DropdownMenuItem(
-                    value: ForecastingMethod.movingAverage,
-                    child: const Text('Moving Average'),
+                    value: 'movingAverage',
+                    child: Text('Moving Average'),
                   ),
                   DropdownMenuItem(
-                    value: ForecastingMethod.exponentialSmoothing,
-                    child: const Text('Exponential Smoothing'),
+                    value: 'exponentialSmoothing',
+                    child: Text('Exponential Smoothing'),
                   ),
                   DropdownMenuItem(
-                    value: ForecastingMethod.seasonalDecomposition,
-                    child: const Text('Seasonal Decomposition'),
+                    value: 'seasonalDecomposition',
+                    child: Text('Seasonal Decomposition'),
                   ),
                 ],
                 onChanged: (value) {
@@ -187,7 +187,7 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
                   ),
 
                   // Method-specific parameters
-                  if (_selectedMethod == ForecastingMethod.movingAverage) ...[
+                  if (_selectedMethod == 'movingAverage') ...[
                     const SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
@@ -217,8 +217,7 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
                         },
                       ),
                     ),
-                  ] else if (_selectedMethod ==
-                      ForecastingMethod.exponentialSmoothing) ...[
+                  ] else if (_selectedMethod == 'exponentialSmoothing') ...[
                     const SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
@@ -248,8 +247,7 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
                         },
                       ),
                     ),
-                  ] else if (_selectedMethod ==
-                      ForecastingMethod.seasonalDecomposition) ...[
+                  ] else if (_selectedMethod == 'seasonalDecomposition') ...[
                     const SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
@@ -300,94 +298,88 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
     );
   }
 
-  Widget _buildForecastingContent(ForecastingState state) {
-    if (state is ForecastingInitialState) {
+  Widget _buildForecastingContent(ForecastingState forecastingState) {
+    if (forecastingState is ForecastingInitialState) {
       return const Center(
-        child: Text('Select parameters and generate a forecast'),
+        child: Text('Select parameters and generate a forecast to get started'),
       );
-    } else if (state is ForecastingLoadingState) {
+    } else if (forecastingState is ForecastingLoadingState) {
       return const Center(
-        child: AppLoadingIndicator(
-          message: 'Generating forecast...',
-        ),
+        child: AppLoadingIndicator(),
       );
-    } else if (state is ForecastingErrorState) {
+    } else if (forecastingState is ForecastingErrorState) {
       return Center(
         child: ErrorView(
-          message: state.message,
+          message: forecastingState.message,
           icon: Icons.error_outline,
-          onRetry: _generateForecast,
         ),
       );
-    } else if (state is ForecastingLoadedState) {
-      return _buildForecastChart(state);
+    } else if (forecastingState is ForecastingLoadedState) {
+      return _buildForecastResults(forecastingState);
     }
 
     return const SizedBox.shrink();
   }
 
-  Widget _buildForecastChart(ForecastingLoadedState state) {
-    final allData = [...state.historicalData, ...state.forecastData];
-    final dateFormat = DateFormat('MMM yyyy');
-
+  Widget _buildForecastResults(ForecastingLoadedState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Forecast for ${state.productName}',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Forecast for ${state.productName}',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.save),
+                  tooltip: 'Save Forecast',
+                  onPressed: () => _saveForecast(state),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.file_download),
+                  tooltip: 'Export Data',
+                  onPressed: () => _exportData(state),
+                ),
+              ],
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Expanded(
           child: SfCartesianChart(
+            legend: Legend(isVisible: true),
             primaryXAxis: DateTimeAxis(
-              dateFormat: dateFormat,
-              intervalType: DateTimeIntervalType.months,
-              majorGridLines: const MajorGridLines(width: 0),
+              dateFormat: DateFormat.MMM(),
             ),
             primaryYAxis: NumericAxis(
-              title: AxisTitle(text: 'Quantity'),
+              numberFormat: NumberFormat.compact(),
             ),
             tooltipBehavior: TooltipBehavior(enable: true),
-            legend: Legend(isVisible: true),
-            series: <CartesianSeries<TimeSeriesPoint, DateTime>>[
+            series: <CartesianSeries>[
               // Historical data
               LineSeries<TimeSeriesPoint, DateTime>(
                 name: 'Historical',
                 dataSource: state.historicalData,
-                xValueMapper: (point, _) => point.timestamp,
-                yValueMapper: (point, _) => point.value,
-                color: Colors.blue,
+                xValueMapper: (TimeSeriesPoint data, _) => data.timestamp,
+                yValueMapper: (TimeSeriesPoint data, _) => data.value,
                 markerSettings: const MarkerSettings(isVisible: true),
               ),
               // Forecast data
               LineSeries<TimeSeriesPoint, DateTime>(
                 name: 'Forecast',
                 dataSource: state.forecastData,
-                xValueMapper: (point, _) => point.timestamp,
-                yValueMapper: (point, _) => point.value,
-                color: Colors.red,
-                markerSettings: const MarkerSettings(isVisible: true),
+                xValueMapper: (TimeSeriesPoint data, _) => data.timestamp,
+                yValueMapper: (TimeSeriesPoint data, _) => data.value,
                 dashArray: const [5, 5],
+                markerSettings: const MarkerSettings(isVisible: true),
+                color: Colors.red,
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            OutlinedButton.icon(
-              onPressed: () => _saveForecast(state),
-              icon: const Icon(Icons.save),
-              label: const Text('Save Forecast'),
-            ),
-            OutlinedButton.icon(
-              onPressed: () => _exportData(state),
-              icon: const Icon(Icons.download),
-              label: const Text('Export Data'),
-            ),
-          ],
         ),
       ],
     );
@@ -395,23 +387,16 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
 
   void _generateForecast() {
     if (_formKey.currentState?.validate() ?? false) {
-      if (_selectedProductId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select a product')),
-        );
-        return;
-      }
-
-      // Prepare parameters based on selected method
+      // Extract parameters based on the selected method
       Map<String, dynamic> parameters = {};
       switch (_selectedMethod) {
-        case ForecastingMethod.movingAverage:
+        case 'movingAverage':
           parameters['windowSize'] = _movingAverageWindow;
           break;
-        case ForecastingMethod.exponentialSmoothing:
+        case 'exponentialSmoothing':
           parameters['alpha'] = _smoothingAlpha;
           break;
-        case ForecastingMethod.seasonalDecomposition:
+        case 'seasonalDecomposition':
           parameters['seasonLength'] = _seasonLength;
           break;
         default:

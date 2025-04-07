@@ -1,31 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:math' as math;
 
 import '../../data/models/sales_forecast_model.dart';
 import '../../data/repositories/sales_forecast_repository.dart';
+import '../../domain/entities/time_series_point.dart';
 import '../algorithms/arima.dart';
 import '../algorithms/exponential_smoothing.dart';
 import '../algorithms/linear_regression.dart';
 import '../algorithms/moving_average.dart';
 import '../algorithms/seasonal_decomposition.dart';
-import '../entities/time_series_point.dart';
 
 /// Forecasting methods supported by the service
 enum ForecastingMethod {
+  linearRegression,
   movingAverage,
   exponentialSmoothing,
-  linearRegression,
-  seasonalDecomposition,
   arima,
+  seasonalDecomposition,
 }
 
-/// Service for generating and managing sales forecasts
+/// Service that provides functionality for sales forecasting
 class ForecastingService {
-  ForecastingService({
-    SalesForecastRepository? repository,
-    FirebaseFirestore? firestore,
-  })  : _repository = repository ?? SalesForecastRepository(),
-        _firestore = firestore ?? FirebaseFirestore.instance;
+  // Singleton pattern for easy access
+  static final ForecastingService _instance = ForecastingService._internal();
+
+  factory ForecastingService() {
+    return _instance;
+  }
+
+  ForecastingService._internal()
+      : _repository = SalesForecastRepository(),
+        _firestore = FirebaseFirestore.instance;
 
   final SalesForecastRepository _repository;
   final FirebaseFirestore _firestore;
@@ -254,26 +260,226 @@ class ForecastingService {
     };
   }
 
-  /// Get saved forecasts for a specific product
+  /// Get forecasts for a specific product
   Future<List<SalesForecastModel>> getForecastsForProduct(
       String productId) async {
-    return await _repository.getSalesForecasts(productId: productId);
+    // For demo purposes, return mock data instead of calling repository
+    // Simulate API delay
+    await Future.delayed(const Duration(milliseconds: 800));
+
+    // Filter forecasts by productId, or return all if 'demo-product-id'
+    if (productId == 'demo-product-id') {
+      return _mockForecasts;
+    }
+
+    return _mockForecasts.where((f) => f.productId == productId).toList();
   }
 
   /// Get a specific forecast by ID
-  Future<SalesForecastModel> getForecastById(String forecastId) async {
-    return await _repository.getSalesForecastById(forecastId);
+  Future<SalesForecastModel?> getForecastById(String forecastId) async {
+    // For demo purposes, return mock data instead of calling repository
+    // Simulate API delay
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    return _mockForecasts.firstWhere(
+      (f) => f.id == forecastId,
+      orElse: () => throw Exception('Forecast not found'),
+    );
   }
 
   /// Delete a forecast
   Future<void> deleteForecast(String forecastId) async {
-    await _repository.deleteSalesForecast(forecastId);
+    // Implementation would call repository
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
+
+  // Mock data for forecasts
+  final List<SalesForecastModel> _mockForecasts = [
+    SalesForecastModel(
+      id: 'forecast-001',
+      name: 'Milk Sales Q2 2023',
+      description: 'Seasonal forecast for whole milk sales in Q2 2023',
+      productId: 'P001',
+      createdDate: DateTime.now().subtract(const Duration(days: 30)),
+      methodName: 'seasonalDecomposition',
+      historicalData: _generateTimeSeriesData(
+        start: DateTime.now().subtract(const Duration(days: 180)),
+        end: DateTime.now(),
+        interval: const Duration(days: 7),
+        baseValue: 1200,
+        trend: 5,
+        seasonality: 100,
+        noise: 30,
+      ),
+      forecastData: _generateTimeSeriesData(
+        start: DateTime.now(),
+        end: DateTime.now().add(const Duration(days: 90)),
+        interval: const Duration(days: 7),
+        baseValue: 1500,
+        trend: 8,
+        seasonality: 120,
+        noise: 0,
+      ),
+      parameters: {
+        'seasonalPeriod': 4,
+        'trendsEnabled': true,
+      },
+      accuracy: {
+        'rmse': 35.7,
+        'mape': 3.2,
+        'r2': 0.92,
+      },
+    ),
+    SalesForecastModel(
+      id: 'forecast-002',
+      name: 'Yogurt Demand Projection',
+      description: 'Linear regression forecast for strawberry yogurt',
+      productId: 'P003',
+      createdDate: DateTime.now().subtract(const Duration(days: 15)),
+      methodName: 'linearRegression',
+      historicalData: _generateTimeSeriesData(
+        start: DateTime.now().subtract(const Duration(days: 120)),
+        end: DateTime.now(),
+        interval: const Duration(days: 7),
+        baseValue: 800,
+        trend: 10,
+        seasonality: 0,
+        noise: 50,
+      ),
+      forecastData: _generateTimeSeriesData(
+        start: DateTime.now(),
+        end: DateTime.now().add(const Duration(days: 60)),
+        interval: const Duration(days: 7),
+        baseValue: 1000,
+        trend: 15,
+        seasonality: 0,
+        noise: 0,
+      ),
+      parameters: {
+        'confidenceInterval': 0.95,
+      },
+      accuracy: {
+        'rmse': 42.3,
+        'mape': 4.8,
+        'r2': 0.89,
+      },
+    ),
+    SalesForecastModel(
+      id: 'forecast-003',
+      name: 'Cheese Production',
+      description: 'Moving average projection for cheese curd production',
+      productId: 'P004',
+      createdDate: DateTime.now().subtract(const Duration(days: 45)),
+      methodName: 'movingAverage',
+      historicalData: _generateTimeSeriesData(
+        start: DateTime.now().subtract(const Duration(days: 150)),
+        end: DateTime.now(),
+        interval: const Duration(days: 7),
+        baseValue: 500,
+        trend: -2,
+        seasonality: 50,
+        noise: 20,
+      ),
+      forecastData: _generateTimeSeriesData(
+        start: DateTime.now(),
+        end: DateTime.now().add(const Duration(days: 75)),
+        interval: const Duration(days: 7),
+        baseValue: 450,
+        trend: 0,
+        seasonality: 50,
+        noise: 0,
+      ),
+      parameters: {
+        'windowSize': 4,
+      },
+      accuracy: {
+        'rmse': 15.8,
+        'mape': 3.1,
+        'r2': 0.87,
+      },
+    ),
+    SalesForecastModel(
+      id: 'forecast-004',
+      name: 'Butter Sales Prediction',
+      description: 'Exponential smoothing for butter sales',
+      productId: 'P005',
+      createdDate: DateTime.now().subtract(const Duration(days: 60)),
+      methodName: 'exponentialSmoothing',
+      historicalData: _generateTimeSeriesData(
+        start: DateTime.now().subtract(const Duration(days: 200)),
+        end: DateTime.now(),
+        interval: const Duration(days: 7),
+        baseValue: 600,
+        trend: 3,
+        seasonality: 80,
+        noise: 25,
+      ),
+      forecastData: _generateTimeSeriesData(
+        start: DateTime.now(),
+        end: DateTime.now().add(const Duration(days: 84)),
+        interval: const Duration(days: 7),
+        baseValue: 750,
+        trend: 5,
+        seasonality: 80,
+        noise: 0,
+      ),
+      parameters: {
+        'alpha': 0.7,
+        'beta': 0.2,
+        'gamma': 0.1,
+      },
+      accuracy: {
+        'rmse': 28.2,
+        'mape': 3.9,
+        'r2': 0.91,
+      },
+    ),
+  ];
+
+  /// Generate mock time series data with trend, seasonality and noise
+  static List<TimeSeriesPoint> _generateTimeSeriesData({
+    required DateTime start,
+    required DateTime end,
+    required Duration interval,
+    required double baseValue,
+    double trend = 0,
+    double seasonality = 0,
+    double noise = 0,
+  }) {
+    final List<TimeSeriesPoint> data = [];
+
+    DateTime current = start;
+    int i = 0;
+
+    while (current.isBefore(end)) {
+      // Calculate components
+      final trendComponent = trend * i;
+      final seasonalComponent =
+          seasonality > 0 ? seasonality * math.sin(2 * math.pi * i / 12) : 0;
+      final noiseComponent =
+          noise > 0 ? (math.Random().nextDouble() * 2 - 1) * noise : 0;
+
+      // Combine components
+      final value =
+          baseValue + trendComponent + seasonalComponent + noiseComponent;
+
+      // Add to list
+      data.add(TimeSeriesPoint(
+        timestamp: current,
+        value: value.roundToDouble(),
+      ));
+
+      // Next point
+      current = current.add(interval);
+      i++;
+    }
+
+    return data;
   }
 }
 
 /// Represents a saved forecast
 class ForecastModel {
-
   ForecastModel({
     required this.id,
     required this.name,

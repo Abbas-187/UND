@@ -2,24 +2,26 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:uuid/uuid.dart';
 
+import '../core/firebase/firebase_module.dart';
 import '../features/milk_reception/domain/models/notification_model.dart';
 import '../models/user_model.dart';
 
 /// Notification service responsible for handling notifications related to milk reception
 class ReceptionNotificationService {
   ReceptionNotificationService({
-    required FirebaseFirestore firestore,
-    required FirebaseMessaging messaging,
+    required dynamic firestore,
+    required dynamic messaging,
     required FlutterLocalNotificationsPlugin localNotifications,
   })  : _firestore = firestore,
         _messaging = messaging,
         _localNotifications = localNotifications;
 
-  final FirebaseFirestore _firestore;
-  final FirebaseMessaging _messaging;
+  final dynamic _firestore;
+  final dynamic _messaging;
   final FlutterLocalNotificationsPlugin _localNotifications;
   final String _notificationsCollection = 'notifications';
   final String _userSettingsCollection = 'userNotificationSettings';
@@ -27,8 +29,15 @@ class ReceptionNotificationService {
 
   /// Initialize the notification service
   Future<void> initialize() async {
+    // Skip initialization if using mock implementation
+    if (useMockFirebase) {
+      debugPrint(
+          'Using mock implementation - skipping real Firebase initialization');
+      return;
+    }
+
     // Request permission for notifications
-    final settings = await _messaging.requestPermission(
+    final settings = await (_messaging as FirebaseMessaging).requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -64,7 +73,8 @@ class ReceptionNotificationService {
     );
 
     // Set up foreground notification presentation options
-    await _messaging.setForegroundNotificationPresentationOptions(
+    await (_messaging as FirebaseMessaging)
+        .setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
@@ -98,7 +108,8 @@ class ReceptionNotificationService {
     final title =
         'Quality Alert: $parameterName ${exceedsThreshold ? "Exceeds" : "Below"} Threshold';
     final message =
-        '$supplierName milk reception has $parameterName of $parameterValue ' '${exceedsThreshold ? "exceeding" : "below"} the threshold of $thresholdValue.';
+        '$supplierName milk reception has $parameterName of $parameterValue '
+        '${exceedsThreshold ? "exceeding" : "below"} the threshold of $thresholdValue.';
 
     // Create notification model
     final notification = QualityAlertNotification(
@@ -262,7 +273,8 @@ class ReceptionNotificationService {
     // Create notification title and message
     final title = '${isUrgent ? 'URGENT: ' : ''}Pending Milk Tests';
     final message =
-        'Sample $sampleCode from $supplierName requires ${testsRequired.join(', ')} ' 'tests. Due ${isUrgent ? 'in $difference hours' : 'by ${dueBy.toIso8601String()}'}';
+        'Sample $sampleCode from $supplierName requires ${testsRequired.join(', ')} '
+        'tests. Due ${isUrgent ? 'in $difference hours' : 'by ${dueBy.toIso8601String()}'}';
 
     // Create notification model
     final notification = PendingTestNotification(
@@ -323,7 +335,8 @@ class ReceptionNotificationService {
     // Create notification title and message
     final title = 'Supplier Performance ${isNegative ? 'Alert' : 'Update'}';
     final message =
-        '$supplierName shows a ${percentageChange.abs().toStringAsFixed(1)}% ' '${isNegative ? 'decline' : 'improvement'} in $trendType.';
+        '$supplierName shows a ${percentageChange.abs().toStringAsFixed(1)}% '
+        '${isNegative ? 'decline' : 'improvement'} in $trendType.';
 
     // Create notification model
     final notification = SupplierPerformanceAlert(
@@ -367,7 +380,7 @@ class ReceptionNotificationService {
 
   /// Save notification to Firestore
   Future<void> _saveNotification(NotificationModel notification) async {
-    await _firestore
+    await (_firestore as FirebaseFirestore)
         .collection(_notificationsCollection)
         .doc(notification.id)
         .set(
@@ -381,7 +394,7 @@ class ReceptionNotificationService {
     // If specific users are targeted, send to their tokens
     if (targetUserIds != null && targetUserIds.isNotEmpty) {
       // Get FCM tokens for the target users
-      final tokenDocs = await _firestore
+      final tokenDocs = await (_firestore as FirebaseFirestore)
           .collection('userTokens')
           .where('userId', whereIn: targetUserIds)
           .get();
@@ -392,7 +405,7 @@ class ReceptionNotificationService {
       // Send to each token
       for (final token in tokens) {
         try {
-          await _messaging.sendMessage(
+          await (_messaging as FirebaseMessaging).sendMessage(
             to: token,
             data: {
               'notificationId': notification.id,
@@ -461,7 +474,7 @@ class ReceptionNotificationService {
 
     // Example implementation would get user emails and send via a service like SendGrid
     if (targetUserIds != null && targetUserIds.isNotEmpty) {
-      final userDocs = await _firestore
+      final userDocs = await (_firestore as FirebaseFirestore)
           .collection('users')
           .where(FieldPath.documentId, whereIn: targetUserIds)
           .get();
@@ -477,7 +490,7 @@ class ReceptionNotificationService {
       }
     } else if (notification.targetRoleId != null) {
       // Send to users with the specific role
-      final userDocs = await _firestore
+      final userDocs = await (_firestore as FirebaseFirestore)
           .collection('users')
           .where('role', isEqualTo: notification.targetRoleId)
           .get();
@@ -502,7 +515,7 @@ class ReceptionNotificationService {
 
     // Example implementation would get user phone numbers and send via a service like Twilio
     if (targetUserIds != null && targetUserIds.isNotEmpty) {
-      final userDocs = await _firestore
+      final userDocs = await (_firestore as FirebaseFirestore)
           .collection('users')
           .where(FieldPath.documentId, whereIn: targetUserIds)
           .get();
@@ -518,7 +531,7 @@ class ReceptionNotificationService {
       }
     } else if (notification.targetRoleId != null) {
       // Send to users with the specific role
-      final userDocs = await _firestore
+      final userDocs = await (_firestore as FirebaseFirestore)
           .collection('users')
           .where('role', isEqualTo: notification.targetRoleId)
           .get();
@@ -538,11 +551,14 @@ class ReceptionNotificationService {
   /// Get notifications for a user
   Future<List<NotificationModel>> getNotificationsForUser(String userId) async {
     // Get user's role
-    final userDoc = await _firestore.collection('users').doc(userId).get();
+    final userDoc = await (_firestore as FirebaseFirestore)
+        .collection('users')
+        .doc(userId)
+        .get();
     final userRole = userDoc.data()?['role'] as String?;
 
     // Query notifications for this user or their role
-    final notificationDocs = await _firestore
+    final notificationDocs = await (_firestore as FirebaseFirestore)
         .collection(_notificationsCollection)
         .where(Filter.or(
           Filter('targetUserId', isEqualTo: userId),
@@ -580,7 +596,7 @@ class ReceptionNotificationService {
 
   /// Mark notification as read
   Future<void> markNotificationAsRead(String notificationId) async {
-    await _firestore
+    await (_firestore as FirebaseFirestore)
         .collection(_notificationsCollection)
         .doc(notificationId)
         .update({
@@ -591,7 +607,7 @@ class ReceptionNotificationService {
   /// Mark notification as acknowledged
   Future<void> acknowledgeNotification(
       String notificationId, String userId) async {
-    await _firestore
+    await (_firestore as FirebaseFirestore)
         .collection(_notificationsCollection)
         .doc(notificationId)
         .update({
@@ -604,8 +620,10 @@ class ReceptionNotificationService {
   /// Get user notification settings
   Future<Map<String, dynamic>> getUserNotificationSettings(
       String userId) async {
-    final doc =
-        await _firestore.collection(_userSettingsCollection).doc(userId).get();
+    final doc = await (_firestore as FirebaseFirestore)
+        .collection(_userSettingsCollection)
+        .doc(userId)
+        .get();
 
     if (doc.exists) {
       return doc.data() ?? {};
@@ -637,7 +655,10 @@ class ReceptionNotificationService {
   /// Update user notification settings
   Future<void> updateUserNotificationSettings(
       String userId, Map<String, dynamic> settings) async {
-    await _firestore.collection(_userSettingsCollection).doc(userId).set(
+    await (_firestore as FirebaseFirestore)
+        .collection(_userSettingsCollection)
+        .doc(userId)
+        .set(
           settings,
           SetOptions(merge: true),
         );
@@ -646,16 +667,19 @@ class ReceptionNotificationService {
   /// Register user for role-based notifications
   Future<void> subscribeToRoleTopics(UserRole role) async {
     final roleStr = role.toString().split('.').last;
-    await _messaging.subscribeToTopic('role_$roleStr');
+    await (_messaging as FirebaseMessaging).subscribeToTopic('role_$roleStr');
 
     // Subscribe to other relevant topics based on role
     switch (role) {
       case UserRole.admin:
-        await _messaging.subscribeToTopic('critical_alerts');
+        await (_messaging as FirebaseMessaging)
+            .subscribeToTopic('critical_alerts');
         break;
       case UserRole.factory:
-        await _messaging.subscribeToTopic('reception_alerts');
-        await _messaging.subscribeToTopic('quality_alerts');
+        await (_messaging as FirebaseMessaging)
+            .subscribeToTopic('reception_alerts');
+        await (_messaging as FirebaseMessaging)
+            .subscribeToTopic('quality_alerts');
         break;
       default:
         break;
@@ -665,16 +689,20 @@ class ReceptionNotificationService {
   /// Unregister user from role-based notifications
   Future<void> unsubscribeFromRoleTopics(UserRole role) async {
     final roleStr = role.toString().split('.').last;
-    await _messaging.unsubscribeFromTopic('role_$roleStr');
+    await (_messaging as FirebaseMessaging)
+        .unsubscribeFromTopic('role_$roleStr');
 
     // Unsubscribe from other relevant topics
     switch (role) {
       case UserRole.admin:
-        await _messaging.unsubscribeFromTopic('critical_alerts');
+        await (_messaging as FirebaseMessaging)
+            .unsubscribeFromTopic('critical_alerts');
         break;
       case UserRole.factory:
-        await _messaging.unsubscribeFromTopic('reception_alerts');
-        await _messaging.unsubscribeFromTopic('quality_alerts');
+        await (_messaging as FirebaseMessaging)
+            .unsubscribeFromTopic('reception_alerts');
+        await (_messaging as FirebaseMessaging)
+            .unsubscribeFromTopic('quality_alerts');
         break;
       default:
         break;
@@ -686,7 +714,7 @@ class ReceptionNotificationService {
     // Get high priority notifications that are unacknowledged and older than a certain threshold
     final cutoffTime = DateTime.now().subtract(const Duration(hours: 4));
 
-    final unacknowledgedDocs = await _firestore
+    final unacknowledgedDocs = await (_firestore as FirebaseFirestore)
         .collection(_notificationsCollection)
         .where('priority', whereIn: [
           NotificationPriority.high.toString(),
@@ -731,7 +759,7 @@ class ReceptionNotificationService {
       await _sendSmsNotification(escalationNotification, null);
 
       // Update the original notification to mark it as escalated
-      await _firestore
+      await (_firestore as FirebaseFirestore)
           .collection(_notificationsCollection)
           .doc(notificationId)
           .update({

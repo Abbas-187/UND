@@ -1,16 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../../core/firebase/firebase_interface.dart';
+import '../../../../core/firebase/firebase_mock.dart';
+import '../../../../core/firebase/firebase_module.dart';
 import '../../domain/entities/supplier.dart';
 import '../../domain/repositories/supplier_repository.dart';
 import '../models/supplier_model.dart';
 
 class SupplierRepositoryImpl implements SupplierRepository {
-
-  SupplierRepositoryImpl(this._firestore);
-  final FirebaseFirestore _firestore;
+  SupplierRepositoryImpl(this._firestoreInstance);
+  final dynamic _firestoreInstance;
   final String _collection = 'suppliers';
 
-  CollectionReference<Map<String, dynamic>> get _suppliersCollection =>
-      _firestore.collection(_collection);
+  CollectionReference<Map<String, dynamic>> get _suppliersCollection {
+    if (useMockFirebase) {
+      return (_firestoreInstance as FirestoreInterface).collection(_collection)
+          as CollectionReference<Map<String, dynamic>>;
+    } else {
+      return (_firestoreInstance as FirebaseFirestore).collection(_collection);
+    }
+  }
 
   @override
   Future<Supplier> getSupplier(String id) async {

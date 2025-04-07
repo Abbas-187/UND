@@ -20,7 +20,6 @@ final supplierProvider = StreamProvider.family<Supplier, String>((ref, id) {
 
 // Filter class
 class SupplierFilter {
-
   const SupplierFilter({
     this.searchQuery = '',
     this.isActive,
@@ -70,21 +69,21 @@ final filteredSuppliersProvider = FutureProvider<List<Supplier>>((ref) async {
       categories: filter.selectedCategories,
     );
   }
-});
+}, dependencies: [supplierRepositoryProvider, supplierFilterProvider]);
 
 // Analytics providers
 final suppliersCountByCategoryProvider =
     FutureProvider<Map<String, int>>((ref) {
   final repository = ref.watch(supplierRepositoryProvider);
   return repository.getSuppliersCountByCategory();
-});
+}, dependencies: [supplierRepositoryProvider]);
 
 final topRatedSuppliersProvider = FutureProvider<List<Supplier>>((ref) {
   final repository = ref.watch(supplierRepositoryProvider);
   return repository.getTopRatedSuppliers(5);
-});
+}, dependencies: [supplierRepositoryProvider]);
 
 final recentlyUpdatedSuppliersProvider = FutureProvider<List<Supplier>>((ref) {
   final repository = ref.watch(supplierRepositoryProvider);
   return repository.getRecentlyUpdatedSuppliers(5);
-});
+}, dependencies: [supplierRepositoryProvider]);

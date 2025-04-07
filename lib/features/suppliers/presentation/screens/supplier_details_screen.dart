@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../../common/widgets/detail_appbar.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../domain/entities/supplier.dart';
 import '../providers/supplier_provider.dart';
 
 class SupplierDetailsScreen extends ConsumerWidget {
-
   const SupplierDetailsScreen({
     super.key,
     required this.supplierId,
@@ -18,8 +18,8 @@ class SupplierDetailsScreen extends ConsumerWidget {
     final supplierAsyncValue = ref.watch(supplierProvider(supplierId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Supplier Details'),
+      appBar: DetailAppBar(
+        title: 'Supplier Details',
         actions: [
           supplierAsyncValue.when(
             data: (supplier) => IconButton(
@@ -187,7 +187,8 @@ class SupplierDetailsScreen extends ConsumerWidget {
           children: supplier.productCategories.map((category) {
             return Chip(
               label: Text(category),
-              backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerHighest,
             );
           }).toList(),
         ),

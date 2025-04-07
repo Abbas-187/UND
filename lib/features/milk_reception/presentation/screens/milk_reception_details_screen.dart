@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models/milk_reception_model.dart';
 import '../controllers/milk_reception_controller.dart';
+import '../../../../theme/app_theme_extensions.dart';
 
 /// Screen that displays detailed information about a milk reception
 class MilkReceptionDetailsScreen extends ConsumerWidget {
@@ -61,7 +62,8 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
 
   Widget _buildReceptionHeader(
       BuildContext context, MilkReceptionModel reception) {
-    final statusColor = _getStatusColor(reception.receptionStatus);
+    final statusColor = _getStatusColor(context, reception.receptionStatus);
+    final textTheme = Theme.of(context).textTheme;
 
     return Card(
       child: Padding(
@@ -73,8 +75,7 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
               children: [
                 Text(
                   'Reception #${reception.id}',
-                  style: const TextStyle(
-                    fontSize: 20,
+                  style: textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -83,9 +84,7 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
                   label: Text(
                     _formatReceptionStatus(reception.receptionStatus),
                     style: TextStyle(
-                      color: statusColor == Colors.grey
-                          ? Colors.black
-                          : Colors.white,
+                      color: _getTextColorForStatus(context, statusColor),
                     ),
                   ),
                   backgroundColor: statusColor,
@@ -95,12 +94,12 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             Text(
               'Received on: ${_formatDateTime(reception.timestamp)}',
-              style: const TextStyle(fontSize: 16),
+              style: textTheme.bodyLarge,
             ),
             const SizedBox(height: 4),
             Text(
               'Received by: ${reception.receivingEmployeeId}',
-              style: const TextStyle(fontSize: 16),
+              style: textTheme.bodyLarge,
             ),
           ],
         ),
@@ -110,23 +109,26 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
 
   Widget _buildSupplierInfo(
       BuildContext context, MilkReceptionModel reception) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Supplier Information',
-              style: TextStyle(
-                fontSize: 18,
+              style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            Text('Supplier: ${reception.supplierName}'),
-            Text('Driver: ${reception.driverName}'),
-            Text('Vehicle: ${reception.vehiclePlate}'),
+            Text('Supplier: ${reception.supplierName}',
+                style: textTheme.bodyLarge),
+            Text('Driver: ${reception.driverName}', style: textTheme.bodyLarge),
+            Text('Vehicle: ${reception.vehiclePlate}',
+                style: textTheme.bodyLarge),
           ],
         ),
       ),
@@ -134,26 +136,33 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildMilkInfo(BuildContext context, MilkReceptionModel reception) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Milk Information',
-              style: TextStyle(
-                fontSize: 18,
+              style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            Text('Type: ${_formatMilkType(reception.milkType)}'),
-            Text('Quantity: ${reception.quantityLiters} liters'),
+            Text('Type: ${_formatMilkType(reception.milkType)}',
+                style: textTheme.bodyLarge),
+            Text('Quantity: ${reception.quantityLiters} liters',
+                style: textTheme.bodyLarge),
             Text(
-                'Containers: ${reception.containerCount} ${_formatContainerType(reception.containerType)}'),
-            Text('Temperature: ${reception.temperatureAtArrival}°C'),
-            if (reception.phValue != null) Text('pH: ${reception.phValue}'),
+              'Containers: ${reception.containerCount} ${_formatContainerType(reception.containerType)}',
+              style: textTheme.bodyLarge,
+            ),
+            Text('Temperature: ${reception.temperatureAtArrival}°C',
+                style: textTheme.bodyLarge),
+            if (reception.phValue != null)
+              Text('pH: ${reception.phValue}', style: textTheme.bodyLarge),
           ],
         ),
       ),
@@ -161,30 +170,37 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildQualityInfo(BuildContext context, MilkReceptionModel reception) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Quality Information',
-              style: TextStyle(
-                fontSize: 18,
+              style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            Text('Smell: ${reception.smell}'),
-            Text('Appearance: ${reception.appearance}'),
+            Text('Smell: ${reception.smell}', style: textTheme.bodyLarge),
+            Text('Appearance: ${reception.appearance}',
+                style: textTheme.bodyLarge),
             Text(
-                'Contamination: ${reception.hasVisibleContamination ? 'Yes' : 'No'}'),
+              'Contamination: ${reception.hasVisibleContamination ? 'Yes' : 'No'}',
+              style: textTheme.bodyLarge,
+            ),
             if (reception.hasVisibleContamination &&
                 reception.contaminationDescription != null)
               Text(
-                  'Contamination details: ${reception.contaminationDescription}'),
+                'Contamination details: ${reception.contaminationDescription}',
+                style: textTheme.bodyLarge,
+              ),
             const SizedBox(height: 8),
-            Text('Initial observations: ${reception.initialObservations}'),
+            Text('Initial observations: ${reception.initialObservations}',
+                style: textTheme.bodyLarge),
           ],
         ),
       ),
@@ -193,6 +209,9 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
 
   Widget _buildStatusSection(
       BuildContext context, WidgetRef ref, MilkReceptionModel reception) {
+    final textTheme = Theme.of(context).textTheme;
+    final buttonStyles = Theme.of(context).extension<CustomButtonStyles>();
+
     // Only show actions if reception is in pending status
     if (reception.receptionStatus == ReceptionStatus.pendingTesting) {
       return Card(
@@ -201,10 +220,9 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Actions',
-                style: TextStyle(
-                  fontSize: 18,
+                style: textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -215,10 +233,7 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
                   ElevatedButton.icon(
                     icon: const Icon(Icons.check_circle),
                     label: const Text('Accept'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                    ),
+                    style: buttonStyles?.successButton,
                     onPressed: () =>
                         _showFinalizeDialog(context, ref, reception, true),
                   ),
@@ -226,8 +241,8 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
                     icon: const Icon(Icons.cancel),
                     label: const Text('Reject'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Theme.of(context).colorScheme.onError,
                     ),
                     onPressed: () =>
                         _showFinalizeDialog(context, ref, reception, false),
@@ -246,15 +261,15 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Notes',
-                style: TextStyle(
-                  fontSize: 18,
+                style: textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
-              Text(reception.notes ?? 'No notes available'),
+              Text(reception.notes ?? 'No notes available',
+                  style: textTheme.bodyLarge),
             ],
           ),
         ),
@@ -269,6 +284,8 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
     bool isAccepting,
   ) {
     final TextEditingController notesController = TextEditingController();
+    final buttonStyles = Theme.of(context).extension<CustomButtonStyles>();
+    final statusColors = Theme.of(context).extension<StatusColors>();
 
     showDialog(
       context: context,
@@ -301,10 +318,12 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
             child: const Text('Cancel'),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isAccepting ? Colors.green : Colors.red,
-              foregroundColor: Colors.white,
-            ),
+            style: isAccepting
+                ? buttonStyles?.successButton
+                : ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    foregroundColor: Theme.of(context).colorScheme.onError,
+                  ),
             onPressed: () async {
               Navigator.pop(dialogContext);
 
@@ -317,14 +336,23 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
                   );
 
               if (success && context.mounted) {
+                final backgroundColor = isAccepting
+                    ? statusColors?.success ?? Colors.green
+                    : Theme.of(context).colorScheme.error;
+
+                final textColor = isAccepting
+                    ? statusColors?.onSuccess ?? Colors.white
+                    : Theme.of(context).colorScheme.onError;
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
                       isAccepting
                           ? 'Reception accepted successfully'
                           : 'Reception rejected successfully',
+                      style: TextStyle(color: textColor),
                     ),
-                    backgroundColor: isAccepting ? Colors.green : Colors.red,
+                    backgroundColor: backgroundColor,
                   ),
                 );
               }
@@ -389,41 +417,61 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
     }
   }
 
-  Color _getStatusColor(ReceptionStatus status) {
+  Color _getStatusColor(BuildContext context, ReceptionStatus status) {
+    final statusColors = Theme.of(context).extension<StatusColors>();
+
     switch (status) {
       case ReceptionStatus.pendingTesting:
-        return Colors.orange;
+        return statusColors?.warning ?? Colors.orange;
       case ReceptionStatus.accepted:
-        return Colors.green;
+        return statusColors?.success ?? Colors.green;
       case ReceptionStatus.rejected:
-        return Colors.red;
+        return Theme.of(context).colorScheme.error;
       default:
         return Colors.grey;
     }
   }
 
+  Color _getTextColorForStatus(BuildContext context, Color backgroundColor) {
+    final statusColors = Theme.of(context).extension<StatusColors>();
+
+    if (backgroundColor == statusColors?.success) {
+      return statusColors?.onSuccess ?? Colors.white;
+    } else if (backgroundColor == statusColors?.warning) {
+      return statusColors?.onWarning ?? Colors.white;
+    } else if (backgroundColor == Theme.of(context).colorScheme.error) {
+      return Theme.of(context).colorScheme.onError;
+    } else {
+      return Colors.black;
+    }
+  }
+
   Widget _buildInventoryCard(
       BuildContext context, MilkReceptionModel reception) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Inventory Information',
-              style: TextStyle(
-                fontSize: 18,
+              style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-                'Status: ${reception.receptionStatus == ReceptionStatus.accepted ? 'Added to inventory' : 'Not in inventory'}'),
+              'Status: ${reception.receptionStatus == ReceptionStatus.accepted ? 'Added to inventory' : 'Not in inventory'}',
+              style: textTheme.bodyLarge,
+            ),
             if (reception.receptionStatus == ReceptionStatus.accepted) ...[
               const SizedBox(height: 4),
-              Text('Quantity: ${reception.quantityLiters} liters'),
-              Text('Storage ID: ${reception.id}'),
+              Text('Quantity: ${reception.quantityLiters} liters',
+                  style: textTheme.bodyLarge),
+              Text('Storage ID: ${reception.id}', style: textTheme.bodyLarge),
             ],
           ],
         ),

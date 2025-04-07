@@ -5,15 +5,13 @@ import '../../domain/models/milk_reception_model.dart';
 import '../../domain/providers/milk_reception_provider.dart';
 import '../widgets/milk_reception_form.dart';
 import 'milk_reception_details_screen.dart';
+import '../../../../theme/app_theme_extensions.dart';
 
 class MilkReceptionScreen extends ConsumerWidget {
   const MilkReceptionScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todayReceptionsAsync = ref.watch(todayMilkReceptionsProvider);
-    final awaitingTestingAsync = ref.watch(receptionsAwaitingTestingProvider);
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -30,142 +28,84 @@ class MilkReceptionScreen extends ConsumerWidget {
         body: TabBarView(
           children: [
             // Today's Receptions Tab
-            todayReceptionsAsync.when(
-              data: (receptions) => _buildReceptionsList(
-                context,
-                receptions,
-                'No milk receptions today',
-              ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(
-                child: Text('Error loading receptions: $error'),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.water_drop,
+                    size: 80,
+                    color: Colors.blue,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Today\'s Milk Receptions',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('No milk receptions today'),
+                ],
               ),
             ),
 
             // Awaiting Testing Tab
-            awaitingTestingAsync.when(
-              data: (receptions) => _buildReceptionsList(
-                context,
-                receptions,
-                'No receptions awaiting testing',
-              ),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(
-                child: Text('Error loading receptions: $error'),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.science,
+                    size: 80,
+                    color: Colors.orange,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Awaiting Testing',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text('No milk receptions awaiting testing'),
+                ],
               ),
             ),
 
             // New Reception Tab
-            SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: MilkReceptionForm(),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.add_circle,
+                    size: 80,
+                    color: Colors.green,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'New Milk Reception',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                      'Form to create a new milk reception will appear here'),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Show a snackbar since this is a placeholder
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                              'This functionality will be implemented soon'),
+                        ),
+                      );
+                    },
+                    child: const Text('Create New Reception'),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Widget _buildReceptionsList(
-    BuildContext context,
-    List<MilkReceptionModel> receptions,
-    String emptyMessage,
-  ) {
-    if (receptions.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.hourglass_empty, size: 64, color: Colors.grey),
-            const SizedBox(height: 16),
-            Text(
-              emptyMessage,
-              style: const TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: receptions.length,
-      padding: const EdgeInsets.all(16),
-      itemBuilder: (context, index) {
-        final reception = receptions[index];
-        return Card(
-          margin: const EdgeInsets.only(bottom: 16),
-          child: ListTile(
-            title: Text(
-                '${reception.supplierName} - ${reception.quantityLiters ?? 0}L'),
-            subtitle: Text(
-              'Received: ${_formatDateTime(reception.timestamp ?? DateTime.now())}\n'
-              'Status: ${_getStatusText(reception.receptionStatus)}',
-            ),
-            trailing: _buildStatusIcon(reception.receptionStatus),
-            isThreeLine: true,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MilkReceptionDetailsScreen(
-                    receptionId: reception.id,
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  String _formatDateTime(DateTime dateTime) {
-    return '${dateTime.day}/${dateTime.month}/${dateTime.year} '
-        '${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
-  }
-
-  String _getStatusText(ReceptionStatus status) {
-    switch (status) {
-      case ReceptionStatus.draft:
-        return 'Draft';
-      case ReceptionStatus.pendingTesting:
-        return 'Awaiting Testing';
-      case ReceptionStatus.accepted:
-        return 'Accepted';
-      case ReceptionStatus.rejected:
-        return 'Rejected';
-      default:
-        return 'Unknown';
-    }
-  }
-
-  Widget _buildStatusIcon(ReceptionStatus status) {
-    IconData iconData;
-    Color color;
-
-    switch (status) {
-      case ReceptionStatus.draft:
-        iconData = Icons.edit_note;
-        color = Colors.grey;
-        break;
-      case ReceptionStatus.pendingTesting:
-        iconData = Icons.science;
-        color = Colors.orange;
-        break;
-      case ReceptionStatus.accepted:
-        iconData = Icons.check_circle;
-        color = Colors.green;
-        break;
-      case ReceptionStatus.rejected:
-        iconData = Icons.cancel;
-        color = Colors.red;
-        break;
-      default:
-        iconData = Icons.help_outline;
-        color = Colors.grey;
-        break;
-    }
-
-    return Icon(iconData, color: color);
   }
 }

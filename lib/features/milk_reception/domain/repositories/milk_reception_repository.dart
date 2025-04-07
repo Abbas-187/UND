@@ -4,13 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/firebase/firebase_interface.dart';
+import '../../../../core/firebase/firebase_mock.dart';
+import '../../../../core/firebase/firebase_module.dart';
 import '../../../../utils/exceptions.dart';
 import '../../domain/models/milk_reception_model.dart';
 
 /// Provider for the milk reception repository
 final milkReceptionRepositoryProvider =
     Provider<MilkReceptionRepository>((ref) {
-  return FirestoreMilkReceptionRepository();
+  final firestoreInstance =
+      useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance;
+  return FirestoreMilkReceptionRepository(firestore: firestoreInstance);
 });
 
 /// Repository interface for milk receptions
@@ -62,10 +67,10 @@ abstract class MilkReceptionRepository {
 /// Firestore implementation of the MilkReceptionRepository
 class FirestoreMilkReceptionRepository implements MilkReceptionRepository {
   FirestoreMilkReceptionRepository({
-    FirebaseFirestore? firestore,
-  }) : _firestore = firestore ?? FirebaseFirestore.instance;
+    dynamic firestore,
+  }) : _firestoreInstance = firestore ?? FirebaseFirestore.instance;
 
-  final FirebaseFirestore _firestore;
+  final dynamic _firestoreInstance;
   final _receptionCollection = 'milk_receptions';
   final _testCollection = 'milk_quality_tests';
 
@@ -73,8 +78,16 @@ class FirestoreMilkReceptionRepository implements MilkReceptionRepository {
   final Map<String, MilkReceptionModel> _cache = {};
 
   // Utility getter for collection reference
-  CollectionReference<Map<String, dynamic>> get _receptions =>
-      _firestore.collection(_receptionCollection);
+  CollectionReference<Map<String, dynamic>> get _receptions {
+    if (useMockFirebase) {
+      return (_firestoreInstance as FirestoreInterface)
+              .collection(_receptionCollection)
+          as CollectionReference<Map<String, dynamic>>;
+    } else {
+      return (_firestoreInstance as FirebaseFirestore)
+          .collection(_receptionCollection);
+    }
+  }
 
   @override
   Future<String> addReception(MilkReceptionModel reception) async {
@@ -238,7 +251,7 @@ class FirestoreMilkReceptionRepository implements MilkReceptionRepository {
       String receptionId, String testId) async {
     try {
       // Run as a transaction to ensure atomicity
-      await _firestore.runTransaction((transaction) async {
+      await _firestoreInstance.runTransaction((transaction) async {
         // Get the reception document
         final receptionDoc = _receptions.doc(receptionId);
         final receptionSnapshot = await transaction.get(receptionDoc);
@@ -248,7 +261,8 @@ class FirestoreMilkReceptionRepository implements MilkReceptionRepository {
         }
 
         // Get the test document
-        final testDoc = _firestore.collection(_testCollection).doc(testId);
+        final testDoc =
+            _firestoreInstance.collection(_testCollection).doc(testId);
         final testSnapshot = await transaction.get(testDoc);
 
         if (!testSnapshot.exists) {

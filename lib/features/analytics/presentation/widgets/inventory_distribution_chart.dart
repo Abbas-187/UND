@@ -1,106 +1,30 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../../../analytics/data/mock_analytics_data.dart';
 
 class InventoryDistributionChart extends StatelessWidget {
-  const InventoryDistributionChart({super.key});
+  InventoryDistributionChart({super.key});
+
+  final MockAnalyticsData _mockData = MockAnalyticsData();
 
   @override
   Widget build(BuildContext context) {
-    // Sample data - in a real app, this would come from a provider
-    final pieData = [
-      PieChartSectionData(
-        value: 40,
-        title: '40%',
-        color: Colors.blue,
-        radius: 50,
-        titleStyle: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      PieChartSectionData(
-        value: 25,
-        title: '25%',
-        color: Colors.orange,
-        radius: 50,
-        titleStyle: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      PieChartSectionData(
-        value: 20,
-        title: '20%',
-        color: Colors.green,
-        radius: 50,
-        titleStyle: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      PieChartSectionData(
-        value: 15,
-        title: '15%',
-        color: Colors.purple,
-        radius: 50,
-        titleStyle: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ];
-
     return Column(
       children: [
-        Text(
+        const Text(
           'Inventory by Category',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         Expanded(
           child: PieChart(
             PieChartData(
-              sections: pieData,
+              sections: _mockData.getInventoryDistributionData(),
               centerSpaceRadius: 30,
               sectionsSpace: 2,
+              centerSpaceColor: Colors.transparent,
             ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildLegendItem('Electronics', Colors.blue),
-            const SizedBox(width: 10),
-            _buildLegendItem('Clothing', Colors.orange),
-            const SizedBox(width: 10),
-            _buildLegendItem('Kitchen', Colors.green),
-            const SizedBox(width: 10),
-            _buildLegendItem('Office', Colors.purple),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLegendItem(String label, Color color) {
-    return Row(
-      children: [
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 10),
         ),
       ],
     );

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../core/firebase/firebase_interface.dart';
+import '../core/firebase/firebase_module.dart';
 import '../features/inventory/data/models/inventory_item_model.dart';
 import '../features/inventory/domain/entities/inventory_item.dart';
 import '../features/inventory/domain/repositories/inventory_repository.dart';
@@ -8,7 +10,6 @@ import '../features/milk_reception/domain/repositories/milk_reception_repository
 
 /// Custom exception for business logic errors
 class BusinessLogicException implements Exception {
-
   BusinessLogicException(this.message);
   final String message;
 
@@ -22,26 +23,43 @@ class ReceptionInventoryService {
   ReceptionInventoryService({
     required MilkReceptionRepository receptionRepository,
     required InventoryRepository inventoryRepository,
-    FirebaseFirestore? firestore,
+    required dynamic firestore,
   })  : _receptionRepository = receptionRepository,
         _inventoryRepository = inventoryRepository,
-        _firestore = firestore ?? FirebaseFirestore.instance;
+        _firestore = firestore;
 
   final MilkReceptionRepository _receptionRepository;
   final InventoryRepository _inventoryRepository;
-  final FirebaseFirestore _firestore;
+  final dynamic _firestore;
+
+  /// Get the properly typed Firestore instance
+  dynamic get firestore => _firestore;
 
   /// Stream of completed milk receptions
   Stream<List<MilkReceptionModel>> get completedReceptions {
-    return _firestore
-        .collection('milk_receptions')
-        .where('receptionStatus',
-            isEqualTo: ReceptionStatus.accepted.toString())
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) =>
-                MilkReceptionModel.fromJson(doc.data()))
-            .toList());
+    if (useMockFirebase) {
+      return (firestore as FirestoreInterface)
+          .collection('milk_receptions')
+          .where('receptionStatus',
+              isEqualTo: ReceptionStatus.accepted.toString())
+          .snapshots()
+          .map((snapshot) => snapshot.docs.map((doc) {
+                final data = doc.data();
+                if (data is Map<String, dynamic>) {
+                  return MilkReceptionModel.fromJson(data);
+                }
+                throw Exception('Unexpected data type in document');
+              }).toList());
+    } else {
+      return (firestore as FirebaseFirestore)
+          .collection('milk_receptions')
+          .where('receptionStatus',
+              isEqualTo: ReceptionStatus.accepted.toString())
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map((doc) => MilkReceptionModel.fromJson(doc.data()))
+              .toList());
+    }
   }
 
   /// Creates inventory from a completed milk reception
@@ -181,7 +199,7 @@ class ReceptionInventoryService {
       MilkType milkType, double quantity) async {
     try {
       // Query available storage locations
-      final locationQuery = await _firestore
+      final locationQuery = await (firestore as FirebaseFirestore)
           .collection('storage_locations')
           .where('storageType', isEqualTo: 'Milk')
           .where('milkType', isEqualTo: milkType.toString())
@@ -202,7 +220,10 @@ class ReceptionInventoryService {
       final locationName = locationDoc.data()['name'] as String;
 
       // Update available capacity in the storage location
-      await _firestore.collection('storage_locations').doc(locationId).update({
+      await (firestore as FirebaseFirestore)
+          .collection('storage_locations')
+          .doc(locationId)
+          .update({
         'availableCapacity': FieldValue.increment(-quantity),
         'lastUpdated': DateTime.now(),
       });
@@ -240,7 +261,9 @@ class ReceptionInventoryService {
         'timestamp': FieldValue.serverTimestamp(),
       };
 
-      await _firestore.collection('inventory_events').add(updateEvent);
+      await (firestore as FirebaseFirestore)
+          .collection('inventory_events')
+          .add(updateEvent);
 
       // Check if low inventory alert needs to be triggered
       if (await _shouldTriggerLowInventoryAlert(inventoryItem.name)) {
@@ -277,12 +300,12 @@ class ReceptionInventoryService {
       };
 
       // Add to temperature_measurements collection
-      await _firestore
+      await (firestore as FirebaseFirestore)
           .collection('temperature_measurements')
           .add(measurementData);
 
       // Add to temperature_history subcollection of the inventory item
-      await _firestore
+      await (firestore as FirebaseFirestore)
           .collection('inventory')
           .doc(inventoryId)
           .collection('temperature_history')
@@ -302,7 +325,7 @@ class ReceptionInventoryService {
   Future<bool> _shouldTriggerLowInventoryAlert(String itemName) async {
     try {
       // Query total available quantity for this item type
-      final snapshot = await _firestore
+      final snapshot = await (firestore as FirebaseFirestore)
           .collection('inventory')
           .where('name', isEqualTo: itemName)
           .get();
@@ -313,7 +336,7 @@ class ReceptionInventoryService {
       }
 
       // Get threshold for this item type
-      final thresholdDoc = await _firestore
+      final thresholdDoc = await (firestore as FirebaseFirestore)
           .collection('inventory_thresholds')
           .where('itemName', isEqualTo: itemName)
           .get();
@@ -341,7 +364,9 @@ class ReceptionInventoryService {
         'severity': 'medium',
       };
 
-      await _firestore.collection('alerts').add(alertData);
+      await (firestore as FirebaseFirestore)
+          .collection('alerts')
+          .add(alertData);
     } catch (e) {
       // Log error but don't throw
       print('Failed to trigger low inventory alert: $e');
@@ -357,13 +382,14 @@ class ReceptionInventoryService {
       final dateString =
           '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
 
-      final analyticsRef = _firestore
+      final analyticsRef = (firestore as FirebaseFirestore)
           .collection('inventory_analytics')
           .doc('daily_additions')
           .collection(dateString)
           .doc(category);
 
-      await _firestore.runTransaction((transaction) async {
+      await (firestore as FirebaseFirestore)
+          .runTransaction((transaction) async {
         final docSnapshot = await transaction.get(analyticsRef);
 
         if (docSnapshot.exists) {
@@ -412,7 +438,9 @@ class ReceptionInventoryService {
         'severity': 'high',
       };
 
-      await _firestore.collection('alerts').add(alertData);
+      await (firestore as FirebaseFirestore)
+          .collection('alerts')
+          .add(alertData);
     } catch (e) {
       // Log error but don't throw
       print('Failed to trigger temperature alert: $e');

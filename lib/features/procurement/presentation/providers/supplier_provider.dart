@@ -14,7 +14,6 @@ final supplierRepositoryProvider = Provider<SupplierRepository>((ref) {
 
 // Filter class for suppliers
 class SupplierFilter {
-
   const SupplierFilter({
     this.searchQuery,
     this.supplierType,
@@ -172,7 +171,7 @@ final supplierProvider =
   final repository = ref.read(supplierRepositoryProvider);
   final supplierDoc = await repository.getSupplier(supplierId);
   return Supplier.fromJson(supplierDoc.data() as Map<String, dynamic>);
-});
+}, dependencies: [supplierRepositoryProvider]);
 
 // Quality logs for a specific supplier
 final supplierQualityLogsProvider =

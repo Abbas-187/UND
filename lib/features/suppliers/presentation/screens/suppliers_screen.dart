@@ -131,7 +131,7 @@ class SuppliersScreen extends ConsumerWidget {
           Navigator.pushNamed(
             context,
             AppRoutes.supplierDetails,
-            arguments: SupplierDetailsArgs(supplierId: supplier.id),
+            arguments: {'supplierId': supplier.id},
           );
         },
         child: Padding(

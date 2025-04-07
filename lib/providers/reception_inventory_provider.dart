@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/firebase/firebase_mock.dart';
+import '../core/firebase/firebase_module.dart';
 import '../features/inventory/presentation/providers/inventory_provider.dart';
 import '../features/milk_reception/domain/models/milk_reception_model.dart';
 import '../features/milk_reception/domain/repositories/milk_reception_repository.dart';
@@ -11,10 +13,13 @@ final receptionInventoryServiceProvider =
     Provider<ReceptionInventoryService>((ref) {
   final receptionRepository = ref.watch(milkReceptionRepositoryProvider);
   final inventoryRepository = ref.watch(inventoryRepositoryProvider);
+  final firestoreInstance =
+      useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance;
 
   return ReceptionInventoryService(
     receptionRepository: receptionRepository,
     inventoryRepository: inventoryRepository,
+    firestore: firestoreInstance,
   );
 });
 

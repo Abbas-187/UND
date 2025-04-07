@@ -1,20 +1,139 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../../../core/routes/app_router.dart';
 import '../../../production/domain/models/production_execution_model.dart';
 import '../widgets/production_execution_card.dart';
+
+// Mock data for development purposes
+List<ProductionExecutionModel> _mockExecutions = [
+  ProductionExecutionModel(
+    id: '001',
+    batchNumber: 'B2023-0123',
+    productionOrderId: 'PO-2023-001',
+    scheduledDate: DateTime.now(),
+    productId: 'P001',
+    productName: 'Whole Milk (1L)',
+    targetQuantity: 1500,
+    unitOfMeasure: 'Liters',
+    status: ProductionExecutionStatus.inProgress,
+    startTime: DateTime.now().subtract(const Duration(hours: 2)),
+    endTime: null,
+    productionLineId: 'PL-001',
+    productionLineName: 'Milk Processing Line 1',
+    assignedPersonnel: const [],
+    materials: const [],
+    expectedYield: 1450,
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
+    createdBy: 'admin',
+    updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
+    updatedBy: 'operator',
+  ),
+  ProductionExecutionModel(
+    id: '002',
+    batchNumber: 'B2023-0124',
+    productionOrderId: 'PO-2023-002',
+    scheduledDate: DateTime.now().add(const Duration(days: 1)),
+    productId: 'P002',
+    productName: 'Low-Fat Milk (1L)',
+    targetQuantity: 1200,
+    unitOfMeasure: 'Liters',
+    status: ProductionExecutionStatus.planned,
+    startTime: null,
+    endTime: null,
+    productionLineId: 'PL-001',
+    productionLineName: 'Milk Processing Line 1',
+    assignedPersonnel: const [],
+    materials: const [],
+    expectedYield: 1150,
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
+    createdBy: 'admin',
+    updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+    updatedBy: 'admin',
+  ),
+  ProductionExecutionModel(
+    id: '003',
+    batchNumber: 'B2023-0122',
+    productionOrderId: 'PO-2023-003',
+    scheduledDate: DateTime.now().subtract(const Duration(days: 1)),
+    productId: 'P003',
+    productName: 'Strawberry Yogurt (500g)',
+    targetQuantity: 800,
+    unitOfMeasure: 'Units',
+    status: ProductionExecutionStatus.completed,
+    startTime: DateTime.now().subtract(const Duration(days: 1, hours: 8)),
+    endTime: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
+    productionLineId: 'PL-002',
+    productionLineName: 'Yogurt Production Line',
+    assignedPersonnel: const [],
+    materials: const [],
+    expectedYield: 790,
+    actualYield: 785,
+    qualityRating: QualityRating.good,
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
+    createdBy: 'admin',
+    updatedAt: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
+    updatedBy: 'operator',
+  ),
+  ProductionExecutionModel(
+    id: '004',
+    batchNumber: 'B2023-0125',
+    productionOrderId: 'PO-2023-004',
+    scheduledDate: DateTime.now().add(const Duration(days: 2)),
+    productId: 'P004',
+    productName: 'Cheese Curd (250g)',
+    targetQuantity: 500,
+    unitOfMeasure: 'Units',
+    status: ProductionExecutionStatus.planned,
+    startTime: null,
+    endTime: null,
+    productionLineId: 'PL-003',
+    productionLineName: 'Cheese Production Line',
+    assignedPersonnel: const [],
+    materials: const [],
+    expectedYield: 480,
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
+    createdBy: 'admin',
+    updatedAt: DateTime.now().subtract(const Duration(days: 1)),
+    updatedBy: 'admin',
+  ),
+  ProductionExecutionModel(
+    id: '005',
+    batchNumber: 'B2023-0126',
+    productionOrderId: 'PO-2023-005',
+    scheduledDate: DateTime.now().subtract(const Duration(days: 3)),
+    productId: 'P005',
+    productName: 'Butter (200g)',
+    targetQuantity: 1000,
+    unitOfMeasure: 'Units',
+    status: ProductionExecutionStatus.completed,
+    startTime: DateTime.now().subtract(const Duration(days: 3, hours: 10)),
+    endTime: DateTime.now().subtract(const Duration(days: 3, hours: 4)),
+    productionLineId: 'PL-004',
+    productionLineName: 'Butter Production Line',
+    assignedPersonnel: const [],
+    materials: const [],
+    expectedYield: 980,
+    actualYield: 975,
+    qualityRating: QualityRating.excellent,
+    createdAt: DateTime.now().subtract(const Duration(days: 4)),
+    createdBy: 'admin',
+    updatedAt: DateTime.now().subtract(const Duration(days: 3, hours: 4)),
+    updatedBy: 'operator',
+  ),
+];
 
 // Temporary provider until Riverpod code generation is run
 final tempProductionExecutionsProvider =
     StreamProvider.autoDispose<List<ProductionExecutionModel>>((ref) {
   // This is a placeholder and should be replaced with the actual generated provider
-  return Stream.value([]);
+  return Stream.value(_mockExecutions);
 });
 
 /// Screen that displays a list of production executions
 class ProductionExecutionsScreen extends ConsumerStatefulWidget {
-
   const ProductionExecutionsScreen({super.key});
+
   /// Route name for navigation
   static const routeName = '/production-executions';
 
@@ -181,7 +300,8 @@ class _ProductionExecutionsScreenState
             icon: const Icon(Icons.add),
             onPressed: () {
               // Navigate to create execution screen
-              // Navigator.of(context).pushNamed('/create-production-execution');
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.createProductionExecution);
             },
             tooltip: 'Create new production execution',
           ),
@@ -331,7 +451,7 @@ class _ProductionExecutionsScreenState
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to create new execution screen
-          // In a real app, this would navigate to a form
+          Navigator.of(context).pushNamed(AppRoutes.createProductionExecution);
         },
         child: const Icon(Icons.add),
       ),
@@ -415,10 +535,10 @@ class _ProductionExecutionsScreenState
       execution: execution,
       onTap: () {
         // Navigate to detail screen
-        // Navigator.of(context).pushNamed(
-        //   '/production-execution-details',
-        //   arguments: execution.id,
-        // );
+        Navigator.of(context).pushNamed(
+          AppRoutes.productionExecutionDetail,
+          arguments: {'executionId': execution.id},
+        );
       },
       // Pass callbacks for actions
       onStart: (id) {

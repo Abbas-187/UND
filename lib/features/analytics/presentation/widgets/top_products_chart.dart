@@ -1,67 +1,105 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import '../../../analytics/data/mock_analytics_data.dart';
 
 class TopProductsChart extends StatelessWidget {
-  const TopProductsChart({super.key});
+  TopProductsChart({super.key});
+
+  final MockAnalyticsData _mockData = MockAnalyticsData();
 
   @override
   Widget build(BuildContext context) {
-    // Sample data - in a real app, this would come from a provider
-    final List<ProductSalesData> chartData = [
-      ProductSalesData('Laptop X1', 35800),
-      ProductSalesData('Smart TV 42"', 29500),
-      ProductSalesData('Smartphone Z10', 27300),
-      ProductSalesData('Bluetooth Speaker', 18600),
-      ProductSalesData('Wireless Earbuds', 15200),
-    ];
+    final topProducts = _mockData.getTopProductsData();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
           'Top Products by Sales',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Expanded(
-          child: SfCartesianChart(
-            primaryXAxis: CategoryAxis(
-              majorGridLines: const MajorGridLines(width: 0),
-              labelStyle: const TextStyle(fontSize: 12),
-            ),
-            primaryYAxis: NumericAxis(
-              numberFormat: NumberFormat.compact(),
-              majorGridLines:
-                  const MajorGridLines(width: 0.5, color: Colors.grey),
-              labelStyle: const TextStyle(fontSize: 12),
-            ),
-            tooltipBehavior: TooltipBehavior(enable: true),
-            series: <CartesianSeries>[
-              BarSeries<ProductSalesData, String>(
-                dataSource: chartData,
-                xValueMapper: (ProductSalesData data, _) => data.product,
-                yValueMapper: (ProductSalesData data, _) => data.sales,
-                name: 'Sales',
-                color: Colors.blue,
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
-                dataLabelSettings: const DataLabelSettings(
-                  isVisible: true,
-                  labelAlignment: ChartDataLabelAlignment.outer,
-                  textStyle: TextStyle(fontSize: 10),
+          child: BarChart(
+            BarChartData(
+              alignment: BarChartAlignment.spaceAround,
+              maxY: 40000,
+              barGroups: List.generate(
+                topProducts.length,
+                (index) => BarChartGroupData(
+                  x: index,
+                  barRods: [
+                    BarChartRodData(
+                      toY: topProducts[index]['sales'].toDouble(),
+                      color: topProducts[index]['color'],
+                      width: 20,
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(4),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+              titlesData: FlTitlesData(
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 40,
+                    getTitlesWidget: (value, meta) {
+                      final formattedValue = (value / 1000).toStringAsFixed(0);
+                      return Text(
+                        '$formattedValue K',
+                        style: const TextStyle(fontSize: 10),
+                      );
+                    },
+                    interval: 10000,
+                  ),
+                ),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (value, meta) {
+                      if (value < 0 || value >= topProducts.length) {
+                        return const SizedBox.shrink();
+                      }
+
+                      // Get product name and truncate if needed
+                      final name =
+                          topProducts[value.toInt()]['product'] as String;
+                      final truncatedName = name.length > 12
+                          ? name.substring(0, 10) + '...'
+                          : name;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          truncatedName,
+                          style: const TextStyle(fontSize: 10),
+                        ),
+                      );
+                    },
+                    reservedSize: 40,
+                  ),
+                ),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+              ),
+              gridData: FlGridData(
+                show: true,
+                horizontalInterval: 10000,
+                drawVerticalLine: false,
+              ),
+              borderData: FlBorderData(
+                show: true,
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+            ),
           ),
         ),
       ],
     );
   }
-}
-
-class ProductSalesData {
-
-  ProductSalesData(this.product, this.sales);
-  final String product;
-  final double sales;
 }

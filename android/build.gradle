@@ -3,6 +3,13 @@ allprojects {
         google()
         mavenCentral()
     }
+    
+    // Force all dependencies to use the same Java toolchain
+    tasks.withType(JavaCompile).configureEach {
+        // Instead of using release option, set source and target compatibility
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 }
 
 rootProject.buildDir = "../build"

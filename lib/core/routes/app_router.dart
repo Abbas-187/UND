@@ -5,6 +5,10 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/unauthorized_screen.dart';
 import '../../features/auth/presentation/screens/user_management_screen.dart';
 import '../../features/auth/presentation/screens/user_profile_screen.dart';
+import '../../features/factory/equipment_maintenance/data/models/equipment_model.dart';
+import '../../features/factory/equipment_maintenance/presentation/screens/create_maintenance_record_screen.dart';
+import '../../features/factory/equipment_maintenance/presentation/screens/equipment_detail_screen.dart';
+import '../../features/factory/equipment_maintenance/presentation/screens/equipment_maintenance_screen.dart';
 import '../../features/factory/production/presentation/screens/create_production_execution_screen.dart';
 import '../../features/factory/production/presentation/screens/production_execution_detail_screen.dart';
 import '../../features/factory/production/presentation/screens/production_executions_screen.dart';
@@ -19,11 +23,17 @@ import '../../features/inventory/presentation/screens/inventory_item_details_scr
 import '../../features/inventory/presentation/screens/inventory_movement_list_page.dart';
 import '../../features/inventory/presentation/screens/movement_details_page.dart';
 import '../../features/milk_reception/presentation/screens/milk_reception_details_screen.dart';
+import '../../features/milk_reception/presentation/screens/milk_reception_screen.dart';
 import '../../features/notifications/presentation/screens/notification_screen.dart';
+import '../../features/procurement/presentation/screens/purchase_order/purchase_order_create_screen.dart';
+import '../../features/procurement/presentation/screens/purchase_order/purchase_order_detail_screen.dart';
+import '../../features/procurement/presentation/screens/purchase_order/purchase_order_list_screen.dart';
+import '../../features/procurement/presentation/screens/reports/procurement_dashboard_screen.dart';
 import '../../features/suppliers/domain/entities/supplier.dart';
 import '../../features/suppliers/presentation/screens/supplier_details_screen.dart';
 import '../../features/suppliers/presentation/screens/supplier_edit_screen.dart';
 import '../../features/suppliers/presentation/screens/suppliers_screen.dart';
+import '../layout/main_layout.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -50,22 +60,49 @@ class AppRoutes {
   static const String forecastingCreate = '/forecasting/create';
   static const String forecastingDetail = '/forecasting/detail';
   static const String forecastingDashboard = '/forecasting/dashboard';
-  static const String milkReceptionDetails = '/reception/details';
+  static const String milkReception = '/milk/reception';
+  static const String milkReceptionDetails = '/milk/reception/details';
+  static const String milkQualityTests = '/milk/quality/tests';
+  static const String milkQualityTestDetails = '/milk/quality/tests/details';
   static const String notifications = '/notifications';
-
-  // Production execution routes
   static const String productionExecutions = '/factory/production/executions';
   static const String productionExecutionDetail =
       '/factory/production/executions/detail';
   static const String createProductionExecution =
       '/factory/production/executions/create';
+  static const String equipmentMaintenance = '/factory/equipment';
+  static const String equipmentMaintenanceDetail = '/factory/equipment/details';
+  static const String createMaintenanceRecord =
+      '/factory/equipment/maintenance/create';
+  static const String maintenanceRecordDetail =
+      '/factory/equipment/maintenance/details';
+  static const String procurement = '/procurement';
+  static const String procurementDashboard = '/procurement/dashboard';
+  static const String purchaseOrders = '/procurement/purchase-orders';
+  static const String purchaseOrderDetail =
+      '/procurement/purchase-orders/details';
+  static const String createPurchaseOrder =
+      '/procurement/purchase-orders/create';
+  static const String suppliers_procurement = '/procurement/suppliers';
 }
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments as Map<String, dynamic>? ?? {};
+    final routeName = settings.name ?? '/';
 
-    switch (settings.name) {
+    // Determine if this is a main navigation screen that should have the navigation rail
+    final bool isMainScreen = _isMainNavigationScreen(routeName);
+
+    // Create the appropriate screen based on the route
+    Widget screen;
+
+    switch (routeName) {
+      case AppRoutes.home:
+      case '/': // Handle both home and root route
+        screen = const SuppliersScreen();
+        break;
+
       case AppRoutes.login:
         return MaterialPageRoute(
           builder: (_) => const LoginScreen(),
@@ -91,30 +128,33 @@ class AppRouter {
         );
 
       case AppRoutes.suppliers:
-        return MaterialPageRoute(
-          builder: (_) => const SuppliersScreen(),
-          settings: settings,
-        );
+        screen = const SuppliersScreen();
+        break;
 
       case AppRoutes.supplierDetails:
-        final supplierId = args['supplierId'] as String;
+        final supplierId = args['supplierId'] as String? ??
+            (settings.arguments is SupplierDetailsArgs
+                ? (settings.arguments as SupplierDetailsArgs).supplierId
+                : '');
+
         return MaterialPageRoute(
           builder: (_) => SupplierDetailsScreen(supplierId: supplierId),
           settings: settings,
         );
 
       case AppRoutes.supplierEdit:
-        final args = settings.arguments as SupplierEditArgs?;
+        final args = settings.arguments is SupplierEditArgs
+            ? settings.arguments as SupplierEditArgs
+            : SupplierEditArgs();
+
         return MaterialPageRoute(
-          builder: (_) => SupplierEditScreen(supplier: args?.supplier),
+          builder: (_) => SupplierEditScreen(supplier: args.supplier),
           settings: settings,
         );
 
       case AppRoutes.forecasting:
-        return MaterialPageRoute(
-          builder: (_) => const ForecastingListScreen(),
-          settings: settings,
-        );
+        screen = const ForecastingListScreen();
+        break;
 
       case AppRoutes.forecastingCreate:
         return MaterialPageRoute(
@@ -130,16 +170,12 @@ class AppRouter {
         );
 
       case AppRoutes.forecastingDashboard:
-        return MaterialPageRoute(
-          builder: (_) => const ForecastingDashboardScreen(),
-          settings: settings,
-        );
+        screen = const ForecastingDashboardScreen();
+        break;
 
       case AppRoutes.analyticsDashboard:
-        return MaterialPageRoute(
-          builder: (_) => const AnalyticsDashboardScreen(),
-          settings: settings,
-        );
+        screen = const AnalyticsDashboardScreen();
+        break;
 
       case AppRoutes.inventoryAlerts:
         return MaterialPageRoute(
@@ -154,21 +190,14 @@ class AppRouter {
         );
 
       case AppRoutes.inventory:
-        return MaterialPageRoute(
-          builder: (_) => const InventoryDashboardPage(),
-          settings: settings,
-        );
+      case AppRoutes.inventoryDashboard:
+        screen = const InventoryDashboardPage();
+        break;
 
       case AppRoutes.inventoryDetails:
         final inventoryId = args['inventoryId'] as String;
         return MaterialPageRoute(
           builder: (_) => InventoryItemDetailsScreen(itemId: inventoryId),
-          settings: settings,
-        );
-
-      case AppRoutes.inventoryDashboard:
-        return MaterialPageRoute(
-          builder: (_) => const InventoryDashboardPage(),
           settings: settings,
         );
 
@@ -191,6 +220,10 @@ class AppRouter {
           settings: settings,
         );
 
+      case AppRoutes.milkReception:
+        screen = const MilkReceptionScreen();
+        break;
+
       case AppRoutes.milkReceptionDetails:
         final receptionId = args['receptionId'] as String;
         return MaterialPageRoute(
@@ -199,8 +232,46 @@ class AppRouter {
         );
 
       case AppRoutes.notifications:
+        screen = const NotificationScreen();
+        break;
+
+      case AppRoutes.equipmentMaintenance:
+        screen = const EquipmentMaintenanceScreen();
+        break;
+
+      case AppRoutes.equipmentMaintenanceDetail:
+        final equipmentId = args['equipmentId'] as String;
         return MaterialPageRoute(
-          builder: (_) => const NotificationScreen(),
+          builder: (_) => EquipmentDetailScreen(equipmentId: equipmentId),
+          settings: settings,
+        );
+
+      case AppRoutes.createMaintenanceRecord:
+        final equipment = args['equipment'];
+        return MaterialPageRoute(
+          builder: (_) => CreateMaintenanceRecordScreen(equipment: equipment),
+          settings: settings,
+        );
+
+      case AppRoutes.procurement:
+      case AppRoutes.procurementDashboard:
+        screen = const ProcurementDashboardScreen();
+        break;
+
+      case AppRoutes.purchaseOrders:
+        screen = const PurchaseOrderListScreen();
+        break;
+
+      case AppRoutes.purchaseOrderDetail:
+        final orderId = args['orderId'] as String;
+        return MaterialPageRoute(
+          builder: (_) => PurchaseOrderDetailScreen(orderId: orderId),
+          settings: settings,
+        );
+
+      case AppRoutes.createPurchaseOrder:
+        return MaterialPageRoute(
+          builder: (_) => const PurchaseOrderCreateScreen(),
           settings: settings,
         );
 
@@ -225,41 +296,72 @@ class AppRouter {
           settings: settings,
         );
 
-      // Add routes for other features here
-
       default:
-        return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(
-              child: Text('No route defined for ${settings.name}'),
-            ),
+        screen = Scaffold(
+          body: Center(
+            child: Text('No route defined for ${settings.name}'),
           ),
         );
     }
+
+    // Wrap main navigation screens with the MainLayout
+    if (isMainScreen) {
+      return MaterialPageRoute(
+        builder: (_) => MainLayout(
+          child: screen,
+          currentRoute: routeName,
+        ),
+        settings: settings,
+      );
+    } else {
+      return MaterialPageRoute(
+        builder: (_) => screen,
+        settings: settings,
+      );
+    }
+  }
+
+  // Helper to determine if a route is a main navigation screen
+  static bool _isMainNavigationScreen(String routeName) {
+    final mainScreenRoutes = [
+      AppRoutes.home,
+      '/',
+      AppRoutes.suppliers,
+      AppRoutes.inventory,
+      AppRoutes.inventoryDashboard,
+      AppRoutes.notifications,
+      AppRoutes.analyticsDashboard,
+      AppRoutes.forecasting,
+      AppRoutes.forecastingDashboard,
+      AppRoutes.productionExecutions,
+      AppRoutes.equipmentMaintenance,
+      AppRoutes.milkReception,
+      AppRoutes.procurement,
+      AppRoutes.procurementDashboard,
+      AppRoutes.purchaseOrders,
+    ];
+
+    return mainScreenRoutes.contains(routeName);
   }
 }
 
 // Route arguments
 class SupplierDetailsArgs {
-
   SupplierDetailsArgs({required this.supplierId});
   final String supplierId;
 }
 
 class SupplierEditArgs {
-
   SupplierEditArgs({this.supplier});
   final Supplier? supplier;
 }
 
 class ForecastingDetailArgs {
-
   ForecastingDetailArgs({required this.forecastId});
   final String forecastId;
 }
 
 class ProductionExecutionDetailArgs {
-
   ProductionExecutionDetailArgs({required this.executionId});
   final String executionId;
 }
