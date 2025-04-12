@@ -1,5 +1,4 @@
 class InventoryItem {
-
   const InventoryItem({
     required this.id,
     required this.name,
@@ -110,4 +109,6 @@ class InventoryItem {
       'lowStockThreshold': lowStockThreshold,
     };
   }
+
+  InventoryItem toDomain() => this;
 }
