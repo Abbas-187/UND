@@ -1,160 +1,117 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'core/firebase/firebase_interface.dart';
-import 'core/firebase/firebase_mock.dart';
-import 'core/firebase/firebase_module.dart';
-import 'core/firebase/mock_app_initializer.dart';
-import 'core/firebase/mock_firebase_helpers.dart';
 import 'core/routes/app_router.dart';
-import 'features/inventory/data/repositories/inventory_repository_impl.dart';
-import 'features/milk_reception/domain/repositories/milk_reception_repository.dart';
-import 'features/milk_reception/domain/services/milk_reception_service.dart';
-import 'features/suppliers/data/repositories/supplier_repository_impl.dart';
-import 'features/suppliers/domain/repositories/supplier_repository.dart';
-import 'features/suppliers/presentation/providers/supplier_provider.dart';
-import 'services/reception_inventory_service.dart';
-import 'services/reception_notification_service.dart';
+import 'features/auth/data/datasources/mock_auth_datasource.dart';
+import 'features/auth/data/repositories/auth_repository_impl.dart';
+import 'features/auth/domain/repositories/auth_repository.dart' as domain_auth;
+import 'features/factory/production/data/repositories/production_execution_repository_impl.dart';
+import 'features/factory/production/presentation/providers/production_execution_providers.dart'
+    as production;
+import 'features/inventory/data/providers/dairy_inventory_provider.dart'
+    as dairy;
+import 'features/inventory/data/providers/mock_inventory_provider.dart';
+import 'features/inventory/data/repositories/dairy_inventory_repository.dart'
+    as dairy_repo;
+import 'features/inventory/data/repositories/inventory_movement_repository.dart';
+import 'features/inventory/data/repositories/inventory_movement_repository_impl.dart';
+// Hide the original inventory repository provider to avoid conflicts
+import 'features/inventory/data/repositories/inventory_repository.dart'
+    hide inventoryRepositoryProvider;
+import 'features/inventory/data/repositories/mock_inventory_repository.dart';
+import 'features/settings/presentation/providers/settings_provider.dart';
+import 'l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
-import 'utils/service_locator.dart';
+
+// Create mock inventory repository provider
+final mockInventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
+  final mockProvider = ref.watch(mockInventoryProvider);
+  // Cast needed since MockInventoryRepository implements domain InventoryRepository
+  return MockInventoryRepository(mockProvider: mockProvider)
+      as InventoryRepository;
+});
+
+// Create inventory movement repository provider
+final inventoryMovementRepositoryImplProvider =
+    Provider<InventoryMovementRepository>((ref) {
+  return InventoryMovementRepositoryImpl(
+    firestore: FirebaseFirestore.instance,
+    logger: Logger(),
+  );
+});
 
 void main() async {
+  // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize either real Firebase or mock Firebase
-  if (useMockFirebase) {
-    await MockAppInitializer.initializeMockFirebase();
-  } else {
-    await Firebase.initializeApp();
-  }
-
-  // Create a ProviderContainer for initialization
-  final container = ProviderContainer();
-
-  // Initialize service locator
-  await _initializeServiceLocator(container);
+  // Initialize SharedPreferences
+  final sharedPreferences = await SharedPreferences.getInstance();
 
   runApp(
     ProviderScope(
-      parent: container,
       overrides: [
-        supplierRepositoryProvider.overrideWithValue(
-          SupplierRepositoryImpl(
-              useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance),
-        ),
+        // Override the SharedPreferences provider
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+
+        // Override the SharedPreferences provider for dairy inventory
+        dairy.sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+
+        // The dairy inventory repository provider is already defined in dairy_inventory_repository.dart
+        // and it automatically exposes the inventoryRepositoryProvider
+
+        // Override the inventory movement repository provider
+        inventoryMovementRepositoryProvider
+            .overrideWithProvider(inventoryMovementRepositoryImplProvider),
+
+        // Override the production execution repository provider
+        production.productionExecutionRepositoryProvider
+            .overrideWith((ref) => ProductionExecutionRepositoryImpl(
+                  firestore: FirebaseFirestore.instance,
+                  logger: Logger(),
+                )),
+
+        // Override the auth repository provider
+        domain_auth.authRepositoryProvider.overrideWith((ref) =>
+            AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider))),
       ],
-      child: MockAppInitializer.addMockIndicator(const MyApp()),
+      child: const MyApp(),
     ),
   );
 }
 
-/// Initialize the service locator with all necessary services
-Future<void> _initializeServiceLocator(ProviderContainer container) async {
-  // Get the appropriate Firebase instances
-  final firestoreInstance =
-      useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance;
-
-  final messagingInstance =
-      useMockFirebase ? MockMessaging() : FirebaseMessaging.instance;
-
-  final localNotifications = FlutterLocalNotificationsPlugin();
-
-  // Create repositories
-  final milkReceptionRepository = FirestoreMilkReceptionRepository(
-    firestore: firestoreInstance,
-  );
-
-  final inventoryRepository = InventoryRepositoryImpl(
-    firestore: firestoreInstance,
-  );
-
-  final supplierRepository = SupplierRepositoryImpl(firestoreInstance);
-
-  // Create notification service with conditional initialization
-  final notificationService = ReceptionNotificationService(
-    firestore: firestoreInstance,
-    messaging: messagingInstance,
-    localNotifications: localNotifications,
-  );
-
-  // Initialize notification service (only if not using mock)
-  if (!useMockFirebase) {
-    await notificationService.initialize();
-  }
-
-  // Create the milk reception service with notification integration
-  final milkReceptionService = initializeMilkReceptionService(
-    milkReceptionRepository,
-    inventoryRepository,
-    supplierRepository,
-    notificationService,
-  );
-
-  // Create the integration service
-  final receptionInventoryService = ReceptionInventoryService(
-    receptionRepository: milkReceptionRepository,
-    inventoryRepository: inventoryRepository,
-    firestore: firestoreInstance,
-  );
-
-  // Register services in the locator
-  ServiceLocator.instance
-      .register<ReceptionInventoryService>(receptionInventoryService);
-  ServiceLocator.instance
-      .register<ReceptionNotificationService>(notificationService);
-  ServiceLocator.instance.register<MilkReceptionService>(milkReceptionService);
-}
-
-/// Helper function to initialize MilkReceptionService with proper type handling
-MilkReceptionService initializeMilkReceptionService(
-  MilkReceptionRepository receptionRepository,
-  dynamic inventoryRepository,
-  SupplierRepository supplierRepository,
-  ReceptionNotificationService notificationService,
-) {
-  return MilkReceptionService(
-    receptionRepository: receptionRepository,
-    inventoryRepository: inventoryRepository,
-    supplierRepository: supplierRepository,
-    notificationService: notificationService,
-  );
-}
-
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsProvider);
+    final locale = Locale(settings.language);
+
     return MaterialApp(
-      title: 'UND Manager',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme(const Locale('en')),
-      darkTheme: AppTheme.darkTheme(const Locale('en')),
-      themeMode: ThemeMode.light, // Force light theme for consistent UI
-      supportedLocales: const [
-        Locale('en', ''), // English
-        Locale('ar', ''), // Arabic
-        Locale('hi', ''), // Hindi
+      title: 'UND Dairy Management',
+      theme: AppTheme.lightTheme(locale),
+      darkTheme: AppTheme.darkTheme(locale),
+      themeMode: settings.darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      locale: locale,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
-      // Add localization delegates in a future update when using flutter_localizations
-      localizationsDelegates: const [],
-      locale: const Locale('en', ''), // Set default locale explicitly
-      initialRoute: AppRoutes.home,
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('ar'), // Arabic
+        Locale('ur'), // Urdu
+        Locale('hi'), // Hindi
+      ],
       onGenerateRoute: AppRouter.generateRoute,
-      builder: (context, child) {
-        // Apply text direction based on locale
-        return Directionality(
-          textDirection:
-              Localizations.maybeLocaleOf(context)?.languageCode == 'ar'
-                  ? TextDirection.rtl
-                  : TextDirection.ltr,
-          child: child ?? const SizedBox(),
-        );
-      },
+      initialRoute: AppRoutes.home,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
