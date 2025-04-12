@@ -9,7 +9,6 @@ enum CertificationStatus { pending, approved, expired, revoked, notApplicable }
 
 /// Immutable class for dairy inventory items
 class InventoryItemModel {
-
   InventoryItemModel({
     required this.id,
     required this.name,
@@ -36,6 +35,10 @@ class InventoryItemModel {
     this.storageCondition,
     this.allergenInfo,
     this.overallQualityStatus,
+    this.fatContent,
+    this.pasteurized = true,
+    this.sourceInfo,
+    this.processingDate,
   }) : searchTerms = searchTerms ?? _generateSearchTerms(name, category);
 
   // Convert from Firestore document
@@ -125,6 +128,14 @@ class InventoryItemModel {
           ? Map<String, String>.from(data['allergenInfo'] as Map)
           : null,
       overallQualityStatus: qualityStatus,
+      fatContent: data['fatContent'] != null
+          ? (data['fatContent'] as num).toDouble()
+          : null,
+      pasteurized: data['pasteurized'] as bool? ?? true,
+      sourceInfo: data['sourceInfo'] as Map<String, dynamic>?,
+      processingDate: data['processingDate'] != null
+          ? (data['processingDate'] as Timestamp).toDate()
+          : null,
     );
   }
 
@@ -145,6 +156,24 @@ class InventoryItemModel {
       additionalAttributes: item.additionalAttributes,
       cost: item.cost,
       lowStockThreshold: item.lowStockThreshold,
+      currentTemperature:
+          item.additionalAttributes?['currentTemperature'] as double?,
+      storageCondition:
+          item.additionalAttributes?['storageCondition'] as String?,
+      overallQualityStatus: item
+                  .additionalAttributes?['overallQualityStatus'] !=
+              null
+          ? QualityStatus.values.firstWhere(
+              (e) =>
+                  e.toString() ==
+                  'QualityStatus.${item.additionalAttributes!['overallQualityStatus']}',
+              orElse: () => QualityStatus.acceptable)
+          : null,
+      fatContent: item.additionalAttributes?['fatContent'] as double?,
+      pasteurized: item.additionalAttributes?['pasteurized'] as bool? ?? true,
+      sourceInfo:
+          item.additionalAttributes?['sourceInfo'] as Map<String, dynamic>?,
+      processingDate: item.additionalAttributes?['processingDate'] as DateTime?,
     );
   }
   final String id;
@@ -174,9 +203,29 @@ class InventoryItemModel {
   final String? storageCondition; // e.g., "refrigerated", "frozen", "ambient"
   final Map<String, String>? allergenInfo;
   final QualityStatus? overallQualityStatus;
+  final double? fatContent;
+  final bool pasteurized;
+  final Map<String, dynamic>? sourceInfo;
+  final DateTime? processingDate;
 
   // Convert to domain entity
   InventoryItem toDomain() {
+    final Map<String, dynamic> attributes = additionalAttributes ?? {};
+
+    // Add dairy-specific attributes
+    if (currentTemperature != null)
+      attributes['currentTemperature'] = currentTemperature;
+    if (storageCondition != null)
+      attributes['storageCondition'] = storageCondition;
+    if (overallQualityStatus != null) {
+      attributes['overallQualityStatus'] =
+          overallQualityStatus.toString().split('.').last;
+    }
+    if (fatContent != null) attributes['fatContent'] = fatContent;
+    attributes['pasteurized'] = pasteurized;
+    if (sourceInfo != null) attributes['sourceInfo'] = sourceInfo;
+    if (processingDate != null) attributes['processingDate'] = processingDate;
+
     return InventoryItem(
       id: id,
       name: name,
@@ -189,7 +238,7 @@ class InventoryItemModel {
       lastUpdated: lastUpdated,
       batchNumber: batchNumber,
       expiryDate: expiryDate,
-      additionalAttributes: additionalAttributes,
+      additionalAttributes: attributes,
       cost: cost,
       lowStockThreshold: lowStockThreshold,
     );
@@ -253,6 +302,11 @@ class InventoryItemModel {
       'storageCondition': storageCondition,
       'allergenInfo': allergenInfo,
       'overallQualityStatus': qualityStatusString,
+      'fatContent': fatContent,
+      'pasteurized': pasteurized,
+      'sourceInfo': sourceInfo,
+      'processingDate':
+          processingDate != null ? Timestamp.fromDate(processingDate!) : null,
     };
   }
 
@@ -282,6 +336,10 @@ class InventoryItemModel {
     String? storageCondition,
     Map<String, String>? allergenInfo,
     QualityStatus? overallQualityStatus,
+    double? fatContent,
+    bool? pasteurized,
+    Map<String, dynamic>? sourceInfo,
+    DateTime? processingDate,
   }) {
     return InventoryItemModel(
       id: id ?? this.id,
@@ -311,6 +369,10 @@ class InventoryItemModel {
       storageCondition: storageCondition ?? this.storageCondition,
       allergenInfo: allergenInfo ?? this.allergenInfo,
       overallQualityStatus: overallQualityStatus ?? this.overallQualityStatus,
+      fatContent: fatContent ?? this.fatContent,
+      pasteurized: pasteurized ?? this.pasteurized,
+      sourceInfo: sourceInfo ?? this.sourceInfo,
+      processingDate: processingDate ?? this.processingDate,
     );
   }
 
@@ -337,11 +399,16 @@ class InventoryItemModel {
 
     return terms.toList();
   }
+
+  /// Whether the item is in low stock condition
+  bool get isLowStock => quantity <= lowStockThreshold;
+
+  /// Whether the item needs to be reordered
+  bool get needsReorder => quantity <= reorderPoint;
 }
 
 /// Temperature reading for tracking inventory item storage conditions
 class TemperatureReading {
-
   const TemperatureReading({
     required this.timestamp,
     required this.temperature,
@@ -406,7 +473,6 @@ class TemperatureReading {
 
 /// Quality parameter measurement for dairy products
 class QualityParameterMeasurement {
-
   const QualityParameterMeasurement({
     required this.parameterName,
     required this.value,
@@ -489,7 +555,6 @@ class QualityParameterMeasurement {
 
 /// Detailed batch information for dairy products
 class BatchInformation {
-
   const BatchInformation({
     required this.batchId,
     required this.productionDate,
@@ -577,7 +642,6 @@ class BatchInformation {
 
 /// Compliance certification for dairy products
 class ComplianceCertification {
-
   const ComplianceCertification({
     required this.certificationName,
     required this.issuingAuthority,
