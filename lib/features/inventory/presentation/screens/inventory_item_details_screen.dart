@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
@@ -8,7 +9,6 @@ import 'inventory_movement_history_screen.dart';
 import 'inventory_transfer_screen.dart';
 
 class InventoryItemDetailsScreen extends ConsumerWidget {
-
   const InventoryItemDetailsScreen({
     super.key,
     required this.itemId,
@@ -19,6 +19,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final repository = ref.watch(inventoryRepositoryProvider);
     final itemStream = repository.watchItem(itemId);
+    final l10n = AppLocalizations.of(context);
 
     return StreamBuilder<InventoryItem>(
       stream: itemStream,
@@ -32,7 +33,8 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
         if (snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(title: const Text('Item Details')),
-            body: Center(child: Text('Error: ${snapshot.error}')),
+            body: Center(
+                child: Text(l10n.errorWithMessage(snapshot.error.toString()))),
           );
         }
 
@@ -47,7 +49,8 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
         final isLowStock = item.quantity <= item.minimumQuantity;
         final needsReorder = item.quantity <= item.reorderPoint;
 
-        final daysUntilExpiry = item.expiryDate?.difference(DateTime.now()).inDays;
+        final daysUntilExpiry =
+            item.expiryDate?.difference(DateTime.now()).inDays;
 
         final isExpiringSoon = daysUntilExpiry != null && daysUntilExpiry <= 30;
 
@@ -72,17 +75,16 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                     final confirm = await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Confirm Deletion'),
-                        content: Text(
-                            'Are you sure you want to delete ${item.name}?'),
+                        title: Text(l10n.confirmDeletion),
+                        content: Text(l10n.confirmDeleteItem(item.name)),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context, false),
-                            child: const Text('CANCEL'),
+                            child: Text(l10n.cancelButton),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(context, true),
-                            child: const Text('DELETE'),
+                            child: Text(l10n.deleteButton),
                           ),
                         ],
                       ),
@@ -97,9 +99,9 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'delete',
-                    child: Text('Delete Item'),
+                    child: Text(l10n.deleteItem),
                   ),
                 ],
               ),
@@ -496,6 +498,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
   ) async {
     final quantityController = TextEditingController();
     final reasonController = TextEditingController();
+    final l10n = AppLocalizations.of(context);
 
     return showDialog(
       context: context,
@@ -545,11 +548,10 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                     Navigator.pop(context);
                   }
                 } catch (e) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
-                  }
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(l10n.errorWithMessage(e.toString()))),
+                  );
                 }
               }
             },
