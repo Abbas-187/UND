@@ -5,7 +5,8 @@ import '../../../inventory/domain/entities/inventory_item.dart';
 import '../../../inventory/domain/entities/stock_level.dart';
 import '../../../inventory/domain/providers/forecasting_provider.dart';
 import '../../../inventory/domain/providers/inventory_provider.dart';
-import '../../../inventory/domain/providers/inventory_repository_provider.dart';
+import '../../../inventory/domain/providers/inventory_repository_provider.dart'
+    as domain_repo;
 import '../../../inventory/domain/providers/stock_level_provider.dart';
 import '../../data/models/purchase_order_model.dart';
 import '../providers/purchase_order_provider.dart';
@@ -57,7 +58,8 @@ class ProcurementInventoryIntegration {
     required String supplierName,
     required DateTime deliveryDate,
   }) async {
-    final inventoryRepository = _ref.read(inventoryRepositoryProvider);
+    final inventoryRepository =
+        _ref.read(domain_repo.inventoryRepositoryProvider);
 
     // Create the inventory item
     final inventoryItem = InventoryItem(
