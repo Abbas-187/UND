@@ -1,31 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
 import '../widgets/inventory_analytics_card.dart';
 import '../widgets/inventory_filter_bar.dart';
 import '../widgets/inventory_item_card.dart';
 import '../widgets/low_stock_alerts_banner.dart';
+import 'inventory_analytics_dashboard_screen.dart';
 import 'inventory_edit_screen.dart';
 import 'inventory_item_details_screen.dart';
+import 'inventory_reports_screen.dart';
+import 'inventory_settings_screen.dart';
 
 class InventoryScreen extends ConsumerWidget {
   const InventoryScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final filteredItems = ref.watch(filteredInventoryItemsProvider);
     final filter = ref.watch(inventoryFilterProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inventory Management'),
+        title: Text(l10n.inventoryManagement),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const InventorySettingsScreen(),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.description),
+            tooltip: l10n.inventoryReports,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const InventoryReportsScreen(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.analytics_outlined),
             onPressed: () {
-              // Navigate to analytics screen
-              // This could be implemented in the future
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const InventoryAnalyticsDashboardScreen(),
+                ),
+              );
             },
           ),
           IconButton(
@@ -63,7 +96,7 @@ class InventoryScreen extends ConsumerWidget {
               data: (items) => _buildInventoryList(context, items),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(
-                child: Text('Error: $error'),
+                child: Text(l10n.errorWithMessage(error.toString())),
               ),
             ),
           ),
@@ -73,9 +106,11 @@ class InventoryScreen extends ConsumerWidget {
   }
 
   Widget _buildInventoryList(BuildContext context, List<InventoryItem> items) {
+    final l10n = AppLocalizations.of(context);
+
     if (items.isEmpty) {
-      return const Center(
-        child: Text('No items found'),
+      return Center(
+        child: Text(l10n.noItemsFound),
       );
     }
 
