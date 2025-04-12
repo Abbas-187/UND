@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
 
 class InventoryMovementHistoryScreen extends ConsumerStatefulWidget {
-
   const InventoryMovementHistoryScreen({
     super.key,
     required this.itemId,
@@ -47,7 +47,9 @@ class _InventoryMovementHistoryScreenState
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading data: $e')),
+          SnackBar(
+              content: Text(
+                  AppLocalizations.of(context).errorLoadingData(e.toString()))),
         );
       }
       _movementsFuture = Future.error(e);
@@ -62,11 +64,13 @@ class _InventoryMovementHistoryScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_item != null
-            ? '${_item!.name} - Movement History'
-            : 'Movement History'),
+            ? l10n.itemMovementHistory(_item!.name)
+            : l10n.movementHistory),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -79,15 +83,16 @@ class _InventoryMovementHistoryScreenState
 
                 if (snapshot.hasError) {
                   return Center(
-                    child: Text('Error: ${snapshot.error}'),
+                    child:
+                        Text(l10n.errorWithMessage(snapshot.error.toString())),
                   );
                 }
 
                 final movements = snapshot.data ?? [];
 
                 if (movements.isEmpty) {
-                  return const Center(
-                    child: Text('No movement history available'),
+                  return Center(
+                    child: Text(l10n.noMovementHistoryAvailable),
                   );
                 }
 
@@ -115,6 +120,8 @@ class _InventoryMovementHistoryScreenState
 
   Widget _buildSummaryCard(
       BuildContext context, InventoryItem item, List<dynamic> movements) {
+    final l10n = AppLocalizations.of(context);
+
     // Calculate total incoming and outgoing
     double totalIncoming = 0;
     double totalOutgoing = 0;
@@ -142,25 +149,25 @@ class _InventoryMovementHistoryScreenState
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 4),
-            Text('Category: ${item.category}'),
-            Text('Location: ${item.location}'),
-            Text('Current Stock: ${item.quantity} ${item.unit}'),
+            Text('${l10n.category}: ${item.category}'),
+            Text('${l10n.location}: ${item.location}'),
+            Text('${l10n.currentStock}: ${item.quantity} ${item.unit}'),
             const Divider(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _summaryItem(
-                  'Total In',
+                  l10n.totalIn,
                   '+${totalIncoming.toString()} ${item.unit}',
                   Colors.green,
                 ),
                 _summaryItem(
-                  'Total Out',
+                  l10n.totalOut,
                   '-${totalOutgoing.toString()} ${item.unit}',
                   Colors.red,
                 ),
                 _summaryItem(
-                  'Net Change',
+                  l10n.netChange,
                   '${netChange >= 0 ? '+' : ''}${netChange.toString()} ${item.unit}',
                   netChange >= 0 ? Colors.green : Colors.red,
                 ),
@@ -168,7 +175,7 @@ class _InventoryMovementHistoryScreenState
             ),
             const SizedBox(height: 8),
             Text(
-              '${movements.length} movements recorded',
+              l10n.movementsRecorded(movements.length),
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -200,6 +207,7 @@ class _InventoryMovementHistoryScreenState
   }
 
   Widget _buildMovementCard(BuildContext context, dynamic movement) {
+    final l10n = AppLocalizations.of(context);
     final quantity = movement['quantity'] as double;
     final isAddition = quantity > 0;
     final timestamp = movement['timestamp'] as DateTime;
@@ -223,7 +231,7 @@ class _InventoryMovementHistoryScreenState
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      isAddition ? 'Stock Added' : 'Stock Removed',
+                      isAddition ? l10n.stockAdded : l10n.stockRemoved,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -240,10 +248,10 @@ class _InventoryMovementHistoryScreenState
               ],
             ),
             const Divider(),
-            Text('Reason: $reason'),
+            Text(l10n.reasonWithText(reason)),
             const SizedBox(height: 4),
             Text(
-              'Date: ${_formatDateTime(timestamp)}',
+              l10n.dateWithValue(_formatDateTime(timestamp)),
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
