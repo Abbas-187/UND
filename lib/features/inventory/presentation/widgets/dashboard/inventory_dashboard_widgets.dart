@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../../../../l10n/app_localizations.dart';
 import '../../../models/inventory_movement_model.dart';
 import '../../../models/inventory_movement_type.dart';
 import '../../../providers/inventory_movement_providers.dart';
@@ -14,6 +15,7 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final now = DateTime.now();
     final weekAgo = now.subtract(const Duration(days: 7));
 
@@ -32,7 +34,7 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Recent Movements',
+                  l10n.recentMovements,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -46,7 +48,7 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
                       ),
                     );
                   },
-                  child: const Text('View All'),
+                  child: Text(l10n.viewAll),
                 ),
               ],
             ),
@@ -56,8 +58,8 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
               child: recentMovementsAsync.when(
                 data: (movements) {
                   if (movements.isEmpty) {
-                    return const Center(
-                      child: Text('No recent movements'),
+                    return Center(
+                      child: Text(l10n.noRecentMovements),
                     );
                   }
 
@@ -103,7 +105,7 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
                   child: CircularProgressIndicator(),
                 ),
                 error: (error, stack) => Center(
-                  child: Text('Error: $error'),
+                  child: Text(l10n.errorWithMessage(error.toString())),
                 ),
               ),
             ),
@@ -166,25 +168,26 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
   }
 
   Widget _buildStatusBadge(BuildContext context, ApprovalStatus status) {
+    final l10n = AppLocalizations.of(context);
     Color color;
     String text;
 
     switch (status) {
       case ApprovalStatus.PENDING:
         color = Colors.orange;
-        text = 'Pending';
+        text = l10n.pending;
         break;
       case ApprovalStatus.APPROVED:
         color = Colors.green;
-        text = 'Approved';
+        text = l10n.approved;
         break;
       case ApprovalStatus.REJECTED:
         color = Colors.red;
-        text = 'Rejected';
+        text = l10n.rejected;
         break;
       default:
         color = Colors.grey;
-        text = 'Unknown';
+        text = l10n.unknown;
     }
 
     return Container(
@@ -209,8 +212,9 @@ class PendingApprovalsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
-    // Get any movements with PENDING status
+    // Use the movementsByTypeProvider for transfers since they often need approval
     final pendingMovementsAsync =
         ref.watch(movementsByTypeProvider(InventoryMovementType.TRANSFER));
 
@@ -226,7 +230,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Pending Approvals',
+                  l10n.pendingApprovals,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -241,7 +245,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
                       ),
                     );
                   },
-                  child: const Text('View All'),
+                  child: Text(l10n.viewAll),
                 ),
               ],
             ),
@@ -257,58 +261,34 @@ class PendingApprovalsWidget extends ConsumerWidget {
 
                   if (pendingMovements.isEmpty) {
                     return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.check_circle_outline,
-                            color: Colors.green,
-                            size: 48,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'No pending approvals',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                        ],
-                      ),
+                      child: Text(l10n.noRecentMovements),
                     );
                   }
 
-                  // Take at most 5 pending movements
-                  final recentPending = pendingMovements.take(5).toList();
-
                   return ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: recentPending.length,
+                    itemCount: pendingMovements.length.clamp(0, 3),
                     itemBuilder: (context, index) {
-                      final movement = recentPending[index];
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        color: Colors.orange.shade50,
-                        child: ListTile(
-                          title: Text(
-                            movement.movementType.toString().split('.').last,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            'Initiated by: ${movement.initiatingEmployeeName}\n'
-                            'Date: ${DateFormat.yMd().format(movement.timestamp)}',
-                          ),
-                          trailing: FilledButton.tonal(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MovementDetailsPage(
-                                    movementId: movement.movementId,
-                                  ),
+                      final movement = pendingMovements[index];
+                      return ListTile(
+                        dense: true,
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(movement.movementId),
+                        subtitle: Text(
+                          DateFormat.yMd().format(movement.timestamp),
+                        ),
+                        trailing: OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MovementDetailsPage(
+                                  movementId: movement.movementId,
                                 ),
-                              );
-                            },
-                            child: const Text('Review'),
-                          ),
-                          isThreeLine: true,
+                              ),
+                            );
+                          },
+                          child: Text(l10n.reviewItems),
                         ),
                       );
                     },
@@ -317,8 +297,8 @@ class PendingApprovalsWidget extends ConsumerWidget {
                 loading: () => const Center(
                   child: CircularProgressIndicator(),
                 ),
-                error: (error, stack) => Center(
-                  child: Text('Error: $error'),
+                error: (error, _) => Center(
+                  child: Text(l10n.errorWithMessage(error.toString())),
                 ),
               ),
             ),
@@ -329,72 +309,18 @@ class PendingApprovalsWidget extends ConsumerWidget {
   }
 }
 
-/// Widget that displays critical movements that require attention
+/// Widget that displays critical movements alerts
 class CriticalMovementsAlertWidget extends ConsumerWidget {
   const CriticalMovementsAlertWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      elevation: 2,
-      color: Colors.red.shade50,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.warning_amber, color: Colors.red),
-                const SizedBox(width: 8),
-                Text(
-                  'Critical Movement Alerts',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-              ],
-            ),
-            const Divider(color: Colors.red),
-            const Text(
-              '2 items in Quality Hold require review',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const Text(
-              'Items have been in quality hold for more than 48 hours',
-            ),
-            const SizedBox(height: 8),
-            FilledButton.tonal(
-              onPressed: () {
-                // Navigate to quality hold items list
-              },
-              style: FilledButton.styleFrom(
-                backgroundColor: Colors.red.shade100,
-                foregroundColor: Colors.red,
-              ),
-              child: const Text('Review Items'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Widget that shows movement volume trends chart
-class MovementTrendsChartWidget extends ConsumerWidget {
-  const MovementTrendsChartWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-
-    // This would normally use chart data from backend
-    // For now we'll just use a placeholder
+    // Get movements with QUALITY_HOLD status
+    final pendingMovementsAsync =
+        ref.watch(movementsByTypeProvider(InventoryMovementType.QUALITY_HOLD));
 
     return Card(
       margin: const EdgeInsets.all(8.0),
@@ -405,68 +331,103 @@ class MovementTrendsChartWidget extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Movement Volume Trends',
+              l10n.criticalMovements,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 200,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.bar_chart,
-                      size: 64,
-                      color: theme.colorScheme.primary.withOpacity(0.5),
+            const Divider(),
+            pendingMovementsAsync.when(
+              data: (criticalMovements) {
+                if (criticalMovements.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Center(
+                      child: Text(l10n.noMovementsMatchingFilters),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Movement Volume Chart',
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    const Text(
-                      'Integration with chart library would display here',
-                    ),
-                  ],
-                ),
+                  );
+                }
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: criticalMovements.length.clamp(0, 3),
+                  itemBuilder: (context, index) {
+                    final movement = criticalMovements[index];
+                    return ListTile(
+                      dense: true,
+                      title: Text(
+                        movement.movementId,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        '${movement.movementType.toString().split('.').last} - ${DateFormat.yMd().format(movement.timestamp)}',
+                      ),
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MovementDetailsPage(
+                                movementId: movement.movementId,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(l10n.review),
+                      ),
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildLegendItem(context, 'Receipts', Colors.blue),
-                const SizedBox(width: 16),
-                _buildLegendItem(context, 'Transfers', Colors.green),
-                const SizedBox(width: 16),
-                _buildLegendItem(context, 'Disposals', Colors.red),
-              ],
+              error: (error, _) => Center(
+                child: Text(l10n.errorWithMessage(error.toString())),
+              ),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildLegendItem(BuildContext context, String label, Color color) {
-    return Row(
-      children: [
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+/// Widget that displays movement trends chart
+class MovementTrendsChartWidget extends ConsumerWidget {
+  const MovementTrendsChartWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+
+    // This would normally use chart data from backend
+    return Card(
+      margin: const EdgeInsets.all(8.0),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.movementTrends,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Divider(),
+            SizedBox(
+              height: 200,
+              child: Center(
+                child: Text(l10n.notAvailable),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 4),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ],
+      ),
     );
   }
 }
