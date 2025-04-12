@@ -9,6 +9,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/services/inventory_movement_service.dart';
 import '../../models/inventory_movement_item_model.dart';
 import '../../models/inventory_movement_model.dart';
@@ -17,7 +18,6 @@ import '../../providers/inventory_movement_providers.dart';
 import '../widgets/movements/movement_approval_dialog.dart';
 
 class MovementDetailsPage extends ConsumerStatefulWidget {
-
   const MovementDetailsPage({
     super.key,
     required this.movementId,
@@ -35,16 +35,17 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final movementAsync =
         ref.watch(inventoryMovementProvider(widget.movementId));
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Movement Details'),
+        title: Text(l10n.movementDetails),
         actions: [
           IconButton(
             icon: const Icon(Icons.print),
-            tooltip: 'Generate PDF',
+            tooltip: l10n.generatePdf,
             onPressed: () => movementAsync.maybeWhen(
               data: (movement) => _generatePdf(movement),
               orElse: () {},
@@ -52,7 +53,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           ),
           IconButton(
             icon: const Icon(Icons.share),
-            tooltip: 'Share',
+            tooltip: l10n.share,
             onPressed: () => movementAsync.maybeWhen(
               data: (movement) => _shareMovementDetails(movement),
               orElse: () {},
@@ -74,7 +75,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Error loading movement details',
+                l10n.errorLoadingMovementDetails,
                 style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -86,7 +87,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
               const SizedBox(height: 16),
               FilledButton.icon(
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: Text(l10n.retry),
                 onPressed: () {
                   ref.invalidate(inventoryMovementProvider(widget.movementId));
                 },
@@ -101,6 +102,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
   Widget _buildMovementDetails(
       BuildContext context, InventoryMovementModel movement) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -129,11 +131,12 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'ID: ${movement.movementId}',
+                    l10n.idWithValue(movement.movementId),
                     style: theme.textTheme.bodyMedium,
                   ),
                   Text(
-                    'Date: ${DateFormat('MMM d, yyyy h:mm a').format(movement.timestamp)}',
+                    l10n.dateWithTimestamp(DateFormat('MMM d, yyyy h:mm a')
+                        .format(movement.timestamp)),
                     style: theme.textTheme.bodyMedium,
                   ),
                 ],
@@ -144,7 +147,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           const SizedBox(height: 16),
 
           // Locations section
-          _buildSectionTitle(context, 'Locations'),
+          _buildSectionTitle(context, l10n.locations),
           Card(
             margin: EdgeInsets.zero,
             child: Padding(
@@ -154,19 +157,19 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                 children: [
                   // Source location
                   Text(
-                    'Source:',
+                    l10n.source,
                     style: theme.textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     movement.sourceLocationName.isNotEmpty
                         ? movement.sourceLocationName
-                        : 'N/A',
+                        : l10n.notAvailable,
                     style: theme.textTheme.bodyLarge,
                   ),
                   if (movement.sourceLocationId.isNotEmpty)
                     Text(
-                      'ID: ${movement.sourceLocationId}',
+                      l10n.idWithValue(movement.sourceLocationId),
                       style: theme.textTheme.bodySmall,
                     ),
 
@@ -176,19 +179,19 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
                   // Destination location
                   Text(
-                    'Destination:',
+                    l10n.destination,
                     style: theme.textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     movement.destinationLocationName.isNotEmpty
                         ? movement.destinationLocationName
-                        : 'N/A',
+                        : l10n.notAvailable,
                     style: theme.textTheme.bodyLarge,
                   ),
                   if (movement.destinationLocationId.isNotEmpty)
                     Text(
-                      'ID: ${movement.destinationLocationId}',
+                      l10n.idWithValue(movement.destinationLocationId),
                       style: theme.textTheme.bodySmall,
                     ),
                 ],
@@ -199,7 +202,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           const SizedBox(height: 16),
 
           // Personnel section
-          _buildSectionTitle(context, 'Personnel'),
+          _buildSectionTitle(context, l10n.personnel),
           Card(
             margin: EdgeInsets.zero,
             child: Padding(
@@ -209,7 +212,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                 children: [
                   // Initiator
                   Text(
-                    'Initiated by:',
+                    l10n.initiatedBy,
                     style: theme.textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
@@ -218,7 +221,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   Text(
-                    'ID: ${movement.initiatingEmployeeId}',
+                    l10n.idWithValue(movement.initiatingEmployeeId),
                     style: theme.textTheme.bodySmall,
                   ),
 
@@ -229,17 +232,17 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
                     // Approver (if applicable)
                     Text(
-                      'Reviewed by:',
+                      l10n.reviewedBy,
                       style: theme.textTheme.labelLarge,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      movement.approverEmployeeName ?? 'N/A',
+                      movement.approverEmployeeName ?? l10n.notAvailable,
                       style: theme.textTheme.bodyLarge,
                     ),
                     if (movement.approverEmployeeId != null)
                       Text(
-                        'ID: ${movement.approverEmployeeId}',
+                        l10n.idWithValue(movement.approverEmployeeId!),
                         style: theme.textTheme.bodySmall,
                       ),
                   ],
@@ -252,7 +255,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
           // Notes section
           if (movement.reasonNotes.isNotEmpty) ...[
-            _buildSectionTitle(context, 'Notes'),
+            _buildSectionTitle(context, l10n.notes),
             Card(
               margin: EdgeInsets.zero,
               child: Padding(
@@ -265,7 +268,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
           // Reference documents
           if (movement.referenceDocuments.isNotEmpty) ...[
-            _buildSectionTitle(context, 'Reference Documents'),
+            _buildSectionTitle(context, l10n.referenceDocuments),
             Card(
               margin: EdgeInsets.zero,
               child: Padding(
@@ -293,7 +296,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           // Items section
           _buildSectionTitle(
             context,
-            'Items (${movement.items.length} ${movement.items.length == 1 ? 'item' : 'items'})',
+            l10n.itemsCount(movement.items.length),
           ),
           Card(
             margin: EdgeInsets.zero,
@@ -372,6 +375,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
   Widget _buildItemTile(BuildContext context, InventoryMovementItemModel item) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -390,7 +394,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                       style: theme.textTheme.titleMedium,
                     ),
                     Text(
-                      'Batch: ${item.batchLotNumber}',
+                      l10n.batchWithValue(item.batchLotNumber),
                       style: theme.textTheme.bodyMedium,
                     ),
                   ],
@@ -440,11 +444,13 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Production: ${DateFormat.yMd().format(item.productionDate)}',
+            l10n.productionWithDate(
+                DateFormat.yMd().format(item.productionDate)),
             style: theme.textTheme.bodySmall,
           ),
           Text(
-            'Expiration: ${DateFormat.yMd().format(item.expirationDate)}',
+            l10n.expirationWithDate(
+                DateFormat.yMd().format(item.expirationDate)),
             style: theme.textTheme.bodySmall,
           ),
         ],
@@ -452,27 +458,44 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
     );
   }
 
+  Color _getQualityStatusColor(QualityStatus status) {
+    switch (status) {
+      case QualityStatus.REGULAR:
+        return Colors.blue;
+      case QualityStatus.QUARANTINE:
+        return Colors.orange;
+      case QualityStatus.APPROVED:
+        return Colors.green;
+      case QualityStatus.REJECTED:
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
   Widget _buildApprovalButtons(
       BuildContext context, InventoryMovementModel movement) {
+    final l10n = AppLocalizations.of(context);
+
     return Row(
       children: [
         Expanded(
-          child: OutlinedButton.icon(
-            icon: const Icon(Icons.cancel_outlined),
-            label: const Text('Reject'),
+          child: FilledButton.icon(
+            icon: const Icon(Icons.check_circle),
+            label: Text(l10n.approve),
             onPressed: _isApproving
                 ? null
-                : () => _showApprovalDialog(context, movement, false),
+                : () => _showApprovalDialog(context, movement, true),
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: FilledButton.icon(
-            icon: const Icon(Icons.check_circle_outline),
-            label: const Text('Approve'),
+          child: OutlinedButton.icon(
+            icon: const Icon(Icons.cancel),
+            label: Text(l10n.reject),
             onPressed: _isApproving
                 ? null
-                : () => _showApprovalDialog(context, movement, true),
+                : () => _showApprovalDialog(context, movement, false),
           ),
         ),
       ],
@@ -521,10 +544,12 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
       ref.invalidate(inventoryMovementProvider(id));
 
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                'Movement successfully ${status == ApprovalStatus.APPROVED ? 'approved' : 'rejected'}'),
+            content: Text(status == ApprovalStatus.APPROVED
+                ? l10n.movementSuccessfullyApproved
+                : l10n.movementSuccessfullyRejected),
             backgroundColor:
                 status == ApprovalStatus.APPROVED ? Colors.green : Colors.red,
           ),
@@ -532,9 +557,10 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $e'),
+            content: Text(l10n.errorWithText(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -545,21 +571,6 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           _isApproving = false;
         });
       }
-    }
-  }
-
-  Color _getQualityStatusColor(QualityStatus status) {
-    switch (status) {
-      case QualityStatus.REGULAR:
-        return Colors.blue;
-      case QualityStatus.QUARANTINE:
-        return Colors.orange;
-      case QualityStatus.APPROVED:
-        return Colors.green;
-      case QualityStatus.REJECTED:
-        return Colors.red;
-      default:
-        return Colors.grey;
     }
   }
 
