@@ -1,18 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../entities/inventory_item.dart';
+import '../repositories/inventory_repository.dart';
 
 import '../../data/models/inventory_item_model.dart';
 import '../../data/models/inventory_transaction_model.dart';
-import '../../data/repositories/inventory_repository.dart';
+import '../../data/repositories/inventory_repository.dart' as data_repo;
 
-/// State notifier for inventory management
+// Repository provider
+final inventoryRepositoryProvider =
+    Provider<data_repo.InventoryRepository>((ref) {
+  throw UnimplementedError('Repository implementation not provided');
+});
+
+// Inventory items provider
+final inventoryProvider = StateNotifierProvider<InventoryStateNotifier,
+    AsyncValue<List<InventoryItemModel>>>((ref) {
+  final repository = ref.watch(inventoryRepositoryProvider);
+  return InventoryStateNotifier(repository);
+});
+
+// State notifier for inventory management
 class InventoryStateNotifier
     extends StateNotifier<AsyncValue<List<InventoryItemModel>>> {
   InventoryStateNotifier(this._repository) : super(const AsyncValue.loading()) {
     loadInventory();
   }
 
-  final InventoryRepository _repository;
+  final data_repo.InventoryRepository _repository;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> loadInventory() async {
@@ -555,29 +570,136 @@ class InventoryStateNotifier
   }
 }
 
-/// Provider for inventory state management
-final inventoryProvider = StateNotifierProvider<InventoryStateNotifier,
-    AsyncValue<List<InventoryItemModel>>>((ref) {
-  final repository = ref.watch(inventoryRepositoryProvider);
-  return InventoryStateNotifier(repository);
-});
-
 /// Provider for inventory items by warehouse
 final inventoryByWarehouseProvider =
-    FutureProvider.family<List<InventoryItemModel>, String>(
+    FutureProvider.family<List<InventoryItem>, String>(
         (ref, warehouseId) async {
   final repository = ref.watch(inventoryRepositoryProvider);
-  return await repository.getInventoryItemsByWarehouse(warehouseId);
+  final items = await repository.getItems();
+  return items.where((item) => item.location.startsWith(warehouseId)).toList();
 });
 
 /// Provider for a single inventory item
 final inventoryItemProvider =
-    FutureProvider.family<InventoryItemModel?, String>((ref, itemId) async {
+    FutureProvider.family<InventoryItem?, String>((ref, itemId) async {
   final repository = ref.watch(inventoryRepositoryProvider);
-  final items = await repository.getInventoryItemsByWarehouse('');
-  try {
-    return items.firstWhere((item) => item.id == itemId);
-  } catch (e) {
-    return null;
+  return await repository.getItem(itemId);
+});
+
+/// Immutable filter class for inventory items
+class InventoryFilter {
+  const InventoryFilter({
+    this.searchQuery = '',
+    this.showLowStock = false,
+    this.showNeedsReorder = false,
+    this.showExpiringSoon = false,
+    this.selectedCategory,
+    this.selectedLocation,
+  });
+
+  final String searchQuery;
+  final bool showLowStock;
+  final bool showNeedsReorder;
+  final bool showExpiringSoon;
+  final String? selectedCategory;
+  final String? selectedLocation;
+
+  InventoryFilter copyWith({
+    String? searchQuery,
+    bool? showLowStock,
+    bool? showNeedsReorder,
+    bool? showExpiringSoon,
+    String? selectedCategory,
+    String? selectedLocation,
+  }) {
+    return InventoryFilter(
+      searchQuery: searchQuery ?? this.searchQuery,
+      showLowStock: showLowStock ?? this.showLowStock,
+      showNeedsReorder: showNeedsReorder ?? this.showNeedsReorder,
+      showExpiringSoon: showExpiringSoon ?? this.showExpiringSoon,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
+      selectedLocation: selectedLocation ?? this.selectedLocation,
+    );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InventoryFilter &&
+          runtimeType == other.runtimeType &&
+          searchQuery == other.searchQuery &&
+          showLowStock == other.showLowStock &&
+          showNeedsReorder == other.showNeedsReorder &&
+          showExpiringSoon == other.showExpiringSoon &&
+          selectedCategory == other.selectedCategory &&
+          selectedLocation == other.selectedLocation;
+
+  @override
+  int get hashCode =>
+      searchQuery.hashCode ^
+      showLowStock.hashCode ^
+      showNeedsReorder.hashCode ^
+      showExpiringSoon.hashCode ^
+      selectedCategory.hashCode ^
+      selectedLocation.hashCode;
+}
+
+// Filter provider
+final inventoryFilterProvider =
+    StateProvider<InventoryFilter>((ref) => const InventoryFilter());
+
+// Filtered inventory items provider
+final filteredInventoryItemsProvider =
+    Provider<AsyncValue<List<InventoryItemModel>>>((ref) {
+  final items = ref.watch(inventoryProvider);
+  final filter = ref.watch(inventoryFilterProvider);
+
+  return items.when(
+    data: (items) {
+      return AsyncValue.data(items.where((item) {
+        // Apply search filter
+        if (filter.searchQuery.isNotEmpty) {
+          final query = filter.searchQuery.toLowerCase();
+          if (!item.name.toLowerCase().contains(query) &&
+              !item.category.toLowerCase().contains(query) &&
+              !(item.batchNumber?.toLowerCase().contains(query) ?? false)) {
+            return false;
+          }
+        }
+
+        // Apply category filter
+        if (filter.selectedCategory != null &&
+            item.category != filter.selectedCategory) {
+          return false;
+        }
+
+        // Apply location filter
+        if (filter.selectedLocation != null &&
+            item.location != filter.selectedLocation) {
+          return false;
+        }
+
+        // Apply stock status filters
+        if (filter.showLowStock && !item.isLowStock) {
+          return false;
+        }
+
+        if (filter.showNeedsReorder && !item.needsReorder) {
+          return false;
+        }
+
+        if (filter.showExpiringSoon && item.expiryDate != null) {
+          final daysUntilExpiry =
+              item.expiryDate!.difference(DateTime.now()).inDays;
+          if (daysUntilExpiry > 30) {
+            return false;
+          }
+        }
+
+        return true;
+      }).toList());
+    },
+    loading: () => const AsyncValue.loading(),
+    error: (error, stack) => AsyncValue.error(error, stack),
+  );
 });
