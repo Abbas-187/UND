@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import '../../../../l10n/app_localizations.dart';
 import '../../providers/inventory_movement_providers.dart';
 import '../widgets/dashboard/inventory_dashboard_widgets.dart';
 import 'create_movement_page.dart';
@@ -12,14 +12,15 @@ class InventoryDashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inventory Dashboard'),
+        title: Text(l10n.inventoryDashboard),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: 'Refresh Data',
+            tooltip: l10n.refreshData,
             onPressed: () {
               // Refresh providers
               ref.invalidate(movementsByDateRangeProvider);
@@ -44,7 +45,7 @@ class InventoryDashboardPage extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Inventory Management',
+                            l10n.inventoryManagement,
                             style: theme.textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onPrimaryContainer,
@@ -52,7 +53,7 @@ class InventoryDashboardPage extends ConsumerWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Monitor and manage your inventory movements',
+                            l10n.monitorAndManageInventory,
                             style: TextStyle(
                               color: theme.colorScheme.onPrimaryContainer,
                             ),
@@ -62,7 +63,7 @@ class InventoryDashboardPage extends ConsumerWidget {
                     ),
                     FilledButton.icon(
                       icon: const Icon(Icons.add),
-                      label: const Text('New Movement'),
+                      label: Text(l10n.newMovement),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -108,7 +109,7 @@ class InventoryDashboardPage extends ConsumerWidget {
             Center(
               child: OutlinedButton.icon(
                 icon: const Icon(Icons.list),
-                label: const Text('View All Movements'),
+                label: Text(l10n.viewAllMovements),
                 onPressed: () {
                   Navigator.push(
                     context,
