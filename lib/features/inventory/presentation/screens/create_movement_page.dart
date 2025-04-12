@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+import '../../../../l10n/app_localizations.dart';
 
 import '../../domain/services/inventory_movement_service.dart';
 import '../../models/inventory_movement_item_model.dart';
@@ -47,6 +48,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Inventory Movement'),
@@ -109,7 +111,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
 
             // Step 3: Add Items
             Step(
-              title: const Text('Add Items'),
+              title: Text(l10n.addItems),
               content: _buildAddItemsStep(),
               isActive: _currentStep >= 2,
               state: _currentStep > 2 ? StepState.complete : StepState.indexed,
@@ -117,7 +119,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
 
             // Step 4: Review and Submit
             Step(
-              title: const Text('Review & Submit'),
+              title: Text(l10n.reviewAndSubmit),
               content: _buildReviewStep(),
               isActive: _currentStep >= 3,
               state: _isProcessing ? StepState.complete : StepState.indexed,
@@ -322,6 +324,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
 
   // Step 3: Add Items
   Widget _buildAddItemsStep() {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -424,11 +427,11 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                   border: OutlineInputBorder(),
                   labelText: 'Unit',
                 ),
-                items: const [
-                  DropdownMenuItem(value: 'kg', child: Text('kg')),
+                items: [
+                  DropdownMenuItem(value: 'kg', child: Text(l10n.kilogram)),
                   DropdownMenuItem(value: 'l', child: Text('l')),
-                  DropdownMenuItem(value: 'pc', child: Text('pc')),
-                  DropdownMenuItem(value: 'box', child: Text('box')),
+                  DropdownMenuItem(value: 'pc', child: Text(l10n.piece)),
+                  DropdownMenuItem(value: 'box', child: Text(l10n.box)),
                 ],
                 onChanged: (value) {
                   if (value != null) {
