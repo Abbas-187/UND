@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'milk_quality_test_model.dart';
 
 /// Enum representing different types of milk
 enum MilkType {
@@ -19,7 +20,6 @@ enum ReceptionStatus { draft, pendingTesting, accepted, rejected }
 
 /// A comprehensive model representing milk reception details in a dairy factory
 class MilkReceptionModel {
-
   /// Creates an empty reception record with default values
   factory MilkReceptionModel.empty() {
     return MilkReceptionModel(
@@ -40,6 +40,7 @@ class MilkReceptionModel {
       smell: 'Normal',
       appearance: 'Normal',
       hasVisibleContamination: false,
+      qualityTest: null,
     );
   }
 
@@ -81,6 +82,10 @@ class MilkReceptionModel {
               .toList() ??
           [],
       geoLocation: json['geoLocation'] as GeoPoint?,
+      qualityTest: json['qualityTest'] != null
+          ? MilkQualityTestModel.fromJson(
+              json['qualityTest'] as Map<String, dynamic>)
+          : null,
     );
   }
   const MilkReceptionModel({
@@ -106,6 +111,7 @@ class MilkReceptionModel {
     this.notes,
     this.photoUrls = const [],
     this.geoLocation,
+    this.qualityTest,
   });
 
   /// Unique identifier for this reception
@@ -174,6 +180,9 @@ class MilkReceptionModel {
   /// Geo-location where the reception took place
   final GeoPoint? geoLocation;
 
+  /// Quality test results for this reception
+  final MilkQualityTestModel? qualityTest;
+
   /// Converts model to a JSON map for Firestore
   Map<String, dynamic> toJson() {
     return {
@@ -199,6 +208,7 @@ class MilkReceptionModel {
       'notes': notes,
       'photoUrls': photoUrls,
       'geoLocation': geoLocation,
+      'qualityTest': qualityTest?.toJson(),
     };
   }
 
@@ -226,6 +236,7 @@ class MilkReceptionModel {
     String? notes,
     List<String>? photoUrls,
     GeoPoint? geoLocation,
+    MilkQualityTestModel? qualityTest,
   }) {
     return MilkReceptionModel(
       id: id ?? this.id,
@@ -252,6 +263,7 @@ class MilkReceptionModel {
       notes: notes ?? this.notes,
       photoUrls: photoUrls ?? this.photoUrls,
       geoLocation: geoLocation ?? this.geoLocation,
+      qualityTest: qualityTest ?? this.qualityTest,
     );
   }
 
