@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../routes/app_router.dart';
+import '../../l10n/app_localizations.dart';
 
 class MainLayout extends StatefulWidget {
   final Widget child;
@@ -18,6 +19,7 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   // Controls whether the navigation rail is visible
   bool _isNavRailVisible = false;
+  double _dragStartX = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -27,34 +29,26 @@ class _MainLayoutState extends State<MainLayout> {
     return Scaffold(
       // Add a gesture detector to handle swipes from the edge
       body: GestureDetector(
-        onHorizontalDragEnd: (details) {
-          // For LTR languages (like English), swipe right reveals the rail
-          // For RTL languages (like Arabic), swipe left reveals the rail
+        onHorizontalDragStart: (details) {
+          _dragStartX = details.globalPosition.dx;
+        },
+        onHorizontalDragUpdate: (details) {
+          final currentX = details.globalPosition.dx;
+          final delta = currentX - _dragStartX;
+
           if (textDirection == TextDirection.ltr) {
-            // Check if swipe was from left edge to right
-            if (details.primaryVelocity! > 0 && !_isNavRailVisible) {
-              setState(() {
-                _isNavRailVisible = true;
-              });
-            }
-            // Check if swipe was from right to left edge
-            else if (details.primaryVelocity! < 0 && _isNavRailVisible) {
-              setState(() {
-                _isNavRailVisible = false;
-              });
+            // For LTR: Swipe right to show, left to hide
+            if (delta > 50 && !_isNavRailVisible) {
+              setState(() => _isNavRailVisible = true);
+            } else if (delta < -50 && _isNavRailVisible) {
+              setState(() => _isNavRailVisible = false);
             }
           } else {
-            // RTL: Check if swipe was from right edge to left
-            if (details.primaryVelocity! < 0 && !_isNavRailVisible) {
-              setState(() {
-                _isNavRailVisible = true;
-              });
-            }
-            // Check if swipe was from left to right edge
-            else if (details.primaryVelocity! > 0 && _isNavRailVisible) {
-              setState(() {
-                _isNavRailVisible = false;
-              });
+            // For RTL: Swipe left to show, right to hide
+            if (delta < -50 && !_isNavRailVisible) {
+              setState(() => _isNavRailVisible = true);
+            } else if (delta > 50 && _isNavRailVisible) {
+              setState(() => _isNavRailVisible = false);
             }
           }
         },
@@ -68,14 +62,14 @@ class _MainLayoutState extends State<MainLayout> {
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               left: textDirection == TextDirection.ltr
-                  ? (_isNavRailVisible ? 0 : -80)
+                  ? (_isNavRailVisible ? 0 : -100)
                   : null,
               right: textDirection == TextDirection.rtl
-                  ? (_isNavRailVisible ? 0 : -80)
+                  ? (_isNavRailVisible ? 0 : -100)
                   : null,
               top: 0,
               bottom: 0,
-              width: 80,
+              width: 100,
               child: Material(
                 elevation: 4,
                 child: _buildNavigationRail(context),
@@ -88,9 +82,13 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   Widget _buildNavigationRail(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return NavigationRail(
       selectedIndex: _getSelectedIndex(widget.currentRoute),
       labelType: NavigationRailLabelType.all,
+      minWidth: 100,
+      minExtendedWidth: 150,
       onDestinationSelected: (index) {
         // Hide the rail after selection
         setState(() {
@@ -129,44 +127,52 @@ class _MainLayoutState extends State<MainLayout> {
           case 8:
             Navigator.pushReplacementNamed(context, AppRoutes.forecasting);
             break;
+          case 9:
+            Navigator.pushReplacementNamed(context, AppRoutes.settings);
+            break;
         }
       },
-      destinations: const [
+      destinations: [
         NavigationRailDestination(
-          icon: Icon(Icons.person),
-          label: Text('Suppliers'),
+          icon: const Icon(Icons.person),
+          label: Text(l10n.getModuleName('suppliers') ?? 'Suppliers'),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.inventory_2),
-          label: Text('Inventory'),
+          icon: const Icon(Icons.inventory_2),
+          label: Text(l10n.getModuleName('inventory') ?? 'Inventory'),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.factory),
-          label: Text('Production'),
+          icon: const Icon(Icons.factory),
+          label: Text(l10n.getModuleName('factory') ?? 'Factory'),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.build),
-          label: Text('Equipment'),
+          icon: const Icon(Icons.build),
+          label:
+              Text(l10n.getModuleName('equipmentMaintenance') ?? 'Equipment'),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.water_drop),
-          label: Text('Milk Reception'),
+          icon: const Icon(Icons.water_drop),
+          label: Text(l10n.getModuleName('milkReception') ?? 'Milk Reception'),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.shopping_cart),
-          label: Text('Procurement'),
+          icon: const Icon(Icons.shopping_cart),
+          label: Text(l10n.getModuleName('procurement') ?? 'Procurement'),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.notifications),
-          label: Text('Notifications'),
+          icon: const Icon(Icons.notifications),
+          label: Text(l10n.notifications),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.analytics),
-          label: Text('Analytics'),
+          icon: const Icon(Icons.analytics),
+          label: Text(l10n.getModuleName('analytics') ?? 'Analytics'),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.trending_up),
-          label: Text('Forecasting'),
+          icon: const Icon(Icons.trending_up),
+          label: Text(l10n.getModuleName('forecasting') ?? 'Forecasting'),
+        ),
+        NavigationRailDestination(
+          icon: const Icon(Icons.settings),
+          label: Text(l10n.settings),
         ),
       ],
     );
@@ -191,6 +197,8 @@ class _MainLayoutState extends State<MainLayout> {
       return 7;
     } else if (routeName.startsWith('/forecasting')) {
       return 8;
+    } else if (routeName == AppRoutes.settings) {
+      return 9;
     }
 
     return 0;
