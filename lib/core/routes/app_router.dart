@@ -15,6 +15,7 @@ import '../../features/factory/production/presentation/screens/production_execut
 import '../../features/forecasting/presentation/screens/forecasting_dashboard_screen.dart';
 import '../../features/forecasting/presentation/screens/forecasting_list_screen.dart';
 import '../../features/forecasting/presentation/screens/forecasting_screen.dart';
+import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/inventory/presentation/screens/batch_scanner_screen.dart';
 import '../../features/inventory/presentation/screens/create_movement_page.dart';
 import '../../features/inventory/presentation/screens/inventory_alerts_screen.dart';
@@ -29,11 +30,14 @@ import '../../features/procurement/presentation/screens/purchase_order/purchase_
 import '../../features/procurement/presentation/screens/purchase_order/purchase_order_detail_screen.dart';
 import '../../features/procurement/presentation/screens/purchase_order/purchase_order_list_screen.dart';
 import '../../features/procurement/presentation/screens/reports/procurement_dashboard_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/suppliers/domain/entities/supplier.dart';
 import '../../features/suppliers/presentation/screens/supplier_details_screen.dart';
 import '../../features/suppliers/presentation/screens/supplier_edit_screen.dart';
 import '../../features/suppliers/presentation/screens/suppliers_screen.dart';
 import '../layout/main_layout.dart';
+import '../../features/inventory/presentation/screens/inventory_category_management_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_adjustment_history_screen.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -53,6 +57,8 @@ class AppRoutes {
   static const String inventoryMovements = '/inventory/movements';
   static const String createMovement = '/inventory/movements/create';
   static const String movementDetails = '/inventory/movements/details';
+  static const String inventoryCategoryManagement = '/inventory/categories';
+  static const String inventoryAdjustmentHistory = '/inventory/adjustments';
   static const String analytics = '/analytics';
   static const String analyticsDashboard = '/analytics/dashboard';
   static const String settings = '/settings';
@@ -100,7 +106,7 @@ class AppRouter {
     switch (routeName) {
       case AppRoutes.home:
       case '/': // Handle both home and root route
-        screen = const SuppliersScreen();
+        screen = const HomeScreen();
         break;
 
       case AppRoutes.login:
@@ -296,10 +302,28 @@ class AppRouter {
           settings: settings,
         );
 
+      case AppRoutes.settings:
+        return MaterialPageRoute(
+          builder: (_) => const SettingsScreen(),
+          settings: settings,
+        );
+
+      case AppRoutes.inventoryCategoryManagement:
+        return MaterialPageRoute(
+          builder: (_) => const InventoryCategoryManagementScreen(),
+          settings: settings,
+        );
+
+      case AppRoutes.inventoryAdjustmentHistory:
+        return MaterialPageRoute(
+          builder: (_) => const InventoryAdjustmentHistoryScreen(),
+          settings: settings,
+        );
+
       default:
         screen = Scaffold(
           body: Center(
-            child: Text('No route defined for ${settings.name}'),
+            child: Text('No route defined for $routeName'),
           ),
         );
     }
@@ -339,6 +363,7 @@ class AppRouter {
       AppRoutes.procurement,
       AppRoutes.procurementDashboard,
       AppRoutes.purchaseOrders,
+      AppRoutes.settings,
     ];
 
     return mainScreenRoutes.contains(routeName);
