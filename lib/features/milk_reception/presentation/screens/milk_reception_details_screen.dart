@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:und_app/features/milk_reception/domain/models/milk_reception_model.dart';
+import 'package:und_app/features/milk_reception/domain/models/milk_quality_test_model.dart';
 
-import '../../domain/models/milk_reception_model.dart';
 import '../controllers/milk_reception_controller.dart';
 import '../../../../theme/app_theme_extensions.dart';
 
@@ -170,8 +171,11 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildQualityInfo(BuildContext context, MilkReceptionModel reception) {
-    final textTheme = Theme.of(context).textTheme;
+    return _buildQualityInfoCard(context, reception);
+  }
 
+  Widget _buildQualityInfoCard(
+      BuildContext context, MilkReceptionModel reception) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -180,29 +184,75 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
           children: [
             Text(
               'Quality Information',
-              style: textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 16),
+            _buildInfoRow(
+                context, 'Temperature', '${reception.temperatureAtArrival}°C'),
+            if (reception.phValue != null)
+              _buildInfoRow(
+                  context, 'pH Value', reception.phValue!.toStringAsFixed(2)),
+            _buildInfoRow(context, 'Smell', reception.smell),
+            _buildInfoRow(context, 'Appearance', reception.appearance),
+            if (reception.hasVisibleContamination)
+              _buildInfoRow(
+                context,
+                'Contamination',
+                reception.contaminationDescription ??
+                    'Visible contamination detected',
               ),
-            ),
-            const SizedBox(height: 8),
-            Text('Smell: ${reception.smell}', style: textTheme.bodyLarge),
-            Text('Appearance: ${reception.appearance}',
-                style: textTheme.bodyLarge),
-            Text(
-              'Contamination: ${reception.hasVisibleContamination ? 'Yes' : 'No'}',
-              style: textTheme.bodyLarge,
-            ),
-            if (reception.hasVisibleContamination &&
-                reception.contaminationDescription != null)
+            if (reception.qualityTest != null) ...[
+              const Divider(),
               Text(
-                'Contamination details: ${reception.contaminationDescription}',
-                style: textTheme.bodyLarge,
+                'Quality Test Results',
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-            const SizedBox(height: 8),
-            Text('Initial observations: ${reception.initialObservations}',
-                style: textTheme.bodyLarge),
+              const SizedBox(height: 8),
+              _buildInfoRow(context, 'Fat Content',
+                  '${reception.qualityTest!.fatContent}%'),
+              _buildInfoRow(context, 'Protein Content',
+                  '${reception.qualityTest!.proteinContent}%'),
+              _buildInfoRow(context, 'Lactose Content',
+                  '${reception.qualityTest!.lactoseContent}%'),
+              _buildInfoRow(context, 'Total Solids',
+                  '${reception.qualityTest!.totalSolids}%'),
+              _buildInfoRow(context, 'Freezing Point',
+                  '${reception.qualityTest!.freezingPoint}°C'),
+              _buildInfoRow(context, 'Density',
+                  '${reception.qualityTest!.density} g/cm³'),
+              _buildInfoRow(
+                  context, 'Acidity', '${reception.qualityTest!.acidity}°SH'),
+              _buildInfoRow(
+                  context,
+                  'Quality Grade',
+                  reception.qualityTest!.qualityGrade
+                      .toString()
+                      .split('.')
+                      .last),
+              if (reception.qualityTest!.notes != null)
+                _buildInfoRow(
+                    context, 'Test Notes', reception.qualityTest!.notes!),
+            ],
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(BuildContext context, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text(
+            '$label:',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(value),
+          ),
+        ],
       ),
     );
   }
