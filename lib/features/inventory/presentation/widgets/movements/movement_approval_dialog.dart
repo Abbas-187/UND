@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 class MovementApprovalDialog extends StatefulWidget {
-
   const MovementApprovalDialog({
     super.key,
     required this.movementId,
@@ -36,10 +36,11 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
       title: Text(
-        widget.isApproval ? 'Approve Movement' : 'Reject Movement',
+        widget.isApproval ? l10n.approveMovement : l10n.rejectMovement,
         style: TextStyle(
           color: widget.isApproval ? Colors.green : Colors.red,
         ),
@@ -53,20 +54,20 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
             children: [
               Text(
                 widget.isApproval
-                    ? 'You are about to approve movement ${widget.movementId}.'
-                    : 'You are about to reject movement ${widget.movementId}.',
+                    ? l10n.aboutToApprove(widget.movementId)
+                    : l10n.aboutToReject(widget.movementId),
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _approverIdController,
-                decoration: const InputDecoration(
-                  labelText: 'Approver ID',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.approverId,
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Approver ID is required';
+                    return l10n.approverIdRequired;
                   }
                   return null;
                 },
@@ -74,13 +75,13 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _approverNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Approver Name',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: l10n.approverName,
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Approver name is required';
+                    return l10n.approverNameRequired;
                   }
                   return null;
                 },
@@ -90,14 +91,14 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
                 controller: _notesController,
                 decoration: InputDecoration(
                   labelText: widget.isApproval
-                      ? 'Additional Notes (Optional)'
-                      : 'Reason for Rejection',
+                      ? l10n.additionalNotes
+                      : l10n.rejectionReason,
                   border: const OutlineInputBorder(),
                   alignLabelWithHint: true,
                 ),
                 validator: (value) {
                   if (!widget.isApproval && (value == null || value.isEmpty)) {
-                    return 'Please provide a reason for rejection';
+                    return l10n.provideRejectionReason;
                   }
                   return null;
                 },
@@ -110,7 +111,7 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         FilledButton(
           onPressed: _isSubmitting ? null : _submitForm,
@@ -126,7 +127,7 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
                     color: Colors.white,
                   ),
                 )
-              : Text(widget.isApproval ? 'Approve' : 'Reject'),
+              : Text(widget.isApproval ? l10n.approve : l10n.reject),
         ),
       ],
     );
