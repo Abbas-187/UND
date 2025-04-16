@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../core/firebase/firebase_interface.dart';
-import '../core/firebase/firebase_module.dart';
+import '../core/core.dart';
 import '../features/inventory/data/models/inventory_item_model.dart';
 import '../features/inventory/domain/entities/inventory_item.dart';
 import '../features/inventory/domain/repositories/inventory_repository.dart';

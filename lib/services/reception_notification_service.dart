@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:uuid/uuid.dart';
 
-import '../core/firebase/firebase_module.dart';
+import '../core/core.dart';
 import '../features/milk_reception/domain/models/notification_model.dart';
 import '../models/user_model.dart';
 

@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/core.dart';
-import '../features/inventory/presentation/providers/inventory_provider.dart';
-import '../features/milk_reception/domain/models/milk_reception_model.dart';
-import '../features/milk_reception/domain/repositories/milk_reception_repository.dart';
-import '../services/reception_inventory_service.dart';
+import '../../../../core/core.dart';
+import '../../../../features/inventory/presentation/providers/inventory_provider.dart';
+import '../../domain/models/milk_reception_model.dart';
+import '../../domain/repositories/milk_reception_repository.dart';
+import '../../../../services/reception_inventory_service.dart';
 
 /// Provider for ReceptionInventoryService
 final receptionInventoryServiceProvider =
