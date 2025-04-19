@@ -8,7 +8,26 @@ This document outlines the plan for restructuring the UND App project to better 
 2. Moving code from global folders to specific feature modules
 3. Ensuring consistent imports across the project
 
-## Standard Feature Module Structure
+## Current Workspace Structure
+```
+lib/
+  main.dart
+  TESTING.md
+  common/
+  core/
+  features/
+  l10n/
+  models/
+  providers/
+  repositories/
+  screens/
+  services/
+  theme/
+  utils/
+  widgets/
+```
+
+## Target Feature Module Structure
 
 Each feature module should follow this structure:
 
@@ -89,25 +108,25 @@ For each remaining feature module:
 
 After moving files to their appropriate feature modules:
 
-- [ ] Clean up the global `models/` directory
+- [x] Clean up the global `models/` directory
    - [x] `inventory/` models moved to feature module
-   - [ ] Decide on `navigation_item.dart` (move to core or keep in models)
-   - [ ] Remove duplicate `user_model.dart` after confirming all imports updated
-- [ ] Clean up the global `providers/` directory
-   - [ ] Remove duplicate `auth_provider.dart` and `auth_provider.g.dart`
-   - [ ] Remove duplicate `firebase_providers.dart` and `firebase_providers.g.dart` (already in core/firebase)
-   - [ ] Remove duplicate `reception_inventory_provider.dart`
-- [ ] Clean up the global `repositories/` directory
-   - [ ] Remove duplicate `auth_repository.dart` and `auth_repository.g.dart`
-- [ ] Clean up the global `screens/` directory
-   - [ ] Remove duplicate auth screens
-   - [ ] Remove duplicate home screen
-- [ ] Clean up the global `services/` directory
-   - [ ] Remove duplicate `auth_service.dart`
-   - [ ] Remove duplicate `reception_analytics_service.dart`
-   - [ ] Remove duplicate `reception_inventory_service.dart`
-   - [ ] Remove duplicate `reception_notification_service.dart`
-- [ ] Ensure any remaining global files are truly cross-cutting concerns
+   - [x] Moved `navigation_item.dart` to `core/routes/`
+   - [x] Remove duplicate `user_model.dart` after confirming all imports updated
+- [x] Clean up the global `providers/` directory
+   - [x] Remove duplicate `auth_provider.dart` and `auth_provider.g.dart` (Done)
+   - [x] Remove duplicate `firebase_providers.dart` and `firebase_providers.g.dart` (Done)
+   - [x] Remove duplicate `reception_inventory_provider.dart` (Done)
+- [x] Clean up the global `repositories/` directory
+   - [x] Remove duplicate `auth_repository.dart` and `auth_repository.g.dart` (Done)
+- [x] Clean up the global `screens/` directory
+   - [x] Remove duplicate auth screens (Done)
+   - [x] Remove duplicate home screen (Done)
+- [x] Clean up the global `services/` directory
+   - [x] Remove duplicate `auth_service.dart` (Done)
+   - [x] Remove duplicate `reception_analytics_service.dart` (Done)
+   - [x] Remove duplicate `reception_inventory_service.dart` (Done)
+   - [x] Remove duplicate `reception_notification_service.dart` (Done)
+- [x] Ensure any remaining global files are truly cross-cutting concerns
 
 ## Import Updates
 
@@ -115,6 +134,146 @@ After moving files to their appropriate feature modules:
 - [x] Updated imports in service files to use barrel files
 - [x] Updated imports in provider files to use barrel files
 - [ ] Update remaining imports throughout the project to use the new file locations and barrel files
+
+## Project Structure Details
+
+### Full Workspace Structure
+```
+analysis_options.yaml
+commit-all-files.ps1
+commit-files.ps1
+custom_lint.log
+pubspec.lock
+pubspec.yaml
+README_PRODUCTION_EXECUTION.md
+README.md
+run_app.bat
+structure_planning.md
+und_app.iml
+android/
+ios/
+linux/
+macos/
+web/
+windows/
+docs/
+  milk_reception_module.md
+documentation/
+  FULL_SCREEN_INVENTORY.md
+  UI_UX_GUIDELINES.md
+  UI_UX_SCREEN_SPECS.md
+lib/
+  main.dart
+  TESTING.md
+  common/
+  core/
+    auth/
+    config/
+    core.dart
+    di/
+    exceptions/
+    firebase/
+    layout/
+    logging/
+    network/
+    routes/
+    services/
+    storage/
+    ui/
+    utils/
+    widgets/
+  features/
+    analytics/
+    auth/
+      data/
+        models/
+          user_model.dart
+      domain/
+        repositories/
+          auth_repository.dart
+          auth_repository.g.dart
+        services/
+        auth_provider.g.dart
+      presentation/
+        providers/
+          auth_provider.dart
+        screens/
+          login_screen.dart
+          register_screen.dart
+          reset_password_screen.dart
+          unauthorized_screen.dart
+          user_management_screen.dart
+          user_profile_screen.dart
+    compliance/
+    factory/
+    forecasting/
+    home/
+      presentation/
+        screens/
+          home_screen.dart
+          module_screens_screen.dart
+    inventory/
+      data/
+        models/
+    logistics/
+    milk_reception/
+      domain/
+        models/
+          milk_reception_model.dart
+        repositories/
+          milk_reception_repository.dart
+        services/
+          milk_reception_service.dart
+          reception_analytics_service.dart
+          reception_inventory_service.dart
+          reception_notification_service.dart
+      presentation/
+        controllers/
+        pages/
+        providers/
+          reception_inventory_provider.dart
+        screens/
+        widgets/
+    notifications/
+    procurement/
+    quality/
+    sales/
+    settings/
+    shared/
+    suppliers/
+    traceability/
+    warehouse/
+  l10n/
+  models/
+    inventory/
+    navigation_item.dart
+    user_model.dart
+  providers/
+    auth_provider.dart
+    auth_provider.g.dart
+    firebase_providers.dart
+    firebase_providers.g.dart
+    reception_inventory_provider.dart
+  repositories/
+    auth_repository.dart
+    auth_repository.g.dart
+  screens/
+    auth/
+      login_screen.dart
+    home/
+      home_screen.dart
+  services/
+    auth_service.dart
+    reception_analytics_service.dart
+    reception_inventory_service.dart
+    reception_notification_service.dart
+  theme/
+  utils/
+  widgets/
+test/
+  README.md
+  features/
+```
 
 ## Next Steps
 
