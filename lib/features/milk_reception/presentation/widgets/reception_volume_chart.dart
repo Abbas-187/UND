@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../utils/date_time_utils.dart';
+import '../../../../core/utils/date_time_utils.dart';
 import '../../domain/models/milk_reception_model.dart';
 
 /// A chart for visualizing milk reception volumes over time
@@ -205,7 +205,7 @@ class ReceptionVolumeChart extends StatelessWidget {
                 );
               }).toList(),
             ),
-            swapAnimationDuration:
+            duration:
                 animate ? const Duration(milliseconds: 500) : Duration.zero,
           ),
         ),
@@ -245,7 +245,7 @@ class ReceptionVolumeChart extends StatelessWidget {
 
     // Initialize all days in range with zero
     for (final date
-        in DateTimeUtils.dateRange(dateRange.start, dateRange.end)) {
+        in DateTimeUtils.getDateRange(dateRange.start, dateRange.end)) {
       final key = DateTimeUtils.formatDate(date);
       groupedData[key] = 0;
     }
@@ -347,7 +347,6 @@ class ReceptionVolumeChart extends StatelessWidget {
 
 /// Data point for chart display
 class ChartDataPoint {
-
   ChartDataPoint(this.label, this.value);
   final String label;
   final double value;
@@ -362,7 +361,6 @@ enum GroupBy {
 
 /// Class for representing a date range
 class DateRange {
-
   const DateRange({required this.start, required this.end});
 
   /// Creates a date range for the current month

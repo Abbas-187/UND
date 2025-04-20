@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../models/inventory_movement_model.dart';
-import '../../models/inventory_movement_type.dart';
+import '../models/inventory_movement_model.dart';
+import '../models/inventory_movement_type.dart';
 
 /// Repository interface for managing inventory movements in the system
 abstract class InventoryMovementRepository {

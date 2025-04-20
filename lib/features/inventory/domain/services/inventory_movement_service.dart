@@ -2,13 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import '../../data/repositories/inventory_movement_repository.dart';
-import '../../models/inventory_movement_model.dart';
-import '../../models/inventory_movement_type.dart';
+import '../../data/models/inventory_movement_model.dart';
+import '../../data/models/inventory_movement_type.dart';
 import '../../providers/inventory_movement_providers.dart' as providers;
 
 /// Service class to handle inventory movement business logic
 class InventoryMovementService {
-
   InventoryMovementService({
     required InventoryMovementRepository movementRepository,
     required Logger logger,
@@ -142,12 +141,9 @@ class InventoryMovementService {
         }
         break;
       case InventoryMovementType.TRANSFER:
-      case InventoryMovementType.PRODUCTION_CONSUMPTION:
-      case InventoryMovementType.PRODUCTION_OUTPUT:
-      case InventoryMovementType.QUALITY_HOLD:
-      case InventoryMovementType.QUALITY_RELEASE:
       case InventoryMovementType.ADJUSTMENT:
-      case InventoryMovementType.SHIPPING:
+      case InventoryMovementType.ISSUE:
+      case InventoryMovementType.RETURN:
         if (movement.sourceLocationId.isEmpty ||
             movement.destinationLocationId.isEmpty) {
           throw Exception(

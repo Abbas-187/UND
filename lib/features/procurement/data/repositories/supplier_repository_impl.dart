@@ -7,13 +7,30 @@ import '../models/supplier_model_new.dart';
 
 /// Implementation of [SupplierRepository] that works with Firestore
 class SupplierRepositoryImpl implements SupplierRepository {
-
   /// Creates a new instance with the given data source
   SupplierRepositoryImpl(this._dataSource);
   final SupplierRemoteDataSource _dataSource;
 
   @override
-  Future<Result<List<Supplier>>> getSuppliers({
+  Future<List<Supplier>> getSuppliers() async {
+    try {
+      // Call the data source method with no filters
+      final supplierMaps = await _dataSource.getSuppliers();
+
+      // Convert the raw data maps to domain entities
+      final suppliers = supplierMaps
+          .map((map) =>
+              SupplierModel.fromMap(map, map['id'] as String).toEntity())
+          .toList();
+
+      return suppliers;
+    } catch (e) {
+      throw ServerFailure('Failed to get suppliers', details: e.toString());
+    }
+  }
+
+  /// Extended version of getSuppliers that supports filtering
+  Future<Result<List<Supplier>>> getSuppliersWithFilters({
     SupplierType? type,
     SupplierStatus? status,
     String? searchQuery,
@@ -21,8 +38,7 @@ class SupplierRepositoryImpl implements SupplierRepository {
     try {
       // Convert enums to strings for the data source
       final typeStr = type?.toString().split('.').last;
-      final statusStr =
-          status?.toString().split('.').last;
+      final statusStr = status?.toString().split('.').last;
 
       final supplierMaps = await _dataSource.getSuppliers(
         type: typeStr,
@@ -49,25 +65,20 @@ class SupplierRepositoryImpl implements SupplierRepository {
   }
 
   @override
-  Future<Result<Supplier>> getSupplierById(String id) async {
+  Future<Supplier?> getSupplierById(String id) async {
     try {
       final supplierMap = await _dataSource.getSupplierById(id);
       final supplier = SupplierModel.fromMap(supplierMap, id).toEntity();
-      return Result.success(supplier);
+      return supplier;
     } on SupplierDataSourceException catch (e) {
       if (e.code == 'not-found') {
-        return Result.failure(
-          NotFoundFailure('Supplier not found with ID: $id'),
-        );
+        return null;
       }
-      return Result.failure(
-        ServerFailure('Failed to get supplier with ID: $id',
-            details: e.toString()),
-      );
+      throw ServerFailure('Failed to get supplier with ID: $id',
+          details: e.toString());
     } catch (e) {
-      return Result.failure(
-        UnknownFailure('An unexpected error occurred', details: e.toString()),
-      );
+      throw UnknownFailure('An unexpected error occurred',
+          details: e.toString());
     }
   }
 
@@ -149,6 +160,86 @@ class SupplierRepositoryImpl implements SupplierRepository {
       return Result.failure(
         UnknownFailure('An unexpected error occurred', details: e.toString()),
       );
+    }
+  }
+
+  @override
+  Future<List<Supplier>> getActiveSuppliers() async {
+    try {
+      final supplierMaps = await _dataSource.getSuppliers(
+        status: 'active',
+      );
+
+      // Convert the raw data maps to domain entities
+      final suppliers = supplierMaps
+          .map((map) =>
+              SupplierModel.fromMap(map, map['id'] as String).toEntity())
+          .toList();
+
+      return suppliers;
+    } catch (e) {
+      throw ServerFailure('Failed to get active suppliers',
+          details: e.toString());
+    }
+  }
+
+  @override
+  Future<Supplier> getPreferredSupplierForItem(String itemId) async {
+    try {
+      // Implementation note: This would typically involve a query to get the preferred
+      // supplier for a specific item. Since we don't have a direct method in the data source,
+      // we need to implement a custom query here or extend the data source.
+
+      // For now, we'll implement a simple version that returns the first active supplier
+      // In a real application, this would query a relationship collection or use a more complex query
+      final supplierMaps = await _dataSource.getSuppliers(status: 'active');
+
+      if (supplierMaps.isEmpty) {
+        throw ServerFailure('No preferred supplier found for item: $itemId');
+      }
+
+      // Assume the first active supplier is the preferred one (this is a simplified approach)
+      return SupplierModel.fromMap(
+              supplierMaps.first, supplierMaps.first['id'] as String)
+          .toEntity();
+    } catch (e) {
+      throw ServerFailure('Failed to get preferred supplier for item: $itemId',
+          details: e.toString());
+    }
+  }
+
+  @override
+  Future<double> getSupplierItemPrice(String supplierId, String itemId) async {
+    try {
+      // Implementation note: This would typically involve a query to the pricing collection
+      // Since we don't have a direct method in the data source, we'll simulate it here
+
+      // In a real application, you would query a pricing collection or item-supplier relationship
+      // For now, returning a dummy value (this should be replaced with actual implementation)
+      return 100.0; // Placeholder price
+    } catch (e) {
+      throw ServerFailure(
+          'Failed to get price for item: $itemId from supplier: $supplierId',
+          details: e.toString());
+    }
+  }
+
+  @override
+  Future<List<Supplier>> getSuppliersForItem(String itemId) async {
+    try {
+      // Implementation note: This would typically involve a query to find all suppliers
+      // that can provide a specific item.
+
+      // For now, returning all active suppliers as a placeholder implementation
+      final supplierMaps = await _dataSource.getSuppliers(status: 'active');
+
+      return supplierMaps
+          .map((map) =>
+              SupplierModel.fromMap(map, map['id'] as String).toEntity())
+          .toList();
+    } catch (e) {
+      throw ServerFailure('Failed to get suppliers for item: $itemId',
+          details: e.toString());
     }
   }
 }

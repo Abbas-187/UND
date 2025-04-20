@@ -5,9 +5,14 @@ import 'package:uuid/uuid.dart';
 import '../../../../l10n/app_localizations.dart';
 
 import '../../domain/services/inventory_movement_service.dart';
-import '../../models/inventory_movement_item_model.dart';
-import '../../models/inventory_movement_model.dart';
-import '../../models/inventory_movement_type.dart';
+import '../../data/models/inventory_movement_item_model.dart';
+import '../../data/models/inventory_movement_model.dart';
+import '../../data/models/inventory_movement_type.dart';
+import '../../data/models/quality_status.dart';
+
+// Import MovementItemStatus enum explicitly
+import '../../data/models/inventory_movement_item_model.dart'
+    show MovementItemStatus;
 
 class CreateMovementPage extends ConsumerStatefulWidget {
   const CreateMovementPage({super.key});
@@ -44,7 +49,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
   final DateTime _currentProductionDate = DateTime.now();
   final DateTime _currentExpirationDate =
       DateTime.now().add(const Duration(days: 365));
-  final QualityStatus _currentQualityStatus = QualityStatus.REGULAR;
+  final QualityStatus _currentQualityStatus = QualityStatus.good;
 
   @override
   Widget build(BuildContext context) {

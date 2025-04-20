@@ -11,9 +11,10 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/services/inventory_movement_service.dart';
-import '../../models/inventory_movement_item_model.dart';
-import '../../models/inventory_movement_model.dart';
-import '../../models/inventory_movement_type.dart';
+import '../../data/models/inventory_movement_item_model.dart';
+import '../../data/models/inventory_movement_model.dart';
+import '../../data/models/inventory_movement_type.dart';
+import '../../data/models/quality_status.dart';
 import '../../providers/inventory_movement_providers.dart';
 import '../widgets/movements/movement_approval_dialog.dart';
 
@@ -353,6 +354,10 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
         chipColor = Colors.red;
         iconData = Icons.cancel;
         break;
+      case ApprovalStatus.CANCELLED:
+        chipColor = Colors.grey;
+        iconData = Icons.block;
+        break;
     }
 
     return Chip(
@@ -460,13 +465,17 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
   Color _getQualityStatusColor(QualityStatus status) {
     switch (status) {
-      case QualityStatus.REGULAR:
-        return Colors.blue;
-      case QualityStatus.QUARANTINE:
-        return Colors.orange;
-      case QualityStatus.APPROVED:
+      case QualityStatus.excellent:
         return Colors.green;
-      case QualityStatus.REJECTED:
+      case QualityStatus.good:
+        return Colors.blue;
+      case QualityStatus.acceptable:
+        return Colors.teal;
+      case QualityStatus.warning:
+        return Colors.orange;
+      case QualityStatus.critical:
+        return Colors.deepOrange;
+      case QualityStatus.rejected:
         return Colors.red;
       default:
         return Colors.grey;

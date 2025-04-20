@@ -130,6 +130,59 @@ class ProcurementDashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildMetricsSection(BuildContext context) {
+    // Simulate async loading and error states for demonstration
+    // In a real app, replace with provider/future/stream
+    final bool isLoading = false; // set to true to simulate loading
+    final String? errorMessage = null; // set to a string to simulate error
+
+    final List<_MetricData> metrics = [
+      _MetricData(
+        title: 'Open POs',
+        value: '12',
+        icon: Icons.shopping_cart,
+        color: Colors.blue,
+        subtitle: 'Orders not yet fulfilled',
+        tooltip: 'Number of purchase orders that are still open',
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Open POs tapped')),
+          );
+        },
+        isLoading: isLoading,
+        errorMessage: errorMessage,
+      ),
+      _MetricData(
+        title: 'Pending Approvals',
+        value: '5',
+        icon: Icons.pending_actions,
+        color: Colors.orange,
+        subtitle: 'Awaiting manager review',
+        tooltip: 'Purchase orders waiting for approval',
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Pending Approvals tapped')),
+          );
+        },
+        isLoading: isLoading,
+        errorMessage: errorMessage,
+      ),
+      _MetricData(
+        title: 'Total Suppliers',
+        value: '24',
+        icon: Icons.people,
+        color: Colors.green,
+        subtitle: 'Active suppliers',
+        tooltip: 'Number of suppliers currently active',
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Total Suppliers tapped')),
+          );
+        },
+        isLoading: isLoading,
+        errorMessage: errorMessage,
+      ),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -138,26 +191,22 @@ class ProcurementDashboardScreen extends ConsumerWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
-        const Row(
-          children: [
-            Expanded(
-              child: ProcurementMetricsCard(
-                title: 'Open POs',
-                value: '12',
-                icon: Icons.shopping_cart,
-                color: Colors.blue,
-              ),
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              child: ProcurementMetricsCard(
-                title: 'Pending Approvals',
-                value: '5',
-                icon: Icons.pending_actions,
-                color: Colors.orange,
-              ),
-            ),
-          ],
+        Row(
+          children: metrics
+              .map((metric) => Expanded(
+                    child: ProcurementMetricsCard(
+                      title: metric.title,
+                      value: metric.value,
+                      icon: metric.icon,
+                      color: metric.color,
+                      subtitle: metric.subtitle,
+                      tooltip: metric.tooltip,
+                      onTap: metric.onTap,
+                      isLoading: metric.isLoading,
+                      errorMessage: metric.errorMessage,
+                    ),
+                  ))
+              .toList(),
         ),
       ],
     );
@@ -197,11 +246,45 @@ class ProcurementDashboardScreen extends ConsumerWidget {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
-        const SizedBox(
+        SizedBox(
           height: 200,
-          child: SupplierPerformanceChart(),
+          child: SupplierPerformanceChart(
+            data: [
+              SupplierPerformance(name: 'DairyBest', score: 4.7),
+              SupplierPerformance(name: 'MilkPro', score: 4.2),
+              SupplierPerformance(name: 'AgroFarm', score: 3.8),
+              SupplierPerformance(name: 'FreshFields', score: 4.5),
+              SupplierPerformance(name: 'GreenPastures', score: 3.9),
+            ],
+            title: 'Supplier Performance',
+            barColor: Colors.blue,
+            backgroundColor: Colors.white,
+          ),
         ),
       ],
     );
   }
+}
+
+class _MetricData {
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+  final String? subtitle;
+  final String? tooltip;
+  final VoidCallback? onTap;
+  final bool isLoading;
+  final String? errorMessage;
+  const _MetricData({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+    this.subtitle,
+    this.tooltip,
+    this.onTap,
+    this.isLoading = false,
+    this.errorMessage,
+  });
 }

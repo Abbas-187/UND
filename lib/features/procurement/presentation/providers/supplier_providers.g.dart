@@ -136,14 +136,33 @@ final supplierRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef SupplierRepositoryRef = AutoDisposeProviderRef<SupplierRepository>;
-String _$suppliersNotifierHash() => r'96149affc02cd225e67c2ba43176edb1a6eb4780';
+String _$supplierFilterNotifierHash() =>
+    r'8c0c79a57f59d26bc534d9891a50a775e2157076';
+
+/// Provider for supplier filter state
+///
+/// Copied from [SupplierFilterNotifier].
+@ProviderFor(SupplierFilterNotifier)
+final supplierFilterNotifierProvider = AutoDisposeNotifierProvider<
+    SupplierFilterNotifier, SupplierFilter>.internal(
+  SupplierFilterNotifier.new,
+  name: r'supplierFilterNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$supplierFilterNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$SupplierFilterNotifier = AutoDisposeNotifier<SupplierFilter>;
+String _$suppliersNotifierHash() => r'8fe757f84043eb1c6d70c9401769634533df2ccc';
 
 /// Notifier for suppliers list
 ///
 /// Copied from [SuppliersNotifier].
 @ProviderFor(SuppliersNotifier)
-final suppliersNotifierProvider =
-    AutoDisposeNotifierProvider<SuppliersNotifier, SuppliersState>.internal(
+final suppliersNotifierProvider = AutoDisposeAsyncNotifierProvider<
+    SuppliersNotifier, SuppliersState>.internal(
   SuppliersNotifier.new,
   name: r'suppliersNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -153,9 +172,9 @@ final suppliersNotifierProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$SuppliersNotifier = AutoDisposeNotifier<SuppliersState>;
+typedef _$SuppliersNotifier = AutoDisposeAsyncNotifier<SuppliersState>;
 String _$supplierDetailNotifierHash() =>
-    r'a09ce498b78a2c6cc8f28b7405c97e8aa0de9680';
+    r'0ee613513813e7346b6ab04004b43adc5e16bc71';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -179,10 +198,10 @@ class _SystemHash {
 }
 
 abstract class _$SupplierDetailNotifier
-    extends BuildlessAutoDisposeNotifier<SupplierDetailState> {
+    extends BuildlessAutoDisposeAsyncNotifier<SupplierDetailState> {
   late final String supplierId;
 
-  SupplierDetailState build(
+  FutureOr<SupplierDetailState> build(
     String supplierId,
   );
 }
@@ -196,7 +215,8 @@ const supplierDetailNotifierProvider = SupplierDetailNotifierFamily();
 /// Notifier for supplier details
 ///
 /// Copied from [SupplierDetailNotifier].
-class SupplierDetailNotifierFamily extends Family<SupplierDetailState> {
+class SupplierDetailNotifierFamily
+    extends Family<AsyncValue<SupplierDetailState>> {
   /// Notifier for supplier details
   ///
   /// Copied from [SupplierDetailNotifier].
@@ -240,8 +260,9 @@ class SupplierDetailNotifierFamily extends Family<SupplierDetailState> {
 /// Notifier for supplier details
 ///
 /// Copied from [SupplierDetailNotifier].
-class SupplierDetailNotifierProvider extends AutoDisposeNotifierProviderImpl<
-    SupplierDetailNotifier, SupplierDetailState> {
+class SupplierDetailNotifierProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<SupplierDetailNotifier,
+        SupplierDetailState> {
   /// Notifier for supplier details
   ///
   /// Copied from [SupplierDetailNotifier].
@@ -274,7 +295,7 @@ class SupplierDetailNotifierProvider extends AutoDisposeNotifierProviderImpl<
   final String supplierId;
 
   @override
-  SupplierDetailState runNotifierBuild(
+  FutureOr<SupplierDetailState> runNotifierBuild(
     covariant SupplierDetailNotifier notifier,
   ) {
     return notifier.build(
@@ -299,7 +320,7 @@ class SupplierDetailNotifierProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  AutoDisposeNotifierProviderElement<SupplierDetailNotifier,
+  AutoDisposeAsyncNotifierProviderElement<SupplierDetailNotifier,
       SupplierDetailState> createElement() {
     return _SupplierDetailNotifierProviderElement(this);
   }
@@ -322,13 +343,13 @@ class SupplierDetailNotifierProvider extends AutoDisposeNotifierProviderImpl<
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin SupplierDetailNotifierRef
-    on AutoDisposeNotifierProviderRef<SupplierDetailState> {
+    on AutoDisposeAsyncNotifierProviderRef<SupplierDetailState> {
   /// The parameter `supplierId` of this provider.
   String get supplierId;
 }
 
 class _SupplierDetailNotifierProviderElement
-    extends AutoDisposeNotifierProviderElement<SupplierDetailNotifier,
+    extends AutoDisposeAsyncNotifierProviderElement<SupplierDetailNotifier,
         SupplierDetailState> with SupplierDetailNotifierRef {
   _SupplierDetailNotifierProviderElement(super.provider);
 

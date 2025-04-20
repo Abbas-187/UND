@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../models/navigation_item.dart';
+
+import '../core/routes/navigation_item.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
 
 class RoleBasedDrawer extends StatelessWidget {
-
   RoleBasedDrawer({super.key});
   final AuthService _authService = AuthService();
 
@@ -308,8 +308,7 @@ class RoleBasedDrawer extends StatelessWidget {
 
     for (var item in items) {
       // Skip items that the user doesn't have access to
-      if (userRole == null ||
-          !item.allowedRoles.contains(userRole.toString())) {
+      if (userRole == null || !item.allowedRoles.contains(userRole.name)) {
         continue;
       }
 

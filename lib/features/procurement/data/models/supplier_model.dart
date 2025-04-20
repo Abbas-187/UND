@@ -17,6 +17,15 @@ enum SupplierType {
   contractor,
 }
 
+/// Enum representing different statuses of suppliers
+enum SupplierStatus {
+  active,
+  inactive,
+  pending,
+  blacklisted,
+  onHold,
+}
+
 /// Converts [SupplierType] enum to string
 String supplierTypeToString(SupplierType type) {
   switch (type) {
@@ -69,7 +78,6 @@ SupplierType supplierTypeFromString(String type) {
 
 /// Model class representing a supplier in the dairy factory system
 class Supplier {
-
   /// Creates a new [Supplier] instance
   Supplier({
     required this.id,
@@ -130,6 +138,7 @@ class Supplier {
           : DateTime.now(),
     );
   }
+
   /// Unique identifier for the supplier
   final String id;
 
@@ -300,7 +309,6 @@ class Supplier {
 
 /// Data model for Supplier
 class SupplierModel {
-
   const SupplierModel({
     this.id,
     required this.name,

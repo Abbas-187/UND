@@ -14,7 +14,6 @@ part 'purchase_order_providers.g.dart';
 /// Represents the state of a purchase order list
 @immutable
 class PurchaseOrdersState {
-
   const PurchaseOrdersState({
     this.isLoading = false,
     this.hasError = false,
@@ -79,7 +78,6 @@ class PurchaseOrdersState {
 /// Represents the state of a purchase order detail
 @immutable
 class PurchaseOrderDetailState {
-
   const PurchaseOrderDetailState({
     this.isLoading = false,
     this.hasError = false,
@@ -197,10 +195,10 @@ class PurchaseOrdersNotifier extends _$PurchaseOrdersNotifier {
 
     switch (sortOption) {
       case SortOption.dateAsc:
-        sortedList.sort((a, b) => a.orderDate.compareTo(b.orderDate));
+        sortedList.sort((a, b) => a.requestDate.compareTo(b.requestDate));
         break;
       case SortOption.dateDesc:
-        sortedList.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+        sortedList.sort((a, b) => b.requestDate.compareTo(a.requestDate));
         break;
       case SortOption.valueAsc:
         sortedList.sort((a, b) => a.totalAmount.compareTo(b.totalAmount));
@@ -209,7 +207,7 @@ class PurchaseOrdersNotifier extends _$PurchaseOrdersNotifier {
         sortedList.sort((a, b) => b.totalAmount.compareTo(a.totalAmount));
         break;
       case SortOption.alphabetical:
-        sortedList.sort((a, b) => a.orderNumber.compareTo(b.orderNumber));
+        sortedList.sort((a, b) => a.poNumber.compareTo(b.poNumber));
         break;
       case SortOption.supplierName:
         sortedList.sort(

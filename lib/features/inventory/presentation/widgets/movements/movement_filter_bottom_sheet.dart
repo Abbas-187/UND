@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../models/inventory_movement_type.dart';
+import '../../../data/models/inventory_movement_type.dart';
 
 class MovementFilterBottomSheet extends ConsumerStatefulWidget {
-
   const MovementFilterBottomSheet({
     super.key,
     this.selectedType,

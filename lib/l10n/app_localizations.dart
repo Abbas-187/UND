@@ -38,7 +38,7 @@ class AppLocalizations {
       'darkMode': 'Dark Mode',
       'enableDarkMode': 'Enable dark mode',
       // Home screen and modules
-      'welcomeToUndManager': 'Welcome to UND Manager',
+      'welcomeToUndManager': 'Welcome to UND App',
       'dairyManagementSolution': 'Your comprehensive dairy management solution',
       'modules': 'Modules',
       'screens': 'Screens',
@@ -81,6 +81,7 @@ class AppLocalizations {
       'inventoryMovementsDesc': 'Track and manage inventory movements',
       'createMovementDesc': 'Create a new inventory movement',
       'inventoryBatchScannerDesc': 'Scan barcodes to track inventory batches',
+      'inventorySettingsDesc': 'Configure inventory management settings',
       // Screen descriptions - Factory
       'productionExecutionsDesc': 'Manage production runs and processes',
       'createProductionExecutionDesc': 'Schedule a new production execution',
@@ -299,6 +300,71 @@ class AppLocalizations {
       'to': 'To {date}',
       'type': 'Type: {type}',
       'status': 'Status: {status}',
+
+      // Language Settings
+      'languageSettings': 'Language Settings',
+      'themeSettings': 'Theme Settings',
+      'enableNotifications': 'Enable Notifications',
+      'enableSounds': 'Enable Sounds',
+      'enableVibration': 'Enable Vibration',
+      'lightTheme': 'Light Theme',
+      'darkTheme': 'Dark Theme',
+      'systemTheme': 'System Default Theme',
+      'themeSettingsSave': 'Save Settings',
+      'themeSettingsSaved': 'Settings saved successfully',
+      'moduleSettings': 'Module Settings',
+
+      // Inventory details screen
+      'item_category': 'Category',
+      'item_minimumQuantity': 'Minimum Quantity',
+      'item_reorderPoint': 'Reorder Point',
+      'item_batchNumber': 'Batch Number',
+      'item_expiryDate': 'Expiry Date',
+      'item_lastUpdated': 'Last Updated',
+      'item_statusAlerts': 'Status Alerts',
+      'item_lowStockAlert': 'Low Stock',
+      'item_lowStockDescription': 'Current quantity is below minimum level',
+      'item_reorderNeeded': 'Reorder Needed',
+      'item_reorderNeededDescription':
+          'Current quantity is below reorder point',
+      'item_expiringSoon': 'Expiring Soon',
+      'item_expiringSoonDescription': 'Item will expire in {days} days',
+      'item_additionalAttributes': 'Additional Attributes',
+      'item_notFound': 'Item not found',
+      'item_details': 'Item Details',
+
+      // Inventory item card
+      'item_expires': 'Expires',
+
+      // Inventory analytics card
+      'inventory_analytics': 'Inventory Analytics',
+
+      // Create movement page
+      'movement_from': 'From',
+      'movement_to': 'To',
+      'movement_items': 'Items',
+      'movement_itemCount': '{count} {count, plural, one{item} other{items}}',
+      'movement_noItemsAdded': 'No items added to this movement',
+
+      // Inventory Alerts Screen
+      'filterAlerts': 'Filter Alerts',
+      'showHighPriority': 'Show High Priority',
+      'showMediumPriority': 'Show Medium Priority',
+      'showLowPriority': 'Show Low Priority',
+      'lowStock': 'Low Stock',
+      'expiredItems': 'Expired Items',
+      'expiringSoon': 'Expiring Soon',
+      'showAcknowledged': 'Show Acknowledged',
+      'apply': 'Apply',
+      'high': 'High',
+      'medium': 'Medium',
+      'low': 'Low',
+      'total': 'Total',
+      'refreshingAlerts': 'Refreshing alerts...',
+      'alertAcknowledged': 'Alert {id} acknowledged',
+      'viewingDetailsFor': 'Viewing details for {itemName}',
+      'noAlertsAtThisTime': 'No alerts at this time.',
+      'acknowledge': 'Acknowledge',
     },
     'ar': {
       'inventoryMovements': 'حركات المخزون',
@@ -368,6 +434,7 @@ class AppLocalizations {
       'inventoryMovementsDesc': 'تتبع وإدارة حركات المخزون',
       'createMovementDesc': 'إنشاء حركة مخزون جديدة',
       'inventoryBatchScannerDesc': 'مسح الرموز الشريطية لتتبع دفعات المخزون',
+      'inventorySettingsDesc': 'تكوين إعدادات إدارة المخزون',
       // Screen descriptions - Factory
       'productionExecutionsDesc': 'إدارة دورات وعمليات الإنتاج',
       'createProductionExecutionDesc': 'جدولة تنفيذ إنتاج جديد',
@@ -580,6 +647,69 @@ class AppLocalizations {
       'performedBy': 'المتميز به',
       'approvedDate': 'تاريخ الموافقة',
       'additionalInfo': 'المعلومات الإضافية',
+
+      // Language Settings
+      'languageSettings': 'الإعدادات اللغوية',
+      'themeSettings': 'الإعدادات المظهرية',
+      'enableNotifications': 'تفعيل الإشعارات',
+      'enableSounds': 'تفعيل الصوت',
+      'enableVibration': 'تفعيل الاهتزاز',
+      'lightTheme': 'الوضع الفاتح',
+      'darkTheme': 'الوضع الداكن',
+      'systemTheme': 'الوضع الافتراضي',
+      'themeSettingsSave': 'حفظ الإعدادات',
+      'themeSettingsSaved': 'تم حفظ الإعدادات بنجاح',
+      'moduleSettings': 'الإعدادات الوحدة',
+
+      // Inventory details screen
+      'item_minimumQuantity': 'كمية الطلب الأدنى',
+      'item_reorderPoint': 'نقطة الطلب',
+      'item_batchNumber': 'رقم الدفعة',
+      'item_expiryDate': 'تاريخ انتهاء الصلاحية',
+      'item_lastUpdated': 'آخر تحديث',
+      'item_statusAlerts': 'تنبيهات الحالة',
+      'item_lowStockAlert': 'كمية منخفضة',
+      'item_lowStockDescription': 'الكمية الحالية أقل من الكمية الأدنى',
+      'item_reorderNeeded': 'يلزم الطلب',
+      'item_reorderNeededDescription': 'الكمية الحالية أقل من نقطة الطلب',
+      'item_expiringSoon': 'سينتهي صلاحيته',
+      'item_expiringSoonDescription': 'سينتهي صلاحيته في {days} يوم',
+      'item_additionalAttributes': 'السمات الإضافية',
+      'item_notFound': 'العنصر غير موجود',
+      'item_details': 'تفاصيل العنصر',
+
+      // Inventory item card
+      'item_expires': 'ينتهي',
+
+      // Inventory analytics card
+      'inventory_analytics': 'تحليل المخزون',
+
+      // Create movement page
+      'movement_from': 'من',
+      'movement_to': 'إلى',
+      'movement_items': 'العناصر',
+      'movement_itemCount': '{count} {count, plural, one{عنصر} other{عناصر}}',
+      'movement_noItemsAdded': 'لم يتم إضافة أي عناصر إلى هذه الحركة',
+
+      // Inventory Alerts Screen
+      'filterAlerts': 'تصفية التنبيهات',
+      'showHighPriority': 'إظهار الأولوية العالية',
+      'showMediumPriority': 'إظهار الأولوية المتوسطة',
+      'showLowPriority': 'إظهار الأولوية المنخفضة',
+      'lowStock': 'مخزون منخفض',
+      'expiredItems': 'عناصر منتهية الصلاحية',
+      'expiringSoon': 'قريبة من انتهاء الصلاحية',
+      'showAcknowledged': 'إظهار المُستلمة',
+      'apply': 'تطبيق',
+      'high': 'عالية',
+      'medium': 'متوسطة',
+      'low': 'منخفضة',
+      'total': 'الإجمالي',
+      'refreshingAlerts': 'تحديث التنبيهات...',
+      'alertAcknowledged': 'تم استلام التنبيه {id}',
+      'viewingDetailsFor': 'عرض تفاصيل {itemName}',
+      'noAlertsAtThisTime': 'لا توجد تنبيهات في الوقت الحالي.',
+      'acknowledge': 'استلام',
     },
     'ur': {
       'inventoryMovements': 'اسٹاک کی منتقلی',
@@ -649,6 +779,7 @@ class AppLocalizations {
       'inventoryMovementsDesc': 'انوینٹری کی منتقلی کو ٹریک اور منظم کریں',
       'createMovementDesc': 'نئی انوینٹری منتقلی بنائیں',
       'inventoryBatchScannerDesc': 'بارکوڈ سکین کرکے بیچز کو ٹریک کریں',
+      'inventorySettingsDesc': 'انوینٹری کی منتقلی کو ٹریک اور منظم کریں',
       // Screen descriptions - Factory
       'productionExecutionsDesc': 'پروڈکشن رنز اور عمل کا انتظام کریں',
       'createProductionExecutionDesc': 'نئی پروڈکشن ایگزیکیوشن شیڈول کریں',
@@ -722,22 +853,21 @@ class AppLocalizations {
       'movementSuccessfullyRejected': 'منتقلی کامیابی سے مسترد کر دی گئی',
       // Inventory Dashboard
       'inventoryManagement': 'انوینٹری مینجمنٹ',
-      'monitorAndManageInventory':
-          'اپنی انوینٹری کی منتقلی کی نگرانی اور انتظام کریں',
-      'recentMovements': 'حالیہ منتقلی',
-      'viewAll': 'سب دیکھیں',
-      'noRecentMovements': 'کوئی حالیہ منتقلی نہیں',
-      'pendingApprovals': 'زیر التواء منظوری',
-      'criticalMovements': 'اہم منتقلی',
-      'movementTrends': 'منتقلی کے رجحانات',
-      'viewAllMovements': 'تمام منتقلی دیکھیں',
-      'refreshData': 'ڈیٹا ریفریش کریں',
-      'pending': 'زیر التواء',
-      'approved': 'منظور شدہ',
-      'rejected': 'مسترد',
-      'unknown': 'نامعلوم',
-      'review': 'جائزہ',
-      'reviewItems': 'آئٹمز کا جائزہ لیں',
+      'monitorAndManageInventory': 'مراقبة وإدارة حركات المخزون',
+      'recentMovements': 'الحركات الأخيرة',
+      'viewAll': 'عرض الكل',
+      'noRecentMovements': 'لا توجد حركات حديثة',
+      'pendingApprovals': 'موافقات معلقة',
+      'criticalMovements': 'حركات حرجة',
+      'movementTrends': 'اتجاهات الحركة',
+      'viewAllMovements': 'عرض جميع الحركات',
+      'refreshData': 'تحديث البيانات',
+      'pending': 'معلق',
+      'approved': 'تمت الموافقة',
+      'rejected': 'مرفوض',
+      'unknown': 'غير معروف',
+      'review': 'مراجعة',
+      'reviewItems': 'مراجعة العناصر',
 
       // Inventory Transfer
       'addItems': 'آئٹمز شامل کریں',
@@ -833,8 +963,7 @@ class AppLocalizations {
       'createAdjustment': 'ایڈجسٹمنٹ بنائیں',
       'adjustmentApprovedSuccessfully': 'ایڈجسٹمنٹ کامیابی سے منظور کر دی گئی',
       'adjustmentRejectedSuccessfully': 'ایڈجسٹمنٹ کامیابی سے مسترد کر دی گئی',
-      'createAdjustmentNotImplemented':
-          'ایڈجسٹمنٹ بنانے کا عمل ابھی تک لاگو نہیں ہوا',
+      'createAdjustmentNotImplemented': 'إنشاء تعديل غير منفذ',
       'from': 'از {date}',
       'to': 'تا {date}',
       'type': 'قسم: {type}',
@@ -863,6 +992,69 @@ class AppLocalizations {
       'performedBy': 'المتميز به',
       'approvedDate': 'تاريخ الموافقة',
       'additionalInfo': 'المعلومات الإضافية',
+
+      // Language Settings
+      'languageSettings': 'الإعدادات اللغوية',
+      'themeSettings': 'الإعدادات المظهرية',
+      'enableNotifications': 'تفعيل الإشعارات',
+      'enableSounds': 'تفعيل الصوت',
+      'enableVibration': 'تفعيل الاهتزاز',
+      'lightTheme': 'الوضع الفاتح',
+      'darkTheme': 'الوضع الداكن',
+      'systemTheme': 'الوضع الافتراضي',
+      'themeSettingsSave': 'حفظ الإعدادات',
+      'themeSettingsSaved': 'تم حفظ الإعدادات بنجاح',
+      'moduleSettings': 'الإعدادات الوحدة',
+
+      // Inventory details screen
+      'item_minimumQuantity': 'كمية الطلب الأدنى',
+      'item_reorderPoint': 'نقطة الطلب',
+      'item_batchNumber': 'رقم الدفعة',
+      'item_expiryDate': 'تاريخ انتهاء الصلاحية',
+      'item_lastUpdated': 'آخر تحديث',
+      'item_statusAlerts': 'تنبيهات الحالة',
+      'item_lowStockAlert': 'كمية منخفضة',
+      'item_lowStockDescription': 'الكمية الحالية أقل من الكمية الأدنى',
+      'item_reorderNeeded': 'يلزم الطلب',
+      'item_reorderNeededDescription': 'الكمية الحالية أقل من نقطة الطلب',
+      'item_expiringSoon': 'سينتهي صلاحيته',
+      'item_expiringSoonDescription': 'سينتهي صلاحيته في {days} يوم',
+      'item_additionalAttributes': 'السمات الإضافية',
+      'item_notFound': 'العنصر غير موجود',
+      'item_details': 'تفاصيل العنصر',
+
+      // Inventory item card
+      'item_expires': 'ينتهي',
+
+      // Inventory analytics card
+      'inventory_analytics': 'تحليل المخزون',
+
+      // Create movement page
+      'movement_from': 'من',
+      'movement_to': 'إلى',
+      'movement_items': 'العناصر',
+      'movement_itemCount': '{count} {count, plural, one{عنصر} other{عناصر}}',
+      'movement_noItemsAdded': 'لم يتم إضافة أي عناصر إلى هذه الحركة',
+
+      // Inventory Alerts Screen
+      'filterAlerts': 'تصفية التنبيهات',
+      'showHighPriority': 'إظهار الأولوية العالية',
+      'showMediumPriority': 'إظهار الأولوية المتوسطة',
+      'showLowPriority': 'إظهار الأولوية المنخفضة',
+      'lowStock': 'مخزون منخفض',
+      'expiredItems': 'عناصر منتهية الصلاحية',
+      'expiringSoon': 'قريبة من انتهاء الصلاحية',
+      'showAcknowledged': 'إظهار المُستلمة',
+      'apply': 'تطبيق',
+      'high': 'عالية',
+      'medium': 'متوسطة',
+      'low': 'منخفضة',
+      'total': 'الإجمالي',
+      'refreshingAlerts': 'تحديث التنبيهات...',
+      'alertAcknowledged': 'تم استلام التنبيه {id}',
+      'viewingDetailsFor': 'عرض تفاصيل {itemName}',
+      'noAlertsAtThisTime': 'لا توجد تنبيهات في الوقت الحالي.',
+      'acknowledge': 'استلام',
     },
     'hi': {
       'inventoryMovements': 'स्टॉक आवाजाही',
@@ -927,6 +1119,8 @@ class AppLocalizations {
       'inventoryMovementsDesc': 'इन्वेंटरी आवाजाही को ट्रैक और प्रबंधित करें',
       'createMovementDesc': 'नई इन्वेंटरी आवाजाही बनाएं',
       'inventoryBatchScannerDesc': 'बारकोड स्कैन करके बैच ट्रैक करें',
+      'inventorySettingsDesc':
+          'इन्वेंटरी प्रबंधन के लिए सेटिंग्स को समायोजित करें',
       // Screen descriptions - Factory
       'productionExecutionsDesc': 'उत्पादन रन और प्रक्रियाओं का प्रबंधन',
       'createProductionExecutionDesc': 'नई उत्पादन निष्पादन बनाएं',
@@ -1117,6 +1311,70 @@ class AppLocalizations {
       'performedBy': 'किया गया',
       'approvedDate': 'मुहूर्त पर मुहूर्त',
       'additionalInfo': 'अतिरिक्त जानकारी',
+
+      // Language Settings
+      'languageSettings': 'भाषा सेटिंग्स',
+      'themeSettings': 'विशेष सेटिंग्स',
+      'enableNotifications': 'सूचनाएं सक्रिय करें',
+      'enableSounds': 'ध्वनि सक्रिय करें',
+      'enableVibration': 'उठाव सक्रिय करें',
+      'lightTheme': 'चमकदार विषय',
+      'darkTheme': 'डार्क विषय',
+      'systemTheme': 'सिस्टम डिफ़ॉल्ट विषय',
+      'saveSettings': 'सेटिंग्स सहेजें',
+      'settingsSaved': 'सेटिंग्स सफलतापूर्वक सहेजी गई',
+      'moduleSettings': 'मॉड्यूल सेटिंग्स',
+
+      // Inventory details screen
+      'item_minimumQuantity': 'आवश्यक आयतन',
+      'item_reorderPoint': 'आवश्यक आयतन',
+      'item_batchNumber': 'आयतन का आयाम',
+      'item_expiryDate': 'आयाम की तारीख',
+      'item_lastUpdated': 'अंतिम अपड़त',
+      'item_statusAlerts': 'अवस्था सूचनाएं',
+      'item_lowStockAlert': 'कम स्टॉक',
+      'item_lowStockDescription': 'वर्तमान आयतन न्यूनतम स्तर से कम है',
+      'item_reorderNeeded': 'आवश्यक आयतन',
+      'item_reorderNeededDescription': 'वर्तमान आयतन न्यूनतम स्तर से कम है',
+      'item_expiringSoon': 'आयाम जल्द समाप्त हो रहा है',
+      'item_expiringSoonDescription':
+          'आयाम जल्द समाप्त हो रहा है {days} दिनों में',
+      'item_additionalAttributes': 'अतिरिक्त विशेषताएं',
+      'item_notFound': 'आइटम नहीं मिला',
+      'item_details': 'आइटम की विवरण',
+
+      // Inventory item card
+      'item_expires': 'आयाम समाप्त हो रहा है',
+
+      // Inventory analytics card
+      'inventory_analytics': 'आयतन का विश्लेषण',
+
+      // Create movement page
+      'movement_from': 'से',
+      'movement_to': 'तक',
+      'movement_items': 'आइटम',
+      'movement_itemCount': '{count} {count, plural, one{आइटम} other{आइटम}}',
+      'movement_noItemsAdded': 'इस भरकार में कोई आइटम नहीं जोड़ा गया',
+
+      // Inventory Alerts Screen
+      'filterAlerts': 'फ़िल्टर आवाजाही',
+      'showHighPriority': 'उच्च आवाजाही दिखाएं',
+      'showMediumPriority': 'मध्यम आवाजाही दिखाएं',
+      'showLowPriority': 'निम्न आवाजाही दिखाएं',
+      'lowStock': 'कम स्टॉक',
+      'expiredItems': 'खत्म होने वाली आवाजाही',
+      'expiringSoon': 'जल्द खत्म होने वाली आवाजाही',
+      'showAcknowledged': 'स्वीकृत आवाजाही दिखाएं',
+      'apply': 'लागू करें',
+      'high': 'उच्च',
+      'medium': 'मध्यम',
+      'low': 'निम्न',
+      'total': 'कुल',
+      'refreshingAlerts': 'आवाजाही अपड़त हो रही है...',
+      'alertAcknowledged': 'आवाजाही {id} स्वीकृत की गई',
+      'viewingDetailsFor': 'आवाजाही {itemName} के विवरण देखने के लिए',
+      'noAlertsAtThisTime': 'इस समय कोई आवाजाही नहीं है।',
+      'acknowledge': 'स्वीकृत करें',
     },
   };
 
@@ -1316,6 +1574,8 @@ class AppLocalizations {
   // Inventory Dashboard getters
   String get inventoryDashboard =>
       _localizedValues[locale.languageCode]?['inventoryDashboard'] ?? '';
+  String get inventoryAlerts =>
+      _localizedValues[locale.languageCode]?['inventoryAlerts'] ?? '';
   String get inventoryManagement =>
       _localizedValues[locale.languageCode]?['inventoryManagement'] ?? '';
   String get monitorAndManageInventory =>
@@ -1587,6 +1847,125 @@ class AppLocalizations {
   String get quantityByType =>
       _localizedValues[locale.languageCode]?['quantityByType'] ?? '';
   String get units => _localizedValues[locale.languageCode]?['units'] ?? '';
+
+  // Language Settings
+  String get languageSettings =>
+      _localizedValues[locale.languageCode]?['languageSettings'] ?? '';
+  String get themeSettings =>
+      _localizedValues[locale.languageCode]?['themeSettings'] ?? '';
+  String get enableNotifications =>
+      _localizedValues[locale.languageCode]?['enableNotifications'] ?? '';
+  String get enableSounds =>
+      _localizedValues[locale.languageCode]?['enableSounds'] ?? '';
+  String get enableVibration =>
+      _localizedValues[locale.languageCode]?['enableVibration'] ?? '';
+  String get lightTheme =>
+      _localizedValues[locale.languageCode]?['lightTheme'] ?? '';
+  String get darkTheme =>
+      _localizedValues[locale.languageCode]?['darkTheme'] ?? '';
+  String get systemTheme =>
+      _localizedValues[locale.languageCode]?['systemTheme'] ?? '';
+  String get themeSettingsSave =>
+      _localizedValues[locale.languageCode]?['themeSettingsSave'] ?? '';
+  String get themeSettingsSaved =>
+      _localizedValues[locale.languageCode]?['themeSettingsSaved'] ?? '';
+  String get moduleSettings =>
+      _localizedValues[locale.languageCode]?['moduleSettings'] ?? '';
+
+  // Inventory details screen
+  String get itemCategory =>
+      _localizedValues[locale.languageCode]?['item_category'] ?? '';
+  String get itemMinimumQuantity =>
+      _localizedValues[locale.languageCode]?['item_minimumQuantity'] ?? '';
+  String get itemReorderPoint =>
+      _localizedValues[locale.languageCode]?['item_reorderPoint'] ?? '';
+  String get itemBatchNumber =>
+      _localizedValues[locale.languageCode]?['item_batchNumber'] ?? '';
+  String get itemExpiryDate =>
+      _localizedValues[locale.languageCode]?['item_expiryDate'] ?? '';
+  String get itemLastUpdated =>
+      _localizedValues[locale.languageCode]?['item_lastUpdated'] ?? '';
+  String get itemStatusAlerts =>
+      _localizedValues[locale.languageCode]?['item_statusAlerts'] ?? '';
+  String get itemLowStockAlert =>
+      _localizedValues[locale.languageCode]?['item_lowStockAlert'] ?? '';
+  String get itemLowStockDescription =>
+      _localizedValues[locale.languageCode]?['item_lowStockDescription'] ?? '';
+  String get itemReorderNeeded =>
+      _localizedValues[locale.languageCode]?['item_reorderNeeded'] ?? '';
+  String get itemReorderNeededDescription =>
+      _localizedValues[locale.languageCode]?['item_reorderNeededDescription'] ??
+      '';
+  String get itemExpiringSoon =>
+      _localizedValues[locale.languageCode]?['item_expiringSoon'] ?? '';
+  String itemExpiringSoonDescription(int days) =>
+      (_localizedValues[locale.languageCode]?['item_expiringSoonDescription'] ??
+              '')
+          .replaceAll('{days}', days.toString());
+  String get itemAdditionalAttributes =>
+      _localizedValues[locale.languageCode]?['item_additionalAttributes'] ?? '';
+  String get itemNotFound =>
+      _localizedValues[locale.languageCode]?['item_notFound'] ?? '';
+  String get itemDetails =>
+      _localizedValues[locale.languageCode]?['item_details'] ?? '';
+
+  // Inventory item card
+  String get itemExpires =>
+      _localizedValues[locale.languageCode]?['item_expires'] ?? '';
+
+  // Inventory analytics card
+  String get inventoryAnalytics =>
+      _localizedValues[locale.languageCode]?['inventory_analytics'] ?? '';
+
+  // Create movement page
+  String get movementFrom =>
+      _localizedValues[locale.languageCode]?['movement_from'] ?? '';
+  String get movementTo =>
+      _localizedValues[locale.languageCode]?['movement_to'] ?? '';
+  String get movementItems =>
+      _localizedValues[locale.languageCode]?['movement_items'] ?? '';
+  String movementItemCount(int count) {
+    return (_localizedValues[locale.languageCode]?['movement_itemCount'] ?? '')
+        .replaceAll('{count}', count.toString());
+  }
+
+  String get movementNoItemsAdded =>
+      _localizedValues[locale.languageCode]?['movement_noItemsAdded'] ?? '';
+
+  // Inventory Alerts Screen
+  String get filterAlerts =>
+      _localizedValues[locale.languageCode]?['filterAlerts'] ?? '';
+  String get showHighPriority =>
+      _localizedValues[locale.languageCode]?['showHighPriority'] ?? '';
+  String get showMediumPriority =>
+      _localizedValues[locale.languageCode]?['showMediumPriority'] ?? '';
+  String get showLowPriority =>
+      _localizedValues[locale.languageCode]?['showLowPriority'] ?? '';
+  String get lowStock =>
+      _localizedValues[locale.languageCode]?['lowStock'] ?? '';
+  String get expiredItems =>
+      _localizedValues[locale.languageCode]?['expiredItems'] ?? '';
+  String get expiringSoon =>
+      _localizedValues[locale.languageCode]?['expiringSoon'] ?? '';
+  String get showAcknowledged =>
+      _localizedValues[locale.languageCode]?['showAcknowledged'] ?? '';
+  String get apply => _localizedValues[locale.languageCode]?['apply'] ?? '';
+  String get high => _localizedValues[locale.languageCode]?['high'] ?? '';
+  String get medium => _localizedValues[locale.languageCode]?['medium'] ?? '';
+  String get low => _localizedValues[locale.languageCode]?['low'] ?? '';
+  String get total => _localizedValues[locale.languageCode]?['total'] ?? '';
+  String get refreshingAlerts =>
+      _localizedValues[locale.languageCode]?['refreshingAlerts'] ?? '';
+  String alertAcknowledged(String id) =>
+      (_localizedValues[locale.languageCode]?['alertAcknowledged'] ?? '')
+          .replaceAll('{id}', id);
+  String viewingDetailsFor(String itemName) =>
+      (_localizedValues[locale.languageCode]?['viewingDetailsFor'] ?? '')
+          .replaceAll('{itemName}', itemName);
+  String get noAlertsAtThisTime =>
+      _localizedValues[locale.languageCode]?['noAlertsAtThisTime'] ?? '';
+  String get acknowledge =>
+      _localizedValues[locale.languageCode]?['acknowledge'] ?? '';
 }
 
 class _AppLocalizationsDelegate

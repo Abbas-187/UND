@@ -125,7 +125,6 @@ class ForecastingListScreen extends ConsumerWidget {
 }
 
 class ForecastListItem extends StatelessWidget {
-
   const ForecastListItem({
     super.key,
     required this.forecast,

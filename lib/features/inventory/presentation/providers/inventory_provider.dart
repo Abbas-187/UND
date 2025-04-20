@@ -5,6 +5,8 @@ import '../../domain/repositories/inventory_repository.dart';
 import '../../domain/usecases/adjust_quantity_usecase.dart';
 import '../../domain/usecases/get_inventory_analytics_usecase.dart';
 import '../../domain/usecases/get_low_stock_alerts_usecase.dart';
+import '../../domain/analytics/inventory_analytics_service.dart';
+import 'package:intl/intl.dart';
 
 // Repository provider
 final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
@@ -29,9 +31,51 @@ final getInventoryAnalyticsUseCaseProvider =
   return GetInventoryAnalyticsUseCase(repository);
 });
 
+// Provider for InventoryAnalyticsService
+final inventoryAnalyticsServiceProvider =
+    Provider<InventoryAnalyticsService>((ref) {
+  return InventoryAnalyticsService();
+});
+
+// Inventory Turnover for the last 30 days
+final inventoryTurnoverProvider = FutureProvider<double>((ref) async {
+  final analytics = ref.watch(inventoryAnalyticsServiceProvider);
+  final now = DateTime.now();
+  final start = now.subtract(const Duration(days: 30));
+  return analytics.getInventoryTurnover(startDate: start, endDate: now);
+});
+
+// Stock Coverage (days on hand by category)
+final stockCoverageProvider = FutureProvider<Map<String, double>>((ref) async {
+  final analytics = ref.watch(inventoryAnalyticsServiceProvider);
+  return analytics.getDaysOnHand();
+});
+
+// Inventory Trends (value over last 12 months)
+final inventoryTrendsProvider =
+    FutureProvider<List<Map<String, dynamic>>>((ref) async {
+  final analytics = ref.watch(inventoryAnalyticsServiceProvider);
+  final now = DateTime.now();
+  final start = DateTime(now.year, now.month - 11, 1);
+  // Map<String, List<TimeSeriesPoint>>
+  final trends =
+      await analytics.getInventoryLevelTrends(startDate: start, endDate: now);
+  // Flatten to List<Map<String, dynamic>>
+  final List<Map<String, dynamic>> result = [];
+  trends.forEach((category, points) {
+    for (final point in points) {
+      result.add({
+        'category': category,
+        'date': point.date,
+        'value': point.value,
+      });
+    }
+  });
+  return result;
+});
+
 // Filter class
 class InventoryFilter {
-
   const InventoryFilter({
     this.searchQuery = '',
     this.showLowStock = false,

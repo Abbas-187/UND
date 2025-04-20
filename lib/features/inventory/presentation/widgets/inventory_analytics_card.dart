@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
 
@@ -8,6 +9,7 @@ class InventoryAnalyticsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final inventoryValue = ref.watch(inventoryValueProvider);
     final topMovingItems = ref.watch(topMovingItemsProvider);
     final slowMovingItems = ref.watch(slowMovingItemsProvider);
@@ -20,14 +22,14 @@ class InventoryAnalyticsCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Inventory Analytics',
+              l10n.inventoryAnalytics,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             // Inventory value by category
             _buildSection(
               context,
-              title: 'Value by Category',
+              title: l10n.valueByCategory,
               content: inventoryValue.when(
                 data: (data) => Column(
                   children: data.entries.map((entry) {
@@ -38,7 +40,7 @@ class InventoryAnalyticsCard extends ConsumerWidget {
                         children: [
                           Text(entry.key),
                           Text(
-                            '\$${entry.value.toStringAsFixed(2)}',
+                            '${l10n.currencySymbol}${entry.value.toStringAsFixed(2)}',
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -46,30 +48,30 @@ class InventoryAnalyticsCard extends ConsumerWidget {
                     );
                   }).toList(),
                 ),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, _) => Text('Error: $error'),
+                loading: () => const CircularProgressIndicator(),
+                error: (e, _) => Text(e.toString()),
               ),
             ),
-            const Divider(),
+            const SizedBox(height: 16),
             // Top moving items
             _buildSection(
               context,
-              title: 'Top Moving Items',
+              title: l10n.topMovingItems,
               content: topMovingItems.when(
                 data: (items) => _buildItemList(items),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, _) => Text('Error: $error'),
+                loading: () => const CircularProgressIndicator(),
+                error: (e, _) => Text(e.toString()),
               ),
             ),
-            const Divider(),
+            const SizedBox(height: 16),
             // Slow moving items
             _buildSection(
               context,
-              title: 'Slow Moving Items',
+              title: l10n.slowMovingItems,
               content: slowMovingItems.when(
                 data: (items) => _buildItemList(items),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, _) => Text('Error: $error'),
+                loading: () => const CircularProgressIndicator(),
+                error: (e, _) => Text(e.toString()),
               ),
             ),
           ],

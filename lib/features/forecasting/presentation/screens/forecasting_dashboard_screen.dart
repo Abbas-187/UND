@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../../common/widgets/app_loading_indicator.dart';
-import '../../../../common/widgets/error_view.dart';
+import '../../../../core/widgets/error_view.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../inventory/data/models/inventory_item_model.dart';
 import '../../../inventory/domain/providers/inventory_provider.dart';
@@ -316,7 +316,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
           ),
           error: (error, stackTrace) => Center(
             child: ErrorView(
-              message: 'Error loading inventory: $error',
+              error: 'Error loading inventory: $error',
               icon: Icons.error_outline,
             ),
           ),

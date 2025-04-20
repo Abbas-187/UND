@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../data/models/purchase_order_model.dart';
 import '../../data/models/supplier_model.dart';
 import '../../data/models/supplier_quality_log_model.dart';
+import 'supplier_performance_chart.dart';
 
 /// Widget for displaying upcoming deliveries on the dashboard
 class UpcomingDeliveriesWidget extends ConsumerWidget {
@@ -60,19 +61,21 @@ class UpcomingDeliveriesWidget extends ConsumerWidget {
                   itemCount: deliveries.length,
                   itemBuilder: (context, index) {
                     final delivery = deliveries[index];
-                    final daysRemaining = delivery.expectedDeliveryDate
-                        .difference(DateTime.now())
-                        .inDays;
+                    final daysRemaining = delivery.expectedDeliveryDate != null
+                        ? delivery.expectedDeliveryDate!
+                            .difference(DateTime.now())
+                            .inDays
+                        : 0;
 
                     return ListTile(
                       title: Text(
-                        'PO ${delivery.orderNumber}',
+                        'PO ${delivery.orderNumber ?? delivery.poNumber}',
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       subtitle: Text(
-                        '${delivery.supplierName} • ${DateFormat('MMM dd, yyyy').format(delivery.expectedDeliveryDate)}',
+                        '${delivery.supplierName} • ${DateFormat('MMM dd, yyyy').format(delivery.expectedDeliveryDate ?? DateTime.now())}',
                       ),
                       trailing: Chip(
                         label: Text(
@@ -166,13 +169,13 @@ class PendingApprovalsWidget extends ConsumerWidget {
                         final approval = approvals[index];
                         return ListTile(
                           title: Text(
-                            'PO ${approval.orderNumber}',
+                            'PO ${approval.orderNumber ?? approval.poNumber}',
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: Text(
-                            'Created ${DateFormat('MMM dd').format(approval.createdAt!)} • ${NumberFormat.currency(symbol: '\$').format(approval.totalAmount)}',
+                            'Created ${DateFormat('MMM dd').format(approval.createdAt ?? DateTime.now())} • ${NumberFormat.currency(symbol: '\$').format(approval.totalAmount)}',
                           ),
                           trailing: OutlinedButton(
                             onPressed: () {
@@ -250,173 +253,98 @@ class PendingApprovalsWidget extends ConsumerWidget {
 }
 
 /// Widget for displaying supplier performance metrics
-class SupplierPerformanceWidget extends ConsumerWidget {
+class SupplierPerformanceWidget extends StatefulWidget {
   const SupplierPerformanceWidget({super.key, this.limit = 5});
-
   final int limit;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final topSuppliers = ref.watch(topSuppliersProvider(limit));
+  State<SupplierPerformanceWidget> createState() =>
+      _SupplierPerformanceWidgetState();
+}
 
+class _SupplierPerformanceWidgetState extends State<SupplierPerformanceWidget> {
+  bool _showData = true;
+  Color _barColor = Colors.indigo;
+  String _title = 'Supplier Performance (Mock)';
+  final TextEditingController _titleController =
+      TextEditingController(text: 'Supplier Performance (Mock)');
+
+  List<SupplierPerformance> get _mockData => [
+        SupplierPerformance(name: 'DairyBest', score: 4.7),
+        SupplierPerformance(name: 'MilkPro', score: 4.2),
+        SupplierPerformance(name: 'AgroFarm', score: 3.8),
+        SupplierPerformance(name: 'FreshFields', score: 4.5),
+        SupplierPerformance(name: 'GreenPastures', score: 3.9),
+      ];
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
-      clipBehavior: Clip.antiAlias,
-      elevation: 2,
+      margin: const EdgeInsets.all(8),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Supplier Performance',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: TextField(
+                    controller: _titleController,
+                    decoration: const InputDecoration(
+                      labelText: 'Chart Title',
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                    ),
+                    onChanged: (val) => setState(() => _title = val),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    // Navigate to supplier performance screen
-                  },
-                  child: const Text('View All'),
+                const SizedBox(width: 12),
+                DropdownButton<Color>(
+                  value: _barColor,
+                  items: [
+                    DropdownMenuItem(
+                      value: Colors.indigo,
+                      child: Container(
+                          width: 24, height: 24, color: Colors.indigo),
+                    ),
+                    DropdownMenuItem(
+                      value: Colors.blue,
+                      child:
+                          Container(width: 24, height: 24, color: Colors.blue),
+                    ),
+                    DropdownMenuItem(
+                      value: Colors.green,
+                      child:
+                          Container(width: 24, height: 24, color: Colors.green),
+                    ),
+                    DropdownMenuItem(
+                      value: Colors.orange,
+                      child: Container(
+                          width: 24, height: 24, color: Colors.orange),
+                    ),
+                  ],
+                  onChanged: (color) => setState(() => _barColor = color!),
+                  underline: Container(),
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  onPressed: () => setState(() => _showData = !_showData),
+                  child: Text(_showData ? 'Show Empty' : 'Show Data'),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            topSuppliers.when(
-              data: (suppliers) {
-                if (suppliers.isEmpty) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text('No supplier data available'),
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: suppliers.length,
-                  itemBuilder: (context, index) {
-                    final supplier = suppliers[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              supplier.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 4,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildPerformanceBar(
-                                  'Quality',
-                                  supplier.performanceMetrics.qualityScore,
-                                  Colors.blue,
-                                ),
-                                const SizedBox(height: 4),
-                                _buildPerformanceBar(
-                                  'Delivery',
-                                  supplier.performanceMetrics.deliveryScore,
-                                  Colors.green,
-                                ),
-                                const SizedBox(height: 4),
-                                _buildPerformanceBar(
-                                  'Price',
-                                  supplier.performanceMetrics.priceScore,
-                                  Colors.orange,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          CircleAvatar(
-                            radius: 16,
-                            backgroundColor: _getOverallScoreColor(
-                                supplier.performanceMetrics.overallScore),
-                            child: Text(
-                              supplier.performanceMetrics.overallScore
-                                  .toStringAsFixed(1),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stackTrace) => Center(
-                child: Text('Error: ${error.toString()}'),
-              ),
+            SupplierPerformanceChart(
+              data: _showData ? _mockData : [],
+              title: _title,
+              barColor: _barColor,
+              backgroundColor: Colors.white,
             ),
           ],
         ),
       ),
     );
-  }
-
-  Widget _buildPerformanceBar(String label, double score, Color color) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 60,
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
-          ),
-        ),
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(2),
-            child: LinearProgressIndicator(
-              value: score / 5, // Assuming 5 is max score
-              backgroundColor: Colors.grey[200],
-              color: color,
-              minHeight: 8,
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 24,
-          child: Text(
-            score.toStringAsFixed(1),
-            textAlign: TextAlign.right,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[800],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Color _getOverallScoreColor(double score) {
-    if (score >= 4.0) return Colors.green;
-    if (score >= 3.0) return Colors.blue;
-    if (score >= 2.0) return Colors.orange;
-    return Colors.red;
   }
 }
 

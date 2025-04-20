@@ -1,5 +1,4 @@
 class PriceListModel {
-
   PriceListModel({
     this.id,
     required this.name,
@@ -41,7 +40,7 @@ class PriceListModel {
           : null,
     );
   }
-  String? id;
+  final String? id;
   final String name;
   final String description;
   final DateTime effectiveFrom;
@@ -86,6 +85,39 @@ class PriceListModel {
       if (approvalDate != null) 'approvalDate': approvalDate!.toIso8601String(),
     };
   }
+
+  PriceListModel copyWith({
+    String? id,
+    String? name,
+    String? description,
+    DateTime? effectiveFrom,
+    DateTime? effectiveTo,
+    String? status,
+    Map<String, Map<String, double>>? prices,
+    String? customerCategory,
+    List<String>? applicableCustomerIds,
+    String? createdBy,
+    DateTime? createdDate,
+    String? approvedBy,
+    DateTime? approvalDate,
+  }) {
+    return PriceListModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      effectiveFrom: effectiveFrom ?? this.effectiveFrom,
+      effectiveTo: effectiveTo ?? this.effectiveTo,
+      status: status ?? this.status,
+      prices: prices ?? this.prices,
+      customerCategory: customerCategory ?? this.customerCategory,
+      applicableCustomerIds:
+          applicableCustomerIds ?? this.applicableCustomerIds,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+      approvedBy: approvedBy ?? this.approvedBy,
+      approvalDate: approvalDate ?? this.approvalDate,
+    );
+  }
 }
 
-// Replace potentially corrupted/old content below with the freezed structure above
+// Remove legacy freezed comment

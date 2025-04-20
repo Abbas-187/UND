@@ -13,7 +13,9 @@ class PurchaseOrderRepository {
     try {
       await _firestore.collection('purchaseOrders').add(purchaseOrderData);
     } catch (e) {
-      throw AppException('Failed to create purchase order: $e');
+      throw AppException(
+          message: 'Failed to create purchase order: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -26,7 +28,9 @@ class PurchaseOrderRepository {
           .doc(purchaseOrderId)
           .get();
     } catch (e) {
-      throw AppException('Failed to get purchase order: $e');
+      throw AppException(
+          message: 'Failed to get purchase order: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -39,7 +43,9 @@ class PurchaseOrderRepository {
           .doc(purchaseOrderId)
           .update(purchaseOrderData);
     } catch (e) {
-      throw AppException('Failed to update purchase order: $e');
+      throw AppException(
+          message: 'Failed to update purchase order: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -51,7 +57,9 @@ class PurchaseOrderRepository {
           .doc(purchaseOrderId)
           .delete();
     } catch (e) {
-      throw AppException('Failed to delete purchase order: $e');
+      throw AppException(
+          message: 'Failed to delete purchase order: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -72,7 +80,9 @@ class PurchaseOrderRepository {
           .collection('items')
           .add(itemData);
     } catch (e) {
-      throw AppException('Failed to add item to purchase order: $e');
+      throw AppException(
+          message: 'Failed to add item to purchase order: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -87,7 +97,9 @@ class PurchaseOrderRepository {
           .doc(itemId)
           .get();
     } catch (e) {
-      throw AppException('Failed to get purchase order item: $e');
+      throw AppException(
+          message: 'Failed to get purchase order item: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -102,7 +114,9 @@ class PurchaseOrderRepository {
           .doc(itemId)
           .update(itemData);
     } catch (e) {
-      throw AppException('Failed to update purchase order item: $e');
+      throw AppException(
+          message: 'Failed to update purchase order item: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -117,7 +131,9 @@ class PurchaseOrderRepository {
           .doc(itemId)
           .delete();
     } catch (e) {
-      throw AppException('Failed to delete purchase order item: $e');
+      throw AppException(
+          message: 'Failed to delete purchase order item: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -140,7 +156,9 @@ class PurchaseOrderRepository {
           .doc(purchaseOrderId)
           .update({'status': newStatus});
     } catch (e) {
-      throw AppException('Failed to transition purchase order status: $e');
+      throw AppException(
+          message: 'Failed to transition purchase order status: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -152,7 +170,9 @@ class PurchaseOrderRepository {
           .doc(purchaseOrderId)
           .update({'approvalRequested': true, 'status': 'pending_approval'});
     } catch (e) {
-      throw AppException('Failed to request purchase order approval: $e');
+      throw AppException(
+          message: 'Failed to request purchase order approval: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -163,7 +183,9 @@ class PurchaseOrderRepository {
           .doc(purchaseOrderId)
           .update({'approved': true, 'status': 'approved'});
     } catch (e) {
-      throw AppException('Failed to approve purchase order: $e');
+      throw AppException(
+          message: 'Failed to approve purchase order: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -174,7 +196,9 @@ class PurchaseOrderRepository {
           .doc(purchaseOrderId)
           .update({'approved': false, 'status': 'rejected'});
     } catch (e) {
-      throw AppException('Failed to reject purchase order: $e');
+      throw AppException(
+          message: 'Failed to reject purchase order: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -192,7 +216,9 @@ class PurchaseOrderRepository {
         'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      throw AppException('Failed to track purchase order history: $e');
+      throw AppException(
+          message: 'Failed to track purchase order history: $e',
+          type: AppExceptionType.unknown);
     }
   }
 
@@ -247,7 +273,9 @@ class PurchaseOrderRepository {
             itemData); // Example of set, can be add as well
       });
     } catch (e) {
-      throw AppException('Transactional operation failed: $e');
+      throw AppException(
+          message: 'Transactional operation failed: $e',
+          type: AppExceptionType.unknown);
     }
   }
 }

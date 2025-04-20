@@ -16,9 +16,14 @@ class MainLayout extends StatefulWidget {
   State<MainLayout> createState() => _MainLayoutState();
 }
 
+// Static variable to maintain nav rail visibility across all screens
+class _NavRailState {
+  static bool isVisible = false;
+}
+
 class _MainLayoutState extends State<MainLayout> {
   // Controls whether the navigation rail is visible
-  bool _isNavRailVisible = false;
+  bool _isNavRailVisible = _NavRailState.isVisible;
   double _dragStartX = 0;
 
   @override
@@ -39,16 +44,16 @@ class _MainLayoutState extends State<MainLayout> {
           if (textDirection == TextDirection.ltr) {
             // For LTR: Swipe right to show, left to hide
             if (delta > 50 && !_isNavRailVisible) {
-              setState(() => _isNavRailVisible = true);
+              _updateNavRailVisibility(true);
             } else if (delta < -50 && _isNavRailVisible) {
-              setState(() => _isNavRailVisible = false);
+              _updateNavRailVisibility(false);
             }
           } else {
             // For RTL: Swipe left to show, right to hide
             if (delta < -50 && !_isNavRailVisible) {
-              setState(() => _isNavRailVisible = true);
+              _updateNavRailVisibility(true);
             } else if (delta > 50 && _isNavRailVisible) {
-              setState(() => _isNavRailVisible = false);
+              _updateNavRailVisibility(false);
             }
           }
         },
@@ -75,10 +80,73 @@ class _MainLayoutState extends State<MainLayout> {
                 child: _buildNavigationRail(context),
               ),
             ),
+
+            // Handle to pull out the navigation rail
+            if (!_isNavRailVisible)
+              Positioned(
+                left: textDirection == TextDirection.ltr ? 0 : null,
+                right: textDirection == TextDirection.rtl ? 0 : null,
+                top: 0,
+                bottom: 0,
+                width: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    _updateNavRailVisibility(true);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primaryContainer
+                          .withOpacity(0.5),
+                      borderRadius: BorderRadius.only(
+                        topRight: textDirection == TextDirection.ltr
+                            ? const Radius.circular(8)
+                            : Radius.zero,
+                        bottomRight: textDirection == TextDirection.ltr
+                            ? const Radius.circular(8)
+                            : Radius.zero,
+                        topLeft: textDirection == TextDirection.rtl
+                            ? const Radius.circular(8)
+                            : Radius.zero,
+                        bottomLeft: textDirection == TextDirection.rtl
+                            ? const Radius.circular(8)
+                            : Radius.zero,
+                      ),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        textDirection == TextDirection.ltr
+                            ? Icons.chevron_right
+                            : Icons.chevron_left,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
+      // Add a floating action button to toggle the navigation rail
+      floatingActionButton: FloatingActionButton(
+        mini: true,
+        onPressed: () {
+          _updateNavRailVisibility(!_isNavRailVisible);
+        },
+        child: Icon(_isNavRailVisible ? Icons.menu_open : Icons.menu),
+        tooltip:
+            _isNavRailVisible ? 'Hide Navigation Menu' : 'Show Navigation Menu',
+      ),
     );
+  }
+
+  // Update the navigation rail visibility in both state and static variable
+  void _updateNavRailVisibility(bool isVisible) {
+    setState(() {
+      _isNavRailVisible = isVisible;
+      _NavRailState.isVisible = isVisible;
+    });
   }
 
   Widget _buildNavigationRail(BuildContext context) {
@@ -90,11 +158,6 @@ class _MainLayoutState extends State<MainLayout> {
       minWidth: 100,
       minExtendedWidth: 150,
       onDestinationSelected: (index) {
-        // Hide the rail after selection
-        setState(() {
-          _isNavRailVisible = false;
-        });
-
         // Navigate to the selected route using pushReplacementNamed to replace the current route
         switch (index) {
           case 0:

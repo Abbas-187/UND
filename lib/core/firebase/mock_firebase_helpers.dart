@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'firebase_mock.dart';
 import 'firebase_module.dart';
@@ -45,6 +44,9 @@ class MockNotificationSettings implements NotificationSettings {
       AppleNotificationSetting.enabled;
 
   @override
+  AppleNotificationSetting get providesAppNotificationSettings =>
+      AppleNotificationSetting.disabled;
+
   NotificationSettings copyWith({
     AuthorizationStatus? authorizationStatus,
     AppleNotificationSetting? alert,

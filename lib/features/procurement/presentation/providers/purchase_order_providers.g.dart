@@ -161,7 +161,7 @@ final purchaseOrderRepositoryProvider =
 typedef PurchaseOrderRepositoryRef
     = AutoDisposeProviderRef<PurchaseOrderRepository>;
 String _$purchaseOrdersNotifierHash() =>
-    r'ca8a7a48a7180cb18a41c76e8ba3d5d61b0b9bd9';
+    r'ff6bfdc5c15d0286f5d2e2f4fbb531ece61339f5';
 
 /// Notifier for purchase orders list
 ///

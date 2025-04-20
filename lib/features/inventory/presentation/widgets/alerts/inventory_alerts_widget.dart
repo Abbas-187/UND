@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../domain/entities/inventory_alert.dart';
 import '../../../domain/services/alerts/inventory_alerts_service.dart';
+import '../../../../../l10n/app_localizations.dart';
 
 /// Widget to display inventory alerts
 class InventoryAlertsWidget extends StatelessWidget {
-
   InventoryAlertsWidget({
     super.key,
     required this.alerts,
     this.onAcknowledge,
     this.onAlertTap,
   });
+
   /// List of alerts to display
   final List<InventoryAlert> alerts;
 
@@ -29,13 +30,15 @@ class InventoryAlertsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     if (alerts.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Text(
-            'No alerts at this time.',
-            style: TextStyle(fontStyle: FontStyle.italic),
+            localizations.noAlertsAtThisTime,
+            style: const TextStyle(fontStyle: FontStyle.italic),
           ),
         ),
       );
@@ -53,6 +56,7 @@ class InventoryAlertsWidget extends StatelessWidget {
   }
 
   Widget _buildAlertCard(BuildContext context, InventoryAlert alert) {
+    final localizations = AppLocalizations.of(context);
     final color = _alertsService.getSeverityColor(alert.severity);
     final icon = _alertsService.getAlertTypeIcon(alert.alertType);
 
@@ -94,7 +98,7 @@ class InventoryAlertsWidget extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
-                        _buildSeverityBadge(alert.severity),
+                        _buildSeverityBadge(context, alert.severity),
                       ],
                     ),
                     const SizedBox(height: 4),
@@ -116,7 +120,7 @@ class InventoryAlertsWidget extends StatelessWidget {
                         if (!alert.isAcknowledged && onAcknowledge != null)
                           TextButton(
                             onPressed: () => onAcknowledge?.call(alert.id),
-                            child: const Text('Acknowledge'),
+                            child: Text(localizations.acknowledge),
                           ),
                       ],
                     ),
@@ -130,21 +134,22 @@ class InventoryAlertsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSeverityBadge(AlertSeverity severity) {
+  Widget _buildSeverityBadge(BuildContext context, AlertSeverity severity) {
+    final localizations = AppLocalizations.of(context);
     String label;
     Color color;
 
     switch (severity) {
       case AlertSeverity.high:
-        label = 'High';
+        label = localizations.high;
         color = Colors.red;
         break;
       case AlertSeverity.medium:
-        label = 'Medium';
+        label = localizations.medium;
         color = Colors.orange;
         break;
       case AlertSeverity.low:
-        label = 'Low';
+        label = localizations.low;
         color = Colors.blue;
         break;
     }

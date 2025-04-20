@@ -6,11 +6,12 @@ import 'firebase_mock.dart';
 part 'firebase_module.g.dart';
 
 /// Toggle this flag to switch between real and mock Firebase
+/// Set to true to use mock data on all platforms for testing purposes
 const bool useMockFirebase = true;
 
 // Firebase Auth Provider
 @riverpod
-AuthInterface authInterface(AuthInterfaceRef ref) {
+AuthInterface authInterface(AutoDisposeProviderRef<AuthInterface> ref) {
   if (useMockFirebase) {
     // Use the mock implementation
     return FirebaseAuthMock();
@@ -22,7 +23,8 @@ AuthInterface authInterface(AuthInterfaceRef ref) {
 
 // Firestore Provider
 @riverpod
-FirestoreInterface firestoreInterface(FirestoreInterfaceRef ref) {
+FirestoreInterface firestoreInterface(
+    AutoDisposeProviderRef<FirestoreInterface> ref) {
   if (useMockFirebase) {
     // Use the mock implementation
     return FirestoreMock();
@@ -34,7 +36,8 @@ FirestoreInterface firestoreInterface(FirestoreInterfaceRef ref) {
 
 // Firebase Storage Provider
 @riverpod
-StorageInterface storageInterface(StorageInterfaceRef ref) {
+StorageInterface storageInterface(
+    AutoDisposeProviderRef<StorageInterface> ref) {
   if (useMockFirebase) {
     // Use the mock implementation
     return StorageMock();

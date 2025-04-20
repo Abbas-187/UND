@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'firebase_interface.dart';
@@ -11,7 +10,7 @@ const bool useMockFirebase = true;
 
 // Firebase Auth Provider
 @riverpod
-AuthInterface firebaseAuth(FirebaseAuthRef ref) {
+AuthInterface firebaseAuth() {
   if (useMockFirebase) {
     // Use the mock implementation
     return FirebaseAuthMock();
@@ -23,7 +22,7 @@ AuthInterface firebaseAuth(FirebaseAuthRef ref) {
 
 // Firestore Provider
 @riverpod
-FirestoreInterface firestore(FirestoreRef ref) {
+FirestoreInterface firestore() {
   if (useMockFirebase) {
     // Use the mock implementation
     return FirestoreMock();
@@ -35,7 +34,7 @@ FirestoreInterface firestore(FirestoreRef ref) {
 
 // Firebase Storage Provider
 @riverpod
-StorageInterface storage(StorageRef ref) {
+StorageInterface storage() {
   if (useMockFirebase) {
     // Use the mock implementation
     return StorageMock();

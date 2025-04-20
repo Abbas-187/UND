@@ -2,20 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
-import '../../models/inventory_movement_model.dart';
-import '../../models/inventory_movement_type.dart';
+import '../../../../core/services/mock_data_service.dart';
+import '../models/inventory_movement_model.dart';
+import '../models/inventory_movement_type.dart';
+import '../models/inventory_movement_item_model.dart';
 import 'inventory_movement_repository.dart';
 
-/// Implementation of the [InventoryMovementRepository] using Firestore
+/// Implementation of the [InventoryMovementRepository] using mock data
 class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
-
   InventoryMovementRepositoryImpl({
     FirebaseFirestore? firestore,
     Logger? logger,
+    MockDataService? mockDataService,
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _logger = logger ?? Logger();
+        _logger = logger ?? Logger(),
+        _mockDataService = mockDataService ?? MockDataService();
+
   final FirebaseFirestore _firestore;
   final Logger _logger;
+  final MockDataService _mockDataService;
   final String _collection = 'inventory_movements';
 
   /// Gets a reference to the movements collection
@@ -31,7 +36,7 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
 
       // Generate an ID if not provided
       final String movementId = movement.movementId.isEmpty
-          ? _firestore.collection(_collection).doc().id
+          ? 'mov-${DateTime.now().millisecondsSinceEpoch}'
           : movement.movementId;
 
       // Create a new movement with the generated ID
@@ -53,11 +58,11 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
         items: movement.items,
       );
 
-      // Convert to Map and save in Firestore
-      await _movementsCollection.doc(movementId).set(newMovement.toJson());
+      // Add to mock data
+      _mockDataService.inventoryMovements.add(newMovement);
 
       _logger.i('Successfully created inventory movement with ID: $movementId');
-      return newMovement;
+      return Future.value(newMovement);
     } catch (error, stackTrace) {
       _logger.e(
         'Error creating inventory movement',
@@ -71,13 +76,10 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
   @override
   Future<InventoryMovementModel> getMovementById(String id) async {
     try {
-      final doc = await _movementsCollection.doc(id).get();
-      if (!doc.exists) {
-        throw Exception('Movement not found with ID: $id');
-      }
-
-      final data = doc.data()!;
-      return InventoryMovementModel.fromJson(data);
+      // Get from mock data
+      final movement = _mockDataService.inventoryMovements
+          .firstWhere((m) => m.movementId == id);
+      return Future.value(movement);
     } catch (error, stackTrace) {
       _logger.e(
         'Error retrieving inventory movement with ID: $id',
@@ -92,14 +94,11 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
   Future<List<InventoryMovementModel>> getMovementsByType(
       InventoryMovementType type) async {
     try {
-      final snapshot = await _movementsCollection
-          .where('movementType', isEqualTo: type.toString().split('.').last)
-          .orderBy('timestamp', descending: true)
-          .get();
-
-      return snapshot.docs
-          .map((doc) => InventoryMovementModel.fromJson(doc.data()))
+      // Get from mock data
+      final movements = _mockDataService.inventoryMovements
+          .where((m) => m.movementType.toString() == type.toString())
           .toList();
+      return Future.value(movements);
     } catch (error, stackTrace) {
       _logger.e(
         'Error retrieving movements by type: $type',
@@ -114,15 +113,11 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
   Future<List<InventoryMovementModel>> getMovementsByTimeRange(
       DateTime start, DateTime end) async {
     try {
-      final snapshot = await _movementsCollection
-          .where('timestamp', isGreaterThanOrEqualTo: start.toIso8601String())
-          .where('timestamp', isLessThanOrEqualTo: end.toIso8601String())
-          .orderBy('timestamp', descending: true)
-          .get();
-
-      return snapshot.docs
-          .map((doc) => InventoryMovementModel.fromJson(doc.data()))
+      // Get from mock data
+      final movements = _mockDataService.inventoryMovements
+          .where((m) => m.timestamp.isAfter(start) && m.timestamp.isBefore(end))
           .toList();
+      return Future.value(movements);
     } catch (error, stackTrace) {
       _logger.e(
         'Error retrieving movements by time range',
@@ -137,17 +132,13 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
   Future<List<InventoryMovementModel>> getMovementsByLocation(
       String locationId, bool isSource) async {
     try {
-      final String fieldToQuery =
-          isSource ? 'sourceLocationId' : 'destinationLocationId';
-
-      final snapshot = await _movementsCollection
-          .where(fieldToQuery, isEqualTo: locationId)
-          .orderBy('timestamp', descending: true)
-          .get();
-
-      return snapshot.docs
-          .map((doc) => InventoryMovementModel.fromJson(doc.data()))
+      // Get from mock data
+      final movements = _mockDataService.inventoryMovements
+          .where((m) => isSource
+              ? m.sourceLocationId == locationId
+              : m.destinationLocationId == locationId)
           .toList();
+      return Future.value(movements);
     } catch (error, stackTrace) {
       final String locationType = isSource ? 'source' : 'destination';
       _logger.e(
@@ -163,16 +154,11 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
   Future<List<InventoryMovementModel>> getMovementsByProduct(
       String productId) async {
     try {
-      // This query is more complex as we need to search through nested items
-      // For Firestore, we need to use array-contains query
-      final snapshot = await _movementsCollection.get();
-
-      // Filter in memory since productId is in a nested array
-      return snapshot.docs
-          .map((doc) => InventoryMovementModel.fromJson(doc.data()))
-          .where((movement) =>
-              movement.items.any((item) => item.productId == productId))
+      // Get from mock data
+      final movements = _mockDataService.inventoryMovements
+          .where((m) => m.items.any((item) => item.productId == productId))
           .toList();
+      return Future.value(movements);
     } catch (error, stackTrace) {
       _logger.e(
         'Error retrieving movements by product ID: $productId',
@@ -190,54 +176,40 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
     try {
       _logger.i('Updating movement $id to status: $status');
 
-      // Use a transaction to ensure data consistency
-      return await _firestore
-          .runTransaction<InventoryMovementModel>((transaction) async {
-        final docRef = _movementsCollection.doc(id);
-        final doc = await transaction.get(docRef);
+      // Find the movement in mock data
+      final index = _mockDataService.inventoryMovements
+          .indexWhere((m) => m.movementId == id);
 
-        if (!doc.exists) {
-          throw Exception('Movement not found with ID: $id');
-        }
+      if (index == -1) {
+        throw Exception('Movement not found with ID: $id');
+      }
 
-        final currentMovement = InventoryMovementModel.fromJson(doc.data()!);
+      final currentMovement = _mockDataService.inventoryMovements[index];
 
-        // Update the movement with new status and approver info
-        final updatedData = {
-          'approvalStatus': status.toString().split('.').last,
-        };
+      // Create updated model
+      final updatedMovement = InventoryMovementModel(
+        movementId: currentMovement.movementId,
+        timestamp: currentMovement.timestamp,
+        movementType: currentMovement.movementType,
+        sourceLocationId: currentMovement.sourceLocationId,
+        sourceLocationName: currentMovement.sourceLocationName,
+        destinationLocationId: currentMovement.destinationLocationId,
+        destinationLocationName: currentMovement.destinationLocationName,
+        initiatingEmployeeId: currentMovement.initiatingEmployeeId,
+        initiatingEmployeeName: currentMovement.initiatingEmployeeName,
+        approvalStatus: status,
+        approverEmployeeId: approverId ?? currentMovement.approverEmployeeId,
+        approverEmployeeName:
+            approverName ?? currentMovement.approverEmployeeName,
+        reasonNotes: currentMovement.reasonNotes,
+        referenceDocuments: currentMovement.referenceDocuments,
+        items: currentMovement.items,
+      );
 
-        // Add approver information if provided
-        if (approverId != null) {
-          updatedData['approverEmployeeId'] = approverId;
-        }
+      // Update in mock data
+      _mockDataService.inventoryMovements[index] = updatedMovement;
 
-        if (approverName != null) {
-          updatedData['approverEmployeeName'] = approverName;
-        }
-
-        transaction.update(docRef, updatedData);
-
-        // Create updated model to return
-        return InventoryMovementModel(
-          movementId: currentMovement.movementId,
-          timestamp: currentMovement.timestamp,
-          movementType: currentMovement.movementType,
-          sourceLocationId: currentMovement.sourceLocationId,
-          sourceLocationName: currentMovement.sourceLocationName,
-          destinationLocationId: currentMovement.destinationLocationId,
-          destinationLocationName: currentMovement.destinationLocationName,
-          initiatingEmployeeId: currentMovement.initiatingEmployeeId,
-          initiatingEmployeeName: currentMovement.initiatingEmployeeName,
-          approvalStatus: status,
-          approverEmployeeId: approverId ?? currentMovement.approverEmployeeId,
-          approverEmployeeName:
-              approverName ?? currentMovement.approverEmployeeName,
-          reasonNotes: currentMovement.reasonNotes,
-          referenceDocuments: currentMovement.referenceDocuments,
-          items: currentMovement.items,
-        );
-      });
+      return Future.value(updatedMovement);
     } catch (error, stackTrace) {
       _logger.e(
         'Error updating movement status',
@@ -251,33 +223,18 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
   @override
   Future<void> deleteMovement(String id) async {
     try {
-      _logger.w('Deleting inventory movement with ID: $id');
+      _logger.i('Deleting movement $id');
 
-      // Check if movement exists before deleting
-      final docSnapshot = await _movementsCollection.doc(id).get();
-      if (!docSnapshot.exists) {
-        throw Exception('Movement not found with ID: $id');
-      }
-
-      // Log the deletion event for audit purposes
-      await _firestore.collection('inventory_movement_audit').add({
-        'action': 'DELETE',
-        'movementId': id,
-        'timestamp': FieldValue.serverTimestamp(),
-        'movementData': docSnapshot.data(),
-      });
-
-      // Delete the movement
-      await _movementsCollection.doc(id).delete();
-
-      _logger.i('Successfully deleted inventory movement with ID: $id');
+      // Delete from mock data
+      _mockDataService.inventoryMovements
+          .removeWhere((m) => m.movementId == id);
     } catch (error, stackTrace) {
       _logger.e(
-        'Error deleting inventory movement',
+        'Error deleting movement',
         error: error,
         stackTrace: stackTrace,
       );
-      throw Exception('Failed to delete inventory movement: $error');
+      throw Exception('Failed to delete movement: $error');
     }
   }
 
@@ -293,10 +250,8 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
       await _firestore.runTransaction((transaction) async {
         // Process each item in the movement
         for (final item in movement.items) {
-          // Decrease quantity at source location (if not RECEIPT or PRODUCTION_OUTPUT)
-          if (movement.movementType != InventoryMovementType.RECEIPT &&
-              movement.movementType !=
-                  InventoryMovementType.PRODUCTION_OUTPUT) {
+          // Decrease quantity at source location (if not RECEIPT)
+          if (movement.movementType != InventoryMovementType.RECEIPT) {
             await _adjustItemQuantity(
               transaction,
               movement.sourceLocationId,
@@ -305,10 +260,8 @@ class InventoryMovementRepositoryImpl implements InventoryMovementRepository {
             );
           }
 
-          // Increase quantity at destination location (if not DISPOSAL or PRODUCTION_CONSUMPTION)
-          if (movement.movementType != InventoryMovementType.DISPOSAL &&
-              movement.movementType !=
-                  InventoryMovementType.PRODUCTION_CONSUMPTION) {
+          // Increase quantity at destination location (if not DISPOSAL)
+          if (movement.movementType != InventoryMovementType.DISPOSAL) {
             await _adjustItemQuantity(
               transaction,
               movement.destinationLocationId,

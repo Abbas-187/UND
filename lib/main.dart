@@ -6,40 +6,185 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/routes/app_router.dart';
+import 'core/firebase/firebase_interface.dart';
+import 'core/firebase/firebase_mock.dart';
+import 'core/firebase/firebase_module.dart';
+import 'core/services/mock_data_service.dart';
 import 'features/auth/data/datasources/mock_auth_datasource.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart' as domain_auth;
 import 'features/factory/production/data/repositories/production_execution_repository_impl.dart';
 import 'features/factory/production/presentation/providers/production_execution_providers.dart'
     as production;
-import 'features/inventory/data/providers/dairy_inventory_provider.dart'
-    as dairy;
-import 'features/inventory/data/providers/mock_inventory_provider.dart';
-import 'features/inventory/data/repositories/dairy_inventory_repository.dart'
-    as dairy_repo;
+import 'features/inventory/presentation/providers/inventory_provider.dart';
 import 'features/inventory/data/repositories/inventory_movement_repository.dart';
 import 'features/inventory/data/repositories/inventory_movement_repository_impl.dart';
-// Hide the original inventory repository provider to avoid conflicts
-import 'features/inventory/data/repositories/inventory_repository.dart'
-    hide inventoryRepositoryProvider;
-import 'features/inventory/data/repositories/mock_inventory_repository.dart';
-import 'features/settings/presentation/providers/settings_provider.dart';
+import 'features/inventory/data/models/inventory_movement_model.dart';
+import 'features/inventory/data/models/inventory_movement_type.dart';
+import 'features/shared/presentation/screens/app_settings_screen.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
 
-// Create mock inventory repository provider
-final mockInventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
-  final mockProvider = ref.watch(mockInventoryProvider);
-  // Cast needed since MockInventoryRepository implements domain InventoryRepository
-  return MockInventoryRepository(mockProvider: mockProvider)
-      as InventoryRepository;
+// Example of how to use the centralized mock data service:
+//
+// import 'core/services/mock_data_service.dart';
+//
+// // Access the central mock data service
+// final mockData = MockDataService();
+//
+// // Or via the Provider in a widget:
+// final mockData = ref.watch(mockDataServiceProvider);
+//
+// // Get inventory items
+// final items = mockData.inventoryItems;
+//
+// // Update an inventory item
+// mockData.updateInventoryItem(updatedItem);
+//
+// // Adjust quantity
+// mockData.adjustQuantity('1', 10.0, 'Manual addition');
+//
+// This ensures all mock data is linked between modules instead of having separate mock data
+// in each repository or data source.
+
+// Create a mock implementation of the InventoryMovementRepository
+class MockInventoryMovementRepository implements InventoryMovementRepository {
+  MockInventoryMovementRepository(this.mockDataService);
+
+  final MockDataService mockDataService;
+
+  @override
+  Future<InventoryMovementModel> createMovement(
+      InventoryMovementModel movement) async {
+    final String movementId = movement.movementId.isEmpty
+        ? 'mov-${DateTime.now().millisecondsSinceEpoch}'
+        : movement.movementId;
+
+    final newMovement = InventoryMovementModel(
+      movementId: movementId,
+      timestamp: movement.timestamp,
+      movementType: movement.movementType,
+      sourceLocationId: movement.sourceLocationId,
+      sourceLocationName: movement.sourceLocationName,
+      destinationLocationId: movement.destinationLocationId,
+      destinationLocationName: movement.destinationLocationName,
+      initiatingEmployeeId: movement.initiatingEmployeeId,
+      initiatingEmployeeName: movement.initiatingEmployeeName,
+      approvalStatus: movement.approvalStatus,
+      approverEmployeeId: movement.approverEmployeeId,
+      approverEmployeeName: movement.approverEmployeeName,
+      reasonNotes: movement.reasonNotes,
+      referenceDocuments: movement.referenceDocuments,
+      items: movement.items,
+    );
+
+    mockDataService.inventoryMovements.add(newMovement);
+    return newMovement;
+  }
+
+  @override
+  Future<void> deleteMovement(String id) async {
+    mockDataService.inventoryMovements.removeWhere((m) => m.movementId == id);
+  }
+
+  @override
+  Future<InventoryMovementModel> getMovementById(String id) async {
+    return mockDataService.inventoryMovements
+        .firstWhere((m) => m.movementId == id);
+  }
+
+  @override
+  Future<List<InventoryMovementModel>> getMovementsByLocation(
+      String locationId, bool isSource) async {
+    return mockDataService.inventoryMovements
+        .where((m) => isSource
+            ? m.sourceLocationId == locationId
+            : m.destinationLocationId == locationId)
+        .toList();
+  }
+
+  @override
+  Future<List<InventoryMovementModel>> getMovementsByProduct(
+      String productId) async {
+    return mockDataService.inventoryMovements
+        .where((m) => m.items.any((item) => item.productId == productId))
+        .toList();
+  }
+
+  @override
+  Future<List<InventoryMovementModel>> getMovementsByTimeRange(
+      DateTime start, DateTime end) async {
+    return mockDataService.inventoryMovements
+        .where((m) => m.timestamp.isAfter(start) && m.timestamp.isBefore(end))
+        .toList();
+  }
+
+  @override
+  Future<List<InventoryMovementModel>> getMovementsByType(
+      InventoryMovementType type) async {
+    return mockDataService.inventoryMovements
+        .where((m) => m.movementType == type)
+        .toList();
+  }
+
+  @override
+  Future<InventoryMovementModel> updateMovementStatus(
+      String id, ApprovalStatus status,
+      {String? approverId, String? approverName}) async {
+    final index = mockDataService.inventoryMovements
+        .indexWhere((m) => m.movementId == id);
+
+    if (index == -1) {
+      throw Exception('Movement not found with ID: $id');
+    }
+
+    final currentMovement = mockDataService.inventoryMovements[index];
+
+    final updatedMovement = InventoryMovementModel(
+      movementId: currentMovement.movementId,
+      timestamp: currentMovement.timestamp,
+      movementType: currentMovement.movementType,
+      sourceLocationId: currentMovement.sourceLocationId,
+      sourceLocationName: currentMovement.sourceLocationName,
+      destinationLocationId: currentMovement.destinationLocationId,
+      destinationLocationName: currentMovement.destinationLocationName,
+      initiatingEmployeeId: currentMovement.initiatingEmployeeId,
+      initiatingEmployeeName: currentMovement.initiatingEmployeeName,
+      approvalStatus: status,
+      approverEmployeeId: approverId ?? currentMovement.approverEmployeeId,
+      approverEmployeeName:
+          approverName ?? currentMovement.approverEmployeeName,
+      reasonNotes: currentMovement.reasonNotes,
+      referenceDocuments: currentMovement.referenceDocuments,
+      items: currentMovement.items,
+    );
+
+    mockDataService.inventoryMovements[index] = updatedMovement;
+    return updatedMovement;
+  }
+}
+
+// Create a provider for the mock data service
+final mockDataServiceProvider = Provider<MockDataService>((ref) {
+  return MockDataService();
+});
+
+// Create a provider for the mock inventory movement repository
+final mockInventoryMovementRepositoryProvider =
+    Provider<InventoryMovementRepository>((ref) {
+  final mockDataService = ref.watch(mockDataServiceProvider);
+  return MockInventoryMovementRepository(mockDataService);
 });
 
 // Create inventory movement repository provider
 final inventoryMovementRepositoryImplProvider =
     Provider<InventoryMovementRepository>((ref) {
+  // Get the appropriate Firestore instance based on the flag
+  final dynamic firestore =
+      useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance;
+
   return InventoryMovementRepositoryImpl(
-    firestore: FirebaseFirestore.instance,
+    firestore: firestore,
     logger: Logger(),
   );
 });
@@ -51,26 +196,21 @@ void main() async {
   // Initialize SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
 
+  // Get the appropriate Firestore instance based on the flag
+  final dynamic firestore =
+      useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance;
+
   runApp(
     ProviderScope(
       overrides: [
-        // Override the SharedPreferences provider
-        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-
-        // Override the SharedPreferences provider for dairy inventory
-        dairy.sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-
-        // The dairy inventory repository provider is already defined in dairy_inventory_repository.dart
-        // and it automatically exposes the inventoryRepositoryProvider
-
-        // Override the inventory movement repository provider
+        // Override the inventory movement repository provider with mock
         inventoryMovementRepositoryProvider
-            .overrideWithProvider(inventoryMovementRepositoryImplProvider),
+            .overrideWithProvider(mockInventoryMovementRepositoryProvider),
 
         // Override the production execution repository provider
         production.productionExecutionRepositoryProvider
             .overrideWith((ref) => ProductionExecutionRepositoryImpl(
-                  firestore: FirebaseFirestore.instance,
+                  firestore: firestore,
                   logger: Logger(),
                 )),
 
@@ -88,15 +228,16 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider);
-    final locale = Locale(settings.language);
+    // Watch app settings for changes
+    final appSettings = ref.watch(appSettingsProvider);
+    final currentLocale = Locale(appSettings.language);
 
     return MaterialApp(
       title: 'UND Dairy Management',
-      theme: AppTheme.lightTheme(locale),
-      darkTheme: AppTheme.darkTheme(locale),
-      themeMode: settings.darkModeEnabled ? ThemeMode.dark : ThemeMode.light,
-      locale: locale,
+      theme: AppTheme.lightTheme(currentLocale),
+      darkTheme: AppTheme.darkTheme(currentLocale),
+      themeMode: appSettings.themeMode,
+      locale: currentLocale,
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -109,8 +250,8 @@ class MyApp extends ConsumerWidget {
         Locale('ur'), // Urdu
         Locale('hi'), // Hindi
       ],
+      initialRoute: '/',
       onGenerateRoute: AppRouter.generateRoute,
-      initialRoute: AppRoutes.home,
       debugShowCheckedModeBanner: false,
     );
   }

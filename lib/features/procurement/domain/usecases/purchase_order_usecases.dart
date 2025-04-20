@@ -24,7 +24,6 @@ abstract class PurchaseOrderRepository {
 }
 
 class GetPurchaseOrdersUseCase {
-
   GetPurchaseOrdersUseCase(this.repository);
   final PurchaseOrderRepository repository;
 
@@ -44,14 +43,13 @@ class GetPurchaseOrdersUseCase {
         searchQuery: searchQuery,
       );
     } catch (e) {
-      throw AppException('Failed to fetch purchase orders',
-          details: e.toString());
+      throw AppException(
+          message: 'Failed to fetch purchase orders', details: e.toString());
     }
   }
 }
 
 class GetPurchaseOrderByIdUseCase {
-
   GetPurchaseOrderByIdUseCase(this.repository);
   final PurchaseOrderRepository repository;
 
@@ -59,14 +57,13 @@ class GetPurchaseOrderByIdUseCase {
     try {
       return await repository.getPurchaseOrderById(id);
     } catch (e) {
-      throw AppException('Failed to fetch purchase order',
-          details: e.toString());
+      throw AppException(
+          message: 'Failed to fetch purchase order', details: e.toString());
     }
   }
 }
 
 class CreatePurchaseOrderUseCase {
-
   CreatePurchaseOrderUseCase(this.repository);
   final PurchaseOrderRepository repository;
 
@@ -74,7 +71,8 @@ class CreatePurchaseOrderUseCase {
     try {
       // Validate order items
       if (order.items.isEmpty) {
-        throw AppException('Purchase order must contain at least one item');
+        throw AppException(
+            message: 'Purchase order must contain at least one item');
       }
 
       // Validate order total
@@ -84,7 +82,8 @@ class CreatePurchaseOrderUseCase {
       }
 
       if ((calculatedTotal - order.totalAmount).abs() > 0.01) {
-        throw AppException('Order total amount does not match sum of items');
+        throw AppException(
+            message: 'Order total amount does not match sum of items');
       }
 
       return await repository.createPurchaseOrder(order);
@@ -92,14 +91,13 @@ class CreatePurchaseOrderUseCase {
       if (e is AppException) {
         rethrow;
       }
-      throw AppException('Failed to create purchase order',
-          details: e.toString());
+      throw AppException(
+          message: 'Failed to create purchase order', details: e.toString());
     }
   }
 }
 
 class UpdatePurchaseOrderUseCase {
-
   UpdatePurchaseOrderUseCase(this.repository);
   final PurchaseOrderRepository repository;
 
@@ -107,14 +105,13 @@ class UpdatePurchaseOrderUseCase {
     try {
       return await repository.updatePurchaseOrder(order);
     } catch (e) {
-      throw AppException('Failed to update purchase order',
-          details: e.toString());
+      throw AppException(
+          message: 'Failed to update purchase order', details: e.toString());
     }
   }
 }
 
 class UpdatePurchaseOrderStatusUseCase {
-
   UpdatePurchaseOrderStatusUseCase(this.repository);
   final PurchaseOrderRepository repository;
 
@@ -126,7 +123,8 @@ class UpdatePurchaseOrderStatusUseCase {
       // Business logic for status transitions
       if (!_isValidStatusTransition(currentOrder.status, status)) {
         throw AppException(
-            'Invalid status transition from ${currentOrder.status} to $status');
+            message:
+                'Invalid status transition from ${currentOrder.status} to $status');
       }
 
       return await repository.updatePurchaseOrderStatus(id, status);
@@ -134,7 +132,8 @@ class UpdatePurchaseOrderStatusUseCase {
       if (e is AppException) {
         rethrow;
       }
-      throw AppException('Failed to update purchase order status',
+      throw AppException(
+          message: 'Failed to update purchase order status',
           details: e.toString());
     }
   }
@@ -144,29 +143,29 @@ class UpdatePurchaseOrderStatusUseCase {
     // Implement business rules for valid status transitions
     switch (currentStatus) {
       case PurchaseOrderStatus.draft:
-        return newStatus == PurchaseOrderStatus.submitted ||
-            newStatus == PurchaseOrderStatus.cancelled;
+        return newStatus == PurchaseOrderStatus.pending ||
+            newStatus == PurchaseOrderStatus.canceled;
 
-      case PurchaseOrderStatus.submitted:
+      case PurchaseOrderStatus.pending:
         return newStatus == PurchaseOrderStatus.approved ||
-            newStatus == PurchaseOrderStatus.rejected ||
-            newStatus == PurchaseOrderStatus.cancelled;
+            newStatus == PurchaseOrderStatus.declined ||
+            newStatus == PurchaseOrderStatus.canceled;
 
       case PurchaseOrderStatus.approved:
-        return newStatus == PurchaseOrderStatus.partiallyReceived ||
-            newStatus == PurchaseOrderStatus.received ||
-            newStatus == PurchaseOrderStatus.cancelled;
+        return newStatus == PurchaseOrderStatus.inProgress ||
+            newStatus == PurchaseOrderStatus.delivered ||
+            newStatus == PurchaseOrderStatus.canceled;
 
-      case PurchaseOrderStatus.partiallyReceived:
-        return newStatus == PurchaseOrderStatus.received ||
-            newStatus == PurchaseOrderStatus.cancelled;
+      case PurchaseOrderStatus.inProgress:
+        return newStatus == PurchaseOrderStatus.delivered ||
+            newStatus == PurchaseOrderStatus.canceled;
 
-      case PurchaseOrderStatus.received:
-        return newStatus == PurchaseOrderStatus.closed;
+      case PurchaseOrderStatus.delivered:
+        return newStatus == PurchaseOrderStatus.completed;
 
-      case PurchaseOrderStatus.rejected:
-      case PurchaseOrderStatus.cancelled:
-      case PurchaseOrderStatus.closed:
+      case PurchaseOrderStatus.declined:
+      case PurchaseOrderStatus.canceled:
+      case PurchaseOrderStatus.completed:
         return false; // Terminal states
 
       default:
@@ -176,7 +175,6 @@ class UpdatePurchaseOrderStatusUseCase {
 }
 
 class DeletePurchaseOrderUseCase {
-
   DeletePurchaseOrderUseCase(this.repository);
   final PurchaseOrderRepository repository;
 
@@ -188,8 +186,8 @@ class DeletePurchaseOrderUseCase {
       if (e is AppException) {
         rethrow;
       }
-      throw AppException('Failed to delete purchase order',
-          details: e.toString());
+      throw AppException(
+          message: 'Failed to delete purchase order', details: e.toString());
     }
   }
 }

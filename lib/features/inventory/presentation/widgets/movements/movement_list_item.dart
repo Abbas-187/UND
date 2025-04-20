@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../models/inventory_movement_model.dart';
-import '../../../models/inventory_movement_type.dart';
+import '../../../data/models/inventory_movement_model.dart';
+import '../../../data/models/inventory_movement_type.dart';
 
 class MovementListItem extends StatelessWidget {
-
   const MovementListItem({
     super.key,
     required this.movement,
@@ -21,6 +20,8 @@ class MovementListItem extends StatelessWidget {
         return Colors.green;
       case ApprovalStatus.REJECTED:
         return Colors.red;
+      case ApprovalStatus.CANCELLED:
+        return Colors.grey;
       default:
         return Colors.grey;
     }
@@ -32,20 +33,14 @@ class MovementListItem extends StatelessWidget {
         return Icons.input;
       case InventoryMovementType.TRANSFER:
         return Icons.swap_horiz;
-      case InventoryMovementType.PRODUCTION_CONSUMPTION:
+      case InventoryMovementType.ISSUE:
         return Icons.remove;
-      case InventoryMovementType.PRODUCTION_OUTPUT:
-        return Icons.add;
-      case InventoryMovementType.QUALITY_HOLD:
-        return Icons.pause_circle;
-      case InventoryMovementType.QUALITY_RELEASE:
-        return Icons.check_circle;
+      case InventoryMovementType.RETURN:
+        return Icons.replay;
       case InventoryMovementType.ADJUSTMENT:
         return Icons.tune;
       case InventoryMovementType.DISPOSAL:
         return Icons.delete;
-      case InventoryMovementType.SHIPPING:
-        return Icons.local_shipping;
       default:
         return Icons.inventory_2;
     }

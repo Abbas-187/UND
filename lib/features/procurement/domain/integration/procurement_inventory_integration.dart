@@ -34,10 +34,10 @@ class ProcurementInventoryIntegration {
       final inventoryId = await _addToInventory(
         item: item,
         poId: purchaseOrderId,
-        poNumber: purchaseOrder?.orderNumber ?? '',
+        poNumber: purchaseOrder?.poNumber ?? '',
         supplierId: purchaseOrder?.supplierId ?? '',
         supplierName: purchaseOrder?.supplierName ?? '',
-        deliveryDate: purchaseOrder?.expectedDeliveryDate ?? DateTime.now(),
+        deliveryDate: purchaseOrder?.deliveryDate ?? DateTime.now(),
       );
 
       createdItemIds.add(inventoryId);
@@ -64,7 +64,7 @@ class ProcurementInventoryIntegration {
     // Create the inventory item
     final inventoryItem = InventoryItem(
       id: '', // Will be set by the repository
-      name: item.productName,
+      name: item.itemName,
       category: 'procurement',
       unit: item.unit,
       quantity: item.quantity,
@@ -82,8 +82,8 @@ class ProcurementInventoryIntegration {
 
     // Create inventory transaction record
     final transaction = InventoryTransactionModel(
-      materialId: item.productId,
-      materialName: item.productName,
+      materialId: item.itemId,
+      materialName: item.itemName,
       warehouseId: 'receiving',
       transactionType: TransactionType.receipt,
       quantity: item.quantity,

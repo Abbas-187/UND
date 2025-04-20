@@ -7,7 +7,6 @@ import '../models/purchase_order_model.dart' as models;
 
 /// Implementation of [PurchaseOrderRepository] that works with Firestore
 class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
-
   /// Creates a new instance with the given data source
   PurchaseOrderRepositoryImpl(this._dataSource);
   final PurchaseOrderRemoteDataSource _dataSource;
@@ -22,8 +21,7 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
   }) async {
     try {
       // Convert enum to string for the data source
-      final statusStr =
-          status?.toString().split('.').last;
+      final statusStr = status?.toString().split('.').last;
 
       final orderMaps = await _dataSource.getPurchaseOrders(
         supplierId: supplierId,
@@ -219,37 +217,41 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
     final items = itemMaps.map((itemMap) {
       return PurchaseOrderItem(
         id: itemMap['id'] ?? '',
-        productId: itemMap['productId'] ?? '',
-        productName: itemMap['productName'] ?? '',
+        itemId: itemMap['itemId'] ?? '',
+        itemName: itemMap['itemName'] ?? '',
         quantity: (itemMap['quantity'] ?? 0).toDouble(),
         unit: itemMap['unit'] ?? '',
         unitPrice: (itemMap['unitPrice'] ?? 0).toDouble(),
         totalPrice: (itemMap['totalPrice'] ?? 0).toDouble(),
-        expectedDeliveryDate: itemMap['expectedDeliveryDate'] != null
-            ? (itemMap['expectedDeliveryDate'] as DateTime)
-            : null,
+        requiredByDate: itemMap['requiredByDate'] != null
+            ? (itemMap['requiredByDate'] as DateTime)
+            : DateTime.now(),
         notes: itemMap['notes'],
       );
     }).toList();
 
+    // Create empty supporting documents list
+    final supportingDocuments = <SupportingDocument>[];
+
     return PurchaseOrder(
       id: map['id'] ?? '',
-      orderNumber: map['orderNumber'] ?? '',
+      procurementPlanId: map['procurementPlanId'] ?? '',
+      poNumber: map['poNumber'] ?? '',
+      requestDate: map['requestDate'] as DateTime? ?? DateTime.now(),
+      requestedBy: map['requestedBy'] ?? '',
       supplierId: map['supplierId'] ?? '',
       supplierName: map['supplierName'] ?? '',
-      orderDate: map['orderDate'] as DateTime? ?? DateTime.now(),
-      approvalDate: map['approvalDate'] as DateTime?,
-      expectedDeliveryDate:
-          map['expectedDeliveryDate'] as DateTime? ?? DateTime.now(),
       status: _mapStringToPurchaseOrderStatus(map['status'] ?? 'draft'),
       items: items,
       totalAmount: (map['totalAmount'] ?? 0).toDouble(),
-      paymentTerms: map['paymentTerms'],
-      shippingTerms: map['shippingTerms'],
-      notes: map['notes'],
+      reasonForRequest: map['reasonForRequest'] ?? '',
+      intendedUse: map['intendedUse'] ?? '',
+      quantityJustification: map['quantityJustification'] ?? '',
+      supportingDocuments: supportingDocuments,
+      approvalDate: map['approvalDate'] as DateTime?,
       approvedBy: map['approvedBy'],
-      createdAt: map['createdAt'] as DateTime? ?? DateTime.now(),
-      updatedAt: map['updatedAt'] as DateTime?,
+      deliveryDate: map['deliveryDate'] as DateTime?,
+      completionDate: map['completionDate'] as DateTime?,
     );
   }
 
@@ -259,31 +261,43 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
     final itemMaps = order.items.map((item) {
       return {
         'id': item.id,
-        'productId': item.productId,
-        'productName': item.productName,
+        'itemId': item.itemId,
+        'itemName': item.itemName,
         'quantity': item.quantity,
         'unit': item.unit,
         'unitPrice': item.unitPrice,
         'totalPrice': item.totalPrice,
-        'expectedDeliveryDate': item.expectedDeliveryDate,
+        'requiredByDate': item.requiredByDate,
         'notes': item.notes,
       };
     }).toList();
 
     return {
-      'orderNumber': order.orderNumber,
+      'procurementPlanId': order.procurementPlanId,
+      'poNumber': order.poNumber,
+      'requestDate': order.requestDate,
+      'requestedBy': order.requestedBy,
       'supplierId': order.supplierId,
       'supplierName': order.supplierName,
-      'orderDate': order.orderDate,
-      'approvalDate': order.approvalDate,
-      'expectedDeliveryDate': order.expectedDeliveryDate,
       'status': order.status.toString().split('.').last,
       'items': itemMaps,
       'totalAmount': order.totalAmount,
-      'paymentTerms': order.paymentTerms,
-      'shippingTerms': order.shippingTerms,
-      'notes': order.notes,
+      'reasonForRequest': order.reasonForRequest,
+      'intendedUse': order.intendedUse,
+      'quantityJustification': order.quantityJustification,
+      'supportingDocuments': order.supportingDocuments
+          .map((doc) => {
+                'id': doc.id,
+                'name': doc.name,
+                'type': doc.type,
+                'url': doc.url,
+                'uploadDate': doc.uploadDate,
+              })
+          .toList(),
+      'approvalDate': order.approvalDate,
       'approvedBy': order.approvedBy,
+      'deliveryDate': order.deliveryDate,
+      'completionDate': order.completionDate,
     };
   }
 
@@ -292,20 +306,20 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
     switch (status.toLowerCase()) {
       case 'draft':
         return PurchaseOrderStatus.draft;
-      case 'submitted':
-        return PurchaseOrderStatus.submitted;
+      case 'pending':
+        return PurchaseOrderStatus.pending;
       case 'approved':
         return PurchaseOrderStatus.approved;
-      case 'rejected':
-        return PurchaseOrderStatus.rejected;
-      case 'partiallyreceived':
-        return PurchaseOrderStatus.partiallyReceived;
-      case 'received':
-        return PurchaseOrderStatus.received;
-      case 'cancelled':
-        return PurchaseOrderStatus.cancelled;
-      case 'closed':
-        return PurchaseOrderStatus.closed;
+      case 'declined':
+        return PurchaseOrderStatus.declined;
+      case 'inprogress':
+        return PurchaseOrderStatus.inProgress;
+      case 'delivered':
+        return PurchaseOrderStatus.delivered;
+      case 'completed':
+        return PurchaseOrderStatus.completed;
+      case 'canceled':
+        return PurchaseOrderStatus.canceled;
       default:
         return PurchaseOrderStatus.draft;
     }

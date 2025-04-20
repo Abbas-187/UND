@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'firebase_module.dart';
-import 'firebase_interface.dart';
 
 part 'example_usage.g.dart';
 

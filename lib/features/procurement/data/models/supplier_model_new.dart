@@ -1,9 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/supplier.dart';
+import 'supplier_performance_metrics.dart';
+
+/// Enum representing different types of suppliers
+enum SupplierType {
+  manufacturer,
+  distributor,
+  retailer,
+  serviceProvider,
+  contractor,
+}
+
+/// Enum representing different statuses of suppliers
+enum SupplierStatus {
+  active,
+  inactive,
+  pending,
+  blacklisted,
+  onHold,
+}
 
 /// Data model for Supplier
 class SupplierModel {
-
   const SupplierModel({
     this.id,
     required this.name,
@@ -40,17 +58,21 @@ class SupplierModel {
     return SupplierModel(
       id: entity.id,
       name: entity.name,
-      code: entity.code,
-      type: entity.type.toString().split('.').last,
-      status: entity.status.toString().split('.').last,
+      code: entity.id, // Using ID as code since Supplier doesn't have a code
+      type: 'manufacturer', // Default type since Supplier doesn't have a type
+      status:
+          'active', // Default status since Supplier doesn't have a status field
       address: entity.address,
       contactPerson: entity.contactPerson,
-      contactEmail: entity.contactEmail,
-      contactPhone: entity.contactPhone,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
+      contactEmail: entity.email,
+      contactPhone: entity.phone,
+      createdAt: DateTime
+          .now(), // Using current time since Supplier doesn't track creation time
+      updatedAt: DateTime
+          .now(), // Using current time since Supplier doesn't track update time
     );
   }
+
   final String? id;
   final String name;
   final String code;
@@ -84,15 +106,13 @@ class SupplierModel {
     return Supplier(
       id: id ?? '',
       name: name,
-      code: code,
-      type: _mapStringToSupplierType(type),
-      status: _mapStringToSupplierStatus(status),
-      address: address,
-      contactPerson: contactPerson,
-      contactEmail: contactEmail,
-      contactPhone: contactPhone,
-      createdAt: createdAt ?? DateTime.now(),
-      updatedAt: updatedAt,
+      contactPerson: contactPerson ?? '',
+      email: contactEmail ?? '',
+      phone: contactPhone ?? '',
+      address: address ?? '',
+      itemCategories: [], // Empty list since we don't store item categories in the model
+      taxId: '', // Empty since we don't store tax ID in the model
+      notes: '', // Empty since we don't store notes in the model
     );
   }
 

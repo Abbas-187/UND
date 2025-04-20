@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../common/widgets/app_loading_indicator.dart';
-import '../../../../common/widgets/error_view.dart';
+import '../../../../core/widgets/error_view.dart';
 import '../../../../common/widgets/detail_appbar.dart';
 import '../../../inventory/data/models/inventory_item_model.dart';
 import '../../../inventory/domain/providers/inventory_provider.dart';
@@ -113,8 +113,7 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
                 ),
                 loading: () => const AppLoadingIndicator(size: 30),
                 error: (error, stack) => ErrorView(
-                  message: 'Failed to load products: $error',
-                  icon: Icons.inventory_2_outlined,
+                  error: 'Failed to load products: $error',
                 ),
               ),
               const SizedBox(height: 16),
@@ -310,8 +309,7 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
     } else if (forecastingState is ForecastingErrorState) {
       return Center(
         child: ErrorView(
-          message: forecastingState.message,
-          icon: Icons.error_outline,
+          error: forecastingState.message,
         ),
       );
     } else if (forecastingState is ForecastingLoadedState) {

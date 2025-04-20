@@ -150,4 +150,69 @@ Widget build(BuildContext context, WidgetRef ref) {
 2. A background sync process attempts to synchronize data periodically.
 3. Users are notified of offline status and pending sync operations.
 4. The system prioritizes data availability and user experience over immediate consistency.
-5. Data is securely stored locally with appropriate encryption methods. 
+5. Data is securely stored locally with appropriate encryption methods.
+
+# Core Services
+
+This directory contains core services used throughout the application.
+
+## Services
+
+### LocalDatabaseService
+
+Service for interacting with the local SQLite database.
+
+### SyncService
+
+Service for synchronizing data between online and offline modes.
+
+### FirestoreService
+
+Service for interacting with Firestore database.
+
+### MockDataService
+
+A central service that provides mock data for all modules in the application. The main purpose of this service is to ensure that mock data is linked between all modules, allowing for a consistent and realistic demo experience.
+
+#### Features:
+
+- Singleton design pattern ensures a single source of truth for mock data
+- Contains mock data for various modules (inventory, milk reception, etc.)
+- Provides methods to update and synchronize data between modules
+- Available via a Riverpod provider for easy access throughout the app
+
+#### Usage:
+
+```dart
+// Access the mock data service using the provider
+final mockData = ref.watch(mockDataServiceProvider);
+
+// Get inventory items
+final items = mockData.inventoryItems;
+
+// Sync milk reception with inventory
+mockData.syncMilkReceptionWithInventory(newReception);
+
+// Update an inventory item
+mockData.updateInventoryItem(updatedItem);
+```
+
+#### Integration:
+
+The MockDataService should be used by all repository implementations that need to access mock data. For example:
+
+```dart
+class MockInventoryRepository implements InventoryRepository {
+  MockInventoryRepository({required this.mockDataService});
+
+  final MockDataService mockDataService;
+
+  @override
+  Future<List<InventoryItem>> getItems() async {
+    // Use the centralized mock data
+    return mockDataService.inventoryItems
+        .map((item) => item.toDomain())
+        .toList();
+  }
+}
+``` 

@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import '../data/repositories/inventory_movement_repository.dart';
 import '../data/repositories/inventory_movement_repository_impl.dart';
-import '../models/inventory_movement_model.dart';
-import '../models/inventory_movement_type.dart';
+import '../data/models/inventory_movement_model.dart';
+import '../data/models/inventory_movement_type.dart';
 
 /// Provider for the Logger instance
 final loggerProvider = Provider<Logger>((ref) {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 
 class InventoryItemCard extends StatelessWidget {
-
   const InventoryItemCard({
     super.key,
     required this.item,
@@ -14,6 +14,7 @@ class InventoryItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isLowStock = item.quantity <= item.minimumQuantity;
 
     return Card(
@@ -58,18 +59,18 @@ class InventoryItemCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Category: ${item.category}',
+                '${l10n.itemCategory}: ${item.category}',
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 4),
               Text(
-                'Location: ${item.location}',
+                '${l10n.location}: ${item.location}',
                 style: theme.textTheme.bodyMedium,
               ),
               if (item.expiryDate != null) ...[
                 const SizedBox(height: 4),
                 Text(
-                  'Expires: ${_formatDate(item.expiryDate!)}',
+                  '${l10n.itemExpires}: ${_formatDate(item.expiryDate!)}',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: _isNearExpiry(item.expiryDate!) ? Colors.red : null,
                   ),

@@ -1,89 +1,373 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
+import '../config/app_config.dart';
+import '../di/app_providers.dart';
+import '../exceptions/app_exception.dart';
+
+/// HTTP API client for making REST API calls
 class ApiClient {
-  ApiClient({required this.baseUrl});
   final String baseUrl;
+  final Logger logger;
+  final Map<String, String> defaultHeaders;
+  final Duration timeout;
 
-  Future<ApiResponse> get(String endpoint) async {
-    final response = await http.get(Uri.parse('$baseUrl/$endpoint'));
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return ApiResponse(data, response.statusCode);
+  ApiClient({
+    required this.baseUrl,
+    required this.logger,
+    this.defaultHeaders = const {'Content-Type': 'application/json'},
+    this.timeout = const Duration(seconds: 30),
+  });
+
+  /// Add authorization token to headers
+  Map<String, String> _addAuthHeader(
+      Map<String, String>? headers, String? token) {
+    final allHeaders = Map<String, String>.from(defaultHeaders);
+
+    if (headers != null) {
+      allHeaders.addAll(headers);
+    }
+
+    if (token != null) {
+      allHeaders['Authorization'] = 'Bearer $token';
+    }
+
+    return allHeaders;
+  }
+
+  /// Handle HTTP response and extract data or throw appropriate exception
+  ApiResponse _handleResponse(http.Response response) {
+    final statusCode = response.statusCode;
+    final responseBody = response.body;
+
+    logger.d('Response: $statusCode - '
+        '${responseBody.length > 500 ? '${responseBody.substring(0, 500)}...' : responseBody}');
+
+    if (statusCode >= 200 && statusCode < 300) {
+      // Success response
+      if (responseBody.isEmpty) {
+        return ApiResponse(null, statusCode);
+      }
+
+      try {
+        final data = jsonDecode(responseBody);
+        return ApiResponse(data, statusCode);
+      } catch (e) {
+        logger.e('Error decoding JSON response: $e');
+        throw AppException(
+          message: 'Invalid response format',
+          statusCode: statusCode,
+        );
+      }
     } else {
-      throw Exception('Failed to fetch data: ${response.statusCode}');
+      // Error response
+      try {
+        final errorData =
+            responseBody.isNotEmpty ? jsonDecode(responseBody) : null;
+        final errorMessage =
+            errorData?['message'] ?? 'Request failed with status: $statusCode';
+
+        switch (statusCode) {
+          case 400:
+            throw AppException(
+              message: errorMessage,
+              statusCode: statusCode,
+              data: errorData,
+              type: AppExceptionType.badRequest,
+            );
+          case 401:
+            throw AppException(
+              message: 'Unauthorized: $errorMessage',
+              statusCode: statusCode,
+              data: errorData,
+              type: AppExceptionType.unauthorized,
+            );
+          case 403:
+            throw AppException(
+              message: 'Forbidden: $errorMessage',
+              statusCode: statusCode,
+              data: errorData,
+              type: AppExceptionType.forbidden,
+            );
+          case 404:
+            throw AppException(
+              message: 'Not found: $errorMessage',
+              statusCode: statusCode,
+              data: errorData,
+              type: AppExceptionType.notFound,
+            );
+          case 409:
+            throw AppException(
+              message: 'Conflict: $errorMessage',
+              statusCode: statusCode,
+              data: errorData,
+              type: AppExceptionType.conflict,
+            );
+          case 500:
+          case 501:
+          case 502:
+          case 503:
+            throw AppException(
+              message: 'Server error: $errorMessage',
+              statusCode: statusCode,
+              data: errorData,
+              type: AppExceptionType.serverError,
+            );
+          default:
+            throw AppException(
+              message: 'API Error: $errorMessage',
+              statusCode: statusCode,
+              data: errorData,
+            );
+        }
+      } catch (e) {
+        if (e is AppException) {
+          throw e;
+        }
+
+        throw AppException(
+          message: 'Error processing response: ${e.toString()}',
+          statusCode: statusCode,
+        );
+      }
     }
   }
 
-  Future<ApiResponse> post(String endpoint, {dynamic data}) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/$endpoint'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
+  /// GET request
+  Future<ApiResponse> get(
+    String endpoint, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? queryParams,
+    String? token,
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl/$endpoint').replace(
+        queryParameters: queryParams,
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final responseData = jsonDecode(response.body);
-      return ApiResponse(responseData, response.statusCode);
-    } else {
-      throw Exception('Failed to post data: ${response.statusCode}');
+      logger.d('GET $uri');
+
+      final response = await http
+          .get(
+            uri,
+            headers: _addAuthHeader(headers, token),
+          )
+          .timeout(timeout);
+
+      return _handleResponse(response);
+    } on SocketException {
+      throw const AppException(
+        message: 'No internet connection',
+        type: AppExceptionType.network,
+      );
+    } on TimeoutException {
+      throw const AppException(
+        message: 'Request timeout',
+        type: AppExceptionType.timeout,
+      );
+    } catch (e) {
+      if (e is AppException) {
+        rethrow;
+      }
+
+      logger.e('GET request error: $e');
+      throw AppException(
+        message: 'Request failed: ${e.toString()}',
+      );
     }
   }
 
-  Future<ApiResponse> patch(String endpoint, {dynamic data}) async {
-    final response = await http.patch(
-      Uri.parse('$baseUrl/$endpoint'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
+  /// POST request
+  Future<ApiResponse> post(
+    String endpoint, {
+    dynamic data,
+    Map<String, String>? headers,
+    String? token,
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl/$endpoint');
 
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-      return ApiResponse(responseData, response.statusCode);
-    } else {
-      throw Exception('Failed to patch data: ${response.statusCode}');
+      logger.d('POST $uri with data: $data');
+
+      final response = await http
+          .post(
+            uri,
+            headers: _addAuthHeader(headers, token),
+            body: data != null ? jsonEncode(data) : null,
+          )
+          .timeout(timeout);
+
+      return _handleResponse(response);
+    } on SocketException {
+      throw const AppException(
+        message: 'No internet connection',
+        type: AppExceptionType.network,
+      );
+    } on TimeoutException {
+      throw const AppException(
+        message: 'Request timeout',
+        type: AppExceptionType.timeout,
+      );
+    } catch (e) {
+      if (e is AppException) {
+        rethrow;
+      }
+
+      logger.e('POST request error: $e');
+      throw AppException(
+        message: 'Request failed: ${e.toString()}',
+      );
     }
   }
 
-  Future<ApiResponse> put(String endpoint, {dynamic data}) async {
-    final response = await http.put(
-      Uri.parse('$baseUrl/$endpoint'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
+  /// PUT request
+  Future<ApiResponse> put(
+    String endpoint, {
+    dynamic data,
+    Map<String, String>? headers,
+    String? token,
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl/$endpoint');
 
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-      return ApiResponse(responseData, response.statusCode);
-    } else {
-      throw Exception('Failed to put data: ${response.statusCode}');
+      logger.d('PUT $uri with data: $data');
+
+      final response = await http
+          .put(
+            uri,
+            headers: _addAuthHeader(headers, token),
+            body: data != null ? jsonEncode(data) : null,
+          )
+          .timeout(timeout);
+
+      return _handleResponse(response);
+    } on SocketException {
+      throw const AppException(
+        message: 'No internet connection',
+        type: AppExceptionType.network,
+      );
+    } on TimeoutException {
+      throw const AppException(
+        message: 'Request timeout',
+        type: AppExceptionType.timeout,
+      );
+    } catch (e) {
+      if (e is AppException) {
+        rethrow;
+      }
+
+      logger.e('PUT request error: $e');
+      throw AppException(
+        message: 'Request failed: ${e.toString()}',
+      );
     }
   }
 
-  Future<ApiResponse> delete(String endpoint) async {
-    final response = await http.delete(Uri.parse('$baseUrl/$endpoint'));
+  /// PATCH request
+  Future<ApiResponse> patch(
+    String endpoint, {
+    dynamic data,
+    Map<String, String>? headers,
+    String? token,
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl/$endpoint');
 
-    if (response.statusCode == 200 || response.statusCode == 204) {
-      // Some DELETE operations return no content (204)
-      final responseData =
-          response.statusCode == 204 ? null : jsonDecode(response.body);
-      return ApiResponse(responseData, response.statusCode);
-    } else {
-      throw Exception('Failed to delete data: ${response.statusCode}');
+      logger.d('PATCH $uri with data: $data');
+
+      final response = await http
+          .patch(
+            uri,
+            headers: _addAuthHeader(headers, token),
+            body: data != null ? jsonEncode(data) : null,
+          )
+          .timeout(timeout);
+
+      return _handleResponse(response);
+    } on SocketException {
+      throw const AppException(
+        message: 'No internet connection',
+        type: AppExceptionType.network,
+      );
+    } on TimeoutException {
+      throw const AppException(
+        message: 'Request timeout',
+        type: AppExceptionType.timeout,
+      );
+    } catch (e) {
+      if (e is AppException) {
+        rethrow;
+      }
+
+      logger.e('PATCH request error: $e');
+      throw AppException(
+        message: 'Request failed: ${e.toString()}',
+      );
+    }
+  }
+
+  /// DELETE request
+  Future<ApiResponse> delete(
+    String endpoint, {
+    Map<String, String>? headers,
+    String? token,
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl/$endpoint');
+
+      logger.d('DELETE $uri');
+
+      final response = await http
+          .delete(
+            uri,
+            headers: _addAuthHeader(headers, token),
+          )
+          .timeout(timeout);
+
+      return _handleResponse(response);
+    } on SocketException {
+      throw const AppException(
+        message: 'No internet connection',
+        type: AppExceptionType.network,
+      );
+    } on TimeoutException {
+      throw const AppException(
+        message: 'Request timeout',
+        type: AppExceptionType.timeout,
+      );
+    } catch (e) {
+      if (e is AppException) {
+        rethrow;
+      }
+
+      logger.e('DELETE request error: $e');
+      throw AppException(
+        message: 'Request failed: ${e.toString()}',
+      );
     }
   }
 }
 
+/// API response model
 class ApiResponse {
-  ApiResponse(this.data, this.statusCode);
   final dynamic data;
   final int statusCode;
+
+  ApiResponse(this.data, this.statusCode);
 }
 
 /// Provider for the API client
 final apiClientProvider = Provider<ApiClient>((ref) {
+  final logger = ref.watch(loggerProvider);
+  final appConfig = AppConfig();
+
   return ApiClient(
-      baseUrl: 'https://api.unddairy.com'); // Replace with your actual base URL
+    baseUrl: appConfig.apiBaseUrl,
+    logger: logger,
+  );
 });

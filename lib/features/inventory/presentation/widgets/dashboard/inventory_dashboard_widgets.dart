@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../../../l10n/app_localizations.dart';
-import '../../../models/inventory_movement_model.dart';
-import '../../../models/inventory_movement_type.dart';
+import '../../../data/models/inventory_movement_model.dart';
+import '../../../data/models/inventory_movement_type.dart';
 import '../../../providers/inventory_movement_providers.dart';
 import '../../screens/inventory_movement_list_page.dart';
 import '../../screens/movement_details_page.dart';
@@ -128,21 +128,13 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
         iconData = Icons.swap_horiz;
         iconColor = Colors.green;
         break;
-      case InventoryMovementType.PRODUCTION_CONSUMPTION:
+      case InventoryMovementType.ISSUE:
         iconData = Icons.remove;
         iconColor = Colors.orange;
         break;
-      case InventoryMovementType.PRODUCTION_OUTPUT:
-        iconData = Icons.add;
+      case InventoryMovementType.RETURN:
+        iconData = Icons.replay;
         iconColor = Colors.teal;
-        break;
-      case InventoryMovementType.QUALITY_HOLD:
-        iconData = Icons.pause_circle;
-        iconColor = Colors.amber;
-        break;
-      case InventoryMovementType.QUALITY_RELEASE:
-        iconData = Icons.check_circle;
-        iconColor = Colors.green;
         break;
       case InventoryMovementType.ADJUSTMENT:
         iconData = Icons.tune;
@@ -151,10 +143,6 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
       case InventoryMovementType.DISPOSAL:
         iconData = Icons.delete;
         iconColor = Colors.red;
-        break;
-      case InventoryMovementType.SHIPPING:
-        iconData = Icons.local_shipping;
-        iconColor = Colors.blue;
         break;
       default:
         iconData = Icons.inventory_2;
@@ -318,9 +306,9 @@ class CriticalMovementsAlertWidget extends ConsumerWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
-    // Get movements with QUALITY_HOLD status
+    // Get movements with critical status (using RETURN as proxy for critical movements)
     final pendingMovementsAsync =
-        ref.watch(movementsByTypeProvider(InventoryMovementType.QUALITY_HOLD));
+        ref.watch(movementsByTypeProvider(InventoryMovementType.RETURN));
 
     return Card(
       margin: const EdgeInsets.all(8.0),
