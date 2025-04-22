@@ -7,6 +7,8 @@ class AppTheme {
   // Light Theme
   static ThemeData lightTheme(Locale locale) {
     return ThemeData(
+      fontFamily: 'NotoSans',
+      fontFamilyFallback: const ['Arial', 'Tahoma', 'sans-serif'],
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.lightPrimary,
@@ -89,6 +91,8 @@ class AppTheme {
   // Dark Theme
   static ThemeData darkTheme(Locale locale) {
     return ThemeData(
+      fontFamily: 'NotoSans',
+      fontFamilyFallback: const ['Arial', 'Tahoma', 'sans-serif'],
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.darkPrimary,

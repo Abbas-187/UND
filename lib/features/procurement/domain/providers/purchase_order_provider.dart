@@ -1,19 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/datasources/purchase_order_remote_datasource.dart';
-import '../../data/models/purchase_order_model.dart';
 import '../../data/repositories/purchase_order_repository_impl.dart';
+import '../../../suppliers/domain/repositories/supplier_repository.dart';
+import '../../../suppliers/presentation/providers/supplier_provider.dart';
 import '../repositories/purchase_order_repository.dart';
-
-final purchaseOrderDataSourceProvider =
-    Provider<PurchaseOrderRemoteDataSource>((ref) {
-  return PurchaseOrderRemoteDataSource();
-});
+import '../../data/models/purchase_order_model.dart';
 
 final purchaseOrderRepositoryProvider =
     Provider<PurchaseOrderRepository>((ref) {
-  final dataSource = ref.read(purchaseOrderDataSourceProvider);
-  return PurchaseOrderRepositoryImpl(dataSource);
+  final supplierRepository = ref.read(supplierRepositoryProvider);
+  final mockProvider = null; // Replace with actual mock provider if needed
+  final dataSource = null; // Replace with actual data source if needed
+  // Use the .fromMock factory for now, or adjust as needed for your app
+  return PurchaseOrderRepositoryImpl.fromMock(mockProvider, supplierRepository);
 });
 
 final purchaseOrdersProvider =

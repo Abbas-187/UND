@@ -3,17 +3,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../features/milk_reception/domain/models/milk_quality_test_model.dart';
 import '../features/milk_reception/domain/models/milk_reception_model.dart';
 import '../features/milk_reception/domain/repositories/milk_reception_repository.dart';
+import '../features/suppliers/domain/repositories/supplier_repository.dart';
 import '../utils/exceptions.dart';
 
 /// Service for analyzing milk reception data and generating reports
 class ReceptionAnalyticsService {
   ReceptionAnalyticsService({
     required MilkReceptionRepository receptionRepository,
+    required SupplierRepository supplierRepository,
     FirebaseFirestore? firestore,
   })  : _receptionRepository = receptionRepository,
+        _supplierRepository = supplierRepository,
         _firestore = firestore ?? FirebaseFirestore.instance;
 
   final MilkReceptionRepository _receptionRepository;
+  final SupplierRepository _supplierRepository;
   final FirebaseFirestore _firestore;
 
   /// Calculate trends in supplier milk quality over time
@@ -46,6 +50,15 @@ class ReceptionAnalyticsService {
         };
       }
 
+      // Fetch supplier name from supplier module
+      String supplierName = '';
+      try {
+        final supplier = await _supplierRepository.getSupplier(supplierId);
+        supplierName = supplier.name;
+      } catch (_) {
+        supplierName = filteredReceptions.first.supplierName;
+      }
+
       // Organize by time periods
       final periodData = _organizeDataByTimePeriods(
           filteredReceptions, period.start, period.end);
@@ -60,7 +73,7 @@ class ReceptionAnalyticsService {
 
       return {
         'supplierId': supplierId,
-        'supplierName': filteredReceptions.first.supplierName,
+        'supplierName': supplierName,
         'period': {
           'start': period.start.toIso8601String(),
           'end': period.end.toIso8601String(),
@@ -287,6 +300,15 @@ class ReceptionAnalyticsService {
         };
       }
 
+      // Fetch supplier name from supplier module
+      String supplierName = '';
+      try {
+        final supplier = await _supplierRepository.getSupplier(supplierId);
+        supplierName = supplier.name;
+      } catch (_) {
+        supplierName = filteredReceptions.first.supplierName;
+      }
+
       // Get quality tests
       final qualityTests = await _getQualityTestsForReceptions(
           filteredReceptions.map((r) => r.id).toList());
@@ -294,7 +316,7 @@ class ReceptionAnalyticsService {
       // Build comprehensive report
       final report = {
         'supplierId': supplierId,
-        'supplierName': filteredReceptions.first.supplierName,
+        'supplierName': supplierName,
         'period': {
           'start': dateRange.start.toIso8601String(),
           'end': dateRange.end.toIso8601String(),
@@ -480,8 +502,7 @@ class ReceptionAnalyticsService {
             .get();
 
         final batchTests = querySnapshot.docs
-            .map((doc) => MilkQualityTestModel.fromJson(
-                doc.data()))
+            .map((doc) => MilkQualityTestModel.fromJson(doc.data()))
             .toList();
 
         resultTests.addAll(batchTests);
@@ -640,7 +661,6 @@ enum GroupBy {
 
 /// Class for representing a date range
 class DateRange {
-
   const DateRange({required this.start, required this.end});
 
   /// Create a date range for today

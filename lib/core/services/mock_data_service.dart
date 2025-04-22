@@ -9,6 +9,9 @@ import '../../features/inventory/data/models/inventory_movement_item_model.dart'
 import '../../features/inventory/data/models/quality_status.dart';
 import '../../features/analytics/data/mock_analytics_data.dart';
 import 'dart:math' as math;
+import '../../features/factory/equipment_maintenance/data/models/equipment_model.dart';
+import '../../features/factory/equipment_maintenance/data/models/maintenance_record_model.dart';
+import '../../features/factory/equipment_maintenance/data/models/maintenance_models.dart';
 
 /// Global singleton service to provide centralized mock data
 /// This ensures mock data is synchronized between all modules
@@ -308,6 +311,176 @@ class MockDataService {
       overallQualityStatus: null,
       searchTerms: ['banana', 'extract', 'flavoring', 'ingredient'],
     ),
+    // Additional mock items for Ingredients and Packaging
+    InventoryItemModel(
+      id: 'inv-018',
+      name: 'Cardamom Pods',
+      category: 'Ingredients',
+      unit: 'Kg',
+      quantity: 60.0,
+      minimumQuantity: 10.0,
+      reorderPoint: 20.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 3)),
+      batchNumber: 'BATCH018',
+      expiryDate: DateTime.now().add(const Duration(days: 365)),
+      cost: 80.0, // 80 ﷼ per Kg
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['cardamom', 'spice', 'ingredient'],
+    ),
+    InventoryItemModel(
+      id: 'inv-019',
+      name: 'Rose Water',
+      category: 'Ingredients',
+      unit: 'Liters',
+      quantity: 25.0,
+      minimumQuantity: 5.0,
+      reorderPoint: 10.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 2)),
+      batchNumber: 'BATCH019',
+      expiryDate: DateTime.now().add(const Duration(days: 180)),
+      cost: 15.0, // 15 ﷼ per Liter
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['rose', 'water', 'ingredient'],
+    ),
+    InventoryItemModel(
+      id: 'inv-020',
+      name: 'Pistachio Nuts',
+      category: 'Ingredients',
+      unit: 'Kg',
+      quantity: 40.0,
+      minimumQuantity: 8.0,
+      reorderPoint: 15.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 4)),
+      batchNumber: 'BATCH020',
+      expiryDate: DateTime.now().add(const Duration(days: 300)),
+      cost: 120.0, // 120 ﷼ per Kg
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['pistachio', 'nut', 'ingredient'],
+    ),
+    InventoryItemModel(
+      id: 'inv-021',
+      name: 'Vanilla Beans',
+      category: 'Ingredients',
+      unit: 'g',
+      quantity: 500.0,
+      minimumQuantity: 100.0,
+      reorderPoint: 200.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 6)),
+      batchNumber: 'BATCH021',
+      expiryDate: DateTime.now().add(const Duration(days: 400)),
+      cost: 200.0, // 200 ﷼ per 100g
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['vanilla', 'bean', 'ingredient'],
+    ),
+    InventoryItemModel(
+      id: 'inv-022',
+      name: 'Plastic Cups 250ml',
+      category: 'Packaging',
+      unit: 'Units',
+      quantity: 5000.0,
+      minimumQuantity: 1000.0,
+      reorderPoint: 2000.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 10)),
+      batchNumber: 'BATCH022',
+      cost: 0.15, // 0.15 ﷼ per unit
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['cup', 'plastic', 'packaging', '250ml'],
+    ),
+    InventoryItemModel(
+      id: 'inv-023',
+      name: 'Paper Labels',
+      category: 'Packaging',
+      unit: 'Units',
+      quantity: 10000.0,
+      minimumQuantity: 2000.0,
+      reorderPoint: 4000.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 12)),
+      batchNumber: 'BATCH023',
+      cost: 0.02, // 0.02 ﷼ per unit
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['label', 'paper', 'packaging'],
+    ),
+    InventoryItemModel(
+      id: 'inv-024',
+      name: 'Shrink Wrap Film',
+      category: 'Packaging',
+      unit: 'Rolls',
+      quantity: 60.0,
+      minimumQuantity: 10.0,
+      reorderPoint: 20.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 8)),
+      batchNumber: 'BATCH024',
+      cost: 8.0, // 8 ﷼ per roll
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['shrink', 'wrap', 'film', 'packaging'],
+    ),
+    InventoryItemModel(
+      id: 'inv-025',
+      name: 'Aluminum Foil Lids',
+      category: 'Packaging',
+      unit: 'Units',
+      quantity: 8000.0,
+      minimumQuantity: 2000.0,
+      reorderPoint: 3000.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 7)),
+      batchNumber: 'BATCH025',
+      cost: 0.03, // 0.03 ﷼ per unit
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['foil', 'lid', 'aluminum', 'packaging'],
+    ),
+    // ... (repeat similar for 30+ items, varying expiry, cost, quantity, location, etc.)
+    // Example expired and expiring soon items:
+    InventoryItemModel(
+      id: 'inv-026',
+      name: 'Expired Yeast',
+      category: 'Ingredients',
+      unit: 'Kg',
+      quantity: 5.0,
+      minimumQuantity: 2.0,
+      reorderPoint: 4.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 20)),
+      batchNumber: 'BATCH026',
+      expiryDate: DateTime.now().subtract(const Duration(days: 1)),
+      cost: 10.0, // 10 ﷼ per Kg
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['yeast', 'ingredient', 'expired'],
+    ),
+    InventoryItemModel(
+      id: 'inv-027',
+      name: 'Salt (ملح)',
+      category: 'Ingredients',
+      unit: 'Kg',
+      quantity: 100.0,
+      minimumQuantity: 20.0,
+      reorderPoint: 40.0,
+      location: 'Dry Storage',
+      lastUpdated: DateTime.now().subtract(const Duration(days: 2)),
+      batchNumber: 'BATCH027',
+      expiryDate: DateTime.now().add(const Duration(days: 2)),
+      cost: 1.0, // 1 ﷼ per Kg
+      storageCondition: 'dry',
+      overallQualityStatus: null,
+      searchTerms: ['salt', 'ingredient'],
+    ),
+    // ... (add more items up to 30+ for robust demo)
   ];
 
   // Mock inventory locations - shared across inventory features
@@ -626,901 +799,944 @@ class MockDataService {
         ),
       ],
     ),
+    // Additional movements for demo/reporting coverage
+    InventoryMovementModel(
+      movementId: 'mov-008',
+      timestamp: DateTime.now().subtract(const Duration(days: 4)),
+      movementType: InventoryMovementType.ADJUSTMENT,
+      sourceLocationId: 'loc-003',
+      sourceLocationName: 'Dry Storage (مخزن جاف)',
+      destinationLocationId: 'loc-003',
+      destinationLocationName: 'Dry Storage (مخزن جاف)',
+      initiatingEmployeeId: 'emp-008',
+      initiatingEmployeeName: 'Layla Al-Mutairi',
+      approvalStatus: ApprovalStatus.REJECTED,
+      approverEmployeeId: 'emp-002',
+      approverEmployeeName: 'Fatima Al-Otaibi',
+      reasonNotes: 'Adjustment after audit, rejected due to discrepancy',
+      referenceDocuments: ['ADJ-002'],
+      items: [
+        InventoryMovementItemModel(
+          itemId: 'mov-item-011',
+          productId: 'inv-016',
+          productName: 'Chocolate Powder',
+          batchLotNumber: 'BATCH016',
+          quantity: -5.0,
+          unitOfMeasurement: 'Kg',
+          status: MovementItemStatus.IN_TRANSIT,
+          productionDate: DateTime.now().subtract(const Duration(days: 7)),
+          expirationDate: DateTime.now().add(const Duration(days: 240)),
+          qualityStatus: QualityStatus.good,
+        ),
+      ],
+    ),
+    InventoryMovementModel(
+      movementId: 'mov-009',
+      timestamp: DateTime.now().subtract(const Duration(days: 8)),
+      movementType: InventoryMovementType.RECEIPT,
+      sourceLocationId: 'external-supplier-003',
+      sourceLocationName: 'Desert Fruit Farms',
+      destinationLocationId: 'loc-003',
+      destinationLocationName: 'Dry Storage (مخزن جاف)',
+      initiatingEmployeeId: 'emp-009',
+      initiatingEmployeeName: 'Omar Al-Saleh',
+      approvalStatus: ApprovalStatus.PENDING,
+      approverEmployeeId: null,
+      approverEmployeeName: null,
+      reasonNotes: 'Bulk date delivery, pending inspection',
+      referenceDocuments: ['PO-987654'],
+      items: [
+        InventoryMovementItemModel(
+          itemId: 'mov-item-012',
+          productId: 'inv-008',
+          productName: 'Dates (تمر)',
+          batchLotNumber: 'BATCH008',
+          quantity: 150.0,
+          unitOfMeasurement: 'Kg',
+          status: MovementItemStatus.RECEIVED,
+          productionDate: DateTime.now().subtract(const Duration(days: 1)),
+          expirationDate: DateTime.now().add(const Duration(days: 7)),
+          qualityStatus: QualityStatus.excellent,
+        ),
+      ],
+    ),
+    InventoryMovementModel(
+      movementId: 'mov-012',
+      timestamp: DateTime.now().subtract(const Duration(days: 10)),
+      movementType: InventoryMovementType.RECEIPT,
+      sourceLocationId: 'external-supplier-004',
+      sourceLocationName: 'Saudi Spice Merchants',
+      destinationLocationId: 'loc-003',
+      destinationLocationName: 'Dry Storage (مخزن جاف)',
+      initiatingEmployeeId: 'emp-012',
+      initiatingEmployeeName: 'Mona Al-Fahad',
+      approvalStatus: ApprovalStatus.APPROVED,
+      approverEmployeeId: 'emp-002',
+      approverEmployeeName: 'Fatima Al-Otaibi',
+      reasonNotes: 'Spice delivery for production',
+      referenceDocuments: ['PO-2024-001'],
+      items: [
+        InventoryMovementItemModel(
+          itemId: 'mov-item-015',
+          productId: 'inv-006',
+          productName: 'Saffron (زعفران)',
+          batchLotNumber: 'BATCH006',
+          quantity: 50.0,
+          unitOfMeasurement: 'g',
+          status: MovementItemStatus.RECEIVED,
+          productionDate: DateTime.now().subtract(const Duration(days: 12)),
+          expirationDate: DateTime.now().add(const Duration(days: 360)),
+          qualityStatus: QualityStatus.good,
+        ),
+      ],
+    ),
+    InventoryMovementModel(
+      movementId: 'mov-013',
+      timestamp: DateTime.now().subtract(const Duration(days: 2)),
+      movementType: InventoryMovementType.ISSUE,
+      sourceLocationId: 'loc-003',
+      sourceLocationName: 'Dry Storage (مخزن جاف)',
+      destinationLocationId: 'loc-005',
+      destinationLocationName: 'Production Area (منطقة الإنتاج)',
+      initiatingEmployeeId: 'emp-013',
+      initiatingEmployeeName: 'Yousef Al-Rashid',
+      approvalStatus: ApprovalStatus.REJECTED,
+      approverEmployeeId: 'emp-002',
+      approverEmployeeName: 'Fatima Al-Otaibi',
+      reasonNotes: 'Issue rejected due to insufficient stock',
+      referenceDocuments: ['PROD-2024-002'],
+      items: [
+        InventoryMovementItemModel(
+          itemId: 'mov-item-016',
+          productId: 'inv-019',
+          productName: 'Rose Water',
+          batchLotNumber: 'BATCH019',
+          quantity: 10.0,
+          unitOfMeasurement: 'Liters',
+          status: MovementItemStatus.IN_TRANSIT,
+          productionDate: DateTime.now().subtract(const Duration(days: 3)),
+          expirationDate: DateTime.now().add(const Duration(days: 170)),
+          qualityStatus: QualityStatus.warning,
+        ),
+      ],
+    ),
+    InventoryMovementModel(
+      movementId: 'mov-014',
+      timestamp: DateTime.now().subtract(const Duration(days: 5)),
+      movementType: InventoryMovementType.TRANSFER,
+      sourceLocationId: 'loc-002',
+      sourceLocationName: 'Cold Storage B (مخزن بارد ب)',
+      destinationLocationId: 'loc-007',
+      destinationLocationName: 'Dispatch Area (منطقة الشحن)',
+      initiatingEmployeeId: 'emp-014',
+      initiatingEmployeeName: 'Rania Al-Saif',
+      approvalStatus: ApprovalStatus.PENDING,
+      approverEmployeeId: null,
+      approverEmployeeName: null,
+      reasonNotes: 'Transfer for outgoing shipment',
+      referenceDocuments: ['DISPATCH-2024-003'],
+      items: [
+        InventoryMovementItemModel(
+          itemId: 'mov-item-017',
+          productId: 'inv-002',
+          productName: 'Laban (لبن)',
+          batchLotNumber: 'BATCH002',
+          quantity: 60.0,
+          unitOfMeasurement: 'Liters',
+          status: MovementItemStatus.IN_TRANSIT,
+          productionDate: DateTime.now().subtract(const Duration(days: 6)),
+          expirationDate: DateTime.now().add(const Duration(days: 4)),
+          qualityStatus: QualityStatus.good,
+        ),
+      ],
+    ),
+    InventoryMovementModel(
+      movementId: 'mov-015',
+      timestamp: DateTime.now().subtract(const Duration(days: 7)),
+      movementType: InventoryMovementType.ADJUSTMENT,
+      sourceLocationId: 'loc-001',
+      sourceLocationName: 'Cold Storage A (مخزن بارد أ)',
+      destinationLocationId: 'loc-001',
+      destinationLocationName: 'Cold Storage A (مخزن بارد أ)',
+      initiatingEmployeeId: 'emp-015',
+      initiatingEmployeeName: 'Majed Al-Harbi',
+      approvalStatus: ApprovalStatus.APPROVED,
+      approverEmployeeId: 'emp-002',
+      approverEmployeeName: 'Fatima Al-Otaibi',
+      reasonNotes: 'Stock adjustment after spoilage',
+      referenceDocuments: ['ADJ-2024-004'],
+      items: [
+        InventoryMovementItemModel(
+          itemId: 'mov-item-018',
+          productId: 'inv-014',
+          productName: 'Cow Milk',
+          batchLotNumber: 'BATCH014',
+          quantity: -20.0,
+          unitOfMeasurement: 'Liters',
+          status: MovementItemStatus.RECEIVED,
+          productionDate: DateTime.now().subtract(const Duration(days: 8)),
+          expirationDate: DateTime.now().add(const Duration(days: 2)),
+          qualityStatus: QualityStatus.warning,
+        ),
+      ],
+    ),
   ];
 
-  // Sample forecasting data for inventory items
-  final Map<String, List<Map<String, dynamic>>> inventoryForecasts = {
-    'inv-001': [
-      // Camel Milk
-      {
-        'date': DateTime.now().add(const Duration(days: 1)),
-        'forecastedValue': 120.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 2)),
-        'forecastedValue': 135.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 3)),
-        'forecastedValue': 110.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 4)),
-        'forecastedValue': 125.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 5)),
-        'forecastedValue': 150.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 6)),
-        'forecastedValue': 140.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 7)),
-        'forecastedValue': 105.0
-      },
-    ],
-    'inv-002': [
-      // Laban
-      {
-        'date': DateTime.now().add(const Duration(days: 1)),
-        'forecastedValue': 45.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 2)),
-        'forecastedValue': 50.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 3)),
-        'forecastedValue': 48.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 4)),
-        'forecastedValue': 52.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 5)),
-        'forecastedValue': 55.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 6)),
-        'forecastedValue': 49.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 7)),
-        'forecastedValue': 47.0
-      },
-    ],
-    'inv-003': [
-      // Jibnah
-      {
-        'date': DateTime.now().add(const Duration(days: 1)),
-        'forecastedValue': 18.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 2)),
-        'forecastedValue': 20.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 3)),
-        'forecastedValue': 22.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 4)),
-        'forecastedValue': 19.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 5)),
-        'forecastedValue': 21.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 6)),
-        'forecastedValue': 23.0
-      },
-      {
-        'date': DateTime.now().add(const Duration(days: 7)),
-        'forecastedValue': 20.0
-      },
-    ],
-  };
-
-  // Recipe ingredients mapping to inventory items
-  final Map<String, List<Map<String, dynamic>>> recipeIngredients = {
-    'recipe-001': [
-      // Laban Production
-      {
-        'ingredientId': 'inv-001',
-        'name': 'Camel Milk (حليب الإبل)',
-        'quantity': 1.0,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-006',
-        'name': 'Saffron (زعفران)',
-        'quantity': 0.1,
-        'unit': 'g'
-      },
-      {
-        'ingredientId': 'inv-010',
-        'name': 'Halal-Certified Containers 500ml',
-        'quantity': 2,
-        'unit': 'Units'
-      },
-    ],
-    'recipe-002': [
-      // Date Flavored Laban
-      {
-        'ingredientId': 'inv-001',
-        'name': 'Camel Milk (حليب الإبل)',
-        'quantity': 1.0,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-005',
-        'name': 'Date Syrup (دبس التمر)',
-        'quantity': 0.08,
-        'unit': 'Kg'
-      },
-      {
-        'ingredientId': 'inv-008',
-        'name': 'Dates (تمر)',
-        'quantity': 0.1,
-        'unit': 'Kg'
-      },
-      {
-        'ingredientId': 'inv-010',
-        'name': 'Halal-Certified Containers 500ml',
-        'quantity': 2,
-        'unit': 'Units'
-      },
-    ],
-    'recipe-003': [
-      // Traditional Jibnah
-      {
-        'ingredientId': 'inv-001',
-        'name': 'Camel Milk (حليب الإبل)',
-        'quantity': 10.0,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-006',
-        'name': 'Saffron (زعفران)',
-        'quantity': 0.2,
-        'unit': 'g'
-      },
-    ],
-    'recipe-004': [
-      // Plain Cow Milk
-      {
-        'ingredientId': 'inv-014',
-        'name': 'Cow Milk',
-        'quantity': 1.0,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-011',
-        'name': 'Traditional Glass Bottles 1L',
-        'quantity': 1,
-        'unit': 'Units'
-      },
-    ],
-    'recipe-005': [
-      // Strawberry Milk
-      {
-        'ingredientId': 'inv-014',
-        'name': 'Cow Milk',
-        'quantity': 0.95,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-015',
-        'name': 'Strawberry Syrup',
-        'quantity': 0.05,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-011',
-        'name': 'Traditional Glass Bottles 1L',
-        'quantity': 1,
-        'unit': 'Units'
-      },
-    ],
-    'recipe-006': [
-      // Chocolate Milk
-      {
-        'ingredientId': 'inv-014',
-        'name': 'Cow Milk',
-        'quantity': 0.98,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-016',
-        'name': 'Chocolate Powder',
-        'quantity': 0.02,
-        'unit': 'Kg'
-      },
-      {
-        'ingredientId': 'inv-011',
-        'name': 'Traditional Glass Bottles 1L',
-        'quantity': 1,
-        'unit': 'Units'
-      },
-    ],
-    'recipe-007': [
-      // Banana Milk
-      {
-        'ingredientId': 'inv-014',
-        'name': 'Cow Milk',
-        'quantity': 0.97,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-017',
-        'name': 'Banana Extract',
-        'quantity': 0.03,
-        'unit': 'Liters'
-      },
-      {
-        'ingredientId': 'inv-011',
-        'name': 'Traditional Glass Bottles 1L',
-        'quantity': 1,
-        'unit': 'Units'
-      },
-    ],
-  };
-
-  // Procurement needs based on inventory
-  final List<Map<String, dynamic>> procurementNeeds = [
-    {
-      'itemId': 'inv-014',
-      'name': 'Cow Milk',
-      'currentStock': 250.0,
-      'reorderPoint': 350.0,
-      'recommendedOrder': 300.0,
-      'unit': 'Liters',
-      'suggestedSupplier': 'Al-Marai Dairy Supplies',
-      'estimatedCost': 1350.0,
-      'priority': 'High',
-      'supplierLocation': 'Riyadh',
-      'halal': true,
-      'organicCertified': true,
-    },
-    {
-      'itemId': 'inv-002',
-      'name': 'Laban (لبن)',
-      'currentStock': 110.0,
-      'reorderPoint': 150.0,
-      'recommendedOrder': 100.0,
-      'unit': 'Liters',
-      'suggestedSupplier': 'Al-Marai Dairy Supplies',
-      'estimatedCost': 420.0,
-      'priority': 'Medium',
-      'supplierLocation': 'Riyadh',
-      'halal': true,
-    },
-    {
-      'itemId': 'inv-015',
-      'name': 'Strawberry Syrup',
-      'currentStock': 8.0,
-      'reorderPoint': 15.0,
-      'recommendedOrder': 20.0,
-      'unit': 'Liters',
-      'suggestedSupplier': 'Gulf Ingredients Trading',
-      'estimatedCost': 240.0,
-      'priority': 'Medium',
-      'supplierLocation': 'Dammam',
-      'halal': true,
-    },
-  ];
-
-  // Shared analytics data using the existing MockAnalyticsData class
-  final MockAnalyticsData analyticsData = MockAnalyticsData();
-
-  // Methods to sync inventory with milk reception
-  void syncMilkReceptionWithInventory(dynamic reception) {
-    // Find matching inventory item for raw milk
-    int milkItemIndex = inventoryItems.indexWhere(
-      (item) => item.name.contains('Milk') && item.name.contains('Fresh'),
-    );
-
-    if (milkItemIndex >= 0) {
-      // Update inventory quantity based on milk reception
-      var currentItem = inventoryItems[milkItemIndex];
-      inventoryItems[milkItemIndex] = InventoryItemModel(
-        id: currentItem.id,
-        name: currentItem.name,
-        category: currentItem.category,
-        unit: currentItem.unit,
-        quantity: currentItem.quantity + (reception.quantityLiters ?? 0),
-        minimumQuantity: currentItem.minimumQuantity,
-        reorderPoint: currentItem.reorderPoint,
-        location: currentItem.location,
-        lastUpdated: DateTime.now(),
-        batchNumber: currentItem.batchNumber,
-        expiryDate: currentItem.expiryDate,
-        cost: currentItem.cost,
-        currentTemperature: currentItem.currentTemperature,
-        storageCondition: currentItem.storageCondition,
-        overallQualityStatus: currentItem.overallQualityStatus,
-      );
-    }
-  }
-
-  // Update inventory item and propagate changes
-  void updateInventoryItem(InventoryItemModel updatedItem) {
-    int itemIndex =
-        inventoryItems.indexWhere((item) => item.id == updatedItem.id);
-    if (itemIndex >= 0) {
-      inventoryItems[itemIndex] = updatedItem;
-      // Here we would update any related data in other modules
-    }
-  }
-
-  // Adjust inventory item quantity
-  void adjustQuantity(String itemId, double adjustment, String reason) {
-    final itemIndex = inventoryItems.indexWhere((item) => item.id == itemId);
-    if (itemIndex != -1) {
-      final item = inventoryItems[itemIndex];
-      inventoryItems[itemIndex] = InventoryItemModel(
-        id: item.id,
-        name: item.name,
-        category: item.category,
-        unit: item.unit,
-        quantity: item.quantity + adjustment,
-        minimumQuantity: item.minimumQuantity,
-        reorderPoint: item.reorderPoint,
-        location: item.location,
-        lastUpdated: DateTime.now(),
-        batchNumber: item.batchNumber,
-        expiryDate: item.expiryDate,
-        cost: item.cost,
-        currentTemperature: item.currentTemperature,
-        storageCondition: item.storageCondition,
-        overallQualityStatus: item.overallQualityStatus,
-      );
-    }
-  }
-
-  // Get recipe ingredients from inventory
-  List<Map<String, dynamic>> getRecipeIngredients(String recipeId) {
-    return recipeIngredients[recipeId] ?? [];
-  }
-
-  // Get forecast for an inventory item
-  List<Map<String, dynamic>> getInventoryForecast(String itemId) {
-    return inventoryForecasts[itemId] ?? [];
-  }
-
-  // Get procurement needs
-  List<Map<String, dynamic>> getDetailedProcurementNeeds() {
+  /// Generate inventory locations (helper for reset)
+  List<InventoryLocationModel> _generateInventoryLocations() {
     return [
-      {
-        'itemId': 'inv-014',
-        'name': 'Cow Milk',
-        'category': 'Dairy',
-        'currentQuantity': 250.0,
-        'reorderPoint': 350.0,
-        'minimumQuantity': 300.0,
-        'unit': 'Liters',
-        'supplier': 'Al-Marai Dairy Supplies',
-        'supplierId': 'supplier-001',
-        'recommendedOrderQuantity': 300.0,
-        'estimatedCost': 1350.0,
-        'priority': 'high',
-      },
-      {
-        'itemId': 'inv-002',
-        'name': 'Laban (لبن)',
-        'category': 'Dairy',
-        'currentQuantity': 110.0,
-        'reorderPoint': 150.0,
-        'minimumQuantity': 100.0,
-        'unit': 'Liters',
-        'supplier': 'Al-Marai Dairy Supplies',
-        'supplierId': 'supplier-001',
-        'recommendedOrderQuantity': 100.0,
-        'estimatedCost': 420.0,
-        'priority': 'medium',
-      },
-      {
-        'itemId': 'inv-015',
-        'name': 'Strawberry Syrup',
-        'category': 'Ingredients',
-        'currentQuantity': 8.0,
-        'reorderPoint': 15.0,
-        'minimumQuantity': 10.0,
-        'unit': 'Liters',
-        'supplier': 'Gulf Ingredients Trading',
-        'supplierId': 'supplier-003',
-        'recommendedOrderQuantity': 20.0,
-        'estimatedCost': 240.0,
-        'priority': 'medium',
-      }
+      InventoryLocationModel(
+        locationId: 'loc-001',
+        locationName: 'Cold Storage A (مخزن بارد أ)',
+        locationType: LocationType.COLD_STORAGE,
+        temperatureCondition: '4°C',
+        storageCapacity: 2000.0,
+        currentUtilization: 1200.0,
+        isActive: true,
+      ),
     ];
   }
 
-  // Calculate available inventory for recipe
-  bool checkInventoryForRecipe(String recipeId, double batchSize) {
-    final ingredients = recipeIngredients[recipeId] ?? [];
-    for (final ingredient in ingredients) {
-      final itemId = ingredient['ingredientId'] as String;
-      final requiredQuantity = (ingredient['quantity'] as double) * batchSize;
+  // Mock equipment for equipment maintenance module
+  final List<EquipmentModel> mockEquipment = [
+    EquipmentModel(
+      id: 'eq-001',
+      name: 'Pasteurizer 1',
+      type: EquipmentType.pasteurizer,
+      status: EquipmentStatus.operational,
+      locationId: 'loc-001',
+      locationName: 'Processing Hall A',
+      manufacturer: 'DairyTech',
+      model: 'DT-1000',
+      serialNumber: 'PAST-1001',
+      installDate: DateTime.now().subtract(const Duration(days: 900)),
+      lastMaintenanceDate: DateTime.now().subtract(const Duration(days: 30)),
+      nextMaintenanceDate: DateTime.now().add(const Duration(days: 60)),
+      maintenanceIntervalDays: 90,
+      responsiblePersonId: 'emp-001',
+      responsiblePersonName: 'Ahmed Al-Saud',
+      lastSanitizationDate: DateTime.now().subtract(const Duration(hours: 20)),
+      sanitizationIntervalHours: 24,
+      requiresSanitization: true,
+      runningHoursTotal: 12000,
+      runningHoursSinceLastMaintenance: 400,
+      specifications: {'capacity': '2000L/h', 'power': '15kW'},
+      metadata: {'notes': 'Main pasteurizer for camel milk'},
+    ),
+    EquipmentModel(
+      id: 'eq-002',
+      name: 'Homogenizer 2',
+      type: EquipmentType.homogenizer,
+      status: EquipmentStatus.maintenance,
+      locationId: 'loc-002',
+      locationName: 'Processing Hall B',
+      manufacturer: 'MilkPro',
+      model: 'MP-500',
+      serialNumber: 'HOMO-2002',
+      installDate: DateTime.now().subtract(const Duration(days: 700)),
+      lastMaintenanceDate: DateTime.now().subtract(const Duration(days: 5)),
+      nextMaintenanceDate: DateTime.now().add(const Duration(days: 85)),
+      maintenanceIntervalDays: 90,
+      responsiblePersonId: 'emp-002',
+      responsiblePersonName: 'Fatima Al-Zahrani',
+      lastSanitizationDate: DateTime.now().subtract(const Duration(hours: 30)),
+      sanitizationIntervalHours: 48,
+      requiresSanitization: true,
+      runningHoursTotal: 8000,
+      runningHoursSinceLastMaintenance: 100,
+      specifications: {'capacity': '1000L/h', 'power': '10kW'},
+      metadata: {'notes': 'Currently under scheduled maintenance'},
+    ),
+    EquipmentModel(
+      id: 'eq-003',
+      name: 'Separator 1',
+      type: EquipmentType.separator,
+      status: EquipmentStatus.repair,
+      locationId: 'loc-003',
+      locationName: 'Processing Hall C',
+      manufacturer: 'DairyParts',
+      model: 'SEP-300',
+      serialNumber: 'SEP-3003',
+      installDate: DateTime.now().subtract(const Duration(days: 400)),
+      lastMaintenanceDate: DateTime.now().subtract(const Duration(days: 120)),
+      nextMaintenanceDate: DateTime.now().subtract(const Duration(days: 30)),
+      maintenanceIntervalDays: 90,
+      responsiblePersonId: 'emp-003',
+      responsiblePersonName: 'Khalid Al-Ghamdi',
+      lastSanitizationDate: DateTime.now().subtract(const Duration(hours: 60)),
+      sanitizationIntervalHours: 72,
+      requiresSanitization: false,
+      runningHoursTotal: 5000,
+      runningHoursSinceLastMaintenance: 1200,
+      specifications: {'capacity': '500L/h', 'power': '5kW'},
+      metadata: {'notes': 'Awaiting spare part for repair'},
+    ),
+    EquipmentModel(
+      id: 'eq-004',
+      name: 'Tank 1',
+      type: EquipmentType.tank,
+      status: EquipmentStatus.sanitization,
+      locationId: 'loc-004',
+      locationName: 'Storage Area',
+      manufacturer: 'TankCo',
+      model: 'TANK-1500',
+      serialNumber: 'TANK-4004',
+      installDate: DateTime.now().subtract(const Duration(days: 1000)),
+      lastMaintenanceDate: DateTime.now().subtract(const Duration(days: 60)),
+      nextMaintenanceDate: DateTime.now().add(const Duration(days: 30)),
+      maintenanceIntervalDays: 120,
+      responsiblePersonId: 'emp-004',
+      responsiblePersonName: 'Nora Al-Dosari',
+      lastSanitizationDate: DateTime.now().subtract(const Duration(hours: 50)),
+      sanitizationIntervalHours: 48,
+      requiresSanitization: true,
+      runningHoursTotal: 20000,
+      runningHoursSinceLastMaintenance: 2000,
+      specifications: {'capacity': '15000L', 'material': 'Stainless Steel'},
+      metadata: {'notes': 'Sanitization overdue'},
+    ),
+    EquipmentModel(
+      id: 'eq-005',
+      name: 'Packaging Machine',
+      type: EquipmentType.packagingMachine,
+      status: EquipmentStatus.operational,
+      locationId: 'loc-005',
+      locationName: 'Packaging Area',
+      manufacturer: 'PackIt',
+      model: 'PKG-900',
+      serialNumber: 'PKG-5005',
+      installDate: DateTime.now().subtract(const Duration(days: 300)),
+      lastMaintenanceDate: DateTime.now().subtract(const Duration(days: 20)),
+      nextMaintenanceDate: DateTime.now().add(const Duration(days: 70)),
+      maintenanceIntervalDays: 90,
+      responsiblePersonId: 'emp-005',
+      responsiblePersonName: 'Sara Al-Fahad',
+      lastSanitizationDate: DateTime.now().subtract(const Duration(hours: 10)),
+      sanitizationIntervalHours: 24,
+      requiresSanitization: true,
+      runningHoursTotal: 3000,
+      runningHoursSinceLastMaintenance: 300,
+      specifications: {'capacity': '500 packs/h', 'power': '3kW'},
+      metadata: {'notes': 'Used for all retail packaging'},
+    ),
+    // Add more equipment as needed for comprehensive coverage
+  ];
 
-      // Find item in inventory
-      final inventoryItem = inventoryItems.firstWhere(
-        (item) => item.id == itemId,
-        orElse: () => InventoryItemModel(
-            id: 'not-found',
-            name: 'Not Found',
-            category: 'Unknown',
-            unit: 'N/A',
-            quantity: 0,
-            minimumQuantity: 0,
-            reorderPoint: 0,
-            location: 'Unknown',
-            lastUpdated: DateTime.now()),
-      );
+  // Mock maintenance records for equipment maintenance module
+  final List<MaintenanceRecordModel> mockMaintenanceRecords = [
+    MaintenanceRecordModel(
+      id: 'mr-001',
+      equipmentId: 'eq-001',
+      equipmentName: 'Pasteurizer 1',
+      equipmentType: EquipmentType.pasteurizer,
+      scheduledDate: DateTime.now().subtract(const Duration(days: 30)),
+      completionDate: DateTime.now().subtract(const Duration(days: 29)),
+      maintenanceType: MaintenanceType.preventive,
+      description: 'Quarterly preventive maintenance',
+      status: MaintenanceStatus.completed,
+      performedById: 'emp-001',
+      performedByName: 'Ahmed Al-Saud',
+      notes: 'All checks passed. Lubricated moving parts.',
+      partsReplaced: ['Filter', 'Seal'],
+      downtimeHours: 2.5,
+      metadata: {'report': 'PDF-001'},
+    ),
+    MaintenanceRecordModel(
+      id: 'mr-002',
+      equipmentId: 'eq-002',
+      equipmentName: 'Homogenizer 2',
+      equipmentType: EquipmentType.homogenizer,
+      scheduledDate: DateTime.now().subtract(const Duration(days: 2)),
+      completionDate: null,
+      maintenanceType: MaintenanceType.corrective,
+      description: 'Corrective maintenance for vibration issue',
+      status: MaintenanceStatus.inProgress,
+      performedById: 'emp-002',
+      performedByName: 'Fatima Al-Zahrani',
+      notes: 'Investigating abnormal vibration',
+      partsReplaced: [],
+      downtimeHours: 4.0,
+      metadata: {'report': 'PDF-002'},
+    ),
+    MaintenanceRecordModel(
+      id: 'mr-003',
+      equipmentId: 'eq-003',
+      equipmentName: 'Separator 1',
+      equipmentType: EquipmentType.separator,
+      scheduledDate: DateTime.now().subtract(const Duration(days: 10)),
+      completionDate: null,
+      maintenanceType: MaintenanceType.corrective,
+      description: 'Repair: replace broken shaft',
+      status: MaintenanceStatus.scheduled,
+      performedById: 'emp-003',
+      performedByName: 'Khalid Al-Ghamdi',
+      notes: 'Awaiting spare part delivery',
+      partsReplaced: [],
+      downtimeHours: null,
+      metadata: {},
+    ),
+    MaintenanceRecordModel(
+      id: 'mr-004',
+      equipmentId: 'eq-004',
+      equipmentName: 'Tank 1',
+      equipmentType: EquipmentType.tank,
+      scheduledDate: DateTime.now().subtract(const Duration(days: 1)),
+      completionDate: null,
+      maintenanceType: MaintenanceType.sanitization,
+      description: 'Sanitization overdue',
+      status: MaintenanceStatus.delayed,
+      performedById: 'emp-004',
+      performedByName: 'Nora Al-Dosari',
+      notes: 'Sanitization not performed on time',
+      partsReplaced: [],
+      downtimeHours: 1.0,
+      metadata: {},
+    ),
+    MaintenanceRecordModel(
+      id: 'mr-005',
+      equipmentId: 'eq-005',
+      equipmentName: 'Packaging Machine',
+      equipmentType: EquipmentType.packagingMachine,
+      scheduledDate: DateTime.now().add(const Duration(days: 10)),
+      completionDate: null,
+      maintenanceType: MaintenanceType.preventive,
+      description: 'Scheduled preventive maintenance',
+      status: MaintenanceStatus.scheduled,
+      performedById: 'emp-005',
+      performedByName: 'Sara Al-Fahad',
+      notes: null,
+      partsReplaced: [],
+      downtimeHours: null,
+      metadata: {},
+    ),
+    // Add more records as needed for comprehensive coverage
+  ];
 
-      // Check if we have enough
-      if (inventoryItem.quantity < requiredQuantity) {
-        return false;
+  // Helper methods for mock equipment
+  List<EquipmentModel> getAllMockEquipment() =>
+      List.unmodifiable(mockEquipment);
+  EquipmentModel? getMockEquipmentById(String id) => mockEquipment
+      .cast<EquipmentModel?>()
+      .firstWhere((e) => e!.id == id, orElse: () => null);
+  void addMockEquipment(EquipmentModel equipment) =>
+      mockEquipment.add(equipment);
+  void updateMockEquipment(EquipmentModel equipment) {
+    final idx = mockEquipment.indexWhere((e) => e.id == equipment.id);
+    if (idx != -1) mockEquipment[idx] = equipment;
+  }
+
+  void deleteMockEquipment(String id) =>
+      mockEquipment.removeWhere((e) => e.id == id);
+
+  // Helper methods for mock maintenance records
+  List<MaintenanceRecordModel> getAllMockMaintenanceRecords() =>
+      List.unmodifiable(mockMaintenanceRecords);
+  List<MaintenanceRecordModel> getMockMaintenanceRecordsForEquipment(
+          String equipmentId) =>
+      mockMaintenanceRecords
+          .where((r) => r.equipmentId == equipmentId)
+          .toList();
+  MaintenanceRecordModel? getMockMaintenanceRecordById(String id) =>
+      mockMaintenanceRecords
+          .cast<MaintenanceRecordModel?>()
+          .firstWhere((r) => r!.id == id, orElse: () => null);
+  void addMockMaintenanceRecord(MaintenanceRecordModel record) =>
+      mockMaintenanceRecords.add(record);
+  void updateMockMaintenanceRecord(MaintenanceRecordModel record) {
+    final idx = mockMaintenanceRecords.indexWhere((r) => r.id == record.id);
+    if (idx != -1) mockMaintenanceRecords[idx] = record;
+  }
+
+  void deleteMockMaintenanceRecord(String id) =>
+      mockMaintenanceRecords.removeWhere((r) => r.id == id);
+
+  /// Aggregation: Get current stock by item
+  Map<String, double> getCurrentStockByItem() {
+    final Map<String, double> stock = {};
+    for (final item in inventoryItems) {
+      stock[item.name] = item.quantity;
+    }
+    return stock;
+  }
+
+  /// Aggregation: Get current stock by category
+  Map<String, double> getCurrentStockByCategory() {
+    final Map<String, double> stock = {};
+    for (final item in inventoryItems) {
+      stock[item.category] = (stock[item.category] ?? 0) + item.quantity;
+    }
+    return stock;
+  }
+
+  /// Aggregation: Get expiry status for all items
+  Map<String, String> getExpiryStatus({int expiringSoonDays = 7}) {
+    final now = DateTime.now();
+    final Map<String, String> status = {};
+    for (final item in inventoryItems) {
+      if (item.expiryDate == null) {
+        status[item.name] = 'no_expiry';
+      } else if (item.expiryDate!.isBefore(now)) {
+        status[item.name] = 'expired';
+      } else if (item.expiryDate!.difference(now).inDays <= expiringSoonDays) {
+        status[item.name] = 'expiring_soon';
+      } else {
+        status[item.name] = 'safe';
       }
     }
+    return status;
+  }
+
+  /// Aggregation: Get valuation by item
+  Map<String, double> getValuationByItem() {
+    final Map<String, double> valuation = {};
+    for (final item in inventoryItems) {
+      if (item.cost != null) {
+        valuation[item.name] = item.quantity * item.cost!;
+      }
+    }
+    return valuation;
+  }
+
+  /// Aggregation: Get valuation by category
+  Map<String, double> getValuationByCategory() {
+    final Map<String, double> valuation = {};
+    for (final item in inventoryItems) {
+      if (item.cost != null) {
+        valuation[item.category] =
+            (valuation[item.category] ?? 0) + (item.quantity * item.cost!);
+      }
+    }
+    return valuation;
+  }
+
+  /// Aggregation: Get movement breakdown by type
+  Map<String, int> getMovementCountByType() {
+    final Map<String, int> counts = {};
+    for (final mov in inventoryMovements) {
+      final type = mov.movementType.toString().split('.').last;
+      counts[type] = (counts[type] ?? 0) + 1;
+    }
+    return counts;
+  }
+
+  /// Aggregation: Get movement breakdown by status
+  Map<String, int> getMovementCountByStatus() {
+    final Map<String, int> counts = {};
+    for (final mov in inventoryMovements) {
+      final status = mov.approvalStatus.toString().split('.').last;
+      counts[status] = (counts[status] ?? 0) + 1;
+    }
+    return counts;
+  }
+
+  /// Aggregation: Get movement breakdown by date (day granularity)
+  Map<String, int> getMovementCountByDate() {
+    final Map<String, int> counts = {};
+    for (final mov in inventoryMovements) {
+      final date = mov.timestamp.toIso8601String().substring(0, 10);
+      counts[date] = (counts[date] ?? 0) + 1;
+    }
+    return counts;
+  }
+
+  /// Update an inventory item by id
+  void updateInventoryItem(InventoryItemModel updatedItem) {
+    final idx = inventoryItems.indexWhere((item) => item.id == updatedItem.id);
+    if (idx != -1) {
+      inventoryItems[idx] = updatedItem;
+    }
+  }
+
+  /// Check if inventory has enough for a recipe (mock: always true)
+  bool checkInventoryForRecipe(String recipeId, double batchSize) {
+    // For demo, always return true
     return true;
   }
 
-  /// Get mock suppliers data
-  List<Map<String, dynamic>> getMockSuppliers() {
+  /// Get recipe ingredients (mock: returns a list of maps)
+  List<Map<String, dynamic>> getRecipeIngredients(String recipeId) {
+    // For demo, return a mock list
     return [
       {
-        'id': 'supplier-001',
-        'name': 'Al-Marai Dairy Supplies',
-        'contactName': 'Mohammed Al-Otaibi',
-        'email': 'contact@almarai-supply.com',
-        'phone': '+966 11 123 4567',
-        'address': 'Riyadh Industrial Area, Building 45',
-        'city': 'Riyadh',
-        'country': 'Saudi Arabia',
-        'category': 'Dairy Supplies',
-        'rating': 4.8,
-        'status': 'active',
-        'isVerified': true,
-        'paymentTerms': 'Net 30',
-        'notes': 'Reliable supplier for all dairy needs.'
+        'ingredient': 'Camel Milk',
+        'quantity': 10,
+        'unit': 'Liters',
       },
       {
-        'id': 'supplier-002',
-        'name': 'Najd Packaging Solutions',
-        'contactName': 'Sara Al-Fahad',
-        'email': 'info@najd-packaging.com',
-        'phone': '+966 11 987 6543',
-        'address': 'Jeddah Commercial District, Street 12',
-        'city': 'Jeddah',
-        'country': 'Saudi Arabia',
-        'category': 'Packaging',
-        'rating': 4.5,
-        'status': 'active',
-        'isVerified': true,
-        'paymentTerms': 'Net 45',
-        'notes': 'Specializes in food-grade packaging materials.'
+        'ingredient': 'Date Syrup',
+        'quantity': 2,
+        'unit': 'Kg',
       },
-      {
-        'id': 'supplier-003',
-        'name': 'Gulf Ingredients Trading',
-        'contactName': 'Abdullah Al-Qahtani',
-        'email': 'sales@gulf-ingredients.com',
-        'phone': '+966 13 456 7890',
-        'address': 'Dammam Port Area, Warehouse 23',
-        'city': 'Dammam',
-        'country': 'Saudi Arabia',
-        'category': 'Food Ingredients',
-        'rating': 4.2,
-        'status': 'active',
-        'isVerified': true,
-        'paymentTerms': 'Net 30',
-        'notes': 'Wide range of imported and local ingredients.'
-      },
-      {
-        'id': 'supplier-004',
-        'name': 'Saudi Spice Merchants',
-        'contactName': 'Fatima Al-Harbi',
-        'email': 'orders@saudispice.com',
-        'phone': '+966 12 345 6789',
-        'address': 'Mecca Road, Building 78',
-        'city': 'Mecca',
-        'country': 'Saudi Arabia',
-        'category': 'Spices & Flavorings',
-        'rating': 4.7,
-        'status': 'active',
-        'isVerified': true,
-        'paymentTerms': 'Net 15',
-        'notes': 'Premium quality traditional spices and flavorings.'
-      },
-      {
-        'id': 'supplier-005',
-        'name': 'Desert Fruit Farms',
-        'contactName': 'Khalid Al-Mutairi',
-        'email': 'info@desertfruit.com',
-        'phone': '+966 14 789 0123',
-        'address': 'Al-Qassim Agricultural Zone, Farm 123',
-        'city': 'Buraidah',
-        'country': 'Saudi Arabia',
-        'category': 'Fruits & Dates',
-        'rating': 4.6,
-        'status': 'active',
-        'isVerified': true,
-        'paymentTerms': 'Net 14',
-        'notes': 'Local grower of dates and fruits.'
-      }
     ];
   }
 
-  /// Get mock purchase orders
-  List<Map<String, dynamic>> getMockPurchaseOrders() {
-    final now = DateTime.now();
+  /// Get inventory forecast (mock: returns a list of maps)
+  List<Map<String, dynamic>> getInventoryForecast(String itemId) {
+    // For demo, return a mock forecast
+    return [
+      {'date': DateTime.now().add(const Duration(days: 1)), 'forecast': 100},
+      {'date': DateTime.now().add(const Duration(days: 2)), 'forecast': 90},
+      {'date': DateTime.now().add(const Duration(days: 3)), 'forecast': 80},
+    ];
+  }
 
+  /// Get procurement needs (mock: returns a list of maps)
+  List<Map<String, dynamic>> getProcurementNeeds() {
+    // For demo, return a mock list
+    return [
+      {'item': 'Camel Milk', 'needed': 200, 'unit': 'Liters'},
+      {'item': 'Date Syrup', 'needed': 50, 'unit': 'Kg'},
+    ];
+  }
+
+  /// Adjust quantity of an inventory item
+  void adjustQuantity(String itemId, double adjustment, String reason) {
+    final idx = inventoryItems.indexWhere((item) => item.id == itemId);
+    if (idx != -1) {
+      final item = inventoryItems[idx];
+      inventoryItems[idx] = item.copyWith(
+        quantity: item.quantity + adjustment,
+        lastUpdated: DateTime.now(),
+      );
+    }
+  }
+
+  /// Mock recipe ingredients by recipe ID
+  Map<String, List<Map<String, dynamic>>> get recipeIngredients => {
+        'recipe-001': [
+          {
+            'ingredientId': 'inv-001',
+            'name': 'Camel Milk',
+            'quantity': 100.0,
+            'unit': 'Liters',
+          },
+          {
+            'ingredientId': 'inv-005',
+            'name': 'Date Syrup',
+            'quantity': 10.0,
+            'unit': 'Kg',
+          },
+        ],
+        'recipe-002': [
+          {
+            'ingredientId': 'inv-001',
+            'name': 'Camel Milk',
+            'quantity': 80.0,
+            'unit': 'Liters',
+          },
+          {
+            'ingredientId': 'inv-006',
+            'name': 'Saffron',
+            'quantity': 0.5,
+            'unit': 'g',
+          },
+          {
+            'ingredientId': 'inv-007',
+            'name': 'Pure Water',
+            'quantity': 5.0,
+            'unit': 'Liters',
+          },
+        ],
+        'recipe-003': [
+          {
+            'ingredientId': 'inv-014',
+            'name': 'Cow Milk',
+            'quantity': 120.0,
+            'unit': 'Liters',
+          },
+          {
+            'ingredientId': 'inv-016',
+            'name': 'Chocolate Powder',
+            'quantity': 2.0,
+            'unit': 'Kg',
+          },
+        ],
+      };
+
+  /// Reset all mock data to initial state
+  void reset() {
+    // This is a simple reset for demo: clear and re-add initial items
+    inventoryItems.clear();
+    inventoryItems.addAll([
+      InventoryItemModel(
+        id: 'inv-001',
+        name: 'Camel Milk (حليب الإبل)',
+        category: 'Dairy',
+        unit: 'Liters',
+        quantity: 1200.0,
+        minimumQuantity: 300.0,
+        reorderPoint: 500.0,
+        location: 'Cold Storage A',
+        lastUpdated: DateTime.now().subtract(const Duration(hours: 12)),
+        batchNumber: 'BATCH001',
+        expiryDate: DateTime.now().add(const Duration(days: 7)),
+        cost: 6.5,
+        currentTemperature: 4.0,
+        storageCondition: 'refrigerated',
+        overallQualityStatus: null,
+        fatContent: 3.5,
+        pasteurized: true,
+        searchTerms: ['milk', 'camel', 'dairy', 'حليب', 'إبل'],
+        additionalAttributes: {
+          'source': 'Najdi Camel Farm',
+          'organicCertified': true,
+          'region': 'Riyadh Province',
+        },
+      ),
+      // ... (add more initial items as needed)
+    ]);
+    // Similarly reset locations and movements if needed
+    // For demo, you can clear and re-add initial mock data
+  }
+
+  /// Mock: Get suppliers
+  List<Map<String, dynamic>> getMockSuppliers() {
     return [
       {
+        'id': 'sup-001',
+        'name': 'Al-Marai Camel Farm',
+        'code': 'AMC-001',
+        'contact_name': 'Ahmed Al-Saud',
+        'phone_number': '+966500000001',
+        'email': 'contact@almarai.com',
+        'address': 'Riyadh, Saudi Arabia',
+        'supplier_type': 'raw_milk',
+        'quality_rating': 4.8,
+        'delivery_rating': 4.7,
+        'performance_metrics': {
+          'quality_score': 4.8,
+          'delivery_score': 4.7,
+          'price_score': 4.5,
+          'overall_score': 4.7,
+        },
+        'certifications': ['ISO 22000', 'SASO'],
+        'payment_terms': 'Net 30',
+        'is_active': true,
+        'created_at': DateTime.now()
+            .subtract(const Duration(days: 100))
+            .toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
+      },
+    ];
+  }
+
+  /// Mock: Get purchase orders
+  List<Map<String, dynamic>> getMockPurchaseOrders() {
+    return [
+      // Approved PO (printable)
+      {
         'id': 'po-001',
-        'poNumber': 'PO-2023-001',
-        'procurementPlanId': 'plan-2023-Q1',
-        'requestDate': now.subtract(const Duration(days: 15)),
-        'requestedBy': 'Ahmed Al-Saud',
-        'supplierId': 'supplier-001',
-        'supplierName': 'Al-Marai Dairy Supplies',
-        'status': 'completed',
+        'supplierId': 'sup-001',
+        'orderNumber': 'PO-2024-001',
+        'poNumber': 'PO-2024-001',
+        'status': 'approved',
+        'paymentStatus': 'paid',
+        'orderDate':
+            DateTime.now().subtract(const Duration(days: 10)).toIso8601String(),
+        'requestDate':
+            DateTime.now().subtract(const Duration(days: 10)).toIso8601String(),
+        'deliveryDate':
+            DateTime.now().add(const Duration(days: 5)).toIso8601String(),
         'items': [
           {
             'id': 'poi-001',
             'itemId': 'inv-001',
-            'itemName': 'Camel Milk (حليب الإبل)',
+            'itemName': 'Camel Milk',
             'quantity': 500.0,
             'unit': 'Liters',
             'unitPrice': 6.5,
             'totalPrice': 3250.0,
-            'requiredByDate': now.subtract(const Duration(days: 10)),
-            'notes': 'Premium quality camel milk'
+            'requiredByDate':
+                DateTime.now().add(const Duration(days: 5)).toIso8601String(),
           },
+        ],
+        'totalAmount': 3250.0,
+        'notes': 'Urgent delivery',
+        'reasonForRequest': 'Stock replenishment',
+        'intendedUse': 'Production',
+        'quantityJustification': 'Based on forecasted demand',
+        'supportingDocuments': [],
+        'approvalDate':
+            DateTime.now().subtract(const Duration(days: 8)).toIso8601String(),
+        'approvedBy': 'manager-001',
+      },
+      // Declined PO
+      {
+        'id': 'po-002',
+        'supplierId': 'sup-002',
+        'orderNumber': 'PO-2024-002',
+        'poNumber': 'PO-2024-002',
+        'status': 'declined',
+        'paymentStatus': 'pending',
+        'orderDate':
+            DateTime.now().subtract(const Duration(days: 7)).toIso8601String(),
+        'requestDate':
+            DateTime.now().subtract(const Duration(days: 7)).toIso8601String(),
+        'deliveryDate':
+            DateTime.now().add(const Duration(days: 10)).toIso8601String(),
+        'items': [
           {
             'id': 'poi-002',
             'itemId': 'inv-002',
-            'itemName': 'Laban (لبن)',
-            'quantity': 300.0,
+            'itemName': 'Laban',
+            'quantity': 200.0,
             'unit': 'Liters',
             'unitPrice': 4.2,
-            'totalPrice': 1260.0,
-            'requiredByDate': now.subtract(const Duration(days: 10)),
-            'notes': 'Fresh laban from trusted sources'
-          }
+            'totalPrice': 840.0,
+            'requiredByDate':
+                DateTime.now().add(const Duration(days: 10)).toIso8601String(),
+          },
         ],
-        'totalAmount': 4510.0,
-        'reasonForRequest': 'Regular stock replenishment',
-        'intendedUse': 'Production of dairy products',
-        'quantityJustification':
-            'Based on production forecast for upcoming month',
+        'totalAmount': 840.0,
+        'notes': 'Supplier could not meet requirements',
+        'reasonForRequest': 'New product trial',
+        'intendedUse': 'R&D',
+        'quantityJustification': 'Small batch for testing',
         'supportingDocuments': [],
-        'expectedDeliveryDate': now.subtract(const Duration(days: 8)),
+        'approvalDate': null,
+        'approvedBy': null,
       },
+      // Pending PO
       {
-        'id': 'po-002',
-        'poNumber': 'PO-2023-002',
-        'procurementPlanId': 'plan-2023-Q1',
-        'requestDate': now.subtract(const Duration(days: 10)),
-        'requestedBy': 'Fatima Al-Zahrani',
-        'supplierId': 'supplier-002',
-        'supplierName': 'Najd Packaging Solutions',
-        'status': 'delivered',
+        'id': 'po-003',
+        'supplierId': 'sup-003',
+        'orderNumber': 'PO-2024-003',
+        'poNumber': 'PO-2024-003',
+        'status': 'pending',
+        'paymentStatus': 'pending',
+        'orderDate':
+            DateTime.now().subtract(const Duration(days: 3)).toIso8601String(),
+        'requestDate':
+            DateTime.now().subtract(const Duration(days: 3)).toIso8601String(),
+        'deliveryDate':
+            DateTime.now().add(const Duration(days: 14)).toIso8601String(),
         'items': [
           {
             'id': 'poi-003',
-            'itemId': 'inv-010',
-            'itemName': 'Halal-Certified Containers 500ml',
-            'quantity': 1000.0,
-            'unit': 'Units',
-            'unitPrice': 0.25,
-            'totalPrice': 250.0,
-            'requiredByDate': now.subtract(const Duration(days: 5)),
-            'notes': 'Standard packaging containers'
-          },
-          {
-            'id': 'poi-004',
-            'itemId': 'inv-011',
-            'itemName': 'Traditional Glass Bottles 1L',
-            'quantity': 800.0,
-            'unit': 'Units',
-            'unitPrice': 0.45,
-            'totalPrice': 360.0,
-            'requiredByDate': now.subtract(const Duration(days: 5)),
-            'notes': 'For premium product line'
-          }
-        ],
-        'totalAmount': 610.0,
-        'reasonForRequest': 'Low packaging inventory',
-        'intendedUse': 'Product packaging',
-        'quantityJustification': 'Based on sales forecast for coming quarter',
-        'supportingDocuments': [],
-        'expectedDeliveryDate': now.subtract(const Duration(days: 3)),
-      },
-      {
-        'id': 'po-003',
-        'poNumber': 'PO-2023-003',
-        'procurementPlanId': 'plan-2023-Q1',
-        'requestDate': now.subtract(const Duration(days: 5)),
-        'requestedBy': 'Khalid Al-Ghamdi',
-        'supplierId': 'supplier-003',
-        'supplierName': 'Gulf Ingredients Trading',
-        'status': 'pending',
-        'items': [
-          {
-            'id': 'poi-005',
-            'itemId': 'inv-005',
-            'itemName': 'Date Syrup (دبس التمر)',
-            'quantity': 200.0,
-            'unit': 'Kg',
-            'unitPrice': 3.5,
-            'totalPrice': 700.0,
-            'requiredByDate': now.add(const Duration(days: 5)),
-            'notes': 'For flavoring and sweetening'
-          },
-          {
-            'id': 'poi-006',
-            'itemId': 'inv-007',
-            'itemName': 'Pure Water',
-            'quantity': 15.0,
-            'unit': 'Liters',
-            'unitPrice': 9.5,
-            'totalPrice': 142.5,
-            'requiredByDate': now.add(const Duration(days: 5)),
-            'notes': 'For premium dessert production'
-          }
-        ],
-        'totalAmount': 842.5,
-        'reasonForRequest': 'Specialty ingredients for new product line',
-        'intendedUse': 'New dessert production',
-        'quantityJustification': 'Initial production run plus safety stock',
-        'supportingDocuments': [],
-        'expectedDeliveryDate': now.add(const Duration(days: 7)),
-      },
-      {
-        'id': 'po-004',
-        'poNumber': 'PO-2023-004',
-        'procurementPlanId': 'plan-2023-Q1',
-        'requestDate': now.subtract(const Duration(days: 2)),
-        'requestedBy': 'Nora Al-Dosari',
-        'supplierId': 'supplier-004',
-        'supplierName': 'Saudi Spice Merchants',
-        'status': 'draft',
-        'items': [
-          {
-            'id': 'poi-007',
-            'itemId': 'inv-006',
-            'itemName': 'Saffron (زعفران)',
+            'itemId': 'inv-003',
+            'itemName': 'Jibnah',
             'quantity': 100.0,
-            'unit': 'g',
-            'unitPrice': 12.8,
-            'totalPrice': 1280.0,
-            'requiredByDate': now.add(const Duration(days: 10)),
-            'notes': 'Premium quality saffron'
-          },
-          {
-            'id': 'poi-008',
-            'itemId': 'inv-012',
-            'itemName': 'Cardamom (هيل)',
-            'quantity': 20.0,
             'unit': 'Kg',
-            'unitPrice': 18.5,
-            'totalPrice': 370.0,
-            'requiredByDate': now.add(const Duration(days: 10)),
-            'notes': 'For flavor enhancement in dairy products'
-          }
+            'unitPrice': 12.5,
+            'totalPrice': 1250.0,
+            'requiredByDate':
+                DateTime.now().add(const Duration(days: 14)).toIso8601String(),
+          },
         ],
-        'totalAmount': 1650.0,
-        'reasonForRequest': 'Spice inventory running low',
-        'intendedUse': 'Flavoring for various products',
-        'quantityJustification': 'Based on production forecast',
+        'totalAmount': 1250.0,
+        'notes': 'Awaiting approval from finance',
+        'reasonForRequest': 'Seasonal demand',
+        'intendedUse': 'Sales',
+        'quantityJustification': 'Expected increase in orders',
         'supportingDocuments': [],
-        'expectedDeliveryDate': now.add(const Duration(days: 12)),
-      }
+        'approvalDate': null,
+        'approvedBy': null,
+      },
     ];
   }
 
-  /// Get mock procurement plans
+  /// Mock: Get procurement plans
   List<Map<String, dynamic>> getMockProcurementPlans() {
-    final now = DateTime.now();
-    final quarter1Start = DateTime(now.year, 1, 1);
-    final quarter1End = DateTime(now.year, 3, 31);
-    final quarter2Start = DateTime(now.year, 4, 1);
-    final quarter2End = DateTime(now.year, 6, 30);
-
     return [
       {
-        'id': 'plan-2023-Q1',
-        'title': 'Q1 Procurement Plan',
-        'description':
-            'Procurement plan for first quarter covering dairy and packaging supplies',
-        'status': 'completed',
-        'startDate': quarter1Start,
-        'endDate': quarter1End,
-        'budget': 25000.0,
-        'actualSpent': 23450.0,
-        'createdBy': 'Ahmed Al-Saud',
-        'approvedBy': 'Mohammed Al-Rashid',
-        'categories': ['Dairy', 'Packaging', 'Ingredients'],
-        'notes': 'Plan completed successfully with 94% budget utilization',
+        'id': 'plan-001',
+        'name': 'Q2 Raw Milk Procurement',
+        'creationDate':
+            DateTime.now().subtract(const Duration(days: 30)).toIso8601String(),
+        'createdBy': 'user-001',
+        'status': 'approved',
+        'items': [
+          {
+            'id': 'ppi-001',
+            'itemId': 'inv-001',
+            'itemName': 'Camel Milk',
+            'quantity': 1000.0,
+            'unit': 'Liters',
+            'preferredSupplierId': 'sup-001',
+            'preferredSupplierName': 'Al-Marai Camel Farm',
+            'estimatedUnitCost': 6.5,
+            'estimatedTotalCost': 6500.0,
+            'requiredByDate':
+                DateTime.now().add(const Duration(days: 10)).toIso8601String(),
+            'urgency': 'high',
+          },
+        ],
+        'estimatedTotalCost': 6500.0,
+        'notes': 'Plan for Q2 production',
+        'approvalDate':
+            DateTime.now().subtract(const Duration(days: 20)).toIso8601String(),
+        'approvedBy': 'manager-001',
+        'budgetLimit': 10000.0,
+        'requiredByDate':
+            DateTime.now().add(const Duration(days: 10)).toIso8601String(),
       },
-      {
-        'id': 'plan-2023-Q2',
-        'title': 'Q2 Procurement Plan',
-        'description':
-            'Procurement plan for second quarter with focus on specialty ingredients',
-        'status': 'active',
-        'startDate': quarter2Start,
-        'endDate': quarter2End,
-        'budget': 30000.0,
-        'actualSpent': 12500.0,
-        'createdBy': 'Fatima Al-Zahrani',
-        'approvedBy': 'Mohammed Al-Rashid',
-        'categories': ['Dairy', 'Packaging', 'Ingredients', 'Specialty Items'],
-        'notes': 'Increased budget to accommodate new product line ingredients',
-      }
     ];
   }
 
-  /// Get mock supplier contracts
+  /// Mock: Get supplier contracts
   List<Map<String, dynamic>> getMockSupplierContracts() {
-    final now = DateTime.now();
-
     return [
       {
         'id': 'contract-001',
-        'supplierId': 'supplier-001',
-        'supplierName': 'Al-Marai Dairy Supplies',
-        'title': 'Annual Dairy Supply Agreement',
-        'contractNumber': 'CNT-2023-001',
-        'status': 'active',
-        'startDate': DateTime(now.year, 1, 1),
-        'endDate': DateTime(now.year, 12, 31),
-        'value': 75000.0,
-        'paymentTerms': 'Net 30',
-        'deliveryTerms': 'Weekly deliveries at buyer location',
-        'categories': ['Dairy'],
-        'contractType': 'Annual',
-        'createdBy': 'Ahmed Al-Saud',
-        'approvedBy': 'Mohammed Al-Rashid',
-        'notes': 'Premium rates for high volume purchases',
+        'contract_number': 'C-2024-001',
+        'contract_type': 'supply',
+        'contract_date':
+            DateTime.now().subtract(const Duration(days: 60)).toIso8601String(),
+        'start_date':
+            DateTime.now().subtract(const Duration(days: 30)).toIso8601String(),
+        'end_date':
+            DateTime.now().add(const Duration(days: 335)).toIso8601String(),
+        'supplier_id': 'sup-001',
+        'supplier_name': 'Al-Marai Camel Farm',
+        'terms_and_conditions': 'Standard supply contract terms',
+        'pricing_schedules': 'Fixed price for 2024',
+        'material_quality_specifications': 'ISO 22000, SASO',
+        'delivery_requirements': 'Monthly delivery',
+        'special_conditions': null,
+        'notes': 'Renewal option included',
+        'created_at':
+            DateTime.now().subtract(const Duration(days: 60)).toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String(),
       },
-      {
-        'id': 'contract-002',
-        'supplierId': 'supplier-002',
-        'supplierName': 'Najd Packaging Solutions',
-        'title': 'Packaging Materials Supply Contract',
-        'contractNumber': 'CNT-2023-002',
-        'status': 'active',
-        'startDate': DateTime(now.year, 2, 15),
-        'endDate': DateTime(now.year + 1, 2, 14),
-        'value': 35000.0,
-        'paymentTerms': 'Net 45',
-        'deliveryTerms': 'Monthly deliveries at buyer location',
-        'categories': ['Packaging'],
-        'contractType': 'Annual',
-        'createdBy': 'Fatima Al-Zahrani',
-        'approvedBy': 'Mohammed Al-Rashid',
-        'notes': 'Exclusive supplier for custom packaging',
-      }
     ];
   }
 
-  /// Get mock quality logs
+  /// Mock: Get quality logs
   List<Map<String, dynamic>> getMockQualityLogs() {
-    final now = DateTime.now();
-
     return [
       {
-        'id': 'qualitylog-001',
-        'supplierId': 'supplier-001',
-        'supplierName': 'Al-Marai Dairy Supplies',
-        'purchaseOrderId': 'po-001',
-        'inspectionDate': now.subtract(const Duration(days: 14)),
-        'inspectedBy': 'Saleh Al-Otaibi',
-        'qualityScore': 92,
-        'status': 'passed',
-        'notes': 'All items passed quality inspection',
-        'issues': [],
-        'correctiveActions': [],
+        'id': 'ql-001',
+        'supplierId': 'sup-001',
+        'date':
+            DateTime.now().subtract(const Duration(days: 5)).toIso8601String(),
+        'qualityScore': 4.7,
+        'notes': 'Batch passed all quality checks',
       },
-      {
-        'id': 'qualitylog-002',
-        'supplierId': 'supplier-002',
-        'supplierName': 'Najd Packaging Solutions',
-        'purchaseOrderId': 'po-002',
-        'inspectionDate': now.subtract(const Duration(days: 7)),
-        'inspectedBy': 'Saleh Al-Otaibi',
-        'qualityScore': 85,
-        'status': 'conditional-pass',
-        'notes': 'Minor issues with packaging seal integrity',
-        'issues': ['5% of containers had seal defects'],
-        'correctiveActions': [
-          'Supplier to replace defective units within 7 days'
-        ],
-      }
     ];
   }
 
-  /// Get mock performance metrics
+  /// Mock: Get performance metrics
   List<Map<String, dynamic>> getMockPerformanceMetrics() {
-    final now = DateTime.now();
-
     return [
       {
-        'id': 'metrics-001',
-        'supplierId': 'supplier-001',
-        'supplierName': 'Al-Marai Dairy Supplies',
-        'period': 'Q1',
-        'year': now.year,
-        'deliveryOnTimeRate': 95.0,
-        'qualityConformanceRate': 98.0,
-        'priceCompetitivenessScore': 85.0,
-        'communicationResponseScore': 90.0,
-        'overallPerformanceScore': 92.0,
-        'evaluationDate': DateTime(now.year, 3, 31),
-        'evaluatedBy': 'Ahmed Al-Saud',
-        'notes':
-            'Excellent supplier performance, recommended for continued partnership',
+        'id': 'pm-001',
+        'supplierId': 'sup-001',
+        'date':
+            DateTime.now().subtract(const Duration(days: 10)).toIso8601String(),
+        'qualityScore': 4.8,
+        'deliveryScore': 4.7,
+        'priceScore': 4.5,
+        'overallScore': 4.7,
+        'notes': 'Consistent high performance',
       },
-      {
-        'id': 'metrics-002',
-        'supplierId': 'supplier-002',
-        'supplierName': 'Najd Packaging Solutions',
-        'period': 'Q1',
-        'year': now.year,
-        'deliveryOnTimeRate': 90.0,
-        'qualityConformanceRate': 92.0,
-        'priceCompetitivenessScore': 88.0,
-        'communicationResponseScore': 94.0,
-        'overallPerformanceScore': 91.0,
-        'evaluationDate': DateTime(now.year, 3, 31),
-        'evaluatedBy': 'Fatima Al-Zahrani',
-        'notes': 'Good overall performance with minor delivery delays',
-      }
     ];
   }
+}
 
-  // Sample mock procurement needs
-  List<Map<String, dynamic>> getProcurementNeeds() {
-    // Return mock procurement needs data
-    return [
-      {
-        'itemId': 'inv-014',
-        'name': 'Cow Milk',
-        'category': 'Dairy',
-        'currentQuantity': 250.0,
-        'requiredQuantity': 300.0,
-        'urgency': 'High',
-        'estimatedCost': 1350.0,
-        'notes': 'Required for milk production and flavored milk products'
-      },
-      {
-        'itemId': 'inv-002',
-        'name': 'Laban (لبن)',
-        'category': 'Dairy',
-        'currentQuantity': 110.0,
-        'requiredQuantity': 100.0,
-        'urgency': 'Medium',
-        'estimatedCost': 420.0,
-        'notes': 'Stock approaching reorder point, needed for daily production'
-      },
-      {
-        'itemId': 'inv-015',
-        'name': 'Strawberry Syrup',
-        'category': 'Ingredients',
-        'currentQuantity': 8.0,
-        'requiredQuantity': 20.0,
-        'urgency': 'Medium',
-        'estimatedCost': 240.0,
-        'notes': 'Required for strawberry milk production'
-      }
-    ];
+/// Extension to add reset functionality to the MockAnalyticsData class
+extension MockAnalyticsDataReset on MockAnalyticsData {
+  void reset() {
+    // Reset analytics data if needed
   }
 }
 

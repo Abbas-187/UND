@@ -10,8 +10,10 @@ import '../widgets/low_stock_alerts_banner.dart';
 import 'inventory_analytics_dashboard_screen.dart';
 import 'inventory_edit_screen.dart';
 import 'inventory_item_details_screen.dart';
-import 'inventory_reports_screen.dart';
 import 'inventory_settings_screen.dart';
+import '../../../reports/screens/report_screen.dart';
+import '../../../reports/utils/report_aggregators.dart';
+import '../../../../core/services/mock_data_service.dart';
 
 class InventoryScreen extends ConsumerWidget {
   const InventoryScreen({super.key});
@@ -42,10 +44,14 @@ class InventoryScreen extends ConsumerWidget {
             icon: const Icon(Icons.description),
             tooltip: l10n.inventoryReports,
             onPressed: () {
+              // Best Practice: Use a provider or service locator for dataService in production.
+              // Now using Riverpod provider for MockDataService.
+              final mockDataService = ref.watch(mockDataServiceProvider);
+              final aggregators = ReportAggregators(mockDataService);
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const InventoryReportsScreen(),
+                  builder: (_) => ReportScreen(aggregators: aggregators),
                 ),
               );
             },
@@ -74,7 +80,8 @@ class InventoryScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Column(
+      body: ListView(
+        padding: EdgeInsets.zero,
         children: [
           // Low stock alerts banner
           const LowStockAlertsBanner(),
@@ -91,13 +98,11 @@ class InventoryScreen extends ConsumerWidget {
           const InventoryAnalyticsCard(),
 
           // Inventory list
-          Expanded(
-            child: filteredItems.when(
-              data: (items) => _buildInventoryList(context, items),
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(
-                child: Text(l10n.errorWithMessage(error.toString())),
-              ),
+          filteredItems.when(
+            data: (items) => _buildInventoryList(context, items),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) => Center(
+              child: Text(l10n.errorWithMessage(error.toString())),
             ),
           ),
         ],
@@ -115,6 +120,8 @@ class InventoryScreen extends ConsumerWidget {
     }
 
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];

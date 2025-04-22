@@ -1,6 +1,46 @@
+import 'recipe_step_model.dart';
+
+class RecipeHistoryEntry {
+  final DateTime timestamp;
+  final String user;
+  final String action;
+  final Map<String, dynamic>? before;
+  final Map<String, dynamic>? after;
+  final String? note;
+
+  RecipeHistoryEntry({
+    required this.timestamp,
+    required this.user,
+    required this.action,
+    this.before,
+    this.after,
+    this.note,
+  });
+
+  factory RecipeHistoryEntry.fromJson(Map<String, dynamic> json) {
+    return RecipeHistoryEntry(
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      user: json['user'] as String,
+      action: json['action'] as String,
+      before: json['before'] as Map<String, dynamic>?,
+      after: json['after'] as Map<String, dynamic>?,
+      note: json['note'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'timestamp': timestamp.toIso8601String(),
+      'user': user,
+      'action': action,
+      'before': before,
+      'after': after,
+      'note': note,
+    };
+  }
+}
 
 class RecipeModel {
-
   RecipeModel({
     required this.id,
     required this.name,
@@ -10,6 +50,8 @@ class RecipeModel {
     this.approvedAt,
     required this.createdAt,
     required this.updatedAt,
+    this.steps = const [],
+    this.history = const [],
   });
 
   factory RecipeModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +66,15 @@ class RecipeModel {
           : null,
       createdAt: DateTime.parse(json['createdAt'] as String),
       updatedAt: DateTime.parse(json['updatedAt'] as String),
+      steps: (json['steps'] as List<dynamic>?)
+              ?.map((e) => RecipeStepModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      history: (json['history'] as List<dynamic>?)
+              ?.map(
+                  (e) => RecipeHistoryEntry.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
   final String id;
@@ -34,6 +85,8 @@ class RecipeModel {
   final DateTime? approvedAt;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final List<RecipeStepModel> steps;
+  final List<RecipeHistoryEntry> history;
 
   Map<String, dynamic> toJson() {
     return {
@@ -45,6 +98,8 @@ class RecipeModel {
       'approvedAt': approvedAt?.toIso8601String(),
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+      'steps': steps.map((e) => e.toJson()).toList(),
+      'history': history.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -57,6 +112,8 @@ class RecipeModel {
     DateTime? approvedAt,
     DateTime? createdAt,
     DateTime? updatedAt,
+    List<RecipeStepModel>? steps,
+    List<RecipeHistoryEntry>? history,
   }) {
     return RecipeModel(
       id: id ?? this.id,
@@ -67,6 +124,8 @@ class RecipeModel {
       approvedAt: approvedAt ?? this.approvedAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      steps: steps ?? this.steps,
+      history: history ?? this.history,
     );
   }
 

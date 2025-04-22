@@ -5,6 +5,7 @@ import '../../domain/entities/purchase_order_approval.dart';
 import '../../domain/workflow/po_approval_workflow.dart';
 import '../../domain/security/biometric_validator.dart';
 import '../providers/po_approval_provider.dart';
+import '../../../suppliers/presentation/providers/supplier_provider.dart';
 
 /// Screen for approving or declining purchase orders.
 class POApprovalScreen extends ConsumerStatefulWidget {
@@ -89,7 +90,7 @@ class _POApprovalScreenState extends ConsumerState<POApprovalScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildPOInfoCard(po),
+          _buildPOInfoCard(po, ref),
           const SizedBox(height: 16),
           _buildApprovalRequirementsCard(po),
           const SizedBox(height: 16),
@@ -181,7 +182,11 @@ class _POApprovalScreenState extends ConsumerState<POApprovalScreen> {
     );
   }
 
-  Widget _buildPOInfoCard(PurchaseOrder po) {
+  Widget _buildPOInfoCard(PurchaseOrder po, WidgetRef ref) {
+    final supplierId = po.supplierId;
+    final supplierAsync = (supplierId.isNotEmpty)
+        ? ref.watch(supplierProvider(supplierId))
+        : null;
     return Card(
       elevation: 2,
       child: Padding(
@@ -197,7 +202,20 @@ class _POApprovalScreenState extends ConsumerState<POApprovalScreen> {
               ),
             ),
             const Divider(),
-            _buildInfoRow('Supplier', po.supplierName),
+            supplierAsync != null
+                ? supplierAsync.when(
+                    data: (supplier) =>
+                        _buildInfoRow('Supplier', supplier.name),
+                    loading: () => _buildInfoRow('Supplier', 'Loading...'),
+                    error: (error, stack) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildInfoRow('Supplier', po.supplierName),
+                        const Text('Supplier info unavailable'),
+                      ],
+                    ),
+                  )
+                : _buildInfoRow('Supplier', po.supplierName),
             _buildInfoRow(
                 'Total Amount', '\$${po.totalAmount.toStringAsFixed(2)}'),
             _buildInfoRow('Request Date', _formatDate(po.requestDate)),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
+import '../../domain/providers/inventory_provider.dart';
 
 class InventoryMovementHistoryScreen extends ConsumerStatefulWidget {
   const InventoryMovementHistoryScreen({

@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 
-/// A widget that shows a loading overlay when isLoading is true.
+/// A widget that displays a loading indicator over its child when [isLoading] is true.
 class LoadingOverlay extends StatelessWidget {
+  /// Whether to show the loading indicator
   final bool isLoading;
+
+  /// The widget to display under the loading indicator
   final Widget child;
-  final Color? backgroundColor;
-  final Color? progressColor;
+
+  /// Optional color for the loading indicator background
+  final Color? color;
+
+  /// Optional opacity for the loading indicator background
+  final double opacity;
 
   const LoadingOverlay({
     Key? key,
     required this.isLoading,
     required this.child,
-    this.backgroundColor,
-    this.progressColor,
+    this.color,
+    this.opacity = 0.5,
   }) : super(key: key);
 
   @override
@@ -21,12 +28,13 @@ class LoadingOverlay extends StatelessWidget {
       children: [
         child,
         if (isLoading)
-          Container(
-            color: backgroundColor ?? Colors.black.withOpacity(0.5),
-            child: Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  progressColor ?? Theme.of(context).primaryColor,
+          Positioned.fill(
+            child: AbsorbPointer(
+              absorbing: true,
+              child: Container(
+                color: (color ?? Colors.black).withOpacity(opacity),
+                child: const Center(
+                  child: CircularProgressIndicator(),
                 ),
               ),
             ),

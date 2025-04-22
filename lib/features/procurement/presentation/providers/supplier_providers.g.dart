@@ -137,7 +137,7 @@ final supplierRepositoryProvider =
 // ignore: unused_element
 typedef SupplierRepositoryRef = AutoDisposeProviderRef<SupplierRepository>;
 String _$supplierFilterNotifierHash() =>
-    r'8c0c79a57f59d26bc534d9891a50a775e2157076';
+    r'c13cec68221b0ec5530768e3d2257fc40c14b895';
 
 /// Provider for supplier filter state
 ///
@@ -155,7 +155,7 @@ final supplierFilterNotifierProvider = AutoDisposeNotifierProvider<
 );
 
 typedef _$SupplierFilterNotifier = AutoDisposeNotifier<SupplierFilter>;
-String _$suppliersNotifierHash() => r'8fe757f84043eb1c6d70c9401769634533df2ccc';
+String _$suppliersNotifierHash() => r'13cc7077dc8109de35d05816340e46d7b3e27731';
 
 /// Notifier for suppliers list
 ///
@@ -174,7 +174,7 @@ final suppliersNotifierProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$SuppliersNotifier = AutoDisposeAsyncNotifier<SuppliersState>;
 String _$supplierDetailNotifierHash() =>
-    r'0ee613513813e7346b6ab04004b43adc5e16bc71';
+    r'b4c6472a50e947fd62669aff6061ef32b8f02acc';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -206,23 +206,23 @@ abstract class _$SupplierDetailNotifier
   );
 }
 
-/// Notifier for supplier details
+/// Provider for supplier detail
 ///
 /// Copied from [SupplierDetailNotifier].
 @ProviderFor(SupplierDetailNotifier)
 const supplierDetailNotifierProvider = SupplierDetailNotifierFamily();
 
-/// Notifier for supplier details
+/// Provider for supplier detail
 ///
 /// Copied from [SupplierDetailNotifier].
 class SupplierDetailNotifierFamily
     extends Family<AsyncValue<SupplierDetailState>> {
-  /// Notifier for supplier details
+  /// Provider for supplier detail
   ///
   /// Copied from [SupplierDetailNotifier].
   const SupplierDetailNotifierFamily();
 
-  /// Notifier for supplier details
+  /// Provider for supplier detail
   ///
   /// Copied from [SupplierDetailNotifier].
   SupplierDetailNotifierProvider call(
@@ -257,13 +257,13 @@ class SupplierDetailNotifierFamily
   String? get name => r'supplierDetailNotifierProvider';
 }
 
-/// Notifier for supplier details
+/// Provider for supplier detail
 ///
 /// Copied from [SupplierDetailNotifier].
 class SupplierDetailNotifierProvider
     extends AutoDisposeAsyncNotifierProviderImpl<SupplierDetailNotifier,
         SupplierDetailState> {
-  /// Notifier for supplier details
+  /// Provider for supplier detail
   ///
   /// Copied from [SupplierDetailNotifier].
   SupplierDetailNotifierProvider(

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/inventory_item.dart';
-import '../providers/inventory_provider.dart';
 
-class InventoryEditScreen extends ConsumerStatefulWidget { // Null for adding new item, non-null for editing
+import '../../../../core/auth/models/permission.dart';
+import '../../../../core/auth/widgets/permission_wrapper.dart';
+import '../../domain/entities/inventory_item.dart';
+import '../../domain/providers/inventory_provider.dart';
+
+class InventoryEditScreen extends ConsumerStatefulWidget {
+  // Null for adding new item, non-null for editing
 
   const InventoryEditScreen({
     super.key,
@@ -112,247 +116,253 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
   Widget build(BuildContext context) {
     final isEditing = widget.itemId != null;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(isEditing ? 'Edit Item' : 'Add New Item'),
-        actions: [
-          TextButton(
-            onPressed: _saveItem,
-            child: const Text('SAVE'),
-          ),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Item Name',
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter an item name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _categoryController,
-                            decoration: const InputDecoration(
-                              labelText: 'Category',
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a category';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _unitController,
-                            decoration: const InputDecoration(
-                              labelText: 'Unit',
-                              border: OutlineInputBorder(),
-                              hintText: 'e.g., kg, liters, pieces',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a unit';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _quantityController,
-                            decoration: const InputDecoration(
-                              labelText: 'Quantity',
-                              border: OutlineInputBorder(),
-                            ),
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a quantity';
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'Please enter a valid number';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _locationController,
-                            decoration: const InputDecoration(
-                              labelText: 'Location',
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a location';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _minimumQuantityController,
-                            decoration: const InputDecoration(
-                              labelText: 'Minimum Quantity',
-                              border: OutlineInputBorder(),
-                              hintText: 'For low stock alerts',
-                            ),
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a minimum quantity';
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'Please enter a valid number';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _reorderPointController,
-                            decoration: const InputDecoration(
-                              labelText: 'Reorder Point',
-                              border: OutlineInputBorder(),
-                              hintText: 'When to reorder',
-                            ),
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a reorder point';
-                              }
-                              if (double.tryParse(value) == null) {
-                                return 'Please enter a valid number';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _batchNumberController,
-                      decoration: const InputDecoration(
-                        labelText: 'Batch Number (Optional)',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    InkWell(
-                      onTap: _selectExpiryDate,
-                      child: InputDecorator(
+    return PermissionWrapper(
+      requiredPermission: Permission.inventoryEdit,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(isEditing ? 'Edit Item' : 'Add New Item'),
+          actions: [
+            TextButton(
+              onPressed: _saveItem,
+              child: const Text('SAVE'),
+            ),
+          ],
+        ),
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        controller: _nameController,
                         decoration: const InputDecoration(
-                          labelText: 'Expiry Date (Optional)',
+                          labelText: 'Item Name',
                           border: OutlineInputBorder(),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              _expiryDate != null
-                                  ? _formatDate(_expiryDate!)
-                                  : 'Select Date',
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (_expiryDate != null)
-                                  IconButton(
-                                    icon: const Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        _expiryDate = null;
-                                      });
-                                    },
-                                  ),
-                                const Icon(Icons.calendar_today),
-                              ],
-                            ),
-                          ],
-                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter an item name';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Additional Attributes (Optional)',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    // List existing attributes
-                    ..._additionalAttributes.entries.map((entry) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(entry.key),
-                            ),
-                            Expanded(
-                              child: Text(entry.value.toString()),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                setState(() {
-                                  _additionalAttributes.remove(entry.key);
-                                });
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _categoryController,
+                              decoration: const InputDecoration(
+                                labelText: 'Category',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a category';
+                                }
+                                return null;
                               },
                             ),
-                          ],
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _unitController,
+                              decoration: const InputDecoration(
+                                labelText: 'Unit',
+                                border: OutlineInputBorder(),
+                                hintText: 'e.g., kg, liters, pieces',
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a unit';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _quantityController,
+                              decoration: const InputDecoration(
+                                labelText: 'Quantity',
+                                border: OutlineInputBorder(),
+                              ),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a quantity';
+                                }
+                                if (double.tryParse(value) == null) {
+                                  return 'Please enter a valid number';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _locationController,
+                              decoration: const InputDecoration(
+                                labelText: 'Location',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a location';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: _minimumQuantityController,
+                              decoration: const InputDecoration(
+                                labelText: 'Minimum Quantity',
+                                border: OutlineInputBorder(),
+                                hintText: 'For low stock alerts',
+                              ),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a minimum quantity';
+                                }
+                                if (double.tryParse(value) == null) {
+                                  return 'Please enter a valid number';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _reorderPointController,
+                              decoration: const InputDecoration(
+                                labelText: 'Reorder Point',
+                                border: OutlineInputBorder(),
+                                hintText: 'When to reorder',
+                              ),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      decimal: true),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a reorder point';
+                                }
+                                if (double.tryParse(value) == null) {
+                                  return 'Please enter a valid number';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _batchNumberController,
+                        decoration: const InputDecoration(
+                          labelText: 'Batch Number (Optional)',
+                          border: OutlineInputBorder(),
                         ),
-                      );
-                    }),
-                    // Add new attribute button
-                    OutlinedButton.icon(
-                      onPressed: _addAttribute,
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Attribute'),
-                    ),
-                  ],
+                      ),
+                      const SizedBox(height: 16),
+                      InkWell(
+                        onTap: _selectExpiryDate,
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            labelText: 'Expiry Date (Optional)',
+                            border: OutlineInputBorder(),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _expiryDate != null
+                                    ? _formatDate(_expiryDate!)
+                                    : 'Select Date',
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (_expiryDate != null)
+                                    IconButton(
+                                      icon: const Icon(Icons.clear),
+                                      onPressed: () {
+                                        setState(() {
+                                          _expiryDate = null;
+                                        });
+                                      },
+                                    ),
+                                  const Icon(Icons.calendar_today),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'Additional Attributes (Optional)',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      // List existing attributes
+                      ..._additionalAttributes.entries.map((entry) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(entry.key),
+                              ),
+                              Expanded(
+                                child: Text(entry.value.toString()),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  setState(() {
+                                    _additionalAttributes.remove(entry.key);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                      // Add new attribute button
+                      OutlinedButton.icon(
+                        onPressed: _addAttribute,
+                        icon: const Icon(Icons.add),
+                        label: const Text('Add Attribute'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 

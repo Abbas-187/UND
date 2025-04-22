@@ -1,5 +1,10 @@
-/// A data point in a time series.
+/// A data point in a time series (immutable class).
 class TimeSeriesPoint {
+  /// Creates a new immutable [TimeSeriesPoint].
+  const TimeSeriesPoint({
+    required this.timestamp,
+    required this.value,
+  });
 
   /// Create a TimeSeriesPoint from a map.
   factory TimeSeriesPoint.fromJson(Map<String, dynamic> json) {
@@ -8,11 +13,6 @@ class TimeSeriesPoint {
       value: (json['value'] as num).toDouble(),
     );
   }
-  /// Creates a new [TimeSeriesPoint].
-  TimeSeriesPoint({
-    required this.timestamp,
-    required this.value,
-  });
 
   /// The timestamp for this data point.
   final DateTime timestamp;

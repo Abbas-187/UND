@@ -4,7 +4,7 @@ import 'dart:math' as math;
 
 import '../../data/models/sales_forecast_model.dart';
 import '../../data/repositories/sales_forecast_repository.dart';
-import '../../domain/entities/time_series_point.dart';
+import '../entities/time_series_point.dart';
 import '../algorithms/arima.dart';
 import '../algorithms/exponential_smoothing.dart';
 import '../algorithms/linear_regression.dart';
@@ -478,9 +478,10 @@ class ForecastingService {
   }
 }
 
-/// Represents a saved forecast
+/// Represents a saved forecast (immutable class)
 class ForecastModel {
-  ForecastModel({
+  /// Creates an immutable ForecastModel
+  const ForecastModel({
     required this.id,
     required this.name,
     required this.productId,
@@ -490,6 +491,7 @@ class ForecastModel {
     required this.forecastData,
   });
 
+  /// Create a ForecastModel from a Firestore document
   factory ForecastModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
 
@@ -507,14 +509,29 @@ class ForecastModel {
           .toList(),
     );
   }
+
+  /// Unique identifier
   final String id;
+
+  /// Name of the forecast
   final String name;
+
+  /// ID of the product being forecast
   final String productId;
+
+  /// Method used for forecasting
   final ForecastingMethod method;
+
+  /// Date the forecast was created
   final DateTime createdAt;
+
+  /// Historical time series data points
   final List<TimeSeriesPoint> historicalData;
+
+  /// Forecasted time series data points
   final List<TimeSeriesPoint> forecastData;
 
+  /// Convert method string to enum
   static ForecastingMethod _methodFromString(String methodString) {
     switch (methodString) {
       case 'movingAverage':

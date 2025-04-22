@@ -6,6 +6,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../common/widgets/app_loading_indicator.dart';
 import '../../../../core/widgets/error_view.dart';
 import '../../../../common/widgets/detail_appbar.dart';
+import '../../../../core/utils/app_reset_utility.dart';
 import '../../../inventory/data/models/inventory_item_model.dart';
 import '../../../inventory/domain/providers/inventory_provider.dart';
 import '../../domain/entities/time_series_point.dart';
@@ -53,12 +54,53 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
     return Scaffold(
       appBar: DetailAppBar(
         title: 'Sales Forecasting',
+        actions: [
+          ElevatedButton.icon(
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            label: const Text('RESET APP DATA',
+                style: TextStyle(color: Colors.white)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () => AppResetUtility.resetAppData(context, ref),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Add an emergency reset button at the top of the screen as well
+            Card(
+              color: Colors.red.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const Icon(Icons.warning_amber_rounded, color: Colors.red),
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: Text(
+                        'If you\'re experiencing app errors, try resetting the app data:',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () =>
+                          AppResetUtility.resetAppData(context, ref),
+                      child: const Text('RESET DATA'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             _buildInputForm(inventoryState),
             const SizedBox(height: 16),
             Expanded(

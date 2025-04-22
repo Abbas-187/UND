@@ -7,11 +7,7 @@ import '../../domain/usecases/get_inventory_analytics_usecase.dart';
 import '../../domain/usecases/get_low_stock_alerts_usecase.dart';
 import '../../domain/analytics/inventory_analytics_service.dart';
 import 'package:intl/intl.dart';
-
-// Repository provider
-final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
-  throw UnimplementedError('Repository implementation not provided');
-});
+import '../../domain/providers/inventory_provider.dart';
 
 // Use case providers
 final adjustQuantityUseCaseProvider = Provider<AdjustQuantityUseCase>((ref) {

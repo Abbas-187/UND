@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/purchase_order_item_model.dart';
-import '../../data/models/supplier_quality_log_model.dart';
+import '../../domain/entities/supplier_quality_log.dart';
 
 /// Provider for supplier quality state
 final supplierQualityProvider =
@@ -11,7 +11,6 @@ final supplierQualityProvider =
 
 /// State for supplier quality
 class SupplierQualityState {
-
   SupplierQualityState({
     this.qualityLogs = const [],
     this.isLoading = false,

@@ -1,5 +1,4 @@
 class SupplierAddress {
-
   const SupplierAddress({
     required this.street,
     required this.city,
@@ -50,8 +49,158 @@ class SupplierAddress {
   }
 }
 
-class Supplier {
+class SupplierMetrics {
+  const SupplierMetrics({
+    required this.onTimeDeliveryRate,
+    required this.qualityScore,
+    required this.responseTime,
+  });
+  final double onTimeDeliveryRate;
+  final int qualityScore;
+  final int responseTime;
 
+  factory SupplierMetrics.fromJson(Map<String, dynamic> json) {
+    return SupplierMetrics(
+      onTimeDeliveryRate: (json['onTimeDeliveryRate'] as num).toDouble(),
+      qualityScore: json['qualityScore'] as int,
+      responseTime: json['responseTime'] as int,
+    );
+  }
+  Map<String, dynamic> toJson() => {
+        'onTimeDeliveryRate': onTimeDeliveryRate,
+        'qualityScore': qualityScore,
+        'responseTime': responseTime,
+      };
+  SupplierMetrics copyWith({
+    double? onTimeDeliveryRate,
+    int? qualityScore,
+    int? responseTime,
+  }) =>
+      SupplierMetrics(
+        onTimeDeliveryRate: onTimeDeliveryRate ?? this.onTimeDeliveryRate,
+        qualityScore: qualityScore ?? this.qualityScore,
+        responseTime: responseTime ?? this.responseTime,
+      );
+}
+
+class QualityLog {
+  const QualityLog({
+    required this.date,
+    required this.score,
+    required this.notes,
+  });
+  final DateTime date;
+  final double score;
+  final String notes;
+
+  factory QualityLog.fromJson(Map<String, dynamic> json) {
+    return QualityLog(
+      date: DateTime.parse(json['date'] as String),
+      score: (json['score'] as num).toDouble(),
+      notes: json['notes'] as String,
+    );
+  }
+  Map<String, dynamic> toJson() => {
+        'date': date.toIso8601String(),
+        'score': score,
+        'notes': notes,
+      };
+  QualityLog copyWith({
+    DateTime? date,
+    double? score,
+    String? notes,
+  }) =>
+      QualityLog(
+        date: date ?? this.date,
+        score: score ?? this.score,
+        notes: notes ?? this.notes,
+      );
+}
+
+class SupplierPerformanceMetrics {
+  /// Creates a new immutable [SupplierPerformanceMetrics] instance
+  const SupplierPerformanceMetrics({
+    required this.qualityScore,
+    required this.deliveryScore,
+    required this.priceScore,
+    required this.overallScore,
+  });
+
+  /// Quality score of the supplier (0-5 scale)
+  final double qualityScore;
+
+  /// Delivery reliability score of the supplier (0-5 scale)
+  final double deliveryScore;
+
+  /// Price/value score of the supplier (0-5 scale)
+  final double priceScore;
+
+  /// Overall performance score of the supplier (0-5 scale)
+  final double overallScore;
+
+  /// Creates a [SupplierPerformanceMetrics] instance from a JSON map
+  factory SupplierPerformanceMetrics.fromJson(Map<String, dynamic> json) {
+    return SupplierPerformanceMetrics(
+      qualityScore: (json['quality_score'] ?? 0.0).toDouble(),
+      deliveryScore: (json['delivery_score'] ?? 0.0).toDouble(),
+      priceScore: (json['price_score'] ?? 0.0).toDouble(),
+      overallScore: (json['overall_score'] ?? 0.0).toDouble(),
+    );
+  }
+
+  /// Creates a copy of this [SupplierPerformanceMetrics] instance with the given fields replaced
+  SupplierPerformanceMetrics copyWith({
+    double? qualityScore,
+    double? deliveryScore,
+    double? priceScore,
+    double? overallScore,
+  }) {
+    return SupplierPerformanceMetrics(
+      qualityScore: qualityScore ?? this.qualityScore,
+      deliveryScore: deliveryScore ?? this.deliveryScore,
+      priceScore: priceScore ?? this.priceScore,
+      overallScore: overallScore ?? this.overallScore,
+    );
+  }
+
+  /// Converts this [SupplierPerformanceMetrics] instance to a JSON map
+  Map<String, dynamic> toJson() {
+    return {
+      'quality_score': qualityScore,
+      'delivery_score': deliveryScore,
+      'price_score': priceScore,
+      'overall_score': overallScore,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'SupplierPerformanceMetrics(qualityScore: $qualityScore, deliveryScore: $deliveryScore, priceScore: $priceScore, overallScore: $overallScore)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SupplierPerformanceMetrics &&
+        other.qualityScore == qualityScore &&
+        other.deliveryScore == deliveryScore &&
+        other.priceScore == priceScore &&
+        other.overallScore == overallScore;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      qualityScore,
+      deliveryScore,
+      priceScore,
+      overallScore,
+    );
+  }
+}
+
+class Supplier {
   Supplier({
     required this.id,
     required this.name,
@@ -69,6 +218,9 @@ class Supplier {
     this.paymentTerms = '',
     this.website = '',
     DateTime? lastUpdated,
+    required this.metrics,
+    this.certifications = const [],
+    this.qualityLogs = const [],
   })  : lastOrderDate = lastOrderDate ?? DateTime.now(),
         lastUpdated = lastUpdated ?? DateTime.now();
 
@@ -92,6 +244,16 @@ class Supplier {
       paymentTerms: json['paymentTerms'] as String? ?? '',
       website: json['website'] as String? ?? '',
       lastUpdated: DateTime.parse(json['lastUpdated'] as String),
+      metrics:
+          SupplierMetrics.fromJson(json['metrics'] as Map<String, dynamic>),
+      certifications: (json['certifications'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      qualityLogs: (json['qualityLogs'] as List<dynamic>?)
+              ?.map((e) => QualityLog.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
   }
   final String id;
@@ -110,6 +272,9 @@ class Supplier {
   final String paymentTerms;
   final String website;
   final DateTime lastUpdated;
+  final SupplierMetrics metrics;
+  final List<String> certifications;
+  final List<QualityLog> qualityLogs;
 
   Supplier copyWith({
     String? id,
@@ -128,6 +293,9 @@ class Supplier {
     String? paymentTerms,
     String? website,
     DateTime? lastUpdated,
+    SupplierMetrics? metrics,
+    List<String>? certifications,
+    List<QualityLog>? qualityLogs,
   }) {
     return Supplier(
       id: id ?? this.id,
@@ -146,6 +314,9 @@ class Supplier {
       paymentTerms: paymentTerms ?? this.paymentTerms,
       website: website ?? this.website,
       lastUpdated: lastUpdated ?? this.lastUpdated,
+      metrics: metrics ?? this.metrics,
+      certifications: certifications ?? this.certifications,
+      qualityLogs: qualityLogs ?? this.qualityLogs,
     );
   }
 
@@ -167,6 +338,9 @@ class Supplier {
       'paymentTerms': paymentTerms,
       'website': website,
       'lastUpdated': lastUpdated.toIso8601String(),
+      'metrics': metrics.toJson(),
+      'certifications': certifications,
+      'qualityLogs': qualityLogs.map((e) => e.toJson()).toList(),
     };
   }
 }

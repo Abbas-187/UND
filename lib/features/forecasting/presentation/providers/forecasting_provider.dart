@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../inventory/data/models/inventory_item_model.dart';
-import '../../../inventory/data/repositories/inventory_repository.dart';
+import '../../../inventory/domain/providers/inventory_provider.dart';
 import '../../../sales/data/repositories/sales_repository.dart';
 import '../../data/models/sales_forecast_model.dart';
 import '../../domain/entities/time_series_point.dart';
 import '../../domain/services/forecasting_service.dart';
+import '../../../inventory/domain/repositories/inventory_repository.dart';
+import '../../../inventory/domain/entities/inventory_item.dart';
 
 /// States for the forecasting feature
 abstract class ForecastingState {}
@@ -43,7 +45,7 @@ final forecastingProvider =
   (ref) => ForecastingNotifier(
     forecastingService: ForecastingService(),
     salesRepository: SalesRepository(),
-    inventoryRepository: InventoryRepository(),
+    inventoryRepository: ref.watch(inventoryRepositoryProvider),
   ),
 );
 
@@ -190,11 +192,11 @@ class ForecastingNotifier extends StateNotifier<ForecastingState> {
   }
 
   /// Helper method to get inventory item by ID
-  Future<InventoryItemModel?> _getInventoryItem(String id) async {
+  Future<InventoryItem?> _getInventoryItem(String id) async {
     try {
-      final items = await _inventoryRepository.getInventoryItemsByWarehouse('');
+      final items = await _inventoryRepository.getItems();
       return items.firstWhere((item) => item.id == id);
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }

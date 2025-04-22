@@ -151,117 +151,237 @@ class _MainLayoutState extends State<MainLayout> {
 
   Widget _buildNavigationRail(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
 
-    return NavigationRail(
-      selectedIndex: _getSelectedIndex(widget.currentRoute),
-      labelType: NavigationRailLabelType.all,
-      minWidth: 100,
-      minExtendedWidth: 150,
-      onDestinationSelected: (index) {
-        // Navigate to the selected route using pushReplacementNamed to replace the current route
-        switch (index) {
-          case 0:
-            Navigator.pushReplacementNamed(context, AppRoutes.suppliers);
-            break;
-          case 1:
-            Navigator.pushReplacementNamed(context, AppRoutes.inventory);
-            break;
-          case 2:
-            Navigator.pushReplacementNamed(
-                context, AppRoutes.productionExecutions);
-            break;
-          case 3:
-            Navigator.pushReplacementNamed(
-                context, AppRoutes.equipmentMaintenance);
-            break;
-          case 4:
-            Navigator.pushReplacementNamed(context, AppRoutes.milkReception);
-            break;
-          case 5:
-            Navigator.pushReplacementNamed(context, AppRoutes.procurement);
-            break;
-          case 6:
-            Navigator.pushReplacementNamed(context, AppRoutes.notifications);
-            break;
-          case 7:
-            Navigator.pushReplacementNamed(
-                context, AppRoutes.analyticsDashboard);
-            break;
-          case 8:
-            Navigator.pushReplacementNamed(context, AppRoutes.forecasting);
-            break;
-          case 9:
-            Navigator.pushReplacementNamed(context, AppRoutes.settings);
-            break;
-        }
+    // Create a list of all destinations with their IconData
+    final List<Map<String, dynamic>> navItems = [
+      {
+        'icon': Icons.home,
+        'label': Text('Home'),
+        'route': AppRoutes.home,
       },
-      destinations: [
-        NavigationRailDestination(
-          icon: const Icon(Icons.person),
-          label: Text(l10n.getModuleName('suppliers') ?? 'Suppliers'),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.inventory_2),
-          label: Text(l10n.getModuleName('inventory') ?? 'Inventory'),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.factory),
-          label: Text(l10n.getModuleName('factory') ?? 'Factory'),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.build),
-          label:
-              Text(l10n.getModuleName('equipmentMaintenance') ?? 'Equipment'),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.water_drop),
-          label: Text(l10n.getModuleName('milkReception') ?? 'Milk Reception'),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.shopping_cart),
-          label: Text(l10n.getModuleName('procurement') ?? 'Procurement'),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.notifications),
-          label: Text(l10n.notifications),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.analytics),
-          label: Text(l10n.getModuleName('analytics') ?? 'Analytics'),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.trending_up),
-          label: Text(l10n.getModuleName('forecasting') ?? 'Forecasting'),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.settings),
-          label: Text(l10n.settings),
-        ),
-      ],
+      {
+        'icon': Icons.person,
+        'label': Text(l10n.getModuleName('suppliers') ?? 'Suppliers'),
+        'route': AppRoutes.suppliers,
+      },
+      {
+        'icon': Icons.inventory_2,
+        'label': Text(l10n.getModuleName('inventory') ?? 'Inventory'),
+        'route': AppRoutes.inventory,
+      },
+      {
+        'icon': Icons.factory,
+        'label': Text(l10n.getModuleName('factory') ?? 'Factory'),
+        'route': AppRoutes.productionExecutions,
+      },
+      {
+        'icon': Icons.build,
+        'label':
+            Text(l10n.getModuleName('equipmentMaintenance') ?? 'Equipment'),
+        'route': AppRoutes.equipmentMaintenance,
+      },
+      {
+        'icon': Icons.water_drop,
+        'label': Text(l10n.getModuleName('milkReception') ?? 'Milk Reception'),
+        'route': AppRoutes.milkReception,
+      },
+      {
+        'icon': Icons.shopping_cart,
+        'label': Text(l10n.getModuleName('procurement') ?? 'Procurement'),
+        'route': AppRoutes.procurement,
+      },
+      {
+        'icon': Icons.notifications,
+        'label': Text(l10n.notifications),
+        'route': AppRoutes.notifications,
+      },
+      {
+        'icon': Icons.analytics,
+        'label': Text(l10n.getModuleName('analytics') ?? 'Analytics'),
+        'route': AppRoutes.analyticsDashboard,
+      },
+      {
+        'icon': Icons.trending_up,
+        'label': Text(l10n.getModuleName('forecasting') ?? 'Forecasting'),
+        'route': AppRoutes.forecasting,
+      },
+      {
+        'icon': Icons.settings,
+        'label': Text(l10n.settings),
+        'route': AppRoutes.settings,
+      },
+      {
+        'icon': Icons.menu_book,
+        'label': Text('Recipe List'),
+        'route': AppRoutes.recipes,
+      },
+      {
+        'icon': Icons.add_box,
+        'label': Text('Create Recipe'),
+        'route': AppRoutes.recipeCreate,
+      },
+      {
+        'icon': Icons.receipt_long,
+        'label': Text('Recipe Detail'),
+        'route': AppRoutes.recipeDetail,
+      },
+      {
+        'icon': Icons.list_alt,
+        'label': Text('Production List'),
+        'route': '/factory/production/orders',
+      },
+      {
+        'icon': Icons.info_outline,
+        'label': Text('Production Execution Detail'),
+        'route': AppRoutes.productionExecutionDetail,
+      },
+      {
+        'icon': Icons.precision_manufacturing,
+        'label': Text('Equipment Detail'),
+        'route': AppRoutes.equipmentMaintenanceDetail,
+      },
+    ];
+
+    // Custom navigation rail solution with scrolling
+    return Container(
+      color: theme.colorScheme.surface,
+      child: Column(
+        children: [
+          // App logo or header
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.agriculture,
+              color: theme.colorScheme.primary,
+              size: 36,
+            ),
+          ),
+
+          // Selected index indicator
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              'Navigation',
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+
+          // Scrollable list of nav items
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(navItems.length, (index) {
+                  final isSelected =
+                      index == _getSelectedIndex(widget.currentRoute);
+                  final item = navItems[index];
+
+                  return InkWell(
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, item['route']),
+                    child: Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? theme.colorScheme.primaryContainer
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            item['icon'],
+                            color: isSelected
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                          const SizedBox(height: 4),
+                          DefaultTextStyle(
+                            style: theme.textTheme.bodySmall!.copyWith(
+                              color: isSelected
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.onSurface
+                                      .withOpacity(0.7),
+                            ),
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            child: item['label'],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+
+          // Bottom close button
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: IconButton(
+              icon: const Icon(Icons.chevron_left),
+              onPressed: () => _updateNavRailVisibility(false),
+              tooltip: 'Close navigation',
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   int _getSelectedIndex(String routeName) {
-    if (routeName.startsWith('/suppliers')) {
+    if (routeName == AppRoutes.home || routeName == '/') {
       return 0;
-    } else if (routeName.startsWith('/inventory')) {
+    } else if (routeName.startsWith('/suppliers')) {
       return 1;
-    } else if (routeName.startsWith('/factory/production')) {
+    } else if (routeName.startsWith('/inventory')) {
       return 2;
-    } else if (routeName.startsWith('/factory/equipment')) {
+    } else if (routeName.startsWith('/factory/production')) {
       return 3;
-    } else if (routeName.startsWith('/milk')) {
+    } else if (routeName.startsWith('/factory/equipment')) {
       return 4;
-    } else if (routeName.startsWith('/procurement')) {
+    } else if (routeName.startsWith('/milk')) {
       return 5;
-    } else if (routeName == AppRoutes.notifications) {
+    } else if (routeName.startsWith('/procurement')) {
       return 6;
-    } else if (routeName.startsWith('/analytics')) {
+    } else if (routeName == AppRoutes.notifications) {
       return 7;
-    } else if (routeName.startsWith('/forecasting')) {
+    } else if (routeName.startsWith('/analytics')) {
       return 8;
-    } else if (routeName == AppRoutes.settings) {
+    } else if (routeName.startsWith('/forecasting')) {
       return 9;
+    } else if (routeName == AppRoutes.settings) {
+      return 10;
+    } else if (routeName.startsWith('/recipes')) {
+      return 11;
+    } else if (routeName.startsWith('/recipe/create')) {
+      return 12;
+    } else if (routeName.startsWith('/recipe/detail')) {
+      return 13;
+    } else if (routeName.startsWith('/factory/production/orders')) {
+      return 14;
+    } else if (routeName.startsWith('/factory/production/execution')) {
+      return 15;
+    } else if (routeName.startsWith('/factory/equipment/detail')) {
+      return 16;
     }
 
     return 0;

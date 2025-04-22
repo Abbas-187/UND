@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/supplier.dart';
 
 class SupplierModel {
-
   SupplierModel({
     required this.id,
     required this.name,
@@ -21,6 +20,7 @@ class SupplierModel {
     required this.website,
     required this.lastUpdated,
     required this.searchTerms,
+    required this.metrics,
   });
 
   // Convert Firestore document to SupplierModel
@@ -46,6 +46,10 @@ class SupplierModel {
       lastUpdated:
           (data['lastUpdated'] as Timestamp?)?.toDate() ?? DateTime.now(),
       searchTerms: List<String>.from(data['searchTerms'] ?? []),
+      metrics: data['metrics'] != null
+          ? SupplierMetrics.fromJson(Map<String, dynamic>.from(data['metrics']))
+          : SupplierMetrics(
+              onTimeDeliveryRate: 0, qualityScore: 0, responseTime: 0),
     );
   }
 
@@ -76,6 +80,7 @@ class SupplierModel {
       lastUpdated: supplier.lastUpdated,
       searchTerms: _generateSearchTerms(
           supplier.name, supplier.contactPerson, supplier.productCategories),
+      metrics: supplier.metrics,
     );
   }
   final String id;
@@ -95,6 +100,7 @@ class SupplierModel {
   final String website;
   final DateTime lastUpdated;
   final List<String> searchTerms;
+  final SupplierMetrics metrics;
 
   // Convert data model to domain entity
   Supplier toDomain() {
@@ -121,6 +127,7 @@ class SupplierModel {
       paymentTerms: paymentTerms,
       website: website,
       lastUpdated: lastUpdated,
+      metrics: metrics,
     );
   }
 
@@ -143,6 +150,7 @@ class SupplierModel {
       'website': website,
       'lastUpdated': Timestamp.fromDate(lastUpdated),
       'searchTerms': searchTerms,
+      'metrics': metrics.toJson(),
     };
   }
 
@@ -164,6 +172,7 @@ class SupplierModel {
     String? website,
     DateTime? lastUpdated,
     List<String>? searchTerms,
+    SupplierMetrics? metrics,
   }) {
     return SupplierModel(
       id: id ?? this.id,
@@ -183,6 +192,7 @@ class SupplierModel {
       website: website ?? this.website,
       lastUpdated: lastUpdated ?? this.lastUpdated,
       searchTerms: searchTerms ?? this.searchTerms,
+      metrics: metrics ?? this.metrics,
     );
   }
 

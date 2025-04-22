@@ -5,7 +5,12 @@ import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/exceptions/result.dart';
 import '../../domain/entities/purchase_order.dart';
-import '../../domain/usecases/purchase_order_usecases.dart';
+import '../../domain/usecases/purchase_order_usecases.dart'
+    hide PurchaseOrderRepository;
+import '../../data/providers/mock_procurement_provider.dart';
+import '../../data/repositories/purchase_order_repository_impl.dart';
+import '../../domain/repositories/purchase_order_repository.dart';
+import '../../../suppliers/presentation/providers/supplier_provider.dart';
 
 part 'purchase_order_providers.g.dart';
 
@@ -174,8 +179,10 @@ DeletePurchaseOrderUseCase deletePurchaseOrderUseCase(
 @riverpod
 PurchaseOrderRepository purchaseOrderRepository(
     PurchaseOrderRepositoryRef ref) {
-  throw UnimplementedError(
-      'You need to override this provider in the data layer');
+  // Use the mock procurement provider for mock data
+  final mockProvider = ref.watch(mockProcurementProvider);
+  final supplierRepository = ref.watch(supplierRepositoryProvider);
+  return PurchaseOrderRepositoryImpl.fromMock(mockProvider, supplierRepository);
 }
 
 /// Notifier for purchase orders list

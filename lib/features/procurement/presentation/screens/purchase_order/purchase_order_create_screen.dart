@@ -10,15 +10,15 @@ import '../../../../../utils/validators/form_validators.dart';
 import '../../../domain/entities/purchase_order.dart' hide SupportingDocument;
 import '../../../domain/entities/purchase_order.dart' as purchase_order
     show SupportingDocument;
-import '../../../domain/entities/supplier.dart';
+import '../../../../suppliers/domain/entities/supplier.dart';
 import '../../../domain/entities/inventory_item.dart';
 import '../../../../../domain/entities/supporting_document.dart';
 import '../../../../../core/exceptions/result.dart';
 import '../../providers/purchase_order_providers.dart';
-import '../../providers/supplier_providers.dart';
 import '../../providers/inventory_provider.dart';
 import '../../widgets/document_attachment_picker.dart';
 import '../../widgets/purchase_order_item_form.dart';
+import '../../../../suppliers/presentation/providers/supplier_provider.dart';
 
 class PurchaseOrderCreateScreen extends ConsumerStatefulWidget {
   const PurchaseOrderCreateScreen({super.key});
@@ -55,9 +55,8 @@ class _PurchaseOrderCreateScreenState
 
   @override
   Widget build(BuildContext context) {
-    final suppliersAsync = ref.watch(suppliersNotifierProvider);
+    final suppliersAsync = ref.watch(allSuppliersProvider);
     final itemsAsync = ref.watch(inventoryItemsProvider);
-    final username = ref.watch(currentUserProvider).username;
 
     return Scaffold(
       appBar: DetailAppBar(
@@ -79,8 +78,7 @@ class _PurchaseOrderCreateScreenState
                 ),
                 const SizedBox(height: 16),
                 suppliersAsync.when(
-                  data: (suppliersState) =>
-                      _buildSupplierDropdown(suppliersState.suppliers),
+                  data: (suppliers) => _buildSupplierDropdown(suppliers),
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
                   error: (error, stackTrace) =>
@@ -456,9 +454,8 @@ class _PurchaseOrderCreateScreenState
 
     try {
       final supplierDetailAsync =
-          ref.read(supplierDetailNotifierProvider(_selectedSupplierId));
-      final supplierState = await supplierDetailAsync.valueOrNull;
-      final supplier = supplierState?.supplier;
+          ref.read(supplierProvider(_selectedSupplierId));
+      final supplier = await supplierDetailAsync.valueOrNull;
 
       if (supplier == null) {
         throw Exception('Supplier not found');
@@ -466,7 +463,7 @@ class _PurchaseOrderCreateScreenState
 
       final poNumber =
           'PO-${DateTime.now().millisecondsSinceEpoch.toString().substring(5)}';
-      final username = ref.read(currentUserProvider).username;
+      final username = 'TODO-username'; // TODO: Integrate user context
       double totalAmount = _items.fold(0, (sum, item) => sum + item.totalPrice);
 
       // Convert SupportingDocument to purchase_order.SupportingDocument

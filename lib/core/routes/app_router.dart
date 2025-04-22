@@ -32,6 +32,7 @@ import '../../features/procurement/presentation/screens/reports/procurement_dash
 import '../../features/procurement/presentation/screens/procurement_dashboard_screen.dart';
 import '../../features/procurement/presentation/routes/procurement_routes.dart';
 import '../../features/shared/presentation/screens/app_settings_screen.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/suppliers/domain/entities/supplier.dart';
 import '../../features/suppliers/presentation/screens/supplier_details_screen.dart';
 import '../../features/suppliers/presentation/screens/supplier_edit_screen.dart';
@@ -53,6 +54,11 @@ import '../../features/factory/presentation/screens/recipe/recipe_list_screen.da
 import '../../features/factory/presentation/screens/recipe/recipe_create_screen.dart';
 import '../../features/factory/presentation/screens/recipe/recipe_detail_screen.dart';
 import '../../features/procurement/presentation/screens/po_approval_screen.dart';
+import '../../features/factory/presentation/screens/recipe/recipe_edit_screen.dart';
+import '../../features/factory/presentation/screens/recipe/recipe_history_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_edit_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_item_details_screen.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -119,6 +125,14 @@ class AppRoutes {
   static const String dairyInventoryDemo = '/inventory/dairy-demo';
   static const String inventoryAnalytics = '/inventory/analytics';
   static const String inventoryReports = '/inventory/reports';
+  static const String recipeEdit = '/factory/recipe/edit';
+  static const String recipeHistory = '/factory/recipe/history';
+  static const String inventoryMain = '/inventory/main';
+  static const String inventoryItemDetails = '/inventory/items/details';
+  static const String inventoryItemEdit = '/inventory/items/edit';
+  static const String inventoryBatchBarcodeScan =
+      '/inventory/batch-barcode-scan';
+  static const String inventoryMovementDetails = '/inventory/movements/details';
 }
 
 class AppRouter {
@@ -306,21 +320,43 @@ class AppRouter {
         break;
 
       case AppRoutes.settings:
-        screen = const AppSettingsScreen();
+        screen = const SettingsScreen();
         break;
 
       case AppRoutes.inventorySettings:
         screen = const InventorySettingsScreen();
         break;
 
+      case AppRoutes.inventoryEdit:
+        screen = const InventoryEditScreen();
+        break;
+
+      case AppRoutes.inventoryItemDetails:
+        final itemId = args['itemId'] as String;
+        screen = InventoryItemDetailsScreen(itemId: itemId);
+        break;
+
+      case AppRoutes.inventoryItemEdit:
+        final itemId = args['itemId'] as String;
+        screen = InventoryEditScreen(itemId: itemId);
+        break;
+
+      case AppRoutes.inventoryBatchBarcodeScan:
+        screen = const BatchBarcodeScanScreen();
+        break;
+
+      case AppRoutes.inventoryBatchInventory:
+        screen = const BatchInventoryScreen();
+        break;
+
+      case AppRoutes.inventoryMovementDetails:
+        final movementId = args['movementId'] as String;
+        screen = MovementDetailsPage(movementId: movementId);
+        break;
+
       case AppRoutes.inventoryMovementHistory:
         final itemId = args['itemId'] as String;
         screen = InventoryMovementHistoryScreen(itemId: itemId);
-        break;
-
-      case AppRoutes.inventoryTransfer:
-        final sourceItemId = args['sourceItemId'] as String;
-        screen = InventoryTransferScreen(sourceItemId: sourceItemId);
         break;
 
       case AppRoutes.inventoryTrends:
@@ -329,10 +365,6 @@ class AppRouter {
 
       case AppRoutes.inventoryBarcodeScan:
         screen = const BatchBarcodeScanScreen();
-        break;
-
-      case AppRoutes.inventoryBatchInventory:
-        screen = const BatchInventoryScreen();
         break;
 
       case AppRoutes.dairyInventory:
@@ -356,7 +388,7 @@ class AppRouter {
         break;
 
       case AppRoutes.inventoryReports:
-        screen = const InventoryReportsScreen();
+        // screen = const InventoryReportsScreen(); // TODO: Remove old reports screen reference
         break;
 
       case AppRoutes.milkQualityTestDetails:
@@ -372,8 +404,26 @@ class AppRouter {
         break;
 
       case AppRoutes.recipeDetail:
-        final recipeId = settings.arguments as String;
+        final args = settings.arguments as Map<String, dynamic>;
+        final recipeId = args['recipeId'] as String;
         screen = RecipeDetailScreen(recipeId: recipeId);
+        break;
+
+      case AppRoutes.recipeEdit:
+        final args = settings.arguments as Map<String, dynamic>;
+        final recipeId = args['recipeId'] as String;
+        screen = RecipeEditScreen(recipeId: recipeId);
+        break;
+
+      case AppRoutes.recipeHistory:
+        final args = settings.arguments as Map<String, dynamic>;
+        final recipeId = args['recipeId'] as String;
+        final history = args['history'] as List<dynamic>;
+        screen = RecipeHistoryScreen(recipeId: recipeId, history: history);
+        break;
+
+      case AppRoutes.inventoryMain:
+        screen = const InventoryScreen();
         break;
     }
 

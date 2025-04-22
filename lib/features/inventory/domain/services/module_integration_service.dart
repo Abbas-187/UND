@@ -6,16 +6,15 @@ import '../../../factory/domain/providers/production_provider.dart';
 import '../../../logistics/domain/providers/delivery_provider.dart';
 import '../../../sales/data/models/order_model.dart';
 import '../../../sales/domain/providers/order_provider.dart';
-import '../../data/repositories/inventory_repository.dart' as data_repo;
+import '../repositories/inventory_repository.dart';
 import '../../domain/providers/inventory_provider.dart';
 import '../entities/inventory_item.dart';
-import '../repositories/inventory_repository.dart';
 
 /// Service that handles integration between Inventory and other modules
 class ModuleIntegrationService {
   ModuleIntegrationService(this._ref, this._repository);
   final Ref _ref;
-  final data_repo.InventoryRepository _repository;
+  final InventoryRepository _repository;
 
   /// Updates inventory based on production completion
   Future<void> handleProductionCompletion(String productionOrderId) async {

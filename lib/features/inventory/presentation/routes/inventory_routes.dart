@@ -184,7 +184,9 @@ List<RouteBase> getInventoryRoutes() {
       path: InventoryRoutes.reportsPath,
       name: InventoryRoutes.reports,
       builder: (BuildContext context, GoRouterState state) {
-        return const InventoryReportsScreen();
+        // return const InventoryReportsScreen(); // TODO: Remove old reports screen reference
+        return const SizedBox
+            .shrink(); // TODO: Replace with new reports screen or remove route
       },
     ),
     GoRoute(

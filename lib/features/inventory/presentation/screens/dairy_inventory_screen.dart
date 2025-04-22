@@ -194,7 +194,7 @@ class _DairyInventoryScreenState extends ConsumerState<DairyInventoryScreen> {
                           'Quantity: ${numberFormat.format(item.quantity)} ${item.unit}'),
                       if (item.cost != null)
                         Text(
-                            'Cost: \$${numberFormat.format(item.cost!)} / ${item.unit}'),
+                            'Cost: ﷼${numberFormat.format(item.cost!)} / ${item.unit}'),
                       if (item.expiryDate != null)
                         Text(
                             'Expires: ${DateFormat('MMM dd, yyyy').format(item.expiryDate!)}'),
@@ -466,7 +466,7 @@ class _DairyInventoryScreenState extends ConsumerState<DairyInventoryScreen> {
                         DateFormat('MMM dd, yyyy').format(item.expiryDate!)),
                   if (item.cost != null)
                     _buildDetailItem('Cost',
-                        '\$${NumberFormat('#,##0.00').format(item.cost!)} / ${item.unit}'),
+                        '﷼${NumberFormat('#,##0.00').format(item.cost!)} / ${item.unit}'),
                   const Divider(),
                   const Text(
                     'Dairy-Specific Information',

@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../data/models/inventory_item_model.dart';
-import '../../data/repositories/inventory_repository.dart';
+import '../repositories/inventory_repository.dart';
+import '../entities/inventory_item.dart';
 
 class CalculateInventoryAgingUsecase {
   CalculateInventoryAgingUsecase({
-    InventoryRepository? repository,
-  }) : _repository = repository ?? InventoryRepository();
+    required InventoryRepository repository,
+  }) : _repository = repository;
   final InventoryRepository _repository;
 
   /// Calculate inventory aging for the specified warehouse
   ///
   /// Returns a map with age brackets as keys and lists of inventory items in each bracket
-  Future<Map<AgeBracket, List<InventoryItemModel>>> execute(
+  Future<Map<AgeBracket, List<InventoryItem>>> execute(
       String warehouseId) async {
     // Get all inventory items for the warehouse
-    final items = await _repository.getInventoryItemsByWarehouse(warehouseId);
+    final items = await _repository.getItems();
 
     final now = DateTime.now();
-    final Map<AgeBracket, List<InventoryItemModel>> result = {
+    final Map<AgeBracket, List<InventoryItem>> result = {
       AgeBracket.expiredItems: [],
       AgeBracket.critical: [],
       AgeBracket.warning: [],

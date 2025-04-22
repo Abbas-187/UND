@@ -7,6 +7,7 @@ import '../features/inventory/domain/entities/inventory_item.dart';
 import '../features/inventory/domain/repositories/inventory_repository.dart';
 import '../features/milk_reception/domain/models/milk_reception_model.dart';
 import '../features/milk_reception/domain/repositories/milk_reception_repository.dart';
+import '../features/suppliers/domain/repositories/supplier_repository.dart';
 
 /// Custom exception for business logic errors
 class BusinessLogicException implements Exception {
@@ -24,13 +25,16 @@ class ReceptionInventoryService {
     required MilkReceptionRepository receptionRepository,
     required InventoryRepository inventoryRepository,
     required dynamic firestore,
+    required SupplierRepository supplierRepository,
   })  : _receptionRepository = receptionRepository,
         _inventoryRepository = inventoryRepository,
-        _firestore = firestore;
+        _firestore = firestore,
+        _supplierRepository = supplierRepository;
 
   final MilkReceptionRepository _receptionRepository;
   final InventoryRepository _inventoryRepository;
   final dynamic _firestore;
+  final SupplierRepository _supplierRepository;
 
   /// Get the properly typed Firestore instance
   dynamic get firestore => _firestore;
@@ -69,6 +73,16 @@ class ReceptionInventoryService {
       final reception =
           await _receptionRepository.getReceptionById(receptionId);
 
+      // Fetch supplier name from supplier module
+      String supplierName = '';
+      try {
+        final supplier =
+            await _supplierRepository.getSupplier(reception.supplierId);
+        supplierName = supplier.name;
+      } catch (_) {
+        supplierName = reception.supplierName;
+      }
+
       // Verify that reception is accepted
       if (reception.receptionStatus != ReceptionStatus.accepted) {
         throw BusinessLogicException(
@@ -98,7 +112,7 @@ class ReceptionInventoryService {
         sourceId: receptionId,
         sourceDetails: {
           'supplierId': reception.supplierId,
-          'supplierName': reception.supplierName,
+          'supplierName': supplierName,
           'milkType': reception.milkType.toString(),
           'temperatureAtArrival': reception.temperatureAtArrival,
           'vehiclePlate': reception.vehiclePlate,
@@ -148,6 +162,7 @@ class ReceptionInventoryService {
         additionalAttributes: {
           'receptionId': receptionId,
           'supplierId': reception.supplierId,
+          'supplierName': supplierName,
           'milkType': reception.milkType.toString(),
           'quality': _determineQualityGrade(reception).toString(),
         },
@@ -169,7 +184,7 @@ class ReceptionInventoryService {
         searchTerms: [
           'milk',
           itemName.toLowerCase(),
-          reception.supplierName.toLowerCase(),
+          supplierName.toLowerCase(),
           lotNumber.toLowerCase(),
         ],
         overallQualityStatus: _determineOverallQualityStatus(reception),

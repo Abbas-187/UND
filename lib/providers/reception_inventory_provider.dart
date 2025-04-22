@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/firebase/firebase_mock.dart';
 import '../core/firebase/firebase_module.dart';
 import '../features/inventory/presentation/providers/inventory_provider.dart';
+import '../features/inventory/domain/providers/inventory_provider.dart';
 import '../features/milk_reception/domain/models/milk_reception_model.dart';
 import '../features/milk_reception/domain/repositories/milk_reception_repository.dart';
 import '../services/reception_inventory_service.dart';
+import '../features/suppliers/presentation/providers/supplier_provider.dart';
 
 /// Provider for ReceptionInventoryService
 final receptionInventoryServiceProvider =
@@ -15,11 +17,13 @@ final receptionInventoryServiceProvider =
   final inventoryRepository = ref.watch(inventoryRepositoryProvider);
   final firestoreInstance =
       useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance;
+  final supplierRepository = ref.watch(supplierRepositoryProvider);
 
   return ReceptionInventoryService(
     receptionRepository: receptionRepository,
     inventoryRepository: inventoryRepository,
     firestore: firestoreInstance,
+    supplierRepository: supplierRepository,
   );
 });
 

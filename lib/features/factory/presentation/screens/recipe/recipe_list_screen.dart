@@ -50,7 +50,12 @@ class RecipeListScreen extends ConsumerWidget {
                   onTap: () => Navigator.pushNamed(
                     context,
                     '/factory/recipe/detail',
-                    arguments: recipe.id,
+                    arguments: {'recipeId': recipe.id},
+                  ),
+                  onLongPress: () => Navigator.pushNamed(
+                    context,
+                    '/factory/recipe/edit',
+                    arguments: {'recipeId': recipe.id},
                   ),
                 ),
               );

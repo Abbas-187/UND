@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/routes/app_router.dart';
 import '../../widgets/procurement_metrics_card.dart';
 import '../../widgets/purchase_order_list.dart';
-import '../../widgets/supplier_performance_chart.dart';
+import '../../../../suppliers/presentation/widgets/supplier_performance_chart.dart';
+import '../../../../suppliers/presentation/providers/supplier_provider.dart';
 
 class ProcurementDashboardScreen extends ConsumerWidget {
   const ProcurementDashboardScreen({super.key});
@@ -41,7 +42,7 @@ class ProcurementDashboardScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
                 _buildPurchaseOrdersSection(context),
                 const SizedBox(height: 24),
-                _buildSupplierPerformanceSection(context),
+                _buildSupplierPerformanceSection(context, ref),
               ],
             ),
           ),
@@ -237,7 +238,8 @@ class ProcurementDashboardScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSupplierPerformanceSection(BuildContext context) {
+  Widget _buildSupplierPerformanceSection(BuildContext context, WidgetRef ref) {
+    final suppliersAsync = ref.watch(allSuppliersProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -248,17 +250,25 @@ class ProcurementDashboardScreen extends ConsumerWidget {
         const SizedBox(height: 16),
         SizedBox(
           height: 200,
-          child: SupplierPerformanceChart(
-            data: [
-              SupplierPerformance(name: 'DairyBest', score: 4.7),
-              SupplierPerformance(name: 'MilkPro', score: 4.2),
-              SupplierPerformance(name: 'AgroFarm', score: 3.8),
-              SupplierPerformance(name: 'FreshFields', score: 4.5),
-              SupplierPerformance(name: 'GreenPastures', score: 3.9),
-            ],
-            title: 'Supplier Performance',
-            barColor: Colors.blue,
-            backgroundColor: Colors.white,
+          child: suppliersAsync.when(
+            data: (suppliers) {
+              final data = suppliers
+                  .map((s) => SupplierPerformance(
+                        name: s.name,
+                        score: (s.metrics.qualityScore ?? s.rating ?? 0.0)
+                            .toDouble(),
+                      ))
+                  .toList();
+              return SupplierPerformanceChart(
+                data: data,
+                title: 'Supplier Performance',
+                barColor: Colors.blue,
+                backgroundColor: Colors.white,
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) =>
+                Center(child: Text('Error loading suppliers: $error')),
           ),
         ),
       ],

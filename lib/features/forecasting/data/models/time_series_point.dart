@@ -1,24 +1,23 @@
+// This file now exports the domain entity to avoid duplicate class definitions
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../domain/entities/time_series_point.dart';
 
-class TimeSeriesPoint {
-  TimeSeriesPoint({
-    required this.timestamp,
-    required this.value,
-  });
+export '../../domain/entities/time_series_point.dart';
 
-  factory TimeSeriesPoint.fromJson(Map<String, dynamic> json) {
-    return TimeSeriesPoint(
-      timestamp: (json['timestamp'] as Timestamp).toDate(),
-      value: json['value'].toDouble(),
-    );
-  }
-  final DateTime timestamp;
-  final double value;
+/// Converts a Firestore timestamp to a TimeSeriesPoint
+TimeSeriesPoint timeSeriesPointFromFirestore(Map<String, dynamic> json) {
+  return TimeSeriesPoint(
+    timestamp: json['timestamp'] is Timestamp
+        ? (json['timestamp'] as Timestamp).toDate()
+        : DateTime.fromMillisecondsSinceEpoch(json['timestamp'] as int),
+    value: (json['value'] as num).toDouble(),
+  );
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      'timestamp': Timestamp.fromDate(timestamp),
-      'value': value,
-    };
-  }
+/// Converts a TimeSeriesPoint to Firestore format
+Map<String, dynamic> timeSeriesPointToFirestore(TimeSeriesPoint point) {
+  return {
+    'timestamp': Timestamp.fromDate(point.timestamp),
+    'value': point.value,
+  };
 }

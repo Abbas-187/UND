@@ -2,6 +2,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/models/inventory_item_model.dart';
 import '../usecases/calculate_inventory_aging_usecase.dart';
+import '../entities/inventory_item.dart';
+import '../repositories/inventory_repository.dart';
+import '../providers/inventory_provider.dart';
 
 part 'inventory_aging_provider.g.dart';
 
@@ -10,8 +13,9 @@ class InventoryAging extends _$InventoryAging {
   late final CalculateInventoryAgingUsecase _usecase;
 
   @override
-  Future<Map<AgeBracket, List<InventoryItemModel>>> build(String warehouseId) {
-    _usecase = CalculateInventoryAgingUsecase();
+  Future<Map<AgeBracket, List<InventoryItem>>> build(String warehouseId) {
+    final repository = ref.watch(inventoryRepositoryProvider);
+    _usecase = CalculateInventoryAgingUsecase(repository: repository);
     return _usecase.execute(warehouseId);
   }
 

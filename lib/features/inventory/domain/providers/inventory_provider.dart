@@ -6,11 +6,12 @@ import '../repositories/inventory_repository.dart';
 import '../../data/models/inventory_item_model.dart';
 import '../../data/models/inventory_transaction_model.dart';
 import '../../data/repositories/inventory_repository.dart' as data_repo;
+import '../../data/repositories/mock_inventory_repository.dart';
 
 // Repository provider
-final inventoryRepositoryProvider =
-    Provider<data_repo.InventoryRepository>((ref) {
-  throw UnimplementedError('Repository implementation not provided');
+final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
+  // Use the mock repository by default
+  return ref.watch(mockInventoryRepositoryProvider);
 });
 
 // Inventory items provider
@@ -27,7 +28,7 @@ class InventoryStateNotifier
     loadInventory();
   }
 
-  final data_repo.InventoryRepository _repository;
+  final InventoryRepository _repository;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> loadInventory() async {

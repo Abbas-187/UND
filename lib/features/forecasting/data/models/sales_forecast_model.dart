@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../forecasting/domain/entities/time_series_point.dart';
+import '../../domain/entities/time_series_point.dart';
 
-/// Model for sales forecasts stored in Firestore
+/// Model for sales forecasts stored in Firestore (immutable class)
 class SalesForecastModel {
-  SalesForecastModel({
+  /// Creates an immutable SalesForecastModel
+  const SalesForecastModel({
     this.id,
     required this.name,
     this.description,
@@ -16,6 +17,7 @@ class SalesForecastModel {
     required this.accuracy,
   });
 
+  /// Create a SalesForecastModel from JSON map
   factory SalesForecastModel.fromJson(Map<String, dynamic> json) {
     // Parse historical data
     final List<TimeSeriesPoint> historicalData = [];
@@ -49,17 +51,37 @@ class SalesForecastModel {
     );
   }
 
+  /// Unique identifier
   final String? id;
+
+  /// Name of the forecast
   final String name;
+
+  /// Optional description
   final String? description;
+
+  /// ID of the product being forecast
   final String productId;
+
+  /// Date the forecast was created
   final DateTime createdDate;
+
+  /// Name of the forecast method used
   final String methodName;
+
+  /// Historical time series data points
   final List<TimeSeriesPoint> historicalData;
+
+  /// Forecasted time series data points
   final List<TimeSeriesPoint> forecastData;
+
+  /// Method-specific parameters used
   final Map<String, dynamic> parameters;
+
+  /// Accuracy metrics for the forecast
   final Map<String, double> accuracy;
 
+  /// Convert to a JSON map
   Map<String, dynamic> toJson() {
     return {
       'id': id,

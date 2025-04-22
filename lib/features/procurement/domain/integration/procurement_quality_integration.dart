@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../inventory/data/models/dairy_quality_parameters_model.dart';
 import '../../../inventory/domain/providers/quality_parameters_provider.dart';
-import '../../data/models/supplier_quality_log_model.dart';
+import '../../domain/entities/supplier_quality_log.dart';
 import '../providers/supplier_quality_provider.dart';
 
 /// Integration service to connect procurement with quality control
@@ -58,8 +58,23 @@ class ProcurementQualityIntegration {
         'internalPassRate': _calculateInternalPassRate(internalChecks),
         'fatContentDeviation': _calculateAverageDeviation(
           supplierLogs
-              .map((log) => log.fatContent)
-              .whereType<double>()
+              .map((log) => log != null
+                  ? (log as SupplierQualityLog)
+                      .parameters
+                      .firstWhere(
+                        (p) => p.name == 'fatContent',
+                        orElse: () => const QualityParameter(
+                            id: '',
+                            name: '',
+                            criteria: '',
+                            value: null,
+                            isPassed: false,
+                            notes: null),
+                      )
+                      .value
+                  : null)
+              .whereType<String>()
+              .map((v) => double.tryParse(v) ?? 0.0)
               .toList(),
           internalChecks
               .map((check) => check.fatContent)
@@ -68,8 +83,23 @@ class ProcurementQualityIntegration {
         ),
         'proteinContentDeviation': _calculateAverageDeviation(
           supplierLogs
-              .map((log) => log.proteinContent)
-              .whereType<double>()
+              .map((log) => log != null
+                  ? (log as SupplierQualityLog)
+                      .parameters
+                      .firstWhere(
+                        (p) => p.name == 'proteinContent',
+                        orElse: () => const QualityParameter(
+                            id: '',
+                            name: '',
+                            criteria: '',
+                            value: null,
+                            isPassed: false,
+                            notes: null),
+                      )
+                      .value
+                  : null)
+              .whereType<String>()
+              .map((v) => double.tryParse(v) ?? 0.0)
               .toList(),
           internalChecks
               .map((check) => check.proteinContent)
@@ -84,9 +114,8 @@ class ProcurementQualityIntegration {
   double _calculatePassRate(List<SupplierQualityLog> logs) {
     if (logs.isEmpty) return 0.0;
 
-    final passCount = logs
-        .where((log) => log.inspectionResult == InspectionResult.pass)
-        .length;
+    final passCount =
+        logs.where((log) => log.status == QualityStatus.passed).length;
 
     return passCount / logs.length;
   }
@@ -143,9 +172,8 @@ class ProcurementQualityIntegration {
     final consistencyScore = matchedRecords.isNotEmpty
         ? matchedRecords
                 .where((record) =>
-                    (record['supplierLog'] as SupplierQualityLog)
-                            .inspectionResult ==
-                        InspectionResult.pass &&
+                    (record['supplierLog'] as SupplierQualityLog).status ==
+                        QualityStatus.passed &&
                     (record['internalCheck'] as DairyQualityParametersModel)
                             .status ==
                         'pass')

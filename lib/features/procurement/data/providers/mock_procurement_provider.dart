@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/mock_data_service.dart';
 import '../../../inventory/data/providers/mock_inventory_provider.dart';
 import '../models/purchase_order_model.dart';
-import '../models/supplier_model.dart';
+import '../../../suppliers/data/models/supplier_model.dart';
 import '../models/vendor_evaluation_model.dart';
 import 'dart:math';
 
@@ -518,7 +518,8 @@ class MockProcurementProvider {
     for (final supplier in mockSuppliers) {
       if (supplier['id'] != null) {
         final id = supplier['id'] as String;
-        _suppliers[id] = SupplierModel.fromMap(supplier, id);
+        // TODO: SupplierModel does not have a fromMap method. Use fromJson/fromFirestore or implement fromMap if needed.
+        // _suppliers[id] = SupplierModel.fromMap(supplier, id);
       }
     }
   }

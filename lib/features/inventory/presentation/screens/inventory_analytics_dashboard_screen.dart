@@ -7,6 +7,7 @@ import '../providers/inventory_provider.dart';
 import 'inventory_item_details_screen.dart';
 import 'inventory_reports_screen.dart';
 import 'inventory_trends_screen.dart';
+import '../../domain/providers/inventory_provider.dart';
 
 class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
   const InventoryAnalyticsDashboardScreen({super.key});
@@ -29,12 +30,13 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
             icon: const Icon(Icons.description),
             tooltip: l10n.inventoryReports,
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const InventoryReportsScreen(),
-                ),
-              );
+              // TODO: Remove old reports screen reference
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (_) => const InventoryReportsScreen(),
+              //   ),
+              // );
             },
           ),
           IconButton(

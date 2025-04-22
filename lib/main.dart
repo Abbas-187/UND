@@ -24,6 +24,7 @@ import 'features/inventory/data/models/inventory_movement_type.dart';
 import 'features/shared/presentation/screens/app_settings_screen.dart';
 import 'l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
+import 'core/utils/app_reset_utility.dart';
 
 // Example of how to use the centralized mock data service:
 //
@@ -55,7 +56,8 @@ class MockInventoryMovementRepository implements InventoryMovementRepository {
 
   @override
   Future<InventoryMovementModel> createMovement(
-      InventoryMovementModel movement) async {
+    InventoryMovementModel movement,
+  ) async {
     final String movementId = movement.movementId.isEmpty
         ? 'mov-${DateTime.now().millisecondsSinceEpoch}'
         : movement.movementId;
@@ -89,23 +91,29 @@ class MockInventoryMovementRepository implements InventoryMovementRepository {
 
   @override
   Future<InventoryMovementModel> getMovementById(String id) async {
-    return mockDataService.inventoryMovements
-        .firstWhere((m) => m.movementId == id);
+    return mockDataService.inventoryMovements.firstWhere(
+      (m) => m.movementId == id,
+    );
   }
 
   @override
   Future<List<InventoryMovementModel>> getMovementsByLocation(
-      String locationId, bool isSource) async {
+    String locationId,
+    bool isSource,
+  ) async {
     return mockDataService.inventoryMovements
-        .where((m) => isSource
-            ? m.sourceLocationId == locationId
-            : m.destinationLocationId == locationId)
+        .where(
+          (m) => isSource
+              ? m.sourceLocationId == locationId
+              : m.destinationLocationId == locationId,
+        )
         .toList();
   }
 
   @override
   Future<List<InventoryMovementModel>> getMovementsByProduct(
-      String productId) async {
+    String productId,
+  ) async {
     return mockDataService.inventoryMovements
         .where((m) => m.items.any((item) => item.productId == productId))
         .toList();
@@ -113,7 +121,9 @@ class MockInventoryMovementRepository implements InventoryMovementRepository {
 
   @override
   Future<List<InventoryMovementModel>> getMovementsByTimeRange(
-      DateTime start, DateTime end) async {
+    DateTime start,
+    DateTime end,
+  ) async {
     return mockDataService.inventoryMovements
         .where((m) => m.timestamp.isAfter(start) && m.timestamp.isBefore(end))
         .toList();
@@ -121,7 +131,8 @@ class MockInventoryMovementRepository implements InventoryMovementRepository {
 
   @override
   Future<List<InventoryMovementModel>> getMovementsByType(
-      InventoryMovementType type) async {
+    InventoryMovementType type,
+  ) async {
     return mockDataService.inventoryMovements
         .where((m) => m.movementType == type)
         .toList();
@@ -129,10 +140,14 @@ class MockInventoryMovementRepository implements InventoryMovementRepository {
 
   @override
   Future<InventoryMovementModel> updateMovementStatus(
-      String id, ApprovalStatus status,
-      {String? approverId, String? approverName}) async {
-    final index = mockDataService.inventoryMovements
-        .indexWhere((m) => m.movementId == id);
+    String id,
+    ApprovalStatus status, {
+    String? approverId,
+    String? approverName,
+  }) async {
+    final index = mockDataService.inventoryMovements.indexWhere(
+      (m) => m.movementId == id,
+    );
 
     if (index == -1) {
       throw Exception('Movement not found with ID: $id');
@@ -166,8 +181,12 @@ class MockInventoryMovementRepository implements InventoryMovementRepository {
 
 // Create a provider for the mock data service
 final mockDataServiceProvider = Provider<MockDataService>((ref) {
+  // Initialize the mock data service here to ensure it's properly loaded
   return MockDataService();
 });
+
+// Ensure the mockDataService is properly initialized
+bool useMockFirebase = true; // Set to false to use real Firebase
 
 // Create a provider for the mock inventory movement repository
 final mockInventoryMovementRepositoryProvider =
@@ -200,23 +219,29 @@ void main() async {
   final dynamic firestore =
       useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance;
 
+  // Pre-initialize the mock data service to ensure it's loaded
+  final mockData = MockDataService();
+
   runApp(
     ProviderScope(
       overrides: [
         // Override the inventory movement repository provider with mock
-        inventoryMovementRepositoryProvider
-            .overrideWithProvider(mockInventoryMovementRepositoryProvider),
+        inventoryMovementRepositoryProvider.overrideWithProvider(
+          mockInventoryMovementRepositoryProvider,
+        ),
 
         // Override the production execution repository provider
-        production.productionExecutionRepositoryProvider
-            .overrideWith((ref) => ProductionExecutionRepositoryImpl(
-                  firestore: firestore,
-                  logger: Logger(),
-                )),
+        production.productionExecutionRepositoryProvider.overrideWith(
+          (ref) => ProductionExecutionRepositoryImpl(
+            firestore: firestore,
+            logger: Logger(),
+          ),
+        ),
 
         // Override the auth repository provider
-        domain_auth.authRepositoryProvider.overrideWith((ref) =>
-            AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider))),
+        domain_auth.authRepositoryProvider.overrideWith(
+          (ref) => AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider)),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -238,7 +263,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme(currentLocale),
       themeMode: appSettings.themeMode,
       locale: currentLocale,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

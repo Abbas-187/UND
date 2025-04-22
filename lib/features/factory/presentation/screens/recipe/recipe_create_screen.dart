@@ -16,22 +16,15 @@ class RecipeCreateScreen extends ConsumerWidget {
       body: RecipeForm(
         onSubmit: (recipe) async {
           try {
-            // Get the recipes state notifier
             final recipesNotifier = ref.read(recipesStateProvider.notifier);
-
-            // Create the recipe
             await recipesNotifier.createRecipe(recipe);
-
-            // Show success message
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Recipe created successfully')),
               );
-              // Navigate back to recipes list
               Navigator.pop(context);
             }
           } catch (e) {
-            // Show error message
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Failed to create recipe: $e')),
@@ -39,6 +32,7 @@ class RecipeCreateScreen extends ConsumerWidget {
             }
           }
         },
+        isEditing: false,
       ),
     );
   }

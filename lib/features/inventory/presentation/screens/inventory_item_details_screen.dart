@@ -7,6 +7,7 @@ import '../providers/inventory_provider.dart';
 import 'inventory_edit_screen.dart';
 import 'inventory_movement_history_screen.dart';
 import 'inventory_transfer_screen.dart';
+import '../../domain/providers/inventory_provider.dart';
 
 class InventoryItemDetailsScreen extends ConsumerWidget {
   const InventoryItemDetailsScreen({

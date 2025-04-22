@@ -1,11 +1,14 @@
+// inventory_repository_impl.dart (commented out for testing)
+/*
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/inventory_item_model.dart';
 import '../models/warehouse_location_model.dart';
 import '../../domain/entities/inventory_item.dart';
+import '../../domain/repositories/inventory_repository.dart';
 
-class InventoryRepository {
-  InventoryRepository({FirebaseFirestore? firestore})
+class InventoryRepositoryImpl implements InventoryRepository {
+  InventoryRepositoryImpl({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
@@ -69,5 +72,6 @@ class InventoryRepository {
 
 // Manual provider implementation instead of code generation
 final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
-  return InventoryRepository();
+  return InventoryRepositoryImpl();
 });
+*/

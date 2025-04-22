@@ -4,7 +4,6 @@ import '../../domain/entities/supplier.dart';
 import '../providers/supplier_provider.dart';
 
 class SupplierEditScreen extends ConsumerStatefulWidget {
-
   const SupplierEditScreen({
     super.key,
     this.supplier,
@@ -130,6 +129,9 @@ class _SupplierEditScreenState extends ConsumerState<SupplierEditScreen> {
         notes: _notesController.text,
         taxId: _taxIdController.text,
         paymentTerms: _paymentTermsController.text,
+        metrics: widget.supplier?.metrics ??
+            const SupplierMetrics(
+                onTimeDeliveryRate: 0, qualityScore: 0, responseTime: 0),
       );
 
       if (_isEditing) {

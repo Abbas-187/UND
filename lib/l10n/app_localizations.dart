@@ -202,7 +202,7 @@ class AppLocalizations {
       'itemsToReorder': 'Items to Reorder',
       'stockLevels': 'Stock Levels',
       'seeDetails': 'See Details',
-      'currencySymbol': '\$',
+      'currencySymbol': '﷼',
       'outOfStock': 'Out of Stock',
       'unitsPerMonth': 'Units/Month',
       'showMore': 'Show more',

@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/models/inventory_item_model.dart';
-import '../../data/repositories/inventory_repository.dart' as data_repo;
+import '../repositories/inventory_repository.dart';
 import '../services/label_printing_service.dart';
 import 'inventory_provider.dart';
 
@@ -9,7 +9,7 @@ part 'batch_operations_provider.g.dart';
 
 @riverpod
 class BatchOperationsState extends _$BatchOperationsState {
-  late final data_repo.InventoryRepository _repository;
+  late final InventoryRepository _repository;
   late final LabelPrintingService _labelPrintingService;
 
   @override

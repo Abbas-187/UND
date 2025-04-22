@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/usecases/transfer_stock_usecase.dart';
 import '../providers/inventory_provider.dart';
+import '../../domain/providers/inventory_provider.dart';
 
 class InventoryTransferScreen extends ConsumerStatefulWidget {
-
   const InventoryTransferScreen({
     super.key,
     required this.sourceItemId,

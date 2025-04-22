@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../data/models/purchase_order_model.dart';
-import '../../data/models/supplier_model.dart';
-import '../../data/models/supplier_quality_log_model.dart';
-import 'supplier_performance_chart.dart';
+import '../../../suppliers/data/models/supplier_model.dart';
+import '../../../suppliers/presentation/widgets/supplier_performance_chart.dart'
+    show SupplierPerformance, SupplierPerformanceChart;
+import '../../domain/entities/supplier_quality_log.dart';
+import '../../../suppliers/domain/entities/supplier.dart';
 
 /// Widget for displaying upcoming deliveries on the dashboard
 class UpcomingDeliveriesWidget extends ConsumerWidget {
@@ -336,7 +338,7 @@ class _SupplierPerformanceWidgetState extends State<SupplierPerformanceWidget> {
             ),
             const SizedBox(height: 16),
             SupplierPerformanceChart(
-              data: _showData ? _mockData : [],
+              data: _showData ? _mockData : <SupplierPerformance>[],
               title: _title,
               barColor: _barColor,
               backgroundColor: Colors.white,
@@ -411,8 +413,7 @@ class RecentQualityIssuesWidget extends ConsumerWidget {
                             margin: const EdgeInsets.only(top: 4, right: 8),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: issue.inspectionResult ==
-                                      InspectionResult.fail
+                              color: issue.status == QualityStatus.failed
                                   ? Colors.red
                                   : Colors.amber,
                             ),
@@ -439,12 +440,12 @@ class RecentQualityIssuesWidget extends ConsumerWidget {
                                   'Issues: ${_getQualityIssueDescription(issue)}',
                                   style: const TextStyle(fontSize: 13),
                                 ),
-                                if (issue.correctiveActions != null &&
-                                    issue.correctiveActions!.isNotEmpty)
+                                if (issue.actionTaken != null &&
+                                    issue.actionTaken!.isNotEmpty)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
                                     child: Text(
-                                      'Action: ${issue.correctiveActions}',
+                                      'Action: ${issue.actionTaken}',
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontStyle: FontStyle.italic,
@@ -473,21 +474,14 @@ class RecentQualityIssuesWidget extends ConsumerWidget {
   }
 
   String _getQualityIssueDescription(SupplierQualityLog issue) {
-    final issues = <String>[];
-
-    if (issue.fatContent != null && issue.fatContent! < 3.5) {
-      issues.add('Low fat content (${issue.fatContent}%)');
+    if (issue.defectDescription != null &&
+        issue.defectDescription!.isNotEmpty) {
+      return issue.defectDescription!;
     }
-
-    if (issue.proteinContent != null && issue.proteinContent! < 3.0) {
-      issues.add('Low protein content (${issue.proteinContent}%)');
+    if (issue.status == QualityStatus.failed) {
+      return 'Quality standards not met';
     }
-
-    if (issue.bacterialCount != null && issue.bacterialCount! > 100000) {
-      issues.add('High bacterial count (${issue.bacterialCount})');
-    }
-
-    return issues.isEmpty ? 'Quality standards not met' : issues.join(', ');
+    return 'No issues reported';
   }
 }
 
@@ -569,3 +563,6 @@ final recentQualityIssuesProvider =
     onlyFailures: true,
   );
 });
+
+// Local enum for inspection result (mock)
+enum InspectionResult { pass, fail }

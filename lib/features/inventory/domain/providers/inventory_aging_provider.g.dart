@@ -6,7 +6,7 @@ part of 'inventory_aging_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$inventoryAgingHash() => r'9b86a8f8b86797d8fbfee5b84029bd19ede5da07';
+String _$inventoryAgingHash() => r'3cf893fb244503c3d3fb11864f73400d7cb8084e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$InventoryAging extends BuildlessAutoDisposeAsyncNotifier<
-    Map<AgeBracket, List<InventoryItemModel>>> {
+    Map<AgeBracket, List<InventoryItem>>> {
   late final String warehouseId;
 
-  FutureOr<Map<AgeBracket, List<InventoryItemModel>>> build(
+  FutureOr<Map<AgeBracket, List<InventoryItem>>> build(
     String warehouseId,
   );
 }
@@ -44,7 +44,7 @@ const inventoryAgingProvider = InventoryAgingFamily();
 
 /// See also [InventoryAging].
 class InventoryAgingFamily
-    extends Family<AsyncValue<Map<AgeBracket, List<InventoryItemModel>>>> {
+    extends Family<AsyncValue<Map<AgeBracket, List<InventoryItem>>>> {
   /// See also [InventoryAging].
   const InventoryAgingFamily();
 
@@ -83,7 +83,7 @@ class InventoryAgingFamily
 
 /// See also [InventoryAging].
 class InventoryAgingProvider extends AutoDisposeAsyncNotifierProviderImpl<
-    InventoryAging, Map<AgeBracket, List<InventoryItemModel>>> {
+    InventoryAging, Map<AgeBracket, List<InventoryItem>>> {
   /// See also [InventoryAging].
   InventoryAgingProvider(
     String warehouseId,
@@ -114,7 +114,7 @@ class InventoryAgingProvider extends AutoDisposeAsyncNotifierProviderImpl<
   final String warehouseId;
 
   @override
-  FutureOr<Map<AgeBracket, List<InventoryItemModel>>> runNotifierBuild(
+  FutureOr<Map<AgeBracket, List<InventoryItem>>> runNotifierBuild(
     covariant InventoryAging notifier,
   ) {
     return notifier.build(
@@ -140,7 +140,7 @@ class InventoryAgingProvider extends AutoDisposeAsyncNotifierProviderImpl<
 
   @override
   AutoDisposeAsyncNotifierProviderElement<InventoryAging,
-      Map<AgeBracket, List<InventoryItemModel>>> createElement() {
+      Map<AgeBracket, List<InventoryItem>>> createElement() {
     return _InventoryAgingProviderElement(this);
   }
 
@@ -161,14 +161,14 @@ class InventoryAgingProvider extends AutoDisposeAsyncNotifierProviderImpl<
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin InventoryAgingRef on AutoDisposeAsyncNotifierProviderRef<
-    Map<AgeBracket, List<InventoryItemModel>>> {
+    Map<AgeBracket, List<InventoryItem>>> {
   /// The parameter `warehouseId` of this provider.
   String get warehouseId;
 }
 
 class _InventoryAgingProviderElement
     extends AutoDisposeAsyncNotifierProviderElement<InventoryAging,
-        Map<AgeBracket, List<InventoryItemModel>>> with InventoryAgingRef {
+        Map<AgeBracket, List<InventoryItem>>> with InventoryAgingRef {
   _InventoryAgingProviderElement(super.provider);
 
   @override

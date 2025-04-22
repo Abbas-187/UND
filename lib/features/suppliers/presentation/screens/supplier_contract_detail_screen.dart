@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../domain/entities/supplier_contract.dart';
 import '../providers/supplier_contract_provider.dart';
+import '../../../reports/widgets/attachment_widget.dart';
 
 class SupplierContractDetailScreen extends ConsumerStatefulWidget {
-
   const SupplierContractDetailScreen({super.key, this.contractId});
   final String? contractId;
 
@@ -39,14 +39,15 @@ class _SupplierContractDetailScreenState
 
   bool _isEditMode = false;
   bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
     _initializeControllers();
-    _isEditMode = widget.contractId != null;
-
-    if (_isEditMode) {
+    _isEditMode =
+        widget.contractId == null; // New contract: edit mode by default
+    if (widget.contractId != null) {
       _loadContractData();
     }
   }
@@ -73,14 +74,12 @@ class _SupplierContractDetailScreenState
 
   Future<void> _loadContractData() async {
     if (widget.contractId == null) return;
-
     setState(() {
       _isLoading = true;
+      _errorMessage = null;
     });
-
     try {
       final contractAsyncValue = ref.read(contractProvider(widget.contractId!));
-
       contractAsyncValue.whenData((contract) {
         _titleController.text = contract.title;
         _descriptionController.text = contract.description;
@@ -95,10 +94,15 @@ class _SupplierContractDetailScreenState
         _isActive = contract.isActive;
         _autoRenew = contract.autoRenew;
         _renewalNoticeDays = contract.renewalNoticeDays;
-        _tags = contract.tags;
-        _attachments = contract.attachments;
-        _pricingSchedule = contract.pricingSchedule;
+        _tags = List<String>.from(contract.tags);
+        _attachments = List<Map<String, dynamic>>.from(contract.attachments);
+        _pricingSchedule =
+            List<Map<String, dynamic>>.from(contract.pricingSchedule);
         _terms = contract.terms;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to load contract: $e';
       });
     } finally {
       setState(() {
@@ -107,18 +111,31 @@ class _SupplierContractDetailScreenState
     }
   }
 
-  Future<void> _saveContract() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+  void _switchToEditMode() {
+    setState(() {
+      _isEditMode = true;
+    });
+  }
 
+  void _cancelEdit() {
+    if (widget.contractId == null) {
+      Navigator.pop(context);
+    } else {
+      setState(() {
+        _isEditMode = false;
+      });
+      _loadContractData();
+    }
+  }
+
+  Future<void> _saveContract() async {
+    if (!_formKey.currentState!.validate()) return;
     setState(() {
       _isLoading = true;
+      _errorMessage = null;
     });
-
     try {
       final contractManager = ref.read(contractManagerProvider.notifier);
-
       final contract = SupplierContract(
         id: widget.contractId ?? '',
         title: _titleController.text,
@@ -142,28 +159,25 @@ class _SupplierContractDetailScreenState
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
-
-      if (_isEditMode) {
+      if (_isEditMode && widget.contractId != null) {
         await contractManager.updateContract(contract);
       } else {
         await contractManager.addContract(contract);
       }
-
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
-        );
-      }
-    } finally {
       if (mounted) {
         setState(() {
-          _isLoading = false;
+          _isEditMode = false;
         });
+        if (widget.contractId == null) Navigator.pop(context);
       }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to save contract: $e';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -172,39 +186,143 @@ class _SupplierContractDetailScreenState
     final contract = widget.contractId != null
         ? ref.watch(contractProvider(widget.contractId!))
         : null;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEditMode ? 'Edit Contract' : 'New Contract'),
+        title: Text(_isEditMode
+            ? (widget.contractId == null ? 'New Contract' : 'Edit Contract')
+            : 'Contract Details'),
         actions: [
-          if (_isEditMode)
+          if (!_isEditMode && widget.contractId != null)
             IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: _confirmDelete,
-            ),
+                icon: const Icon(Icons.edit), onPressed: _switchToEditMode),
+          if (_isEditMode && widget.contractId != null)
+            IconButton(
+                icon: const Icon(Icons.delete), onPressed: _confirmDelete),
         ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : contract != null
-              ? contract.when(
-                  data: (data) => _buildForm(),
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  error: (error, stackTrace) => Center(
-                    child: Text('Error: ${error.toString()}'),
+          : _errorMessage != null
+              ? Center(
+                  child: Text(_errorMessage!,
+                      style: const TextStyle(color: Colors.red)))
+              : _isEditMode
+                  ? _buildForm()
+                  : contract != null
+                      ? contract.when(
+                          data: (data) => _buildView(data),
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator()),
+                          error: (error, stackTrace) =>
+                              Center(child: Text('Error: ${error.toString()}')),
+                        )
+                      : _buildForm(),
+      bottomNavigationBar: _isEditMode
+          ? BottomAppBar(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _saveContract,
+                        child: Text(widget.contractId == null
+                            ? 'Create Contract'
+                            : 'Update Contract'),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: _isLoading ? null : _cancelEdit,
+                        child: const Text('Cancel'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : null,
+    );
+  }
+
+  Widget _buildView(SupplierContract contract) {
+    final formatter = NumberFormat.currency(symbol: contract.currency);
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(contract.title,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Text('Contract #: ${contract.contractNumber}'),
+                Text('Supplier: ${contract.supplierName}'),
+                Text('Type: ${contract.contractType}'),
+                Text('Status: ${contract.isActive ? 'Active' : 'Inactive'}'),
+                Text('Value: ${formatter.format(contract.value)}'),
+                Text(
+                    'Period: ${DateFormat('dd/MM/yyyy').format(contract.startDate)} - ${DateFormat('dd/MM/yyyy').format(contract.endDate)}'),
+                if (contract.tags.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8.0,
+                    children: contract.tags
+                        .map((tag) => Chip(label: Text(tag)))
+                        .toList(),
                   ),
-                )
-              : _buildForm(),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: ElevatedButton(
-            onPressed: _isLoading ? null : _saveContract,
-            child: Text(_isEditMode ? 'Update Contract' : 'Create Contract'),
+                ],
+              ],
+            ),
           ),
         ),
-      ),
+        const SizedBox(height: 16),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Description',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Text(contract.description),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        AttachmentWidget(
+          attachments: contract.attachments,
+          editable: false,
+        ),
+        const SizedBox(height: 16),
+        if (contract.pricingSchedule.isNotEmpty)
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Pricing Schedule',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  ...contract.pricingSchedule.map((item) => ListTile(
+                        title: Text(item['description'] ?? ''),
+                        subtitle: Text('Quantity: ${item['quantity']}'),
+                        trailing: Text(formatter.format(
+                            item['unitPrice'] * (item['quantity'] ?? 1))),
+                      )),
+                ],
+              ),
+            ),
+          ),
+      ],
     );
   }
 
@@ -220,7 +338,20 @@ class _SupplierContractDetailScreenState
           const SizedBox(height: 24.0),
           _buildContractOptionsSection(),
           const SizedBox(height: 24.0),
-          _buildAttachmentsSection(),
+          AttachmentWidget(
+            attachments: _attachments,
+            editable: true,
+            onAdd: (newAttachment) async {
+              setState(() {
+                _attachments.add(newAttachment);
+              });
+            },
+            onDelete: (attachment) async {
+              setState(() {
+                _attachments.removeWhere((a) => a['id'] == attachment['id']);
+              });
+            },
+          ),
           const SizedBox(height: 24.0),
           _buildPricingScheduleSection(),
           const SizedBox(height: 24.0),
@@ -530,66 +661,6 @@ class _SupplierContractDetailScreenState
     );
   }
 
-  Widget _buildAttachmentsSection() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'Attachments',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                TextButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add'),
-                  onPressed: _addAttachment,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8.0),
-            if (_attachments.isEmpty)
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('No attachments added'),
-                ),
-              )
-            else
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _attachments.length,
-                itemBuilder: (context, index) {
-                  final attachment = _attachments[index];
-                  return ListTile(
-                    leading: const Icon(Icons.attach_file),
-                    title: Text(attachment['name'] as String),
-                    subtitle: Text('Uploaded: ${attachment['uploadedAt']}'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          _attachments.removeAt(index);
-                        });
-                      },
-                    ),
-                  );
-                },
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildPricingScheduleSection() {
     return Card(
       child: Padding(
@@ -701,19 +772,6 @@ class _SupplierContractDetailScreenState
         ),
       ),
     );
-  }
-
-  void _addAttachment() {
-    // In a real app, this would show a file picker and upload the file
-    // For this example, we'll just add a dummy attachment
-    setState(() {
-      _attachments.add({
-        'id': DateTime.now().millisecondsSinceEpoch.toString(),
-        'name': 'Document_${_attachments.length + 1}.pdf',
-        'url': 'https://example.com/document.pdf',
-        'uploadedAt': DateTime.now().toIso8601String(),
-      });
-    });
   }
 
   void _addPricingItem() {
