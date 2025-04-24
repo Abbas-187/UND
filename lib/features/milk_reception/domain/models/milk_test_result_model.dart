@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:meta/meta.dart';
 
+@immutable
 class MilkTestResultModel {
   factory MilkTestResultModel.fromMap(Map<String, dynamic> map) {
     return MilkTestResultModel(
@@ -22,7 +24,7 @@ class MilkTestResultModel {
       metadata: Map<String, dynamic>.from(map['metadata'] ?? {}),
     );
   }
-  MilkTestResultModel({
+  const MilkTestResultModel({
     required this.testedBy,
     required this.testDate,
     required this.fatContent,

@@ -1,8 +1,10 @@
 // Non-freezed model implementation to avoid generation issues
+import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
+@immutable
 class CustomerModel {
-
-  CustomerModel({
+  const CustomerModel({
     this.id,
     required this.name,
     required this.code,
@@ -169,16 +171,68 @@ class CustomerModel {
       searchTerms: searchTerms ?? this.searchTerms,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CustomerModel &&
+        other.id == id &&
+        other.name == name &&
+        other.code == code &&
+        other.customerType == customerType &&
+        other.status == status &&
+        other.email == email &&
+        other.phoneNumber == phoneNumber &&
+        other.billingAddress == billingAddress &&
+        other.shippingAddress == shippingAddress &&
+        other.contactPerson == contactPerson &&
+        other.taxId == taxId &&
+        other.paymentTerms == paymentTerms &&
+        other.creditLimit == creditLimit &&
+        other.currentBalance == currentBalance &&
+        other.lastOrderDate == lastOrderDate &&
+        other.createdDate == createdDate &&
+        other.lastUpdatedDate == lastUpdatedDate &&
+        listEquals(other.searchTerms, searchTerms);
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+        id,
+        name,
+        code,
+        customerType,
+        status,
+        email,
+        phoneNumber,
+        billingAddress,
+        shippingAddress,
+        contactPerson,
+        taxId,
+        paymentTerms,
+        creditLimit,
+        currentBalance,
+        lastOrderDate,
+        createdDate,
+        lastUpdatedDate,
+        Object.hashAll(searchTerms),
+      ]);
 }
 
+@immutable
 class AddressModel {
+  final String street;
+  final String city;
+  final String state;
+  final String country;
+  final String postalCode;
 
-  AddressModel({
+  const AddressModel({
     required this.street,
     required this.city,
     required this.state,
-    required this.postalCode,
     required this.country,
+    required this.postalCode,
   });
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
@@ -186,23 +240,18 @@ class AddressModel {
       street: json['street'] as String,
       city: json['city'] as String,
       state: json['state'] as String,
-      postalCode: json['postalCode'] as String,
       country: json['country'] as String,
+      postalCode: json['postalCode'] as String,
     );
   }
-  final String street;
-  final String city;
-  final String state;
-  final String postalCode;
-  final String country;
 
   Map<String, dynamic> toJson() {
     return {
       'street': street,
       'city': city,
       'state': state,
-      'postalCode': postalCode,
       'country': country,
+      'postalCode': postalCode,
     };
   }
 
@@ -210,4 +259,24 @@ class AddressModel {
   String toString() {
     return '$street, $city, $state $postalCode, $country';
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is AddressModel &&
+        other.street == street &&
+        other.city == city &&
+        other.state == state &&
+        other.country == country &&
+        other.postalCode == postalCode;
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+        street,
+        city,
+        state,
+        country,
+        postalCode,
+      ]);
 }

@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+@immutable
 class ProductionLineAllocationModel {
   const ProductionLineAllocationModel({
     required this.id,
@@ -46,8 +49,31 @@ class ProductionLineAllocationModel {
       'metadata': metadata,
     };
   }
+
+  ProductionLineAllocationModel copyWith({
+    String? id,
+    String? lineId,
+    String? lineName,
+    double? capacity,
+    List<TimeBlock>? availableTimeBlocks,
+    bool? isAvailable,
+    String? unavailabilityReason,
+    Map<String, dynamic>? metadata,
+  }) {
+    return ProductionLineAllocationModel(
+      id: id ?? this.id,
+      lineId: lineId ?? this.lineId,
+      lineName: lineName ?? this.lineName,
+      capacity: capacity ?? this.capacity,
+      availableTimeBlocks: availableTimeBlocks ?? this.availableTimeBlocks,
+      isAvailable: isAvailable ?? this.isAvailable,
+      unavailabilityReason: unavailabilityReason ?? this.unavailabilityReason,
+      metadata: metadata ?? this.metadata,
+    );
+  }
 }
 
+@immutable
 class TimeBlock {
   const TimeBlock({
     required this.startTime,
@@ -80,5 +106,21 @@ class TimeBlock {
       'allocationId': allocationId,
       'allocationName': allocationName,
     };
+  }
+
+  TimeBlock copyWith({
+    DateTime? startTime,
+    DateTime? endTime,
+    bool? isAllocated,
+    String? allocationId,
+    String? allocationName,
+  }) {
+    return TimeBlock(
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      isAllocated: isAllocated ?? this.isAllocated,
+      allocationId: allocationId ?? this.allocationId,
+      allocationName: allocationName ?? this.allocationName,
+    );
   }
 }

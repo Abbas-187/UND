@@ -2,6 +2,8 @@
 /// simplify the implementation.
 library;
 
+import 'package:meta/meta.dart';
+
 enum EquipmentType {
   pasteurizer,
   homogenizer,
@@ -32,6 +34,7 @@ enum EquipmentStatus {
 }
 
 /// Equipment model for dairy processing equipment
+@immutable
 class EquipmentModel {
   const EquipmentModel({
     required this.id,

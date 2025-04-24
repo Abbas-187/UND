@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:meta/meta.dart';
 
 /// Material types enum for dairy industry products
 enum MaterialType {
@@ -24,7 +25,9 @@ enum RegulatoryClassification {
 }
 
 /// Storage requirements for dairy materials
-class StorageRequirements { // e.g., refrigerated, frozen, ambient
+@immutable
+class StorageRequirements {
+  // e.g., refrigerated, frozen, ambient
 
   const StorageRequirements({
     required this.minTemperature,
@@ -83,8 +86,8 @@ class StorageRequirements { // e.g., refrigerated, frozen, ambient
 }
 
 /// Nutritional parameters for dairy materials
+@immutable
 class NutritionalParameters {
-
   const NutritionalParameters({
     required this.fatContent,
     required this.proteinContent,
@@ -170,8 +173,8 @@ class NutritionalParameters {
 }
 
 /// Testing requirements for dairy materials
+@immutable
 class TestingRequirements {
-
   const TestingRequirements({
     required this.requiredTests,
     required this.thresholds,
@@ -233,8 +236,8 @@ class TestingRequirements {
 }
 
 /// Immutable Material Model with dairy industry specific fields
+@immutable
 class MaterialModel {
-
   const MaterialModel({
     this.id,
     required this.materialCode,

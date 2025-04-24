@@ -59,6 +59,10 @@ import '../../features/factory/presentation/screens/recipe/recipe_history_screen
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_edit_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_item_details_screen.dart';
+import '../../features/order_management/screens/order_list_screen.dart';
+import '../../features/order_management/screens/order_detail_screen.dart';
+import '../../features/order_management/screens/order_creation_edit_screen.dart';
+import '../../features/order_management/screens/discussion_room_screen.dart';
 
 class AppRoutes {
   static const String home = '/';
@@ -133,6 +137,11 @@ class AppRoutes {
   static const String inventoryBatchBarcodeScan =
       '/inventory/batch-barcode-scan';
   static const String inventoryMovementDetails = '/inventory/movements/details';
+  static const String orders = '/orders';
+  static const String orderDetail = '/orders/detail';
+  static const String orderCreate = '/orders/create';
+  static const String orderEdit = '/orders/edit';
+  static const String orderDiscussion = '/orders/discussion';
 }
 
 class AppRouter {
@@ -424,6 +433,33 @@ class AppRouter {
 
       case AppRoutes.inventoryMain:
         screen = const InventoryScreen();
+        break;
+
+      case AppRoutes.orders:
+        screen = const OrderListScreen();
+        break;
+
+      case AppRoutes.orderDetail:
+        final orderId = args['orderId'] as String;
+        screen = OrderDetailScreen(orderId: orderId);
+        break;
+
+      case AppRoutes.orderCreate:
+        screen = const OrderCreationEditScreen();
+        break;
+
+      case AppRoutes.orderEdit:
+        final orderId = args['orderId'] as String;
+        screen = OrderCreationEditScreen(orderId: orderId);
+        break;
+
+      case AppRoutes.orderDiscussion:
+        final orderId = args['orderId'] as String;
+        final discussionId = args['discussionId'] as String?;
+        screen = DiscussionRoomScreen(
+          orderId: orderId,
+          discussionId: discussionId,
+        );
         break;
     }
 

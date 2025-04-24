@@ -289,4 +289,23 @@ final Map<String, AppModule> appModules = {
       ),
     ],
   ),
+  'order_management': const AppModule(
+    nameKey: 'orderManagement',
+    icon: Icons.assignment,
+    color: Colors.amber,
+    screens: [
+      ModuleScreen(
+        nameKey: 'orderList',
+        route: AppRoutes.orders,
+        icon: Icons.list_alt,
+        descriptionKey: 'orderListDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'createOrder',
+        route: AppRoutes.orderCreate,
+        icon: Icons.add_box,
+        descriptionKey: 'createOrderDesc',
+      ),
+    ],
+  ),
 };
