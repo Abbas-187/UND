@@ -34,6 +34,30 @@ target_compile_definitions(${BINARY_NAME} PRIVATE "NOMINMAX")
 # dependencies here.
 target_link_libraries(${BINARY_NAME} PRIVATE flutter flutter_wrapper_app)
 target_link_libraries(${BINARY_NAME} PRIVATE "dwmapi.lib")
+
+# Firebase C++ SDK configuration
+if(DEFINED FIREBASE_CPP_SDK_DIR)
+  # Include the Firebase SDK directories
+  target_include_directories(${BINARY_NAME} PRIVATE 
+    "${FIREBASE_CPP_SDK_DIR}/include"
+  )
+  
+  # Add Firebase library directories
+  target_link_directories(${BINARY_NAME} PRIVATE
+    "${FIREBASE_CPP_SDK_DIR}/libs/windows/VS2019/MD/x64/$<CONFIG>"
+  )
+  
+  # Link Firebase libraries
+  target_link_libraries(${BINARY_NAME} PRIVATE
+    firebase_app
+    firebase_auth
+    firebase_firestore
+    firebase_storage
+    firebase_messaging
+    firebase_functions
+  )
+endif()
+
 target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 
 # Run the Flutter tool portions of the build. This must not be removed.

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../routes/procurement_routes.dart';
 
 /// Dashboard screen for the procurement feature.
 class ProcurementDashboardScreen extends StatelessWidget {
-  const ProcurementDashboardScreen({Key? key}) : super(key: key);
+  const ProcurementDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

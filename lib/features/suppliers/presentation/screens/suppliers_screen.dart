@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/routes/app_router.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routes/app_go_router.dart';
 import '../../domain/entities/supplier.dart';
 import '../providers/supplier_provider.dart';
 
@@ -18,13 +19,7 @@ class SuppliersScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                AppRoutes.supplierEdit,
-                arguments: SupplierEditArgs(),
-              );
-            },
+            onPressed: () => context.push(AppRoutes.supplierEdit),
           ),
         ],
       ),
@@ -127,13 +122,8 @@ class SuppliersScreen extends ConsumerWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            AppRoutes.supplierDetails,
-            arguments: {'supplierId': supplier.id},
-          );
-        },
+        onTap: () => context.push(AppRoutes.supplierDetails,
+            extra: {'supplierId': supplier.id}),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

@@ -6,9 +6,9 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 /// A service that encapsulates the navigation logic for the app
 class NavigationService {
-  final GlobalKey<NavigatorState> navigatorKey;
 
   NavigationService(this.navigatorKey);
+  final GlobalKey<NavigatorState> navigatorKey;
 
   // Get the current navigation context
   BuildContext? get context => navigatorKey.currentContext;

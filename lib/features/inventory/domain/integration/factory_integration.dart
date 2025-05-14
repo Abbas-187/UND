@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Importing Riverpod for Ref
 
+import '../../../factory/data/models/material_requisition_item_model.dart'; // Use requisition item model
 import '../../../factory/data/models/production_order_model.dart'; // Updated import path
 import '../../../factory/domain/providers/production_provider.dart';
-import '../../models/material_model.dart'; // Import MaterialModel
-import '../../providers/material_requisition_provider.dart';
+import '../../data/providers/material_requisition_provider.dart';
 import '../providers/inventory_provider.dart';
 
 /// Handles the specific integration between Inventory and Factory modules
@@ -71,19 +71,19 @@ class FactoryIntegration {
     final productionOrder =
         await _ref.read(productionOrderByIdProvider(productionOrderId).future);
 
-    final inventoryState = _ref.read(inventoryProvider.notifier);
-
     // Find best locations for picking materials
     final pickingLocations =
         await _fetchOptimalPickingLocations(productionOrder);
 
-    // Convert ProductionOrderRequiredMaterial to MaterialModel
-    List<MaterialModel> materials = [];
+    // Convert required materials to requisition item models
+    List<MaterialRequisitionItemModel> materials = [];
     if (productionOrder.requiredMaterials != null) {
       materials = productionOrder.requiredMaterials!
-          .map((material) => MaterialModel(
-              materialId: material.materialId,
-              requiredQuantity: material.requiredQuantity))
+          .map((material) => MaterialRequisitionItemModel(
+                materialId: material.materialId,
+                quantity: material.requiredQuantity,
+                unit: 'each',
+              ))
           .toList();
     }
 

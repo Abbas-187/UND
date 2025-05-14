@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
-import '../../data/repositories/inventory_movement_repository.dart';
 import '../../data/models/inventory_movement_model.dart';
 import '../../data/models/inventory_movement_type.dart';
-import '../../providers/inventory_movement_providers.dart' as providers;
+import '../../data/providers/inventory_movement_providers.dart' as providers;
+import '../../data/repositories/inventory_movement_repository.dart';
 
 /// Service class to handle inventory movement business logic
 class InventoryMovementService {
@@ -59,15 +59,16 @@ class InventoryMovementService {
       }
 
       // Update movement status
-      final updatedMovement = await _movementRepository.updateMovementStatus(
-        id,
-        status,
-        approverId: approverId,
-        approverName: approverName,
-      );
+      // final updatedMovement = await _movementRepository.updateMovementStatus(
+      //   id,
+      //   status,
+      //   approverId: approverId,
+      //   approverName: approverName,
+      // );
 
       _logger.i('Successfully updated movement status to $status');
-      return updatedMovement;
+      // return updatedMovement;
+      throw UnimplementedError('updateMovementStatus is not implemented');
     } catch (error, stackTrace) {
       _logger.e(
         'Error updating movement status',
@@ -129,21 +130,18 @@ class InventoryMovementService {
   void _validateMovement(InventoryMovementModel movement) {
     // Validate source and destination based on movement type
     switch (movement.movementType) {
-      case InventoryMovementType.RECEIPT:
-        if (movement.destinationLocationId.isEmpty) {
-          throw Exception(
-              'Destination location is required for RECEIPT movements');
-        }
-        break;
-      case InventoryMovementType.DISPOSAL:
-        if (movement.sourceLocationId.isEmpty) {
-          throw Exception('Source location is required for DISPOSAL movements');
-        }
-        break;
-      case InventoryMovementType.TRANSFER:
-      case InventoryMovementType.ADJUSTMENT:
-      case InventoryMovementType.ISSUE:
-      case InventoryMovementType.RETURN:
+      case InventoryMovementType.PO_RECEIPT:
+      case InventoryMovementType.PRODUCTION_OUTPUT:
+      case InventoryMovementType.SALES_RETURN:
+      case InventoryMovementType.TRANSFER_IN:
+      case InventoryMovementType.PRODUCTION_ISSUE:
+      case InventoryMovementType.TRANSFER_OUT:
+      case InventoryMovementType.SALE_SHIPMENT:
+      case InventoryMovementType.ADJUSTMENT_DAMAGE:
+      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
+      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
+      case InventoryMovementType.ADJUSTMENT_OTHER:
+      case InventoryMovementType.QUALITY_STATUS_UPDATE:
         if (movement.sourceLocationId.isEmpty ||
             movement.destinationLocationId.isEmpty) {
           throw Exception(

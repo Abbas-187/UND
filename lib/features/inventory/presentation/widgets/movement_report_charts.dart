@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+
 import '../../data/models/inventory_movement_model.dart';
-import '../../data/models/inventory_movement_type.dart';
 
 /// Line chart: Movements over time (by day)
 Widget movementLineChart(List<InventoryMovementModel> movements) {

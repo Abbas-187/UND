@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../../../../common/widgets/detail_appbar.dart';
-import '../../../../../common/widgets/loading_overlay.dart';
 import '../../../../../common/widgets/error_dialog.dart';
+import '../../../../../common/widgets/loading_overlay.dart';
+import '../../../../../domain/entities/supporting_document.dart';
 import '../../../../../utils/formatters/currency_formatter.dart';
 import '../../../../../utils/validators/form_validators.dart';
-import '../../../domain/entities/purchase_order.dart' hide SupportingDocument;
+import '../../../../suppliers/domain/entities/supplier.dart';
+import '../../../../suppliers/presentation/providers/supplier_provider.dart';
+import '../../../domain/entities/inventory_item.dart';
 import '../../../domain/entities/purchase_order.dart' as purchase_order
     show SupportingDocument;
-import '../../../../suppliers/domain/entities/supplier.dart';
-import '../../../domain/entities/inventory_item.dart';
-import '../../../../../domain/entities/supporting_document.dart';
-import '../../../../../core/exceptions/result.dart';
-import '../../providers/purchase_order_providers.dart';
+import '../../../domain/entities/purchase_order.dart' hide SupportingDocument;
 import '../../providers/inventory_provider.dart';
+import '../../providers/purchase_order_providers.dart';
 import '../../widgets/document_attachment_picker.dart';
 import '../../widgets/purchase_order_item_form.dart';
-import '../../../../suppliers/presentation/providers/supplier_provider.dart';
 
 class PurchaseOrderCreateScreen extends ConsumerStatefulWidget {
   const PurchaseOrderCreateScreen({super.key});
@@ -242,8 +242,8 @@ class _PurchaseOrderCreateScreenState
               onUpdate: (updatedItem) {
                 setState(() {
                   final index = _items.indexWhere((i) => i.id == item.id);
-                  if (index >= 0 && updatedItem != null) {
-                    _items[index] = updatedItem as PurchaseOrderItem;
+                  if (index >= 0) {
+                    _items[index] = updatedItem;
                   }
                 });
               },
@@ -455,7 +455,7 @@ class _PurchaseOrderCreateScreenState
     try {
       final supplierDetailAsync =
           ref.read(supplierProvider(_selectedSupplierId));
-      final supplier = await supplierDetailAsync.valueOrNull;
+      final supplier = supplierDetailAsync.valueOrNull;
 
       if (supplier == null) {
         throw Exception('Supplier not found');
@@ -498,22 +498,20 @@ class _PurchaseOrderCreateScreenState
           .read(purchaseOrderDetailNotifierProvider(purchaseOrder.id).notifier)
           .createPurchaseOrder(purchaseOrder);
 
-      if (result is Result<PurchaseOrder>) {
-        if (result.isSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('Purchase order created successfully')),
-          );
-          context.pop();
-        } else {
-          showErrorDialog(
-            context: context,
-            title: 'Error Creating Purchase Order',
-            message: result.failure?.message ?? 'Unknown error occurred',
-          );
-        }
+      if (result.isSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Purchase order created successfully')),
+        );
+        context.pop();
+      } else {
+        showErrorDialog(
+          context: context,
+          title: 'Error Creating Purchase Order',
+          message: result.failure?.message ?? 'Unknown error occurred',
+        );
       }
-    } catch (e) {
+        } catch (e) {
       showErrorDialog(
         context: context,
         title: 'Error',

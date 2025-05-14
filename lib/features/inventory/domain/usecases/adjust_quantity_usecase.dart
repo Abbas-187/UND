@@ -2,12 +2,15 @@ import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
 
 class AdjustQuantityUseCase {
-
   AdjustQuantityUseCase(this.repository);
   final InventoryRepository repository;
 
   Future<InventoryItem> execute(
-      String itemId, double adjustment, String reason) async {
+    String itemId,
+    double adjustment,
+    String reason,
+    String initiatingEmployeeId,
+  ) async {
     if (adjustment == 0) {
       throw Exception('Adjustment quantity cannot be zero');
     }
@@ -32,6 +35,11 @@ class AdjustQuantityUseCase {
     }
 
     // Perform the adjustment
-    return await repository.adjustQuantity(itemId, adjustment, reason);
+    return await repository.adjustQuantity(
+      itemId,
+      adjustment,
+      reason,
+      initiatingEmployeeId,
+    );
   }
 }

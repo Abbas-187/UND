@@ -1,41 +1,22 @@
-enum Environment { dev, test, prod }
-
+/// Configuration for the application
 class AppConfig {
-  // Singleton pattern
-  static final AppConfig _instance = AppConfig._internal();
 
-  factory AppConfig() {
-    return _instance;
-  }
+  /// Create a new AppConfig instance
+  AppConfig({
+    this.enableLogging = true,
+    this.isProduction = false,
+    this.appName = 'UND Dairy Management',
+    this.apiBaseUrl = 'https://api.unddairy.com/v1',
+  });
+  /// Whether to enable logging
+  final bool enableLogging;
 
-  // Private properties
-  Environment _environment;
-  String _apiBaseUrl;
-  bool _enableLogging;
-  bool _useMockData;
+  /// Whether the app is in production mode
+  final bool isProduction;
 
-  AppConfig._internal()
-      : _environment = Environment.dev,
-        _apiBaseUrl = 'https://api.und-dairy.com',
-        _enableLogging = true,
-        _useMockData = true;
+  /// The application name
+  final String appName;
 
-  // Factory method to initialize with specific environment
-  static void initialize({
-    required Environment environment,
-    required String apiBaseUrl,
-    required bool enableLogging,
-    required bool useMockData,
-  }) {
-    _instance._environment = environment;
-    _instance._apiBaseUrl = apiBaseUrl;
-    _instance._enableLogging = enableLogging;
-    _instance._useMockData = useMockData;
-  }
-
-  // Getters
-  Environment get environment => _environment;
-  String get apiBaseUrl => _apiBaseUrl;
-  bool get enableLogging => _enableLogging;
-  bool get useMockData => _useMockData;
+  /// The base URL for API requests
+  final String apiBaseUrl;
 }

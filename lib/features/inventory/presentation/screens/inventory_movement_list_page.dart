@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/inventory_movement_model.dart';
-import '../../data/models/inventory_movement_type.dart';
-import '../../providers/inventory_movement_providers.dart';
+import '../../presentation/providers/inventory_movement_providers.dart';
 import '../widgets/movements/movement_filter_bottom_sheet.dart';
 import '../widgets/movements/movement_list_item.dart';
-import 'create_movement_page.dart';
-import 'movement_details_page.dart';
 
 class InventoryMovementListPage extends ConsumerStatefulWidget {
   const InventoryMovementListPage({super.key});
@@ -108,22 +106,18 @@ class _InventoryMovementListPageState
 
     if (_searchQuery.isNotEmpty) {
       filteredMovements = movements.where((movement) {
-        return movement.movementId
-                .toLowerCase()
-                .contains(_searchQuery.toLowerCase()) ||
-            movement.sourceLocationName
-                .toLowerCase()
-                .contains(_searchQuery.toLowerCase()) ||
-            movement.destinationLocationName
-                .toLowerCase()
-                .contains(_searchQuery.toLowerCase()) ||
-            movement.items.any((item) =>
-                item.productName
-                    .toLowerCase()
-                    .contains(_searchQuery.toLowerCase()) ||
-                item.batchLotNumber
-                    .toLowerCase()
-                    .contains(_searchQuery.toLowerCase()));
+        final movementId = movement.movementId.toLowerCase();
+        final sourceLocation = movement.sourceLocationName?.toLowerCase() ?? '';
+        final destinationLocation =
+            movement.destinationLocationName?.toLowerCase() ?? '';
+        final search = _searchQuery.toLowerCase();
+        final itemMatch = movement.items.any((item) =>
+            item.productName.toLowerCase().contains(search) ||
+            (item.batchLotNumber?.toLowerCase().contains(search) ?? false));
+        return movementId.contains(search) ||
+            sourceLocation.contains(search) ||
+            destinationLocation.contains(search) ||
+            itemMatch;
       }).toList();
     }
 
@@ -329,14 +323,8 @@ class _InventoryMovementListPageState
                       return MovementListItem(
                         movement: movement,
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MovementDetailsPage(
-                                movementId: movement.movementId,
-                              ),
-                            ),
-                          );
+                          context.go(
+                              '/inventory/movement-details/${movement.movementId}');
                         },
                       );
                     },
@@ -387,12 +375,7 @@ class _InventoryMovementListPageState
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CreateMovementPage(),
-            ),
-          );
+          context.go('/inventory/movement-create');
         },
         icon: const Icon(Icons.add),
         label: Text(l10n.newMovement),

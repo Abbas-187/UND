@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../domain/providers/recipe_provider.dart';
-import '../../../data/models/recipe_model.dart';
 import '../../widgets/recipe_form.dart';
 
 class RecipeEditScreen extends ConsumerWidget {
-  final String recipeId;
   const RecipeEditScreen({super.key, required this.recipeId});
+  final String recipeId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -3,13 +3,6 @@ import 'package:flutter/material.dart';
 /// Defines the different user roles in the application
 @immutable
 class UserRole {
-  final String id;
-  final String name;
-  final String description;
-  final IconData icon;
-  final List<String> allowedModules;
-  final bool canAccessSettings;
-  final bool canAccessNotifications;
 
   const UserRole({
     required this.id,
@@ -20,6 +13,13 @@ class UserRole {
     this.canAccessSettings = true,
     this.canAccessNotifications = true,
   });
+  final String id;
+  final String name;
+  final String description;
+  final IconData icon;
+  final List<String> allowedModules;
+  final bool canAccessSettings;
+  final bool canAccessNotifications;
 
   @override
   bool operator ==(Object other) =>
@@ -44,7 +44,9 @@ class UserRoles {
       'milk_reception',
       'procurement',
       'analytics',
-      'forecasting'
+      'forecasting',
+      'crm',
+      'order_management'
     ],
     canAccessSettings: true,
     canAccessNotifications: true,
@@ -62,7 +64,9 @@ class UserRoles {
       'milk_reception',
       'procurement',
       'analytics',
-      'forecasting'
+      'forecasting',
+      'crm',
+      'order_management'
     ],
   );
 
@@ -94,6 +98,15 @@ class UserRoles {
     allowedModules: ['analytics', 'forecasting'],
   );
 
+  // CRM specialist focused on customer relations
+  static const UserRole crmSpecialist = UserRole(
+    id: 'crm',
+    name: 'CRM Specialist',
+    description: 'Access to CRM and order management',
+    icon: Icons.people,
+    allowedModules: ['crm', 'order_management'],
+  );
+
   // List of all available roles
   static const List<UserRole> allRoles = [
     admin,
@@ -101,5 +114,6 @@ class UserRoles {
     worker,
     procurement,
     analyst,
+    crmSpecialist,
   ];
 }

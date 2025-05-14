@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class StatusBadge extends StatelessWidget {
-  final String status;
 
   const StatusBadge({
-    Key? key,
+    super.key,
     required this.status,
-  }) : super(key: key);
+  });
+  final String status;
 
   @override
   Widget build(BuildContext context) {

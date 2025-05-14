@@ -6,20 +6,6 @@ import 'procurement_status.dart';
 
 /// Represents a procurement request in the system
 class ProcurementRequest {
-  final String id;
-  final String orderId;
-  final String location;
-  final List<ProcurementRequestItem> items;
-  final String requestedBy;
-  final DateTime requestDate;
-  final ProcurementRequestStatus status;
-  final String? notes;
-  final DateTime? fulfilledAt;
-  final String? fulfilledBy;
-  final DateTime? cancelledAt;
-  final String? cancelledBy;
-  final String? cancellationReason;
-  final DateTime? updatedAt;
 
   /// Creates a new procurement request
   ProcurementRequest({
@@ -38,6 +24,53 @@ class ProcurementRequest {
     this.cancellationReason,
     this.updatedAt,
   });
+
+  /// Creates a procurement request from a JSON map
+  factory ProcurementRequest.fromJson(Map<String, dynamic> json) {
+    try {
+      return ProcurementRequest(
+        id: json['id'] as String,
+        orderId: json['orderId'] as String,
+        location: json['location'] as String,
+        items: (json['items'] as List)
+            .map((item) => ProcurementRequestItem.fromJson(item))
+            .toList(),
+        requestedBy: json['requestedBy'] as String,
+        requestDate: DateTime.parse(json['requestDate'] as String),
+        status: ProcurementRequestStatus.fromString(json['status'] as String),
+        notes: json['notes'] as String?,
+        fulfilledAt: json['fulfilledAt'] != null
+            ? DateTime.parse(json['fulfilledAt'] as String)
+            : null,
+        fulfilledBy: json['fulfilledBy'] as String?,
+        cancelledAt: json['cancelledAt'] != null
+            ? DateTime.parse(json['cancelledAt'] as String)
+            : null,
+        cancelledBy: json['cancelledBy'] as String?,
+        cancellationReason: json['cancellationReason'] as String?,
+        updatedAt: json['updatedAt'] != null
+            ? DateTime.parse(json['updatedAt'] as String)
+            : null,
+      );
+    } catch (e) {
+      throw DataParsingException(
+          'Error parsing procurement request: ${e.toString()}');
+    }
+  }
+  final String id;
+  final String orderId;
+  final String location;
+  final List<ProcurementRequestItem> items;
+  final String requestedBy;
+  final DateTime requestDate;
+  final ProcurementRequestStatus status;
+  final String? notes;
+  final DateTime? fulfilledAt;
+  final String? fulfilledBy;
+  final DateTime? cancelledAt;
+  final String? cancelledBy;
+  final String? cancellationReason;
+  final DateTime? updatedAt;
 
   /// Creates a copy of this procurement request with the given fields replaced
   ProcurementRequest copyWith({
@@ -72,39 +105,6 @@ class ProcurementRequest {
       cancellationReason: cancellationReason ?? this.cancellationReason,
       updatedAt: updatedAt ?? this.updatedAt,
     );
-  }
-
-  /// Creates a procurement request from a JSON map
-  factory ProcurementRequest.fromJson(Map<String, dynamic> json) {
-    try {
-      return ProcurementRequest(
-        id: json['id'] as String,
-        orderId: json['orderId'] as String,
-        location: json['location'] as String,
-        items: (json['items'] as List)
-            .map((item) => ProcurementRequestItem.fromJson(item))
-            .toList(),
-        requestedBy: json['requestedBy'] as String,
-        requestDate: DateTime.parse(json['requestDate'] as String),
-        status: ProcurementRequestStatus.fromString(json['status'] as String),
-        notes: json['notes'] as String?,
-        fulfilledAt: json['fulfilledAt'] != null
-            ? DateTime.parse(json['fulfilledAt'] as String)
-            : null,
-        fulfilledBy: json['fulfilledBy'] as String?,
-        cancelledAt: json['cancelledAt'] != null
-            ? DateTime.parse(json['cancelledAt'] as String)
-            : null,
-        cancelledBy: json['cancelledBy'] as String?,
-        cancellationReason: json['cancellationReason'] as String?,
-        updatedAt: json['updatedAt'] != null
-            ? DateTime.parse(json['updatedAt'] as String)
-            : null,
-      );
-    } catch (e) {
-      throw DataParsingException(
-          'Error parsing procurement request: ${e.toString()}');
-    }
   }
 
   /// Converts this procurement request to a JSON map
@@ -148,12 +148,6 @@ class ProcurementRequest {
 
 /// Represents an item in a procurement request
 class ProcurementRequestItem {
-  final String name;
-  final double quantity;
-  final String unit;
-  final String? productId;
-  final double? estimatedPrice;
-  final double? actualQuantityReceived;
 
   /// Creates a new procurement request item
   ProcurementRequestItem({
@@ -185,6 +179,12 @@ class ProcurementRequestItem {
           'Error parsing procurement request item: ${e.toString()}');
     }
   }
+  final String name;
+  final double quantity;
+  final String unit;
+  final String? productId;
+  final double? estimatedPrice;
+  final double? actualQuantityReceived;
 
   /// Converts this procurement request item to a JSON map
   Map<String, dynamic> toJson() {

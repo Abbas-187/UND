@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../routes/app_router.dart';
+import '../../routes/app_go_router.dart';
 import '../models/permission.dart';
 import '../services/auth_service.dart';
 
 /// A widget that checks if the current user has the required permission to view the content
 /// If not, it shows either a custom unauthorized widget or redirects to the unauthorized screen
 class PermissionWrapper extends ConsumerWidget {
-
   /// Constructor
   const PermissionWrapper({
     super.key,
@@ -17,6 +17,7 @@ class PermissionWrapper extends ConsumerWidget {
     this.unauthorizedWidget,
     this.redirectWhenUnauthorized = true,
   });
+
   /// The child widget to display if the user has permission
   final Widget child;
 
@@ -38,7 +39,7 @@ class PermissionWrapper extends ConsumerWidget {
         if (user == null) {
           // Not authenticated, redirect to login
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+            context.go(AppRoutes.login);
           });
 
           return const Scaffold(
@@ -56,7 +57,7 @@ class PermissionWrapper extends ConsumerWidget {
         if (redirectWhenUnauthorized) {
           // Redirect to the unauthorized screen
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.of(context).pushReplacementNamed(AppRoutes.unauthorized);
+            context.go(AppRoutes.unauthorized);
           });
 
           // Return a loading widget temporarily
@@ -121,12 +122,12 @@ class PermissionWrapper extends ConsumerWidget {
 /// A widget that checks if the user is logged in
 /// If not, it redirects to the login screen
 class AuthenticationWrapper extends ConsumerWidget {
-
   /// Constructor
   const AuthenticationWrapper({
     super.key,
     required this.child,
   });
+
   /// The child widget to display if the user is authenticated
   final Widget child;
 
@@ -139,7 +140,7 @@ class AuthenticationWrapper extends ConsumerWidget {
         if (user == null) {
           // Redirect to login screen
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+            context.go(AppRoutes.login);
           });
 
           // Return a loading widget temporarily
@@ -160,7 +161,7 @@ class AuthenticationWrapper extends ConsumerWidget {
       error: (_, __) {
         // Redirect to login screen
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+          context.go(AppRoutes.login);
         });
 
         // Return a loading widget temporarily

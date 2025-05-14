@@ -60,8 +60,10 @@ class QualityParametersRadarChart extends StatelessWidget {
 
     // Default colors
     final defaultLineColor = theme.colorScheme.primary;
-    final defaultFillColor = theme.colorScheme.primary.withOpacity(0.3);
-    final defaultIdealColor = theme.colorScheme.secondary.withOpacity(0.5);
+    final defaultFillColor =
+        theme.colorScheme.primary.withValues(alpha: 0.3 * 255);
+    final defaultIdealColor =
+        theme.colorScheme.secondary.withValues(alpha: 0.5 * 255);
     final defaultLabelColor = theme.colorScheme.onSurface;
     final defaultBackgroundColor = theme.colorScheme.surface;
 
@@ -263,7 +265,6 @@ class QualityParametersRadarChart extends StatelessWidget {
 
 /// A parameter for the radar chart
 class RadarParameter {
-
   const RadarParameter({
     required this.name,
     required this.value,
@@ -282,7 +283,6 @@ class RadarParameter {
 
 /// A data point for the radar chart
 class RadarDataPoint {
-
   const RadarDataPoint({
     required this.name,
     required this.value,

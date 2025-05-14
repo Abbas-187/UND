@@ -1,20 +1,21 @@
 import 'package:uuid/uuid.dart';
+
+import '../../../suppliers/domain/repositories/supplier_repository.dart';
 import '../entities/procurement_plan.dart';
 import '../entities/purchase_order.dart';
-import '../../../suppliers/domain/repositories/supplier_repository.dart';
 import '../validation/po_validator.dart';
 
 /// Service for generating purchase orders from procurement plans.
 class PurchaseOrderGenerator {
-  final SupplierRepository _supplierRepository;
-  final POValidator _validator;
-  final Uuid _uuid = const Uuid();
 
   PurchaseOrderGenerator({
     required SupplierRepository supplierRepository,
     required POValidator validator,
   })  : _supplierRepository = supplierRepository,
         _validator = validator;
+  final SupplierRepository _supplierRepository;
+  final POValidator _validator;
+  final Uuid _uuid = const Uuid();
 
   /// Generates purchase orders from a procurement plan.
   ///
@@ -59,10 +60,6 @@ class PurchaseOrderGenerator {
         final items = entry.value;
 
         final supplier = await _supplierRepository.getSupplier(supplierId);
-
-        if (supplier == null) {
-          throw Exception('Supplier not found: $supplierId');
-        }
 
         final po = await _createPurchaseOrder(
           planId: plan.id,

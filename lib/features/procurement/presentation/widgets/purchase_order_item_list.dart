@@ -3,12 +3,12 @@ import 'package:intl/intl.dart';
 import '../../domain/entities/purchase_order.dart';
 
 class PurchaseOrderItemList extends StatelessWidget {
-  final List<PurchaseOrderItem> items;
 
   const PurchaseOrderItemList({
-    Key? key,
+    super.key,
     required this.items,
-  }) : super(key: key);
+  });
+  final List<PurchaseOrderItem> items;
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +152,7 @@ class PurchaseOrderItemList extends StatelessWidget {
                     ],
                   ),
                 ))
-            .toList(),
+            ,
 
         // Total row at the bottom
         Container(

@@ -6,12 +6,6 @@ enum AttributeType {
 }
 
 class AttributeDefinition {
-  final String name;
-  final AttributeType type;
-  final String? description;
-  final bool required;
-  final List<String>? options;
-  final dynamic defaultValue;
 
   const AttributeDefinition({
     required this.name,
@@ -21,6 +15,12 @@ class AttributeDefinition {
     this.options,
     this.defaultValue,
   });
+  final String name;
+  final AttributeType type;
+  final String? description;
+  final bool required;
+  final List<String>? options;
+  final dynamic defaultValue;
 
   AttributeDefinition copyWith({
     String? name,
@@ -42,13 +42,6 @@ class AttributeDefinition {
 }
 
 class InventoryCategory {
-  final String id;
-  final String name;
-  final String description;
-  final String? parentCategoryId;
-  final String colorCode;
-  final int itemCount;
-  final Map<String, AttributeDefinition> attributeDefinitions;
 
   const InventoryCategory({
     required this.id,
@@ -59,6 +52,13 @@ class InventoryCategory {
     required this.itemCount,
     required this.attributeDefinitions,
   });
+  final String id;
+  final String name;
+  final String description;
+  final String? parentCategoryId;
+  final String colorCode;
+  final int itemCount;
+  final Map<String, AttributeDefinition> attributeDefinitions;
 
   InventoryCategory copyWith({
     String? id,

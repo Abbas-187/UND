@@ -1,14 +1,4 @@
 class Group {
-  final String id;
-  final String name;
-  final String description;
-  final List<String> members;
-  final List<String> admins;
-  final DateTime createdAt;
-  final String createdBy;
-  final String groupType; // team, department, project, taskforce
-  final String? groupImageUrl;
-  final bool isActive;
 
   Group({
     required this.id,
@@ -37,6 +27,16 @@ class Group {
       isActive: json['isActive'] as bool? ?? true,
     );
   }
+  final String id;
+  final String name;
+  final String description;
+  final List<String> members;
+  final List<String> admins;
+  final DateTime createdAt;
+  final String createdBy;
+  final String groupType; // team, department, project, taskforce
+  final String? groupImageUrl;
+  final bool isActive;
 
   Map<String, dynamic> toJson() {
     return {

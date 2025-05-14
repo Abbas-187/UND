@@ -2,7 +2,6 @@ import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
 
 class TransferStockUseCase {
-
   TransferStockUseCase(this.repository);
   final InventoryRepository repository;
 
@@ -11,6 +10,7 @@ class TransferStockUseCase {
     required String destinationItemId,
     required double quantity,
     required String reason,
+    required String initiatingEmployeeId,
   }) async {
     if (quantity <= 0) {
       throw Exception('Transfer quantity must be greater than zero');
@@ -59,11 +59,13 @@ class TransferStockUseCase {
       sourceItemId,
       -quantity,
       'Transfer to ${destinationItem.location}: $reason',
+      initiatingEmployeeId,
     );
     await repository.adjustQuantity(
       destinationItemId,
       quantity,
       'Transfer from ${sourceItem.location}: $reason',
+      initiatingEmployeeId,
     );
 
     return [updatedSource, updatedDestination];

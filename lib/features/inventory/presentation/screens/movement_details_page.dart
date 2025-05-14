@@ -10,12 +10,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/services/inventory_movement_service.dart';
 import '../../data/models/inventory_movement_item_model.dart';
 import '../../data/models/inventory_movement_model.dart';
-import '../../data/models/inventory_movement_type.dart';
 import '../../data/models/quality_status.dart';
-import '../../providers/inventory_movement_providers.dart';
+import '../../domain/services/inventory_movement_service.dart';
+import '../providers/inventory_movement_provider.dart';
 import '../widgets/movements/movement_approval_dialog.dart';
 
 class MovementDetailsPage extends ConsumerStatefulWidget {
@@ -35,10 +34,9 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    final movementAsync =
-        ref.watch(inventoryMovementProvider(widget.movementId));
+    final movementState = ref.watch(inventoryMovementProvider);
+    final movement = movementState.currentMovement;
 
     return Scaffold(
       appBar: AppBar(
@@ -47,62 +45,24 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           IconButton(
             icon: const Icon(Icons.print),
             tooltip: l10n.generatePdf,
-            onPressed: () => movementAsync.maybeWhen(
-              data: (movement) => _generatePdf(movement),
-              orElse: () {},
-            ),
+            onPressed: movement != null ? () => _generatePdf(movement) : null,
           ),
           IconButton(
             icon: const Icon(Icons.share),
             tooltip: l10n.share,
-            onPressed: () => movementAsync.maybeWhen(
-              data: (movement) => _shareMovementDetails(movement),
-              orElse: () {},
-            ),
+            onPressed:
+                movement != null ? () => _shareMovementDetails(movement) : null,
           ),
         ],
       ),
-      body: movementAsync.when(
-        data: (movement) => _buildMovementDetails(context, movement),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Colors.red,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                l10n.errorLoadingMovementDetails,
-                style: theme.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                error.toString(),
-                style: theme.textTheme.bodySmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              FilledButton.icon(
-                icon: const Icon(Icons.refresh),
-                label: Text(l10n.retry),
-                onPressed: () {
-                  ref.invalidate(inventoryMovementProvider(widget.movementId));
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
+      body: movement == null
+          ? const Center(child: CircularProgressIndicator())
+          : _buildMovementDetails(context, movement),
     );
   }
 
   Widget _buildMovementDetails(
       BuildContext context, InventoryMovementModel movement) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
     return SingleChildScrollView(
@@ -124,7 +84,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                       Expanded(
                         child: Text(
                           movement.movementType.toString().split('.').last,
-                          style: theme.textTheme.headlineSmall,
+                          style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       ),
                       _buildStatusChip(context, movement.approvalStatus),
@@ -133,12 +93,12 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                   const SizedBox(height: 8),
                   Text(
                     l10n.idWithValue(movement.movementId),
-                    style: theme.textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(
                     l10n.dateWithTimestamp(DateFormat('MMM d, yyyy h:mm a')
                         .format(movement.timestamp)),
-                    style: theme.textTheme.bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),
@@ -159,19 +119,19 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                   // Source location
                   Text(
                     l10n.source,
-                    style: theme.textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    movement.sourceLocationName.isNotEmpty
-                        ? movement.sourceLocationName
+                    movement.sourceLocationName?.isNotEmpty == true
+                        ? movement.sourceLocationName!
                         : l10n.notAvailable,
-                    style: theme.textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  if (movement.sourceLocationId.isNotEmpty)
+                  if ((movement.sourceLocationId ?? '').isNotEmpty)
                     Text(
-                      l10n.idWithValue(movement.sourceLocationId),
-                      style: theme.textTheme.bodySmall,
+                      l10n.idWithValue(movement.sourceLocationId ?? ''),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
 
                   const SizedBox(height: 16),
@@ -181,19 +141,19 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                   // Destination location
                   Text(
                     l10n.destination,
-                    style: theme.textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    movement.destinationLocationName.isNotEmpty
-                        ? movement.destinationLocationName
+                    movement.destinationLocationName?.isNotEmpty == true
+                        ? movement.destinationLocationName!
                         : l10n.notAvailable,
-                    style: theme.textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  if (movement.destinationLocationId.isNotEmpty)
+                  if ((movement.destinationLocationId ?? '').isNotEmpty)
                     Text(
-                      l10n.idWithValue(movement.destinationLocationId),
-                      style: theme.textTheme.bodySmall,
+                      l10n.idWithValue(movement.destinationLocationId ?? ''),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                 ],
               ),
@@ -214,16 +174,16 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                   // Initiator
                   Text(
                     l10n.initiatedBy,
-                    style: theme.textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    movement.initiatingEmployeeName,
-                    style: theme.textTheme.bodyLarge,
+                    movement.initiatingEmployeeName ?? l10n.notAvailable,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   Text(
                     l10n.idWithValue(movement.initiatingEmployeeId),
-                    style: theme.textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
 
                   if (movement.approvalStatus != ApprovalStatus.PENDING) ...[
@@ -234,17 +194,17 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                     // Approver (if applicable)
                     Text(
                       l10n.reviewedBy,
-                      style: theme.textTheme.labelLarge,
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       movement.approverEmployeeName ?? l10n.notAvailable,
-                      style: theme.textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    if (movement.approverEmployeeId != null)
+                    if ((movement.approverEmployeeId ?? '').isNotEmpty)
                       Text(
-                        l10n.idWithValue(movement.approverEmployeeId!),
-                        style: theme.textTheme.bodySmall,
+                        l10n.idWithValue(movement.approverEmployeeId ?? ''),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                   ],
                 ],
@@ -255,20 +215,20 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           const SizedBox(height: 16),
 
           // Notes section
-          if (movement.reasonNotes.isNotEmpty) ...[
+          if ((movement.reasonNotes ?? '').isNotEmpty) ...[
             _buildSectionTitle(context, l10n.notes),
             Card(
               margin: EdgeInsets.zero,
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(movement.reasonNotes),
+                child: Text(movement.reasonNotes ?? ''),
               ),
             ),
             const SizedBox(height: 16),
           ],
 
           // Reference documents
-          if (movement.referenceDocuments.isNotEmpty) ...[
+          if ((movement.referenceDocuments ?? []).isNotEmpty) ...[
             _buildSectionTitle(context, l10n.referenceDocuments),
             Card(
               margin: EdgeInsets.zero,
@@ -276,7 +236,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: movement.referenceDocuments.map((doc) {
+                  children: (movement.referenceDocuments ?? []).map((doc) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Row(
@@ -323,21 +283,18 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
   }
 
   Widget _buildSectionTitle(BuildContext context, String title) {
-    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
-        style: theme.textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
       ),
     );
   }
 
   Widget _buildStatusChip(BuildContext context, ApprovalStatus status) {
-    final theme = Theme.of(context);
-
     Color chipColor;
     IconData iconData;
 
@@ -363,13 +320,13 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
     return Chip(
       avatar: Icon(
         iconData,
-        color: theme.colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.onPrimary,
         size: 16,
       ),
       label: Text(
         status.toString().split('.').last,
         style: TextStyle(
-          color: theme.colorScheme.onPrimary,
+          color: Theme.of(context).colorScheme.onPrimary,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -379,7 +336,6 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
   }
 
   Widget _buildItemTile(BuildContext context, InventoryMovementItemModel item) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
     return Padding(
@@ -396,11 +352,11 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                   children: [
                     Text(
                       item.productName,
-                      style: theme.textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      l10n.batchWithValue(item.batchLotNumber),
-                      style: theme.textTheme.bodyMedium,
+                      l10n.batchWithValue(item.batchLotNumber ?? ''),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
                 ),
@@ -411,13 +367,13 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
                   '${item.quantity} ${item.unitOfMeasurement}',
                   style: TextStyle(
-                    color: theme.colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -431,15 +387,17 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
             children: [
               Chip(
                 label: Text(item.status.toString().split('.').last),
-                backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                backgroundColor:
+                    Theme.of(context).colorScheme.surfaceContainerHighest,
                 padding: EdgeInsets.zero,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 8),
               ),
               Chip(
                 label: Text(item.qualityStatus.toString().split('.').last),
-                backgroundColor: _getQualityStatusColor(item.qualityStatus),
+                backgroundColor: _getQualityStatusColor(
+                    _parseQualityStatus(item.qualityStatus)),
                 labelStyle: TextStyle(
-                  color: theme.colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: 12,
                 ),
                 padding: EdgeInsets.zero,
@@ -450,13 +408,13 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           const SizedBox(height: 8),
           Text(
             l10n.productionWithDate(
-                DateFormat.yMd().format(item.productionDate)),
-            style: theme.textTheme.bodySmall,
+                DateFormat.yMd().format(item.productionDate ?? DateTime.now())),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           Text(
             l10n.expirationWithDate(
-                DateFormat.yMd().format(item.expirationDate)),
-            style: theme.textTheme.bodySmall,
+                DateFormat.yMd().format(item.expirationDate ?? DateTime.now())),
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),
@@ -477,8 +435,25 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
         return Colors.deepOrange;
       case QualityStatus.rejected:
         return Colors.red;
+    }
+  }
+
+  QualityStatus _parseQualityStatus(String? status) {
+    switch (status) {
+      case 'excellent':
+        return QualityStatus.excellent;
+      case 'good':
+        return QualityStatus.good;
+      case 'acceptable':
+        return QualityStatus.acceptable;
+      case 'warning':
+        return QualityStatus.warning;
+      case 'critical':
+        return QualityStatus.critical;
+      case 'rejected':
+        return QualityStatus.rejected;
       default:
-        return Colors.grey;
+        return QualityStatus.acceptable;
     }
   }
 
@@ -550,7 +525,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           id, status, approverId, approverName);
 
       // Invalidate the provider to refresh the data
-      ref.invalidate(inventoryMovementProvider(id));
+      ref.invalidate(inventoryMovementProvider);
 
       if (mounted) {
         final l10n = AppLocalizations.of(context);
@@ -647,8 +622,8 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                       ),
                       pw.SizedBox(height: 5),
-                      pw.Text('From: ${movement.sourceLocationName}'),
-                      pw.Text('To: ${movement.destinationLocationName}'),
+                      pw.Text('From: ${movement.sourceLocationName ?? ''}'),
+                      pw.Text('To: ${movement.destinationLocationName ?? ''}'),
                       pw.Divider(),
 
                       // Personnel
@@ -658,8 +633,8 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                       ),
                       pw.SizedBox(height: 5),
                       pw.Text(
-                          'Initiated by: ${movement.initiatingEmployeeName}'),
-                      if (movement.approverEmployeeName != null)
+                          'Initiated by: ${movement.initiatingEmployeeName ?? ''}'),
+                      if ((movement.approverEmployeeName ?? '').isNotEmpty)
                         pw.Text(
                             'Approved by: ${movement.approverEmployeeName}'),
                     ],
@@ -718,7 +693,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(5),
-                              child: pw.Text(item.batchLotNumber),
+                              child: pw.Text(item.batchLotNumber ?? ''),
                             ),
                             pw.Padding(
                               padding: const pw.EdgeInsets.all(5),
@@ -732,11 +707,11 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                             ),
                           ],
                         )),
-                  ],
+                  ].toList(),
                 ),
 
                 // Notes if available
-                if (movement.reasonNotes.isNotEmpty) ...[
+                if ((movement.reasonNotes ?? '').isNotEmpty) ...[
                   pw.SizedBox(height: 20),
                   pw.Text(
                     'Notes',
@@ -750,7 +725,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                       borderRadius:
                           const pw.BorderRadius.all(pw.Radius.circular(5)),
                     ),
-                    child: pw.Text(movement.reasonNotes),
+                    child: pw.Text(movement.reasonNotes ?? ''),
                   ),
                 ],
 
@@ -815,13 +790,13 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
       buffer.writeln('');
 
       buffer.writeln('LOCATIONS');
-      buffer.writeln('From: ${movement.sourceLocationName}');
-      buffer.writeln('To: ${movement.destinationLocationName}');
+      buffer.writeln('From: ${movement.sourceLocationName ?? ''}');
+      buffer.writeln('To: ${movement.destinationLocationName ?? ''}');
       buffer.writeln('');
 
       buffer.writeln('PERSONNEL');
-      buffer.writeln('Initiated by: ${movement.initiatingEmployeeName}');
-      if (movement.approverEmployeeName != null) {
+      buffer.writeln('Initiated by: ${movement.initiatingEmployeeName ?? ''}');
+      if ((movement.approverEmployeeName ?? '').isNotEmpty) {
         buffer.writeln('Approved by: ${movement.approverEmployeeName}');
       }
       buffer.writeln('');
@@ -830,16 +805,16 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
       for (int i = 0; i < movement.items.length; i++) {
         final item = movement.items[i];
         buffer.writeln('${i + 1}. ${item.productName}');
-        buffer.writeln('   Batch: ${item.batchLotNumber}');
+        buffer.writeln('   Batch: ${item.batchLotNumber ?? ''}');
         buffer
             .writeln('   Quantity: ${item.quantity} ${item.unitOfMeasurement}');
         buffer.writeln('   Status: ${item.status.toString().split('.').last}');
         buffer.writeln('');
       }
 
-      if (movement.reasonNotes.isNotEmpty) {
+      if ((movement.reasonNotes ?? '').isNotEmpty) {
         buffer.writeln('NOTES');
-        buffer.writeln(movement.reasonNotes);
+        buffer.writeln(movement.reasonNotes ?? '');
       }
 
       // Share the text

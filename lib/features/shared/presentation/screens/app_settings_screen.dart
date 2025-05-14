@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
-import '../../../../core/routes/app_router.dart';
+import '../../../../core/routes/app_go_router.dart';
 import '../../../../l10n/app_localizations.dart';
 
 // Constants for SharedPreferences keys
@@ -24,6 +25,7 @@ class AppSettingsNotifier extends StateNotifier<AppSettings> {
           notificationsEnabled: true,
           soundEnabled: true,
           vibrationEnabled: true,
+          bypassLogin: false,
         )) {
     // Load saved settings when notifier is created
     _loadSettings();
@@ -86,16 +88,33 @@ class AppSettingsNotifier extends StateNotifier<AppSettings> {
     state = state.copyWith(vibrationEnabled: enabled);
     saveSettings();
   }
+
+  void updateBypassLogin(bool enabled) {
+    state = state.copyWith(bypassLogin: enabled);
+    saveSettings();
+  }
 }
 
 // Model for app settings
 class AppSettings {
+  // Create from JSON from storage
+  factory AppSettings.fromJson(Map<String, dynamic> json) {
+    return AppSettings(
+      language: json['language'] as String? ?? 'en',
+      themeMode: ThemeMode.values[json['themeMode'] as int? ?? 0],
+      notificationsEnabled: json['notificationsEnabled'] as bool? ?? true,
+      soundEnabled: json['soundEnabled'] as bool? ?? true,
+      vibrationEnabled: json['vibrationEnabled'] as bool? ?? true,
+      bypassLogin: json['bypassLogin'] as bool? ?? false,
+    );
+  }
   const AppSettings({
     required this.language,
     required this.themeMode,
     required this.notificationsEnabled,
     required this.soundEnabled,
     required this.vibrationEnabled,
+    required this.bypassLogin,
   });
 
   final String language;
@@ -103,6 +122,7 @@ class AppSettings {
   final bool notificationsEnabled;
   final bool soundEnabled;
   final bool vibrationEnabled;
+  final bool bypassLogin;
 
   AppSettings copyWith({
     String? language,
@@ -110,6 +130,7 @@ class AppSettings {
     bool? notificationsEnabled,
     bool? soundEnabled,
     bool? vibrationEnabled,
+    bool? bypassLogin,
   }) {
     return AppSettings(
       language: language ?? this.language,
@@ -117,6 +138,7 @@ class AppSettings {
       notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
       soundEnabled: soundEnabled ?? this.soundEnabled,
       vibrationEnabled: vibrationEnabled ?? this.vibrationEnabled,
+      bypassLogin: bypassLogin ?? this.bypassLogin,
     );
   }
 
@@ -128,18 +150,8 @@ class AppSettings {
       'notificationsEnabled': notificationsEnabled,
       'soundEnabled': soundEnabled,
       'vibrationEnabled': vibrationEnabled,
+      'bypassLogin': bypassLogin,
     };
-  }
-
-  // Create from JSON from storage
-  factory AppSettings.fromJson(Map<String, dynamic> json) {
-    return AppSettings(
-      language: json['language'] as String? ?? 'en',
-      themeMode: ThemeMode.values[json['themeMode'] as int? ?? 0],
-      notificationsEnabled: json['notificationsEnabled'] as bool? ?? true,
-      soundEnabled: json['soundEnabled'] as bool? ?? true,
-      vibrationEnabled: json['vibrationEnabled'] as bool? ?? true,
-    );
   }
 }
 
@@ -300,6 +312,31 @@ class AppSettingsScreen extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: 16),
+
+          // Developer Settings
+          _buildSectionHeader(context, 'Developer Settings'),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    title: const Text('Bypass Login Screen'),
+                    subtitle: const Text(
+                        'Skip authentication for development purposes'),
+                    value: settings.bypassLogin,
+                    onChanged: (value) {
+                      notifier.updateBypassLogin(value);
+                    },
+                    secondary: const Icon(Icons.security),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+
           const SizedBox(height: 32),
 
           // Save button

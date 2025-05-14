@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../sales/data/models/product_catalog_model.dart';
+import '../../../sales/data/repositories/product_catalog_repository.dart';
 import '../../data/models/recipe_ingredient_model.dart';
 import '../../data/models/recipe_model.dart';
 import '../../data/models/recipe_step_model.dart';
-import '../../../sales/data/models/product_catalog_model.dart';
-import '../../../sales/data/repositories/product_catalog_repository.dart';
 
 class RecipeForm extends StatefulWidget {
   const RecipeForm({
@@ -340,8 +340,8 @@ class _RecipeFormState extends State<RecipeForm> {
 }
 
 class _IngredientDialog extends StatefulWidget {
-  final RecipeIngredientModel? ingredient;
   const _IngredientDialog({this.ingredient});
+  final RecipeIngredientModel? ingredient;
 
   @override
   State<_IngredientDialog> createState() => _IngredientDialogState();
@@ -443,9 +443,9 @@ class _IngredientDialogState extends State<_IngredientDialog> {
 }
 
 class _StepDialog extends StatefulWidget {
+  const _StepDialog({this.step, this.order});
   final RecipeStepModel? step;
   final int? order;
-  const _StepDialog({this.step, this.order});
 
   @override
   State<_StepDialog> createState() => _StepDialogState();

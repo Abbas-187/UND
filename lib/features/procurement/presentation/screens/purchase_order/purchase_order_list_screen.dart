@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/detail_appbar.dart';
 import '../../widgets/purchase_order_list.dart';
 
@@ -15,7 +16,7 @@ class PurchaseOrderListScreen extends ConsumerWidget {
       body: const PurchaseOrderList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/procurement/purchase-orders/create');
+          context.go('/procurement/purchase-orders/create');
         },
         child: const Icon(Icons.add),
       ),

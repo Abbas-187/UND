@@ -1,10 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/services/mock_data_service.dart';
 import '../models/inventory_item_model.dart';
-import '../models/inventory_movement_model.dart';
 import '../models/inventory_location_model.dart';
+import '../models/inventory_movement_model.dart';
 import '../models/inventory_movement_type.dart';
-import '../models/quality_status.dart';
 
 /// Provides mock inventory data for all modules
 class MockInventoryProvider {
@@ -126,24 +126,24 @@ class MockInventoryProvider {
   void _processMovementImpact(InventoryMovementModel movement) {
     // Process based on movement type
     switch (movement.movementType) {
-      case InventoryMovementType.RECEIPT:
+      case InventoryMovementType.PO_RECEIPT:
         // Increase inventory for received items
         for (final item in movement.items) {
           mockDataService.adjustQuantity(item.productId, item.quantity,
               'Received from ${movement.sourceLocationName}');
         }
         break;
-      case InventoryMovementType.ISSUE:
+      case InventoryMovementType.PRODUCTION_ISSUE:
         // Decrease inventory for issued items
         for (final item in movement.items) {
           mockDataService.adjustQuantity(item.productId, -item.quantity,
               'Issued to ${movement.destinationLocationName}');
         }
         break;
-      case InventoryMovementType.TRANSFER:
+      case InventoryMovementType.TRANSFER_IN:
         // No net change in total inventory, just location change
         break;
-      case InventoryMovementType.ADJUSTMENT:
+      case InventoryMovementType.ADJUSTMENT_OTHER:
         // Process each item separately (could be positive or negative)
         for (final item in movement.items) {
           mockDataService.adjustQuantity(
@@ -161,3 +161,4 @@ final mockInventoryProvider = Provider<MockInventoryProvider>((ref) {
   final mockDataService = ref.read(mockDataServiceProvider);
   return MockInventoryProvider(mockDataService: mockDataService);
 });
+*/

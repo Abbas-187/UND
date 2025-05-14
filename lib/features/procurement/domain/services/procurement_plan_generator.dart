@@ -1,17 +1,13 @@
 import 'package:uuid/uuid.dart';
+
+import '../../../suppliers/domain/repositories/supplier_repository.dart';
 import '../../domain/entities/procurement_plan.dart';
 import '../../domain/repositories/inventory_repository.dart';
 import '../../domain/repositories/production_plan_repository.dart';
-import '../../../suppliers/domain/repositories/supplier_repository.dart';
 import '../../domain/validation/procurement_plan_validator.dart';
 
 /// Service responsible for generating procurement plans based on production needs.
 class ProcurementPlanGenerator {
-  final ProductionPlanRepository _productionPlanRepository;
-  final InventoryRepository _inventoryRepository;
-  final SupplierRepository _supplierRepository;
-  final ProcurementPlanValidator _validator;
-  final Uuid _uuid = const Uuid();
 
   ProcurementPlanGenerator({
     required ProductionPlanRepository productionPlanRepository,
@@ -22,6 +18,11 @@ class ProcurementPlanGenerator {
         _inventoryRepository = inventoryRepository,
         _supplierRepository = supplierRepository,
         _validator = validator;
+  final ProductionPlanRepository _productionPlanRepository;
+  final InventoryRepository _inventoryRepository;
+  final SupplierRepository _supplierRepository;
+  final ProcurementPlanValidator _validator;
+  final Uuid _uuid = const Uuid();
 
   /// Generates a procurement plan based on the provided production plan IDs.
   ///

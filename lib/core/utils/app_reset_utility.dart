@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../services/mock_data_service.dart';
+
 import '../../features/forecasting/presentation/providers/forecasting_provider.dart';
-import '../../features/inventory/presentation/providers/inventory_provider.dart';
 import '../../features/inventory/data/repositories/inventory_movement_repository.dart';
+import '../../features/inventory/presentation/providers/inventory_provider.dart';
+import '../services/firestore_service.dart';
+import '../services/local_database_service.dart';
 
 /// Utility class to help reset app state when encountering data-related errors
 class AppResetUtility {
@@ -28,12 +30,9 @@ class AppResetUtility {
 
     // Clear caches and reset providers
     try {
-      // Get the mock data service and call reset
-      final mockDataService = MockDataService();
-      mockDataService.reset();
-
-      // Clear any caches
-      ref.invalidate(mockDataServiceProvider);
+      // Invalidate real Firebase and local database providers
+      ref.invalidate(firestoreServiceProvider);
+      ref.invalidate(localDatabaseServiceProvider);
 
       // Invalidate other key providers - add any specific providers that need to be refreshed
       ref.invalidate(forecastingProvider);
@@ -74,7 +73,7 @@ class AppResetUtility {
 
 /// Add this button to any screen to allow users to reset when they encounter errors
 class ResetAppButton extends StatelessWidget {
-  const ResetAppButton({Key? key}) : super(key: key);
+  const ResetAppButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -115,3 +114,4 @@ class ResetAppButton extends StatelessWidget {
     );
   }
 }
+*/

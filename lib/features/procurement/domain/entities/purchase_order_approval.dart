@@ -18,15 +18,6 @@ enum ApprovalStage {
 /// Represents an approval action in the purchase order workflow.
 @immutable
 class ApprovalAction {
-  final String id;
-  final String purchaseOrderId;
-  final String userId;
-  final String userName;
-  final DateTime timestamp;
-  final ApprovalStatus decision;
-  final String? notes;
-  final ApprovalStage stage;
-  final bool isBiometricallyValidated;
 
   const ApprovalAction({
     required this.id,
@@ -39,6 +30,15 @@ class ApprovalAction {
     required this.isBiometricallyValidated,
     this.notes,
   });
+  final String id;
+  final String purchaseOrderId;
+  final String userId;
+  final String userName;
+  final DateTime timestamp;
+  final ApprovalStatus decision;
+  final String? notes;
+  final ApprovalStage stage;
+  final bool isBiometricallyValidated;
 
   ApprovalAction copyWith({
     String? id,
@@ -96,11 +96,6 @@ class ApprovalAction {
 /// Represents the complete approval history for a purchase order.
 @immutable
 class PurchaseOrderApprovalHistory {
-  final String purchaseOrderId;
-  final List<ApprovalAction> actions;
-  final ApprovalStage currentStage;
-  final ApprovalStatus currentStatus;
-  final DateTime lastUpdated;
 
   const PurchaseOrderApprovalHistory({
     required this.purchaseOrderId,
@@ -109,6 +104,11 @@ class PurchaseOrderApprovalHistory {
     required this.currentStatus,
     required this.lastUpdated,
   });
+  final String purchaseOrderId;
+  final List<ApprovalAction> actions;
+  final ApprovalStage currentStage;
+  final ApprovalStatus currentStatus;
+  final DateTime lastUpdated;
 
   PurchaseOrderApprovalHistory copyWith({
     String? purchaseOrderId,

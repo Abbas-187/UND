@@ -8,6 +8,9 @@ class ApiEndpoints {
   // Order endpoints
   static const String orders = '$baseUrl/orders';
 
+  // Order discussion endpoints
+  static const String orderDiscussions = '$baseUrl/orders/discussions';
+
   // Customer endpoints
   static const String customers = '$baseUrl/customers';
 

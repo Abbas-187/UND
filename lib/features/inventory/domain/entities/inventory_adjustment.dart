@@ -16,23 +16,6 @@ enum AdjustmentApprovalStatus {
 }
 
 class InventoryAdjustment {
-  final String id;
-  final String itemId;
-  final String itemName;
-  final AdjustmentType adjustmentType;
-  final double quantity;
-  final double previousQuantity;
-  final double adjustedQuantity;
-  final String reason;
-  final String performedBy;
-  final DateTime performedAt;
-  final String? notes;
-  final String categoryId;
-  final String categoryName;
-  final AdjustmentApprovalStatus? approvalStatus;
-  final String? approvedBy;
-  final DateTime? approvedAt;
-  final String? documentReference;
 
   const InventoryAdjustment({
     required this.id,
@@ -53,6 +36,23 @@ class InventoryAdjustment {
     this.approvedAt,
     this.documentReference,
   });
+  final String id;
+  final String itemId;
+  final String itemName;
+  final AdjustmentType adjustmentType;
+  final double quantity;
+  final double previousQuantity;
+  final double adjustedQuantity;
+  final String reason;
+  final String performedBy;
+  final DateTime performedAt;
+  final String? notes;
+  final String categoryId;
+  final String categoryName;
+  final AdjustmentApprovalStatus? approvalStatus;
+  final String? approvedBy;
+  final DateTime? approvedAt;
+  final String? documentReference;
 
   InventoryAdjustment copyWith({
     String? id,

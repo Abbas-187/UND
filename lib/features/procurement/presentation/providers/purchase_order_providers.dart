@@ -1,16 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/exceptions/result.dart';
-import '../../domain/entities/purchase_order.dart';
-import '../../domain/usecases/purchase_order_usecases.dart'
-    hide PurchaseOrderRepository;
+import '../../../suppliers/presentation/providers/supplier_provider.dart';
 import '../../data/providers/mock_procurement_provider.dart';
 import '../../data/repositories/purchase_order_repository_impl.dart';
+import '../../domain/entities/purchase_order.dart';
 import '../../domain/repositories/purchase_order_repository.dart';
-import '../../../suppliers/presentation/providers/supplier_provider.dart';
+import '../../domain/usecases/purchase_order_usecases.dart'
+    hide PurchaseOrderRepository;
 
 part 'purchase_order_providers.g.dart';
 
@@ -175,14 +177,17 @@ DeletePurchaseOrderUseCase deletePurchaseOrderUseCase(
   return DeletePurchaseOrderUseCase(repository);
 }
 
+/// Provider for FirebaseFirestore instance
+final firebaseFirestoreProvider =
+    Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
+
 /// Provider for purchase order repository (to be implemented in the data layer)
 @riverpod
 PurchaseOrderRepository purchaseOrderRepository(
     PurchaseOrderRepositoryRef ref) {
-  // Use the mock procurement provider for mock data
-  final mockProvider = ref.watch(mockProcurementProvider);
+  final firestoreInterface = ref.watch(firebaseFirestoreProvider);
   final supplierRepository = ref.watch(supplierRepositoryProvider);
-  return PurchaseOrderRepositoryImpl.fromMock(mockProvider, supplierRepository);
+  return PurchaseOrderRepositoryImpl(firestoreInterface, supplierRepository);
 }
 
 /// Notifier for purchase orders list

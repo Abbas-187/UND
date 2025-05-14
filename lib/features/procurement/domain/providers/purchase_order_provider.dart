@@ -1,18 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/repositories/purchase_order_repository_impl.dart';
-import '../../../suppliers/domain/repositories/supplier_repository.dart';
+import '../../../../core/firebase/firebase_module.dart';
 import '../../../suppliers/presentation/providers/supplier_provider.dart';
-import '../repositories/purchase_order_repository.dart';
 import '../../data/models/purchase_order_model.dart';
+import '../../data/repositories/purchase_order_repository_impl.dart';
+import '../repositories/purchase_order_repository.dart';
 
 final purchaseOrderRepositoryProvider =
     Provider<PurchaseOrderRepository>((ref) {
+  final firestore = ref.read(firestoreInterfaceProvider);
   final supplierRepository = ref.read(supplierRepositoryProvider);
-  final mockProvider = null; // Replace with actual mock provider if needed
-  final dataSource = null; // Replace with actual data source if needed
-  // Use the .fromMock factory for now, or adjust as needed for your app
-  return PurchaseOrderRepositoryImpl.fromMock(mockProvider, supplierRepository);
+  return PurchaseOrderRepositoryImpl(
+      firestore as FirebaseFirestore, supplierRepository);
 });
 
 final purchaseOrdersProvider =

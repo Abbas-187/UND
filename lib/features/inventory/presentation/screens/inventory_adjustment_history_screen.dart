@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_adjustment.dart';
 import '../providers/inventory_adjustment_provider.dart';
-import '../widgets/adjustment_statistics_chart.dart';
 import '../widgets/adjustment_details_dialog.dart';
 import '../widgets/adjustment_filter_dialog.dart';
+import '../widgets/adjustment_statistics_chart.dart';
 
 class InventoryAdjustmentHistoryScreen extends ConsumerStatefulWidget {
   const InventoryAdjustmentHistoryScreen({super.key});
@@ -420,7 +420,8 @@ class _InventoryAdjustmentHistoryScreenState
                   }
 
                   return Container(
-                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    color:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -529,12 +530,7 @@ class _InventoryAdjustmentHistoryScreenState
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // This would open a form to create a new adjustment
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l10n.createAdjustmentNotImplemented),
-            ),
-          );
+          // context.go('/inventory/adjustments/create');
         },
         tooltip: l10n.createAdjustment,
         child: const Icon(Icons.add),

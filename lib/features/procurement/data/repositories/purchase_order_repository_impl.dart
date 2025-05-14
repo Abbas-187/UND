@@ -1,27 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/exceptions/result.dart';
+import '../../../suppliers/domain/entities/supplier.dart';
+import '../../../suppliers/domain/repositories/supplier_repository.dart';
 import '../../domain/entities/purchase_order.dart';
 import '../../domain/repositories/purchase_order_repository.dart';
 import '../models/purchase_order_model.dart' as models;
-import '../providers/mock_procurement_provider.dart';
-import '../../../suppliers/domain/repositories/supplier_repository.dart';
-import '../../../suppliers/domain/entities/supplier.dart';
 
 /// Implementation of [PurchaseOrderRepository] that works with Firestore
 class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
-  /// Creates a new instance with the given data source and supplier repository
-  PurchaseOrderRepositoryImpl(this._dataSource, this._supplierRepository);
-  final dynamic _dataSource;
-  final SupplierRepository _supplierRepository;
+  /// Creates a new instance with the given firestore interface and supplier repository
+  PurchaseOrderRepositoryImpl(this._firestore, this._supplierRepository);
 
-  /// Factory constructor for mock usage
-  factory PurchaseOrderRepositoryImpl.fromMock(
-      MockProcurementProvider mockProvider,
-      SupplierRepository supplierRepository) {
-    final mockDataSource = MockPurchaseOrderDataSource(mockProvider);
-    return PurchaseOrderRepositoryImpl(
-        mockDataSource as dynamic, supplierRepository);
-  }
+  final FirebaseFirestore _firestore;
+  final SupplierRepository _supplierRepository;
 
   @override
   Future<Result<List<PurchaseOrder>>> getPurchaseOrders({
@@ -32,22 +25,34 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
     String? searchQuery,
   }) async {
     try {
-      // Convert enum to string for the data source
       final statusStr = status?.toString().split('.').last;
-
-      final orderMaps = await _dataSource.getPurchaseOrders(
-        supplierId: supplierId,
-        status: statusStr,
-        fromDate: fromDate,
-        toDate: toDate,
-        searchQuery: searchQuery,
-      );
-
-      // Convert raw data to domain entities
-      // This would normally use a model class like in the supplier repository
-      // For brevity, we're using a simplified approach here
-      final purchaseOrders = await _convertMapsToPurchaseOrders(orderMaps);
-
+      // Use Query type for filtered queries
+      Query<Map<String, dynamic>> query =
+          _firestore.collection('purchase_orders');
+      if (supplierId != null) {
+        query = query.where('supplierId', isEqualTo: supplierId);
+      }
+      if (statusStr != null) {
+        query = query.where('status', isEqualTo: statusStr);
+      }
+      if (fromDate != null) {
+        query = query.where('requestDate',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(fromDate));
+      }
+      if (toDate != null) {
+        query = query.where('requestDate',
+            isLessThanOrEqualTo: Timestamp.fromDate(toDate));
+      }
+      final snapshot = await query.get();
+      final docs = snapshot.docs;
+      final filteredDocs = searchQuery != null && searchQuery.isNotEmpty
+          ? docs.where((doc) {
+              final data = doc.data();
+              final poNumber = data['poNumber'] as String? ?? '';
+              return poNumber.toLowerCase().contains(searchQuery.toLowerCase());
+            }).toList()
+          : docs;
+      final purchaseOrders = await _convertDocsToPurchaseOrders(filteredDocs);
       return Result.success(purchaseOrders);
     } on Exception catch (e) {
       return Result.failure(
@@ -59,8 +64,9 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
   @override
   Future<models.PurchaseOrderModel?> getPurchaseOrderById(String id) async {
     try {
-      // For now, return null
-      return null;
+      final doc = await _firestore.collection('purchase_orders').doc(id).get();
+      if (!doc.exists) return null;
+      return models.PurchaseOrderModel.fromMap(doc.data()!, doc.id);
     } catch (e) {
       return null;
     }
@@ -69,8 +75,14 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
   @override
   Future<Result<PurchaseOrder>> getPurchaseOrderByIdResult(String id) async {
     try {
-      final orderMap = await _dataSource.getPurchaseOrderById(id);
-      final purchaseOrder = await _convertMapToPurchaseOrder(orderMap);
+      final doc = await _firestore.collection('purchase_orders').doc(id).get();
+      if (!doc.exists) {
+        return Result.failure(
+          NotFoundFailure('Purchase order with ID: $id not found'),
+        );
+      }
+
+      final purchaseOrder = await _convertDocToPurchaseOrder(doc);
       return Result.success(purchaseOrder);
     } on Exception catch (e) {
       return Result.failure(
@@ -86,11 +98,25 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
       // Convert domain entity to data map
       final orderMap = _convertPurchaseOrderToMap(order);
 
-      // Pass to data source
-      final createdOrderMap = await _dataSource.createPurchaseOrder(orderMap);
+      // Generate a new document ID if none exists
+      final docRef = order.id.isEmpty
+          ? _firestore.collection('purchase_orders').doc()
+          : _firestore.collection('purchase_orders').doc(order.id);
 
-      // Convert back to domain entity
-      final createdOrder = await _convertMapToPurchaseOrder(createdOrderMap);
+      // Add created timestamp
+      final dataWithTimestamps = {
+        ...orderMap,
+        'id': docRef.id,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+
+      // Save to Firestore
+      await docRef.set(dataWithTimestamps);
+
+      // Fetch the created document to return
+      final docSnapshot = await docRef.get();
+      final createdOrder = await _convertDocToPurchaseOrder(docSnapshot);
 
       return Result.success(createdOrder);
     } on Exception catch (e) {
@@ -113,12 +139,19 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
       // Convert domain entity to data map
       final orderMap = _convertPurchaseOrderToMap(order);
 
-      // Pass to data source
-      final updatedOrderMap =
-          await _dataSource.updatePurchaseOrder(order.id, orderMap);
+      // Add updated timestamp
+      final dataWithTimestamp = {
+        ...orderMap,
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
 
-      // Convert back to domain entity
-      final updatedOrder = await _convertMapToPurchaseOrder(updatedOrderMap);
+      // Update in Firestore
+      final docRef = _firestore.collection('purchase_orders').doc(order.id);
+      await docRef.update(dataWithTimestamp);
+
+      // Fetch the updated document to return
+      final docSnapshot = await docRef.get();
+      final updatedOrder = await _convertDocToPurchaseOrder(docSnapshot);
 
       return Result.success(updatedOrder);
     } on Exception catch (e) {
@@ -132,15 +165,28 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
   Future<Result<PurchaseOrder>> updatePurchaseOrderStatus(
       String id, dynamic status) async {
     try {
-      // Convert enum to string for the data source
+      // Convert enum to string for Firestore
       final statusStr = status.toString().split('.').last;
 
-      // Pass to data source
-      final updatedOrderMap =
-          await _dataSource.updatePurchaseOrderStatus(id, statusStr);
+      // Update status in Firestore
+      final docRef = _firestore.collection('purchase_orders').doc(id);
+      await docRef.update({
+        'status': statusStr,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
 
-      // Convert back to domain entity
-      final updatedOrder = await _convertMapToPurchaseOrder(updatedOrderMap);
+      // If it's an approval status, update the approval fields
+      if (statusStr == 'approved') {
+        await docRef.update({
+          'approvalDate': FieldValue.serverTimestamp(),
+          // Note: In a real app, you'd use the current user's ID
+          'approvedBy': 'current_user_id',
+        });
+      }
+
+      // Fetch the updated document to return
+      final docSnapshot = await docRef.get();
+      final updatedOrder = await _convertDocToPurchaseOrder(docSnapshot);
 
       return Result.success(updatedOrder);
     } on Exception catch (e) {
@@ -154,7 +200,7 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
   @override
   Future<Result<void>> deletePurchaseOrder(String id) async {
     try {
-      await _dataSource.deletePurchaseOrder(id);
+      await _firestore.collection('purchase_orders').doc(id).delete();
       return Result.success(null);
     } on Exception catch (e) {
       return Result.failure(
@@ -166,22 +212,25 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
   @override
   Future<List<models.PurchaseOrderModel>> getAllPurchaseOrders() async {
     try {
-      // For now, just return an empty list
-      return [];
+      final snapshot = await _firestore.collection('purchase_orders').get();
+      return snapshot.docs
+          .map((doc) => models.PurchaseOrderModel.fromMap(doc.data(), doc.id))
+          .toList();
     } catch (e) {
       return [];
     }
   }
 
-  // Helper method to convert a list of maps to domain entities
-  Future<List<PurchaseOrder>> _convertMapsToPurchaseOrders(
-      List<Map<String, dynamic>> maps) async {
-    return Future.wait(maps.map((map) => _convertMapToPurchaseOrder(map)));
+  // Helper method to convert a list of documents to domain entities
+  Future<List<PurchaseOrder>> _convertDocsToPurchaseOrders(
+      List<DocumentSnapshot> docs) async {
+    return Future.wait(docs.map((doc) => _convertDocToPurchaseOrder(doc)));
   }
 
-  // Helper method to convert a map to a domain entity
-  Future<PurchaseOrder> _convertMapToPurchaseOrder(
-      Map<String, dynamic> map) async {
+  // Helper method to convert a document to a domain entity
+  Future<PurchaseOrder> _convertDocToPurchaseOrder(DocumentSnapshot doc) async {
+    final map = doc.data() as Map<String, dynamic>;
+
     // Fetch supplier info from supplier module
     Supplier? supplier;
     String supplierName = map['supplierName'] ?? '';
@@ -194,10 +243,37 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
         // Supplier not found, fallback to map value
       }
     }
+
+    // Convert timestamps to DateTime
+    DateTime? requestDate;
+    if (map['requestDate'] is Timestamp) {
+      requestDate = (map['requestDate'] as Timestamp).toDate();
+    }
+
+    DateTime? approvalDate;
+    if (map['approvalDate'] is Timestamp) {
+      approvalDate = (map['approvalDate'] as Timestamp).toDate();
+    }
+
+    DateTime? deliveryDate;
+    if (map['deliveryDate'] is Timestamp) {
+      deliveryDate = (map['deliveryDate'] as Timestamp).toDate();
+    }
+
+    DateTime? completionDate;
+    if (map['completionDate'] is Timestamp) {
+      completionDate = (map['completionDate'] as Timestamp).toDate();
+    }
+
     // Convert item maps to domain entities
     final itemMaps =
         (map['items'] as List<dynamic>?)?.cast<Map<String, dynamic>>() ?? [];
     final items = itemMaps.map((itemMap) {
+      DateTime? requiredByDate;
+      if (itemMap['requiredByDate'] is Timestamp) {
+        requiredByDate = (itemMap['requiredByDate'] as Timestamp).toDate();
+      }
+
       return PurchaseOrderItem(
         id: itemMap['id'] ?? '',
         itemId: itemMap['itemId'] ?? '',
@@ -206,19 +282,35 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
         unit: itemMap['unit'] ?? '',
         unitPrice: (itemMap['unitPrice'] ?? 0).toDouble(),
         totalPrice: (itemMap['totalPrice'] ?? 0).toDouble(),
-        requiredByDate: itemMap['requiredByDate'] != null
-            ? (itemMap['requiredByDate'] as DateTime)
-            : DateTime.now(),
+        requiredByDate: requiredByDate ?? DateTime.now(),
         notes: itemMap['notes'],
       );
     }).toList();
-    // Create empty supporting documents list
-    final supportingDocuments = <SupportingDocument>[];
+
+    // Create supporting documents list
+    final supportingDocMaps = (map['supportingDocuments'] as List<dynamic>?)
+            ?.cast<Map<String, dynamic>>() ??
+        [];
+    final supportingDocuments = supportingDocMaps.map((docMap) {
+      DateTime? uploadDate;
+      if (docMap['uploadDate'] is Timestamp) {
+        uploadDate = (docMap['uploadDate'] as Timestamp).toDate();
+      }
+
+      return SupportingDocument(
+        id: docMap['id'] ?? '',
+        name: docMap['name'] ?? '',
+        type: docMap['type'] ?? '',
+        url: docMap['url'] ?? '',
+        uploadDate: uploadDate ?? DateTime.now(),
+      );
+    }).toList();
+
     return PurchaseOrder(
-      id: map['id'] ?? '',
+      id: doc.id,
       procurementPlanId: map['procurementPlanId'] ?? '',
       poNumber: map['poNumber'] ?? '',
-      requestDate: map['requestDate'] as DateTime? ?? DateTime.now(),
+      requestDate: requestDate ?? DateTime.now(),
       requestedBy: map['requestedBy'] ?? '',
       supplierId: supplierId,
       supplierName: supplierName,
@@ -229,10 +321,10 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
       intendedUse: map['intendedUse'] ?? '',
       quantityJustification: map['quantityJustification'] ?? '',
       supportingDocuments: supportingDocuments,
-      approvalDate: map['approvalDate'] as DateTime?,
+      approvalDate: approvalDate,
       approvedBy: map['approvedBy'],
-      deliveryDate: map['deliveryDate'] as DateTime?,
-      completionDate: map['completionDate'] as DateTime?,
+      deliveryDate: deliveryDate,
+      completionDate: completionDate,
     );
   }
 
@@ -304,70 +396,5 @@ class PurchaseOrderRepositoryImpl implements PurchaseOrderRepository {
       default:
         return PurchaseOrderStatus.draft;
     }
-  }
-}
-
-/// Mock data source for purchase orders using MockProcurementProvider
-class MockPurchaseOrderDataSource {
-  final MockProcurementProvider mockProvider;
-  MockPurchaseOrderDataSource(this.mockProvider);
-
-  Future<List<Map<String, dynamic>>> getPurchaseOrders({
-    String? supplierId,
-    String? status,
-    DateTime? fromDate,
-    DateTime? toDate,
-    String? searchQuery,
-  }) async {
-    // Get all mock POs and filter as needed
-    final all = mockProvider.mockDataService.getMockPurchaseOrders();
-    return all.where((po) {
-      bool matches = true;
-      if (supplierId != null && po['supplierId'] != supplierId) matches = false;
-      if (status != null && po['status'] != status) matches = false;
-      if (fromDate != null &&
-          DateTime.tryParse(po['orderDate'] ?? po['requestDate'])
-                  ?.isBefore(fromDate) ==
-              true) matches = false;
-      if (toDate != null &&
-          DateTime.tryParse(po['orderDate'] ?? po['requestDate'])
-                  ?.isAfter(toDate) ==
-              true) matches = false;
-      if (searchQuery != null &&
-          searchQuery.isNotEmpty &&
-          !(po['poNumber']?.toString().contains(searchQuery) ?? false))
-        matches = false;
-      return matches;
-    }).toList();
-  }
-
-  Future<Map<String, dynamic>> getPurchaseOrderById(String id) async {
-    final all = mockProvider.mockDataService.getMockPurchaseOrders();
-    final po = all.firstWhere((po) => po['id'] == id, orElse: () => {});
-    if (po.isEmpty) throw Exception('Purchase order not found');
-    return po;
-  }
-
-  Future<Map<String, dynamic>> createPurchaseOrder(
-      Map<String, dynamic> data) async {
-    // Not implemented for mock
-    throw UnimplementedError('Mock createPurchaseOrder not implemented');
-  }
-
-  Future<Map<String, dynamic>> updatePurchaseOrder(
-      String id, Map<String, dynamic> data) async {
-    // Not implemented for mock
-    throw UnimplementedError('Mock updatePurchaseOrder not implemented');
-  }
-
-  Future<Map<String, dynamic>> updatePurchaseOrderStatus(
-      String id, String status) async {
-    // Not implemented for mock
-    throw UnimplementedError('Mock updatePurchaseOrderStatus not implemented');
-  }
-
-  Future<void> deletePurchaseOrder(String id) async {
-    // Not implemented for mock
-    throw UnimplementedError('Mock deletePurchaseOrder not implemented');
   }
 }

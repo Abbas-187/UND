@@ -78,6 +78,9 @@ class ProcurementInventoryIntegration {
         'purchaseOrderId': poId,
         'purchaseOrderNumber': poNumber,
       },
+      subCategory: '',
+      sapCode: '',
+      appItemId: '',
     );
 
     // Create inventory transaction record

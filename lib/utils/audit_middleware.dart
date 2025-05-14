@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'audit_middleware.g.dart';
@@ -35,7 +36,7 @@ class AuditMiddleware {
         'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      print('Error logging audit action: $e');
+      debugPrint('Error logging audit action: $e');
       // Consider how you want to handle errors here - silent fail or rethrow
     }
   }

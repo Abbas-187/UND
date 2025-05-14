@@ -4,7 +4,6 @@ import '../models/user_model.dart';
 import '../services/auth_service.dart';
 
 class RoleBasedWidget extends StatelessWidget {
-
   RoleBasedWidget({
     super.key,
     required this.allowedRoles,

@@ -6,6 +6,9 @@ project(und_app LANGUAGES CXX)
 # the on-disk name of your application.
 set(BINARY_NAME "und_app")
 
+# Firebase C++ SDK Path - Set this to the path where you've downloaded the Firebase C++ SDK
+set(FIREBASE_CPP_SDK_DIR "C:/Users/Abbas/Downloads/firebase_cpp_sdk_12.7.0")
+
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.
 cmake_policy(VERSION 3.14...3.25)

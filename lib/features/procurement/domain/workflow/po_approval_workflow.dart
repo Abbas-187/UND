@@ -1,14 +1,15 @@
-import 'package:uuid/uuid.dart';
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
+
 import '../entities/purchase_order.dart';
 import '../entities/purchase_order_approval.dart';
 import '../security/biometric_validator.dart';
 
 /// Exception thrown when a user is not authorized to perform an approval action.
 class UnauthorizedApprovalException implements Exception {
-  final String message;
 
   UnauthorizedApprovalException(this.message);
+  final String message;
 
   @override
   String toString() => 'UnauthorizedApprovalException: $message';
@@ -16,12 +17,12 @@ class UnauthorizedApprovalException implements Exception {
 
 @immutable
 class PurchaseOrderApprovalWorkflow {
-  final BiometricValidator biometricValidator;
-  final Uuid _uuid = const Uuid();
 
   const PurchaseOrderApprovalWorkflow({
     required this.biometricValidator,
   });
+  final BiometricValidator biometricValidator;
+  final Uuid _uuid = const Uuid();
 
   /// Initiates the approval workflow for a purchase order.
   ///

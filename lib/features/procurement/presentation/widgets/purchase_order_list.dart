@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import '../providers/purchase_order_providers.dart';
-import '../screens/purchase_order/purchase_order_detail_screen.dart';
 
 class PurchaseOrderList extends ConsumerStatefulWidget {
+  const PurchaseOrderList({super.key, this.limit});
   final int? limit;
-  const PurchaseOrderList({Key? key, this.limit}) : super(key: key);
 
   @override
   ConsumerState<PurchaseOrderList> createState() => _PurchaseOrderListState();
@@ -135,13 +136,8 @@ class _PurchaseOrderListState extends ConsumerState<PurchaseOrderList> {
                         trailing: PopupMenuButton<String>(
                           onSelected: (value) async {
                             if (value == 'view') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => PurchaseOrderDetailScreen(
-                                      orderId: order.id),
-                                ),
-                              );
+                              context.go('/procurement/purchase-orders/detail',
+                                  extra: {'orderId': order.id});
                             } else if (value == 'delete') {
                               final confirmed = await showDialog<bool>(
                                 context: context,
@@ -152,11 +148,11 @@ class _PurchaseOrderListState extends ConsumerState<PurchaseOrderList> {
                                   actions: [
                                     TextButton(
                                         onPressed: () =>
-                                            Navigator.pop(ctx, false),
+                                            context.pop(false),
                                         child: const Text('Cancel')),
                                     TextButton(
                                         onPressed: () =>
-                                            Navigator.pop(ctx, true),
+                                            context.pop(true),
                                         child: const Text('Delete')),
                                   ],
                                 ),
@@ -184,13 +180,8 @@ class _PurchaseOrderListState extends ConsumerState<PurchaseOrderList> {
                           ],
                         ),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  PurchaseOrderDetailScreen(orderId: order.id),
-                            ),
-                          );
+                          context.go('/procurement/purchase-orders/detail',
+                              extra: {'orderId': order.id});
                         },
                       );
                     },

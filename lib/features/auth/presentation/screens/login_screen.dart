@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/auth/services/auth_service.dart';
-import '../../../../core/routes/app_router.dart';
+import '../../../../core/routes/app_go_router.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
 
@@ -18,6 +20,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
+  bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberedEmail();
+  }
+
+  Future<void> _loadRememberedEmail() async {
+    final prefs = await SharedPreferences.getInstance();
+    final remembered = prefs.getBool('remember_me') ?? false;
+    if (remembered) {
+      final email = prefs.getString('saved_email') ?? '';
+      _emailController.text = email;
+    }
+    setState(() {
+      _rememberMe = remembered;
+    });
+  }
 
   @override
   void dispose() {
@@ -27,7 +48,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login() async {
+    print('Login button pressed');
     if (!_formKey.currentState!.validate()) {
+      print('Form validation failed');
       return;
     }
 
@@ -37,17 +60,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     try {
+      print(
+          'Attempting to sign in with email: ${_emailController.text.trim()}');
       final authService = ref.read(authServiceProvider);
       await authService.signInWithEmailAndPassword(
         _emailController.text.trim(),
         _passwordController.text,
       );
 
+      print('Login successful');
       if (!mounted) return;
 
-      // Navigate to home screen on successful login
-      Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+      // Navigate to home screen on successful login using GoRouter
+      print('Navigating to home screen');
+      // Persist remember me preference
+      final prefs = await SharedPreferences.getInstance();
+      if (_rememberMe) {
+        await prefs.setBool('remember_me', true);
+        await prefs.setString('saved_email', _emailController.text.trim());
+      } else {
+        await prefs.remove('remember_me');
+        await prefs.remove('saved_email');
+      }
+      GoRouter.of(context).go(AppRoutes.home);
     } catch (e) {
+      print('Login error: $e');
       setState(() {
         _errorMessage = e.toString();
       });
@@ -157,6 +194,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: 16),
                     ],
+
+                    // Remember Me checkbox
+                    const SizedBox(height: 16),
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('Remember Me'),
+                      value: _rememberMe,
+                      onChanged: (value) {
+                        setState(() {
+                          _rememberMe = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
 
                     // Login button
                     PrimaryButton(

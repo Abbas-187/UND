@@ -2,10 +2,11 @@
 // For now, it's just a stub to make imports work
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../domain/entities/purchase_order.dart';
 import '../../domain/entities/purchase_order_approval.dart';
-import '../../domain/workflow/po_approval_workflow.dart';
 import '../../domain/security/biometric_validator.dart';
+import '../../domain/workflow/po_approval_workflow.dart';
 
 /// Provider for the biometric validator
 final biometricValidatorProvider = Provider<BiometricValidator>((ref) {

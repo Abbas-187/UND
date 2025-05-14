@@ -4,8 +4,8 @@ import '../../data/models/equipment_model.dart';
 import '../../domain/providers/equipment_maintenance_provider.dart';
 
 class AddEditEquipmentScreen extends ConsumerStatefulWidget {
-  final EquipmentModel? equipment;
   const AddEditEquipmentScreen({super.key, this.equipment});
+  final EquipmentModel? equipment;
 
   @override
   ConsumerState<AddEditEquipmentScreen> createState() =>

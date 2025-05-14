@@ -188,7 +188,7 @@ class WarehouseDashboardScreen extends ConsumerWidget {
               end: Alignment.bottomRight,
               colors: <Color>[
                 color,
-                color.withOpacity(0.7),
+                color.withAlpha((0.7 * 255).toInt()),
               ],
             ),
             borderRadius: BorderRadius.circular(16),

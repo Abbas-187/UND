@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../common/widgets/detail_appbar.dart';
-import '../../data/models/equipment_model.dart';
 import '../../domain/providers/equipment_maintenance_provider.dart';
 import '../screens/create_maintenance_record_screen.dart';
 import '../widgets/maintenance_schedule_card.dart';
@@ -53,9 +52,6 @@ class EquipmentDetailScreen extends ConsumerWidget {
           children: [
             equipmentAsync.when(
               data: (equipment) {
-                if (equipment == null) {
-                  return const Text('Equipment not found.');
-                }
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

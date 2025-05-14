@@ -59,7 +59,7 @@ class ProcurementQualityIntegration {
         'fatContentDeviation': _calculateAverageDeviation(
           supplierLogs
               .map((log) => log != null
-                  ? (log as SupplierQualityLog)
+                  ? (log)
                       .parameters
                       .firstWhere(
                         (p) => p.name == 'fatContent',
@@ -84,7 +84,7 @@ class ProcurementQualityIntegration {
         'proteinContentDeviation': _calculateAverageDeviation(
           supplierLogs
               .map((log) => log != null
-                  ? (log as SupplierQualityLog)
+                  ? (log)
                       .parameters
                       .firstWhere(
                         (p) => p.name == 'proteinContent',

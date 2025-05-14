@@ -1,0 +1,1130 @@
+{
+  "inventory": {
+    "2e2410e9-2065-40e5-88a0-26853d7ab4c8": {
+      "id": "2e2410e9-2065-40e5-88a0-26853d7ab4c8",
+      "product_code": "PA7855",
+      "product_name": "Tray Yoghurt 150g (6 pcs)",
+      "category": "Packaging",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 583,
+      "location": "HF-FLV",
+      "status": "Available"
+    },
+    "444002ac-4f44-453d-b7aa-e9bf32bd2eed": {
+      "id": "444002ac-4f44-453d-b7aa-e9bf32bd2eed",
+      "product_code": "PA7435",
+      "product_name": "Tray Yoghurt 150g (6 pcs)",
+      "category": "Packaging",
+      "unit_of_measure": "rolls",
+      "quantity_on_hand": 595,
+      "location": "SH-CLD",
+      "status": "Available"
+    },
+    "430faa24-b5f5-47b9-85e8-da64c4c0f121": {
+      "id": "430faa24-b5f5-47b9-85e8-da64c4c0f121",
+      "product_code": "PA5484",
+      "product_name": "Bucket 1kg",
+      "category": "Packaging",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 706,
+      "location": "HF-FLV",
+      "status": "Out of Stock"
+    },
+    "8772071e-14a1-4b3a-82e5-f408354d3440": {
+      "id": "8772071e-14a1-4b3a-82e5-f408354d3440",
+      "product_code": "RM3927",
+      "product_name": "Sugar",
+      "category": "Raw Materials",
+      "unit_of_measure": "tons",
+      "quantity_on_hand": 481,
+      "location": "HF-FLV",
+      "status": "Discontinued"
+    },
+    "7775b9d2-1a42-40ee-852d-812da1d30908": {
+      "id": "7775b9d2-1a42-40ee-852d-812da1d30908",
+      "product_code": "PA1690",
+      "product_name": "Bucket 2.25kg",
+      "category": "Packaging",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 551,
+      "location": "HF-AMB",
+      "status": "Out of Stock"
+    },
+    "9c3ad134-417c-495a-b66a-de1eaf6764ee": {
+      "id": "9c3ad134-417c-495a-b66a-de1eaf6764ee",
+      "product_code": "RM5715",
+      "product_name": "Stabilizers",
+      "category": "Raw Materials",
+      "unit_of_measure": "liters",
+      "quantity_on_hand": 808,
+      "location": "HF-CLD",
+      "status": "Discontinued"
+    },
+    "98e5d159-82a1-49ee-970e-797413f50de4": {
+      "id": "98e5d159-82a1-49ee-970e-797413f50de4",
+      "product_code": "JU5172",
+      "product_name": "Strawberry Juice",
+      "category": "Juices",
+      "unit_of_measure": "bottles",
+      "quantity_on_hand": 893,
+      "location": "HF-AMB",
+      "status": "Out of Stock"
+    },
+    "a860ede4-7e03-42ba-9b5d-b4c5af247e36": {
+      "id": "a860ede4-7e03-42ba-9b5d-b4c5af247e36",
+      "product_code": "DA9891",
+      "product_name": "Butter",
+      "category": "Dairy",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 466,
+      "location": "HF-FIN",
+      "status": "Available"
+    },
+    "fd8b790e-e5d4-4e36-8120-6e526eead5ce": {
+      "id": "fd8b790e-e5d4-4e36-8120-6e526eead5ce",
+      "product_code": "PA5591",
+      "product_name": "Tray Yoghurt 150g (6 pcs)",
+      "category": "Packaging",
+      "unit_of_measure": "rolls",
+      "quantity_on_hand": 249,
+      "location": "HF-AMB",
+      "status": "Available"
+    },
+    "3b6f512e-616a-4b22-9d15-49a3b5a9fa6c": {
+      "id": "3b6f512e-616a-4b22-9d15-49a3b5a9fa6c",
+      "product_code": "JU9512",
+      "product_name": "Apple Juice",
+      "category": "Juices",
+      "unit_of_measure": "bottles",
+      "quantity_on_hand": 211,
+      "location": "HF-FIN",
+      "status": "Discontinued"
+    },
+    "440de011-6c46-4c9f-a825-b440bb8c4dd0": {
+      "id": "440de011-6c46-4c9f-a825-b440bb8c4dd0",
+      "product_code": "JU3985",
+      "product_name": "Pomegranate Juice",
+      "category": "Juices",
+      "unit_of_measure": "liters",
+      "quantity_on_hand": 214,
+      "location": "HF-FLV",
+      "status": "Out of Stock"
+    },
+    "88c343ac-ed51-48bb-abfe-3b73ad680b99": {
+      "id": "88c343ac-ed51-48bb-abfe-3b73ad680b99",
+      "product_code": "DA1621",
+      "product_name": "Yogurt",
+      "category": "Dairy",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 503,
+      "location": "HF-AMB",
+      "status": "Available"
+    },
+    "6285df01-d4ad-40cf-a4d5-0ebc6364b47a": {
+      "id": "6285df01-d4ad-40cf-a4d5-0ebc6364b47a",
+      "product_code": "JU6302",
+      "product_name": "Strawberry Juice",
+      "category": "Juices",
+      "unit_of_measure": "bottles",
+      "quantity_on_hand": 783,
+      "location": "HF-FLV",
+      "status": "Discontinued"
+    },
+    "c311d559-3ae4-43e7-84e2-a2d1ed952025": {
+      "id": "c311d559-3ae4-43e7-84e2-a2d1ed952025",
+      "product_code": "RM4755",
+      "product_name": "Cream",
+      "category": "Raw Materials",
+      "unit_of_measure": "tons",
+      "quantity_on_hand": 578,
+      "location": "HF-AMB",
+      "status": "Out of Stock"
+    },
+    "a99ce612-4f45-4e80-a3b0-24623b9aa7ec": {
+      "id": "a99ce612-4f45-4e80-a3b0-24623b9aa7ec",
+      "product_code": "RM3579",
+      "product_name": "Fruit Concentrates",
+      "category": "Raw Materials",
+      "unit_of_measure": "tons",
+      "quantity_on_hand": 173,
+      "location": "HF-AMB",
+      "status": "Out of Stock"
+    },
+    "ad38ab69-d1b3-465f-899c-eedb57b50212": {
+      "id": "ad38ab69-d1b3-465f-899c-eedb57b50212",
+      "product_code": "DA4015",
+      "product_name": "Cheese",
+      "category": "Dairy",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 198,
+      "location": "SH-CLD",
+      "status": "Discontinued"
+    },
+    "a8bbeb57-3a5a-405f-9406-af2b09b2a8d5": {
+      "id": "a8bbeb57-3a5a-405f-9406-af2b09b2a8d5",
+      "product_code": "JU4147",
+      "product_name": "Orange Juice",
+      "category": "Juices",
+      "unit_of_measure": "liters",
+      "quantity_on_hand": 309,
+      "location": "SH-CLD",
+      "status": "Out of Stock"
+    },
+    "2e526d98-f588-47ba-a0de-b5e069c59315": {
+      "id": "2e526d98-f588-47ba-a0de-b5e069c59315",
+      "product_code": "RM2686",
+      "product_name": "Milk",
+      "category": "Raw Materials",
+      "unit_of_measure": "tons",
+      "quantity_on_hand": 333,
+      "location": "HF-FIN",
+      "status": "Available"
+    },
+    "1c71b650-c4fd-45aa-a370-1f6864f6afd7": {
+      "id": "1c71b650-c4fd-45aa-a370-1f6864f6afd7",
+      "product_code": "DA1466",
+      "product_name": "Laban",
+      "category": "Dairy",
+      "unit_of_measure": "liters",
+      "quantity_on_hand": 89,
+      "location": "HF-AMB",
+      "status": "Available"
+    },
+    "e5598dac-7f98-4041-bdae-a8a507e3c856": {
+      "id": "e5598dac-7f98-4041-bdae-a8a507e3c856",
+      "product_code": "JU2949",
+      "product_name": "Mango Juice",
+      "category": "Juices",
+      "unit_of_measure": "bottles",
+      "quantity_on_hand": 389,
+      "location": "HF-FLV",
+      "status": "Out of Stock"
+    },
+    "424740b5-36e5-4478-a39b-2df236e3e2b0": {
+      "id": "424740b5-36e5-4478-a39b-2df236e3e2b0",
+      "product_code": "RM9204",
+      "product_name": "Cream",
+      "category": "Raw Materials",
+      "unit_of_measure": "kg",
+      "quantity_on_hand": 874,
+      "location": "SH-CLD",
+      "status": "Out of Stock"
+    },
+    "b7fa7c7e-8b61-4671-9b63-6293beeba9e6": {
+      "id": "b7fa7c7e-8b61-4671-9b63-6293beeba9e6",
+      "product_code": "DA4875",
+      "product_name": "Ice Cream",
+      "category": "Dairy",
+      "unit_of_measure": "kg",
+      "quantity_on_hand": 790,
+      "location": "SH-CLD",
+      "status": "Out of Stock"
+    },
+    "1f82f408-0b66-4ebc-a8a9-f5c9c527b3bf": {
+      "id": "1f82f408-0b66-4ebc-a8a9-f5c9c527b3bf",
+      "product_code": "JU5011",
+      "product_name": "Mixed Fruit",
+      "category": "Juices",
+      "unit_of_measure": "bottles",
+      "quantity_on_hand": 798,
+      "location": "SH-CLD",
+      "status": "Discontinued"
+    },
+    "1763e178-b015-4c16-bc2a-3f3d3895e9ed": {
+      "id": "1763e178-b015-4c16-bc2a-3f3d3895e9ed",
+      "product_code": "DA4022",
+      "product_name": "Laban",
+      "category": "Dairy",
+      "unit_of_measure": "kg",
+      "quantity_on_hand": 428,
+      "location": "HF-AMB",
+      "status": "Out of Stock"
+    },
+    "3f830153-5f81-4c45-8ab0-886ee086b16b": {
+      "id": "3f830153-5f81-4c45-8ab0-886ee086b16b",
+      "product_code": "DA9071",
+      "product_name": "Ice Cream",
+      "category": "Dairy",
+      "unit_of_measure": "kg",
+      "quantity_on_hand": 168,
+      "location": "SH-CLD",
+      "status": "Out of Stock"
+    },
+    "986f62d9-f100-440a-a93b-0fcb343b9955": {
+      "id": "986f62d9-f100-440a-a93b-0fcb343b9955",
+      "product_code": "DA8931",
+      "product_name": "Ice Cream",
+      "category": "Dairy",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 52,
+      "location": "HF-FLV",
+      "status": "Out of Stock"
+    },
+    "28d33224-4a1f-45fa-9cc2-cc27015ede28": {
+      "id": "28d33224-4a1f-45fa-9cc2-cc27015ede28",
+      "product_code": "PA5989",
+      "product_name": "Bucket 5kg",
+      "category": "Packaging",
+      "unit_of_measure": "rolls",
+      "quantity_on_hand": 151,
+      "location": "HF-FIN",
+      "status": "Out of Stock"
+    },
+    "e0f2f6fe-4fa5-4b96-9ab9-3e86c49de26d": {
+      "id": "e0f2f6fe-4fa5-4b96-9ab9-3e86c49de26d",
+      "product_code": "RM7672",
+      "product_name": "Fruit Concentrates",
+      "category": "Raw Materials",
+      "unit_of_measure": "liters",
+      "quantity_on_hand": 742,
+      "location": "HF-FLV",
+      "status": "Discontinued"
+    },
+    "516e69b7-c5ff-4973-bd44-d797c1d58a9c": {
+      "id": "516e69b7-c5ff-4973-bd44-d797c1d58a9c",
+      "product_code": "PA1831",
+      "product_name": "Plastic Bottles PET 200ml",
+      "category": "Packaging",
+      "unit_of_measure": "boxes",
+      "quantity_on_hand": 960,
+      "location": "SH-CLD",
+      "status": "Discontinued"
+    },
+    "4794b1a0-d7b1-4cb3-b363-9bba5ed965bd": {
+      "id": "4794b1a0-d7b1-4cb3-b363-9bba5ed965bd",
+      "product_code": "PA8685",
+      "product_name": "Bucket 5kg",
+      "category": "Packaging",
+      "unit_of_measure": "rolls",
+      "quantity_on_hand": 747,
+      "location": "HF-FLV",
+      "status": "Available"
+    },
+    "c0a64b5c-10da-48f3-80f4-d68e6fd9a25b": {
+      "id": "c0a64b5c-10da-48f3-80f4-d68e6fd9a25b",
+      "product_code": "PA1537",
+      "product_name": "Cups 150g",
+      "category": "Packaging",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 550,
+      "location": "HF-FIN",
+      "status": "Out of Stock"
+    },
+    "7672a428-81ad-4b01-8e89-d7d18aab14d5": {
+      "id": "7672a428-81ad-4b01-8e89-d7d18aab14d5",
+      "product_code": "PA2368",
+      "product_name": "Plastic Bottles PET 200ml",
+      "category": "Packaging",
+      "unit_of_measure": "boxes",
+      "quantity_on_hand": 449,
+      "location": "HF-FIN",
+      "status": "Available"
+    },
+    "c42fa549-8de6-4ac9-abbf-f6aaa97caeba": {
+      "id": "c42fa549-8de6-4ac9-abbf-f6aaa97caeba",
+      "product_code": "RM7613",
+      "product_name": "Milk",
+      "category": "Raw Materials",
+      "unit_of_measure": "liters",
+      "quantity_on_hand": 578,
+      "location": "HF-FIN",
+      "status": "Available"
+    },
+    "c8518bba-ebba-4a93-a6e8-649c943e45a9": {
+      "id": "c8518bba-ebba-4a93-a6e8-649c943e45a9",
+      "product_code": "PA5827",
+      "product_name": "Bucket 5kg",
+      "category": "Packaging",
+      "unit_of_measure": "boxes",
+      "quantity_on_hand": 731,
+      "location": "HF-AMB",
+      "status": "Available"
+    },
+    "19e1c0e6-e772-45f3-b52d-10ce2e8b6a11": {
+      "id": "19e1c0e6-e772-45f3-b52d-10ce2e8b6a11",
+      "product_code": "RM6204",
+      "product_name": "Fruit Concentrates",
+      "category": "Raw Materials",
+      "unit_of_measure": "tons",
+      "quantity_on_hand": 174,
+      "location": "SH-CLD",
+      "status": "Discontinued"
+    },
+    "4abddb3a-8dca-47bd-ba0b-30683bcdd325": {
+      "id": "4abddb3a-8dca-47bd-ba0b-30683bcdd325",
+      "product_code": "DA5918",
+      "product_name": "Laban",
+      "category": "Dairy",
+      "unit_of_measure": "liters",
+      "quantity_on_hand": 602,
+      "location": "HF-AMB",
+      "status": "Out of Stock"
+    },
+    "7a3b8408-711a-4240-91f8-c223548ac133": {
+      "id": "7a3b8408-711a-4240-91f8-c223548ac133",
+      "product_code": "JU9841",
+      "product_name": "Mixed Fruit",
+      "category": "Juices",
+      "unit_of_measure": "bottles",
+      "quantity_on_hand": 677,
+      "location": "SH-CLD",
+      "status": "Out of Stock"
+    },
+    "850f39a9-917c-4237-acda-371c2511ac41": {
+      "id": "850f39a9-917c-4237-acda-371c2511ac41",
+      "product_code": "PA8266",
+      "product_name": "Bucket 16kg",
+      "category": "Packaging",
+      "unit_of_measure": "boxes",
+      "quantity_on_hand": 639,
+      "location": "HF-CLD",
+      "status": "Available"
+    },
+    "4dbd8c2f-3031-4c8b-9b5c-860e8458dd04": {
+      "id": "4dbd8c2f-3031-4c8b-9b5c-860e8458dd04",
+      "product_code": "DA1796",
+      "product_name": "Flavored Milk",
+      "category": "Dairy",
+      "unit_of_measure": "kg",
+      "quantity_on_hand": 551,
+      "location": "SH-CLD",
+      "status": "Out of Stock"
+    },
+    "3e911897-4be8-4f19-bb8a-4ff2fe9cf196": {
+      "id": "3e911897-4be8-4f19-bb8a-4ff2fe9cf196",
+      "product_code": "DA6846",
+      "product_name": "Laban",
+      "category": "Dairy",
+      "unit_of_measure": "pieces",
+      "quantity_on_hand": 948,
+      "location": "HF-CLD",
+      "status": "Out of Stock"
+    }
+  },
+  "recipes": {
+    "b4881209-a2fb-4712-812a-c110517252bb": {
+      "id": "b4881209-a2fb-4712-812a-c110517252bb",
+      "recipe_code": "R1938",
+      "recipe_name": "Orange Nectar 50% Juice",
+      "product_code": "P5390",
+      "ingredient_code": "I3415",
+      "ingredient_name": "Orange juice concentrate (60\u00b0 Brix)",
+      "quantity_required": 95.2,
+      "unit_of_measure": "kg",
+      "step_number": 1,
+      "instructions": ""
+    },
+    "f272b754-65e3-44b7-b087-d4bf5823898b": {
+      "id": "f272b754-65e3-44b7-b087-d4bf5823898b",
+      "recipe_code": "R1938",
+      "recipe_name": "Orange Nectar 50% Juice",
+      "product_code": "P5390",
+      "ingredient_code": "I1175",
+      "ingredient_name": "Processed water",
+      "quantity_required": 904.8,
+      "unit_of_measure": "L",
+      "step_number": 2,
+      "instructions": ""
+    },
+    "6a08c6b0-5799-4b9f-b90d-a5a3ac51790b": {
+      "id": "6a08c6b0-5799-4b9f-b90d-a5a3ac51790b",
+      "recipe_code": "R1938",
+      "recipe_name": "Orange Nectar 50% Juice",
+      "product_code": "P5390",
+      "ingredient_code": "I3979",
+      "ingredient_name": "Citric acid",
+      "quantity_required": 5.8,
+      "unit_of_measure": "kg",
+      "step_number": 3,
+      "instructions": ""
+    },
+    "8da3ed82-742e-4e5e-8eb6-136ad108161a": {
+      "id": "8da3ed82-742e-4e5e-8eb6-136ad108161a",
+      "recipe_code": "R1938",
+      "recipe_name": "Orange Nectar 50% Juice",
+      "product_code": "P5390",
+      "ingredient_code": "I5860",
+      "ingredient_name": "Stevia",
+      "quantity_required": 0.5,
+      "unit_of_measure": "kg",
+      "step_number": 4,
+      "instructions": ""
+    },
+    "12abe4a3-f1de-4352-95a0-003c9573869e": {
+      "id": "12abe4a3-f1de-4352-95a0-003c9573869e",
+      "recipe_code": "R6893",
+      "recipe_name": "Orange Juice Beverage 30% Juice",
+      "product_code": "P1169",
+      "ingredient_code": "I5706",
+      "ingredient_name": "Orange juice concentrate (60\u00b0 Brix)",
+      "quantity_required": 57.0,
+      "unit_of_measure": "kg",
+      "step_number": 1,
+      "instructions": ""
+    },
+    "22d045f8-c07f-48f0-8cfc-ff1594532696": {
+      "id": "22d045f8-c07f-48f0-8cfc-ff1594532696",
+      "recipe_code": "R6893",
+      "recipe_name": "Orange Juice Beverage 30% Juice",
+      "product_code": "P1169",
+      "ingredient_code": "I2515",
+      "ingredient_name": "Processed water",
+      "quantity_required": 943.0,
+      "unit_of_measure": "L",
+      "step_number": 2,
+      "instructions": ""
+    },
+    "6ca5df3d-ee3d-4275-a8db-1ce13599d006": {
+      "id": "6ca5df3d-ee3d-4275-a8db-1ce13599d006",
+      "recipe_code": "R6893",
+      "recipe_name": "Orange Juice Beverage 30% Juice",
+      "product_code": "P1169",
+      "ingredient_code": "I8313",
+      "ingredient_name": "Citric acid",
+      "quantity_required": 4.0,
+      "unit_of_measure": "kg",
+      "step_number": 3,
+      "instructions": ""
+    },
+    "d08bc4aa-be4b-435a-808b-15c4e70770a3": {
+      "id": "d08bc4aa-be4b-435a-808b-15c4e70770a3",
+      "recipe_code": "R6893",
+      "recipe_name": "Orange Juice Beverage 30% Juice",
+      "product_code": "P1169",
+      "ingredient_code": "I1725",
+      "ingredient_name": "Stevia",
+      "quantity_required": 0.6,
+      "unit_of_measure": "kg",
+      "step_number": 4,
+      "instructions": ""
+    },
+    "44df4a69-8c03-4c88-b3ae-7d5744f4823e": {
+      "id": "44df4a69-8c03-4c88-b3ae-7d5744f4823e",
+      "recipe_code": "R1027",
+      "recipe_name": "Orange Beverage 8% Juice",
+      "product_code": "P9369",
+      "ingredient_code": "I5883",
+      "ingredient_name": "Orange juice concentrate (60\u00b0 Brix)",
+      "quantity_required": 15.2,
+      "unit_of_measure": "kg",
+      "step_number": 1,
+      "instructions": ""
+    },
+    "52748e4f-7c45-4554-aad7-2177c8ae5902": {
+      "id": "52748e4f-7c45-4554-aad7-2177c8ae5902",
+      "recipe_code": "R1027",
+      "recipe_name": "Orange Beverage 8% Juice",
+      "product_code": "P9369",
+      "ingredient_code": "I7796",
+      "ingredient_name": "Processed water",
+      "quantity_required": 984.8,
+      "unit_of_measure": "L",
+      "step_number": 2,
+      "instructions": ""
+    },
+    "72153c0b-2111-4d3c-9867-3b43b407c28c": {
+      "id": "72153c0b-2111-4d3c-9867-3b43b407c28c",
+      "recipe_code": "R1027",
+      "recipe_name": "Orange Beverage 8% Juice",
+      "product_code": "P9369",
+      "ingredient_code": "I5627",
+      "ingredient_name": "Citric acid",
+      "quantity_required": 3.0,
+      "unit_of_measure": "kg",
+      "step_number": 3,
+      "instructions": ""
+    },
+    "482c63b2-fa12-4a03-ac92-d4c23c3a5c2f": {
+      "id": "482c63b2-fa12-4a03-ac92-d4c23c3a5c2f",
+      "recipe_code": "R1027",
+      "recipe_name": "Orange Beverage 8% Juice",
+      "product_code": "P9369",
+      "ingredient_code": "I5519",
+      "ingredient_name": "Stevia",
+      "quantity_required": 0.65,
+      "unit_of_measure": "kg",
+      "step_number": 4,
+      "instructions": ""
+    },
+    "1b8072e6-944d-4dd3-beb7-8438691fef07": {
+      "id": "1b8072e6-944d-4dd3-beb7-8438691fef07",
+      "recipe_code": "R4977",
+      "recipe_name": "Orange Beverage 4% Juice",
+      "product_code": "P6080",
+      "ingredient_code": "I9743",
+      "ingredient_name": "Orange juice concentrate (60\u00b0 Brix)",
+      "quantity_required": 7.6,
+      "unit_of_measure": "kg",
+      "step_number": 1,
+      "instructions": ""
+    },
+    "8b7e5b63-e8b3-4e1c-ab39-4a949eb5ec4a": {
+      "id": "8b7e5b63-e8b3-4e1c-ab39-4a949eb5ec4a",
+      "recipe_code": "R4977",
+      "recipe_name": "Orange Beverage 4% Juice",
+      "product_code": "P6080",
+      "ingredient_code": "I1046",
+      "ingredient_name": "Processed water",
+      "quantity_required": 992.4,
+      "unit_of_measure": "L",
+      "step_number": 2,
+      "instructions": ""
+    },
+    "a572310d-8a67-49be-b676-47c3516257a6": {
+      "id": "a572310d-8a67-49be-b676-47c3516257a6",
+      "recipe_code": "R4977",
+      "recipe_name": "Orange Beverage 4% Juice",
+      "product_code": "P6080",
+      "ingredient_code": "I3548",
+      "ingredient_name": "Citric acid",
+      "quantity_required": 2.2,
+      "unit_of_measure": "kg",
+      "step_number": 3,
+      "instructions": ""
+    },
+    "f401798e-eb9e-4b1f-bf1c-2c2d39a99412": {
+      "id": "f401798e-eb9e-4b1f-bf1c-2c2d39a99412",
+      "recipe_code": "R4977",
+      "recipe_name": "Orange Beverage 4% Juice",
+      "product_code": "P6080",
+      "ingredient_code": "I4402",
+      "ingredient_name": "Stevia",
+      "quantity_required": 0.7,
+      "unit_of_measure": "kg",
+      "step_number": 4,
+      "instructions": ""
+    },
+    "2e841fb1-6426-4433-939c-129978e74214": {
+      "id": "2e841fb1-6426-4433-939c-129978e74214",
+      "recipe_code": "R2733",
+      "recipe_name": "Ready-To-Drink Lemon Drink 12% Brix",
+      "product_code": "P6404",
+      "ingredient_code": "I8830",
+      "ingredient_name": "Lemon Base (Brix 30-32, Acidity 17-19%)",
+      "quantity_required": 30.8,
+      "unit_of_measure": "kg",
+      "step_number": 1,
+      "instructions": ""
+    },
+    "c479e4ec-7715-4e8f-8cc7-7004c18aefa5": {
+      "id": "c479e4ec-7715-4e8f-8cc7-7004c18aefa5",
+      "recipe_code": "R2733",
+      "recipe_name": "Ready-To-Drink Lemon Drink 12% Brix",
+      "product_code": "P6404",
+      "ingredient_code": "I2888",
+      "ingredient_name": "Dry Sugar",
+      "quantity_required": 70.4,
+      "unit_of_measure": "kg",
+      "step_number": 2,
+      "instructions": ""
+    },
+    "0f62c570-4876-4041-bd7e-dfa94faad267": {
+      "id": "0f62c570-4876-4041-bd7e-dfa94faad267",
+      "recipe_code": "R2733",
+      "recipe_name": "Ready-To-Drink Lemon Drink 12% Brix",
+      "product_code": "P6404",
+      "ingredient_code": "I2161",
+      "ingredient_name": "Water",
+      "quantity_required": 898.8,
+      "unit_of_measure": "kg",
+      "step_number": 3,
+      "instructions": ""
+    },
+    "adc1b653-8035-4974-b5ad-bc21def004de": {
+      "id": "adc1b653-8035-4974-b5ad-bc21def004de",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I6302",
+      "ingredient_name": "Crystalline fructose",
+      "quantity_required": 35.3,
+      "unit_of_measure": "kg",
+      "step_number": 1,
+      "instructions": ""
+    },
+    "dcfb02b0-e095-441e-94ad-3e9df0843bd5": {
+      "id": "dcfb02b0-e095-441e-94ad-3e9df0843bd5",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I3244",
+      "ingredient_name": "Anhydrous citric acid",
+      "quantity_required": 3.66,
+      "unit_of_measure": "kg",
+      "step_number": 2,
+      "instructions": ""
+    },
+    "733f3298-d012-4035-b4c1-b9cc567d4b38": {
+      "id": "733f3298-d012-4035-b4c1-b9cc567d4b38",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I2271",
+      "ingredient_name": "Ascorbic acid",
+      "quantity_required": 0.28,
+      "unit_of_measure": "kg",
+      "step_number": 3,
+      "instructions": ""
+    },
+    "6bb7631a-f1f6-4660-8723-94cefef05d82": {
+      "id": "6bb7631a-f1f6-4660-8723-94cefef05d82",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I7130",
+      "ingredient_name": "Carrageenan gum",
+      "quantity_required": 0.06,
+      "unit_of_measure": "kg",
+      "step_number": 4,
+      "instructions": ""
+    },
+    "865f0fa5-53dc-4f2b-8479-6c7bc0d3bda1": {
+      "id": "865f0fa5-53dc-4f2b-8479-6c7bc0d3bda1",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I9101",
+      "ingredient_name": "Riboflavin",
+      "quantity_required": 0.01,
+      "unit_of_measure": "kg",
+      "step_number": 5,
+      "instructions": ""
+    },
+    "328fe91b-9a93-495c-a486-4972e98ee5f8": {
+      "id": "328fe91b-9a93-495c-a486-4972e98ee5f8",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I1896",
+      "ingredient_name": "Silicon dioxide",
+      "quantity_required": 0.2,
+      "unit_of_measure": "kg",
+      "step_number": 6,
+      "instructions": ""
+    },
+    "53f01f3a-9051-43ff-8883-3dae0e854062": {
+      "id": "53f01f3a-9051-43ff-8883-3dae0e854062",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I2078",
+      "ingredient_name": "Clouding agent",
+      "quantity_required": 0.13,
+      "unit_of_measure": "kg",
+      "step_number": 7,
+      "instructions": ""
+    },
+    "1391abaa-d9e3-403d-a932-090aa716e341": {
+      "id": "1391abaa-d9e3-403d-a932-090aa716e341",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I6938",
+      "ingredient_name": "Lemon flavor",
+      "quantity_required": 0.21,
+      "unit_of_measure": "kg",
+      "step_number": 8,
+      "instructions": ""
+    },
+    "f738a6c1-5644-4ff5-b10d-32fa81f14e35": {
+      "id": "f738a6c1-5644-4ff5-b10d-32fa81f14e35",
+      "recipe_code": "R3821",
+      "recipe_name": "Beverage Powder Mix for 1000L",
+      "product_code": "P4083",
+      "ingredient_code": "I8425",
+      "ingredient_name": "Stevia",
+      "quantity_required": 0.24,
+      "unit_of_measure": "kg",
+      "step_number": 9,
+      "instructions": ""
+    }
+  },
+  "machines": {
+    "c1882ae4-fbf5-4d9d-92e0-59b5072d28d2": {
+      "id": "c1882ae4-fbf5-4d9d-92e0-59b5072d28d2",
+      "machine_code": "M7429",
+      "machine_name": "GEA Pasteurizer B-366",
+      "type": "Pasteurizer",
+      "manufacturer": "GEA",
+      "location": "HF-FIN",
+      "status": "Under Maintenance",
+      "last_maintenance_date": "2025-04-20",
+      "next_maintenance_due": "2025-07-01"
+    },
+    "b5615df6-637a-4104-a723-019c3c91479c": {
+      "id": "b5615df6-637a-4104-a723-019c3c91479c",
+      "machine_code": "M5513",
+      "machine_name": "SPX Juice Extractor B-122",
+      "type": "Juice Extractor",
+      "manufacturer": "SPX",
+      "location": "SH-CLD",
+      "status": "Out of Service",
+      "last_maintenance_date": "2024-07-04",
+      "next_maintenance_due": "2024-09-06"
+    },
+    "bb8b75c4-10e8-4dfe-99fb-a939d6f7fa7b": {
+      "id": "bb8b75c4-10e8-4dfe-99fb-a939d6f7fa7b",
+      "machine_code": "M1555",
+      "machine_name": "Tetra Pak CIP System B-639",
+      "type": "CIP System",
+      "manufacturer": "Tetra Pak",
+      "location": "SH-CLD",
+      "status": "Out of Service",
+      "last_maintenance_date": "2025-03-12",
+      "next_maintenance_due": "2025-08-09"
+    },
+    "43076fe8-65b8-421c-be87-54a6b44771fa": {
+      "id": "43076fe8-65b8-421c-be87-54a6b44771fa",
+      "machine_code": "M3734",
+      "machine_name": "Technogel Fruit Pulping Machine B-450",
+      "type": "Fruit Pulping Machine",
+      "manufacturer": "Technogel",
+      "location": "HF-FIN",
+      "status": "Under Maintenance",
+      "last_maintenance_date": "2024-05-04",
+      "next_maintenance_due": "2024-08-08"
+    },
+    "3b159714-1cce-42b0-ae3b-7bf90f5e7be5": {
+      "id": "3b159714-1cce-42b0-ae3b-7bf90f5e7be5",
+      "machine_code": "M5748",
+      "machine_name": "GEA Standardization Unit D-398",
+      "type": "Standardization Unit",
+      "manufacturer": "GEA",
+      "location": "HF-CLD",
+      "status": "Operational",
+      "last_maintenance_date": "2024-08-20",
+      "next_maintenance_due": "2025-01-03"
+    },
+    "ab35ccb2-8cac-4344-ab3c-e05b8a7e41cf": {
+      "id": "ab35ccb2-8cac-4344-ab3c-e05b8a7e41cf",
+      "machine_code": "M8062",
+      "machine_name": "Alfa Laval Vacuum Concentrator -474",
+      "type": "Vacuum Concentrator",
+      "manufacturer": "Alfa Laval",
+      "location": "HF-AMB",
+      "status": "Under Maintenance",
+      "last_maintenance_date": "2024-06-10",
+      "next_maintenance_due": "2024-08-26"
+    },
+    "cdbb7c25-752d-4916-a735-9f8084ef807b": {
+      "id": "cdbb7c25-752d-4916-a735-9f8084ef807b",
+      "machine_code": "M2480",
+      "machine_name": "Tetrapak UHT Processing Unit D-507",
+      "type": "UHT Processing Unit",
+      "manufacturer": "Tetrapak",
+      "location": "HF-CLD",
+      "status": "Operational",
+      "last_maintenance_date": "2025-02-05",
+      "next_maintenance_due": "2025-05-08"
+    },
+    "a0457c58-e21a-425f-882e-90e2ff52c5d2": {
+      "id": "a0457c58-e21a-425f-882e-90e2ff52c5d2",
+      "machine_code": "M2920",
+      "machine_name": "GEA Cream Processing Unit C-866",
+      "type": "Cream Processing Unit",
+      "manufacturer": "GEA",
+      "location": "HF-CLD",
+      "status": "Under Maintenance",
+      "last_maintenance_date": "2025-03-27",
+      "next_maintenance_due": "2025-06-06"
+    },
+    "42974f29-9ccb-479e-8d63-ee67e4234111": {
+      "id": "42974f29-9ccb-479e-8d63-ee67e4234111",
+      "machine_code": "M4470",
+      "machine_name": "APV UHT Processing Unit A-279",
+      "type": "UHT Processing Unit",
+      "manufacturer": "APV",
+      "location": "SH-CLD",
+      "status": "Out of Service",
+      "last_maintenance_date": "2024-09-03",
+      "next_maintenance_due": "2025-01-15"
+    },
+    "6ab27f12-6f51-481a-9663-47f89167ac45": {
+      "id": "6ab27f12-6f51-481a-9663-47f89167ac45",
+      "machine_code": "M3443",
+      "machine_name": "Promag Pasteurizer D-225",
+      "type": "Pasteurizer",
+      "manufacturer": "Promag",
+      "location": "HF-FLV",
+      "status": "Out of Service",
+      "last_maintenance_date": "2024-10-12",
+      "next_maintenance_due": "2024-12-17"
+    },
+    "54f442f6-3681-4e2d-be16-89de0bdcfd8e": {
+      "id": "54f442f6-3681-4e2d-be16-89de0bdcfd8e",
+      "machine_code": "M5182",
+      "machine_name": "APV Vacuum Concentrator A-969",
+      "type": "Vacuum Concentrator",
+      "manufacturer": "APV",
+      "location": "HF-FLV",
+      "status": "Scheduled Maintenance",
+      "last_maintenance_date": "2024-10-09",
+      "next_maintenance_due": "2025-02-24"
+    },
+    "f87f07eb-a468-445e-bcff-c21920266ac0": {
+      "id": "f87f07eb-a468-445e-bcff-c21920266ac0",
+      "machine_code": "M3605",
+      "machine_name": "Tetra Pak Vacuum Concentrator C-597",
+      "type": "Vacuum Concentrator",
+      "manufacturer": "Tetra Pak",
+      "location": "SH-CLD",
+      "status": "Scheduled Maintenance",
+      "last_maintenance_date": "2024-12-16",
+      "next_maintenance_due": "2025-06-06"
+    },
+    "e977989b-2e66-4882-bac1-e85a7b87d3cf": {
+      "id": "e977989b-2e66-4882-bac1-e85a7b87d3cf",
+      "machine_code": "M5679",
+      "machine_name": "Tetrapak Continuous Freezer B-912",
+      "type": "Continuous Freezer",
+      "manufacturer": "Tetrapak",
+      "location": "HF-AMB",
+      "status": "Operational",
+      "last_maintenance_date": "2024-12-30",
+      "next_maintenance_due": "2025-04-21"
+    },
+    "09b096fe-486d-4477-940c-ce89228af6e3": {
+      "id": "09b096fe-486d-4477-940c-ce89228af6e3",
+      "machine_code": "M4031",
+      "machine_name": "Technogel Continuous Freezer E-527",
+      "type": "Continuous Freezer",
+      "manufacturer": "Technogel",
+      "location": "SH-CLD",
+      "status": "Out of Service",
+      "last_maintenance_date": "2025-04-24",
+      "next_maintenance_due": "2025-09-12"
+    },
+    "19e5ee5b-3195-4e41-8d9b-7e62f64a7b82": {
+      "id": "19e5ee5b-3195-4e41-8d9b-7e62f64a7b82",
+      "machine_code": "M6305",
+      "machine_name": "APV Cream Processing Unit E-175",
+      "type": "Cream Processing Unit",
+      "manufacturer": "APV",
+      "location": "HF-FLV",
+      "status": "Operational",
+      "last_maintenance_date": "2024-12-13",
+      "next_maintenance_due": "2025-04-16"
+    },
+    "f45e1004-407f-44bc-a497-72e09d5636f0": {
+      "id": "f45e1004-407f-44bc-a497-72e09d5636f0",
+      "machine_code": "M6678",
+      "machine_name": "Alfa Laval Standardization Unit B-964",
+      "type": "Standardization Unit",
+      "manufacturer": "Alfa Laval",
+      "location": "SH-CLD",
+      "status": "Operational",
+      "last_maintenance_date": "2025-04-08",
+      "next_maintenance_due": "2025-06-02"
+    },
+    "00d7f92c-364e-496f-be32-96b158e73b40": {
+      "id": "00d7f92c-364e-496f-be32-96b158e73b40",
+      "machine_code": "M6737",
+      "machine_name": "Technogel Pasteurizer A-382",
+      "type": "Pasteurizer",
+      "manufacturer": "Technogel",
+      "location": "HF-FLV",
+      "status": "Scheduled Maintenance",
+      "last_maintenance_date": "2024-05-30",
+      "next_maintenance_due": "2024-08-10"
+    },
+    "2f59e22f-6d45-43f6-8d73-a998507f3328": {
+      "id": "2f59e22f-6d45-43f6-8d73-a998507f3328",
+      "machine_code": "M2575",
+      "machine_name": "Carpigiani Juice Extractor D-275",
+      "type": "Juice Extractor",
+      "manufacturer": "Carpigiani",
+      "location": "HF-FLV",
+      "status": "Scheduled Maintenance",
+      "last_maintenance_date": "2024-08-26",
+      "next_maintenance_due": "2024-10-19"
+    }
+  },
+  "suppliers": {
+    "b09c49af-0e7a-498a-a049-7ff233541151": {
+      "id": "b09c49af-0e7a-498a-a049-7ff233541151",
+      "supplier_code": "S4825",
+      "supplier_name": "Almarai",
+      "address": "194 King Abdullah Rd, Mecca",
+      "phone": "+966-23-439-9450",
+      "email": "info@almarai.com.sa",
+      "product_categories": [
+        "Raw Milk",
+        "Dairy Ingredients",
+        "Fruit Suppliers"
+      ],
+      "status": "Active"
+    },
+    "e7d506a7-e90e-4649-bc32-a9483803c7e1": {
+      "id": "e7d506a7-e90e-4649-bc32-a9483803c7e1",
+      "supplier_code": "S7987",
+      "supplier_name": "SADAFCO",
+      "address": "630 King Fahd Rd, Dammam",
+      "phone": "+966-28-129-5114",
+      "email": "info@sadafco.com.sa",
+      "product_categories": [
+        "Raw Milk",
+        "Dairy Ingredients"
+      ],
+      "status": "Inactive"
+    },
+    "76db8c04-aeef-4fa7-92ba-71abe97ff481": {
+      "id": "76db8c04-aeef-4fa7-92ba-71abe97ff481",
+      "supplier_code": "S2912",
+      "supplier_name": "NADEC",
+      "address": "849 King Abdullah Rd, Jeddah",
+      "phone": "+966-84-524-1457",
+      "email": "info@nadec.com.sa",
+      "product_categories": [
+        "Raw Milk",
+        "Dairy Ingredients"
+      ],
+      "status": "Inactive"
+    },
+    "9786f75b-d177-4d7f-be10-40170fbe932c": {
+      "id": "9786f75b-d177-4d7f-be10-40170fbe932c",
+      "supplier_code": "S8322",
+      "supplier_name": "Arla Foods",
+      "address": "530 King Abdullah Rd, Riyadh",
+      "phone": "+966-14-138-8251",
+      "email": "info@arlafoods.com.sa",
+      "product_categories": [
+        "Raw Milk",
+        "Dairy Ingredients"
+      ],
+      "status": "New"
+    },
+    "5efa5c15-ff85-40c7-9403-2ec21a28b5c2": {
+      "id": "5efa5c15-ff85-40c7-9403-2ec21a28b5c2",
+      "supplier_code": "S8927",
+      "supplier_name": "Danone SA",
+      "address": "365 King Abdullah Rd, Al Khobar",
+      "phone": "+966-19-421-8597",
+      "email": "info@danonesa.com.sa",
+      "product_categories": [
+        "Raw Milk",
+        "Dairy Ingredients"
+      ],
+      "status": "Inactive"
+    },
+    "8412fa85-d861-436b-8bc4-9bbc1c24d237": {
+      "id": "8412fa85-d861-436b-8bc4-9bbc1c24d237",
+      "supplier_code": "S2010",
+      "supplier_name": "Al-Othman Holding",
+      "address": "267 Industrial Area, Dammam",
+      "phone": "+966-54-544-1258",
+      "email": "info@al-othmanholding.com.sa",
+      "product_categories": [
+        "Logistics Services"
+      ],
+      "status": "New"
+    },
+    "ab5ea07c-3ccd-49e9-968f-ef3f6ced36e0": {
+      "id": "ab5ea07c-3ccd-49e9-968f-ef3f6ced36e0",
+      "supplier_code": "S4092",
+      "supplier_name": "BEL SA",
+      "address": "546 King Abdullah Rd, Jeddah",
+      "phone": "+966-63-390-3586",
+      "email": "info@belsa.com.sa",
+      "product_categories": [
+        "Food Additives"
+      ],
+      "status": "Active"
+    },
+    "fb5351e9-6576-4d55-8bd9-f2ae7d162a3a": {
+      "id": "fb5351e9-6576-4d55-8bd9-f2ae7d162a3a",
+      "supplier_code": "S8584",
+      "supplier_name": "Saudi Juice Company 28",
+      "address": "569 Industrial City, Al Khobar",
+      "phone": "+966-95-325-1723",
+      "email": "info@saudijuicecompany28.com.sa",
+      "product_categories": [
+        "Dairy Ingredients"
+      ],
+      "status": "Inactive"
+    },
+    "47132710-c06f-4289-970e-8ba346c192f6": {
+      "id": "47132710-c06f-4289-970e-8ba346c192f6",
+      "supplier_code": "S6405",
+      "supplier_name": "Saudi Packaging Company 81",
+      "address": "615 Industrial City, Riyadh",
+      "phone": "+966-71-564-6629",
+      "email": "info@saudipackagingcompany81.com.sa",
+      "product_categories": [
+        "Dairy Ingredients"
+      ],
+      "status": "Inactive"
+    },
+    "ef19f0d4-c228-4868-b9b3-0e9a0d0c1aaa": {
+      "id": "ef19f0d4-c228-4868-b9b3-0e9a0d0c1aaa",
+      "supplier_code": "S7041",
+      "supplier_name": "Saudi Packaging Company 78",
+      "address": "975 Commercial Area, Riyadh",
+      "phone": "+966-85-188-2407",
+      "email": "info@saudipackagingcompany78.com.sa",
+      "product_categories": [
+        "Raw Milk"
+      ],
+      "status": "Active"
+    },
+    "8de93663-acba-41c0-a1c8-567874047b05": {
+      "id": "8de93663-acba-41c0-a1c8-567874047b05",
+      "supplier_code": "S7937",
+      "supplier_name": "Saudi Packaging Company 31",
+      "address": "781 Industrial City, Dammam",
+      "phone": "+966-69-329-1385",
+      "email": "info@saudipackagingcompany31.com.sa",
+      "product_categories": [
+        "Dairy Ingredients"
+      ],
+      "status": "Inactive"
+    },
+    "dcb4f137-fb83-4ad5-a967-94162c1fdb4a": {
+      "id": "dcb4f137-fb83-4ad5-a967-94162c1fdb4a",
+      "supplier_code": "S2449",
+      "supplier_name": "Saudi Foods Company 80",
+      "address": "160 Industrial City, Medina",
+      "phone": "+966-32-153-5797",
+      "email": "info@saudifoodscompany80.com.sa",
+      "product_categories": [
+        "Food Additives"
+      ],
+      "status": "Inactive"
+    },
+    "e22dfb60-cb7e-4454-b144-246ed79f567b": {
+      "id": "e22dfb60-cb7e-4454-b144-246ed79f567b",
+      "supplier_code": "S4723",
+      "supplier_name": "Saudi Foods Company 14",
+      "address": "495 Industrial City, Riyadh",
+      "phone": "+966-95-256-2137",
+      "email": "info@saudifoodscompany14.com.sa",
+      "product_categories": [
+        "Raw Milk"
+      ],
+      "status": "New"
+    },
+    "88e7ed42-4471-446d-8855-8eaeb2fff4f5": {
+      "id": "88e7ed42-4471-446d-8855-8eaeb2fff4f5",
+      "supplier_code": "S4902",
+      "supplier_name": "Saudi Juice Company 87",
+      "address": "139 Industrial City, Abha",
+      "phone": "+966-89-238-8302",
+      "email": "info@saudijuicecompany87.com.sa",
+      "product_categories": [
+        "Processing Equipment"
+      ],
+      "status": "New"
+    },
+    "a1925693-8e1d-42cd-9e02-7b132fad6f06": {
+      "id": "a1925693-8e1d-42cd-9e02-7b132fad6f06",
+      "supplier_code": "S7000",
+      "supplier_name": "Saudi Juice Company 50",
+      "address": "564 Industrial City, Medina",
+      "phone": "+966-71-330-1828",
+      "email": "info@saudijuicecompany50.com.sa",
+      "product_categories": [
+        "Food Additives"
+      ],
+      "status": "On Hold"
+    }
+  }
+}

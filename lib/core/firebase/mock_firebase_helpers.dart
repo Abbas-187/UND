@@ -1,9 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'firebase_mock.dart';
-import 'firebase_module.dart';
 
 /// A MockMessaging implementation for testing without Firebase
 class MockMessaging {
@@ -91,26 +89,22 @@ class MockNotificationSettings implements NotificationSettings {
       AppleNotificationSetting.disabled;
 }
 
-/// Provides the appropriate Firebase implementation based on useMockFirebase flag
+/// Provides Firebase implementation
 class FirebaseImplementationProvider {
-  /// Get a Firebase-like instance (real or mock)
+  /// Get a Firebase-like instance
   static dynamic getFirestoreInstance() {
-    return useMockFirebase ? FirestoreMock() : null;
+    return null; // Will be handled by real Firebase
   }
 
-  /// Get a messaging instance (real or mock)
+  /// Get a messaging instance
   static dynamic getMessagingInstance() {
-    return useMockFirebase ? MockMessaging() : null;
+    return null; // Will be handled by real Firebase
   }
 
-  /// Updated code for initializing mock services
+  /// Initialize app
   static Future<void> initializeApp(WidgetRef ref) async {
-    if (useMockFirebase) {
-      debugPrint('Initializing app with mock Firebase implementation');
-    } else {
-      // Use the real Firebase implementation
-      debugPrint('Initializing app with real Firebase implementation');
-    }
+    // Use the real Firebase implementation
+    debugPrint('Initializing app with real Firebase implementation');
   }
 
   /// Helper for safely handling required Firebase dependency in repositories

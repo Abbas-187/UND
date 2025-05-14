@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/routes/app_go_router.dart';
 import '../../../../features/shared/models/user_role.dart';
 import '../../../../features/shared/providers/user_role_provider.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../shared/presentation/screens/app_settings_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -13,6 +16,9 @@ class SettingsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final currentRole = ref.watch(userRoleProvider);
+    // Watch persisted app settings
+    final appSettings = ref.watch(appSettingsProvider);
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -48,14 +54,12 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Role selection cards
-          ...UserRoles.allRoles
-              .map((role) => _buildRoleCard(
-                    context: context,
-                    role: role,
-                    isSelected: role.id == currentRole.id,
-                    onSelected: () => _changeRole(ref, role),
-                  ))
-              .toList(),
+          ...UserRoles.allRoles.map((role) => _buildRoleCard(
+                context: context,
+                role: role,
+                isSelected: role.id == currentRole.id,
+                onSelected: () => _changeRole(ref, role),
+              )),
 
           const SizedBox(height: 32),
 
@@ -63,7 +67,8 @@ class SettingsScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Card(
-              color: theme.colorScheme.primaryContainer.withOpacity(0.5),
+              color: theme.colorScheme.primaryContainer
+                  .withValues(alpha: 0.5 * 255),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -100,9 +105,106 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
 
-          // Other settings sections would go here
+          // Language Settings
+          _buildSectionHeader(context, l10n.languageSettings),
+          Card(
+            child: ListTile(
+              title: Text(l10n.language),
+              trailing: DropdownButton<String>(
+                value: appSettings.language,
+                onChanged: (value) => value != null
+                    ? settingsNotifier.updateLanguage(value)
+                    : null,
+                items: const [
+                  DropdownMenuItem(value: 'en', child: Text('English')),
+                  DropdownMenuItem(value: 'ar', child: Text('العربية')),
+                  DropdownMenuItem(value: 'ur', child: Text('اردو')),
+                  DropdownMenuItem(value: 'hi', child: Text('हिंदी')),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Theme Settings
+          _buildSectionHeader(context, l10n.themeSettings),
+          Card(
+            child: Column(
+              children: ThemeMode.values.map((mode) {
+                final label = mode == ThemeMode.light
+                    ? l10n.lightTheme
+                    : mode == ThemeMode.dark
+                        ? l10n.darkTheme
+                        : l10n.systemTheme;
+                return RadioListTile<ThemeMode>(
+                  title: Text(label),
+                  value: mode,
+                  groupValue: appSettings.themeMode,
+                  onChanged: (value) => value != null
+                      ? settingsNotifier.updateThemeMode(value)
+                      : null,
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Notification Settings
+          _buildSectionHeader(context, l10n.notificationSettings),
+          Card(
+            child: Column(
+              children: [
+                SwitchListTile(
+                  title: Text(l10n.enableNotifications),
+                  value: appSettings.notificationsEnabled,
+                  onChanged: settingsNotifier.updateNotificationsEnabled,
+                ),
+                if (appSettings.notificationsEnabled) ...[
+                  SwitchListTile(
+                    title: Text(l10n.enableSounds),
+                    value: appSettings.soundEnabled,
+                    onChanged: settingsNotifier.updateSoundEnabled,
+                  ),
+                  SwitchListTile(
+                    title: Text(l10n.enableVibration),
+                    value: appSettings.vibrationEnabled,
+                    onChanged: settingsNotifier.updateVibrationEnabled,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Module-specific Settings
+          _buildSectionHeader(context, l10n.moduleSettings),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.inventory_2),
+              title: Text(l10n.inventorySettings),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap: () => context.go(AppRoutes.inventorySettings),
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // Save preferences explicitly if needed
+          ElevatedButton(
+            onPressed: () async {
+              await settingsNotifier.saveSettings();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(l10n.settingsSaved),
+                      backgroundColor: Colors.green),
+                );
+              }
+            },
+            child: Text(l10n.saveSettings),
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -130,7 +232,8 @@ class SettingsScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         side: isSelected
             ? BorderSide(color: theme.colorScheme.primary, width: 2)
-            : BorderSide(color: theme.colorScheme.outline.withOpacity(0.2)),
+            : BorderSide(
+                color: theme.colorScheme.outline.withValues(alpha: 0.2 * 255)),
       ),
       child: InkWell(
         onTap: onSelected,
@@ -144,13 +247,14 @@ class SettingsScreen extends ConsumerWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? theme.colorScheme.primary.withOpacity(0.2)
+                      ? theme.colorScheme.primary.withValues(alpha: 0.2 * 255)
                       : theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                     color: isSelected
                         ? theme.colorScheme.primary
-                        : theme.colorScheme.onSurface.withOpacity(0.2),
+                        : theme.colorScheme.onSurface
+                            .withValues(alpha: 0.2 * 255),
                     width: 1,
                   ),
                 ),
@@ -158,7 +262,8 @@ class SettingsScreen extends ConsumerWidget {
                   role.icon,
                   color: isSelected
                       ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurface.withOpacity(0.7),
+                      : theme.colorScheme.onSurface
+                          .withValues(alpha: 0.7 * 255),
                   size: 24,
                 ),
               ),
@@ -182,8 +287,9 @@ class SettingsScreen extends ConsumerWidget {
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: isSelected
                             ? theme.colorScheme.onPrimaryContainer
-                                .withOpacity(0.8)
-                            : theme.colorScheme.onSurface.withOpacity(0.6),
+                                .withValues(alpha: 0.8 * 255)
+                            : theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6 * 255),
                       ),
                     ),
                   ],
@@ -216,7 +322,8 @@ class SettingsScreen extends ConsumerWidget {
           Icon(
             icon,
             size: 18,
-            color: theme.colorScheme.onPrimaryContainer.withOpacity(0.7),
+            color: theme.colorScheme.onPrimaryContainer
+                .withValues(alpha: 0.7 * 255),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -235,6 +342,20 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Text(
+        title,
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.primary,
+        ),
       ),
     );
   }

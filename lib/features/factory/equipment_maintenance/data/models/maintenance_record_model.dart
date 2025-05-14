@@ -54,6 +54,27 @@ class MaintenanceRecordModel {
       metadata: json['metadata'] as Map<String, dynamic>,
     );
   }
+
+  static MaintenanceRecordModel dummy() {
+    return MaintenanceRecordModel(
+      id: 'dummy',
+      equipmentId: 'dummy-equipment',
+      equipmentName: 'Dummy Equipment',
+      equipmentType: EquipmentType.other,
+      scheduledDate: DateTime(2000, 1, 1),
+      completionDate: null,
+      maintenanceType: MaintenanceType.preventive,
+      description: 'Dummy maintenance record',
+      status: MaintenanceStatus.scheduled,
+      performedById: 'dummy-user',
+      performedByName: 'Dummy User',
+      notes: null,
+      partsReplaced: null,
+      downtimeHours: null,
+      metadata: const {},
+    );
+  }
+
   final String id;
   final String equipmentId;
   final String equipmentName;

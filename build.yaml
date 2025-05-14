@@ -1,0 +1,19 @@
+targets:
+  $default:
+    builders:
+      freezed:
+        generate_for:
+          include:
+            - lib/features/crm/models/*.dart
+            - lib/features/inventory/**/*.dart
+          exclude:
+            - lib/features/crm/models/customer.freezed.dart
+            - lib/features/crm/models/order.freezed.dart
+            - lib/features/crm/models/interaction_log.freezed.dart
+            - lib/features/crm/models/crm_reminder.freezed.dart
+            - lib/features/crm/models/crm_report.freezed.dart
+      json_serializable:
+        options:
+          explicit_to_json: true
+          create_to_json: true
+          field_rename: snake

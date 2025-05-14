@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:und_app/features/milk_reception/domain/models/milk_reception_model.dart';
-import 'package:und_app/features/milk_reception/domain/models/milk_quality_test_model.dart';
+import 'package:go_router/go_router.dart';
 
-import '../controllers/milk_reception_controller.dart';
+import '../../../../core/routes/app_go_router.dart';
 import '../../../../theme/app_theme_extensions.dart';
+import '../../domain/models/milk_reception_model.dart';
+import '../controllers/milk_reception_controller.dart';
 
 /// Screen that displays detailed information about a milk reception
 class MilkReceptionDetailsScreen extends ConsumerWidget {
@@ -20,16 +21,23 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
     final receptionState =
         ref.watch(milkReceptionControllerProvider(receptionId));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Milk Reception Details'),
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        GoRouter.of(context).go(AppRoutes.milkReception);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Milk Reception Details'),
+        ),
+        body: receptionState.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : receptionState.errorMessage != null
+                ? Center(child: Text('Error: ${receptionState.errorMessage}'))
+                : _buildReceptionDetails(
+                    context, ref, receptionState.receptionModel),
       ),
-      body: receptionState.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : receptionState.errorMessage != null
-              ? Center(child: Text('Error: ${receptionState.errorMessage}'))
-              : _buildReceptionDetails(
-                  context, ref, receptionState.receptionModel),
     );
   }
 
@@ -428,8 +436,8 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
         return 'Accepted';
       case ReceptionStatus.rejected:
         return 'Rejected';
-      default:
-        return status.toString().split('.').last;
+      case ReceptionStatus.draft:
+        return 'Draft';
     }
   }
 
@@ -447,8 +455,8 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
         return 'Pasteurized Goat Milk';
       case MilkType.pasteurizedSheep:
         return 'Pasteurized Sheep Milk';
-      default:
-        return type.toString().split('.').last;
+      case MilkType.other:
+        return 'Other Milk Type';
     }
   }
 
@@ -462,8 +470,8 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
         return 'Plastic Containers';
       case ContainerType.bulk:
         return 'Bulk Container';
-      default:
-        return type.toString().split('.').last;
+      case ContainerType.other:
+        return 'Other Container';
     }
   }
 
@@ -477,7 +485,7 @@ class MilkReceptionDetailsScreen extends ConsumerWidget {
         return statusColors?.success ?? Colors.green;
       case ReceptionStatus.rejected:
         return Theme.of(context).colorScheme.error;
-      default:
+      case ReceptionStatus.draft:
         return Colors.grey;
     }
   }

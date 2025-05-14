@@ -31,10 +31,10 @@ abstract class StorageInterface {
 
 // Real Firebase implementations
 class FirebaseAuthReal implements AuthInterface {
-  final firebase_auth.FirebaseAuth _auth;
 
   FirebaseAuthReal({firebase_auth.FirebaseAuth? auth})
       : _auth = auth ?? firebase_auth.FirebaseAuth.instance;
+  final firebase_auth.FirebaseAuth _auth;
 
   @override
   Stream<firebase_auth.User?> authStateChanges() => _auth.authStateChanges();
@@ -70,10 +70,10 @@ class FirebaseAuthReal implements AuthInterface {
 }
 
 class FirestoreReal implements FirestoreInterface {
-  final FirebaseFirestore _firestore;
 
   FirestoreReal({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
 
   @override
   CollectionReference collection(String path) => _firestore.collection(path);
@@ -90,10 +90,10 @@ class FirestoreReal implements FirestoreInterface {
 }
 
 class StorageReal implements StorageInterface {
-  final FirebaseStorage _storage;
 
   StorageReal({FirebaseStorage? storage})
       : _storage = storage ?? FirebaseStorage.instance;
+  final FirebaseStorage _storage;
 
   @override
   Reference ref([String? path]) =>

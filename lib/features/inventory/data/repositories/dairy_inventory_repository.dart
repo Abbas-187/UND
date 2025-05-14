@@ -1,7 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/entities/cost_layer.dart';
+import '../../domain/entities/cost_method_setting.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/repositories/inventory_repository.dart';
 import '../models/inventory_item_model.dart';
+import '../models/inventory_movement_model.dart';
 import '../providers/dairy_inventory_provider.dart';
 
 /// Repository implementation for dairy inventory using mock data
@@ -26,6 +30,7 @@ class DairyInventoryRepository implements InventoryRepository {
     // Convert domain entity to model - creating a basic model with essential info
     final model = InventoryItemModel(
       id: item.id,
+      appItemId: item.appItemId,
       name: item.name,
       category: item.category,
       unit: item.unit,
@@ -151,8 +156,8 @@ class DairyInventoryRepository implements InventoryRepository {
   }
 
   @override
-  Future<InventoryItem> adjustQuantity(
-      String id, double adjustment, String reason) async {
+  Future<InventoryItem> adjustQuantity(String id, double adjustment,
+      String reason, String initiatingEmployeeId) async {
     dairyProvider.adjustQuantity(id, adjustment, reason);
     final item = dairyProvider.getItemById(id);
     if (item == null) {
@@ -203,7 +208,9 @@ class DairyInventoryRepository implements InventoryRepository {
   @override
   Future<List<InventoryItem>> filterItems({
     String? category,
+    String? subCategory,
     String? location,
+    String? supplier,
     bool? lowStock,
     bool? needsReorder,
     bool? expired,
@@ -214,8 +221,14 @@ class DairyInventoryRepository implements InventoryRepository {
       items = items.where((item) => item.category == category).toList();
     }
 
-    if (location != null) {
-      items = items.where((item) => item.location == location).toList();
+    if (subCategory != null) {
+      items = items.where((item) => item.subCategory == subCategory).toList();
+    }
+
+    if (supplier != null) {
+      items = items
+          .where((item) => item.additionalAttributes?['supplier'] == supplier)
+          .toList();
     }
 
     if (lowStock == true) {
@@ -299,6 +312,222 @@ class DairyInventoryRepository implements InventoryRepository {
   Future<void> resetInventory() async {
     await dairyProvider.resetInventory();
   }
+
+  @override
+  Future<List<InventoryItem>> getMostExpensiveItems(int limit) async {
+    final items = await getItems();
+    items.sort((a, b) => (b.cost ?? 0).compareTo(a.cost ?? 0));
+    return items.take(limit).toList();
+  }
+
+  @override
+  Future<int> countItemsBySupplier(String supplier) async {
+    final items = await getItems();
+    return items.where((item) => item.supplier == supplier).length;
+  }
+
+  @override
+  Future<int> countRecipesUsingItem(String itemId) async {
+    // TODO: implement real query to count recipes
+    return 0;
+  }
+
+  // --- BEGIN: InventoryRepository required stubs ---
+  @override
+  Future<String> addMovement(InventoryMovementModel movement) {
+    throw UnimplementedError(
+        'addMovement is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<InventoryMovementModel?> getMovement(String movementId) {
+    throw UnimplementedError(
+        'getMovement is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<InventoryMovementModel>> getMovementsForItem(String itemId) {
+    throw UnimplementedError(
+        'getMovementsForItem is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<InventoryMovementModel>> getInboundMovementsForItem(
+      String itemId) {
+    throw UnimplementedError(
+        'getInboundMovementsForItem is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<InventoryMovementModel>> getMovementsForWarehouse(
+      String warehouseId) {
+    throw UnimplementedError(
+        'getMovementsForWarehouse is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> updateMovement(InventoryMovementModel movement) {
+    throw UnimplementedError(
+        'updateMovement is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> deleteMovement(String movementId) {
+    throw UnimplementedError(
+        'deleteMovement is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<InventoryItem?> getInventoryItem(String itemId) {
+    throw UnimplementedError(
+        'getInventoryItem is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> updateInventoryItem(InventoryItem item) {
+    throw UnimplementedError(
+        'updateInventoryItem is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<InventoryItem>> getInventoryItems(String warehouseId) {
+    throw UnimplementedError(
+        'getInventoryItems is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<double> getCurrentStockQuantity(String itemId, String warehouseId) {
+    throw UnimplementedError(
+        'getCurrentStockQuantity is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<CostLayer>> getAvailableCostLayers(
+      String itemId, String warehouseId, CostingMethod costingMethod) {
+    throw UnimplementedError(
+        'getAvailableCostLayers is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<double?> getItemWeightedAverageCost(
+      String itemId, String warehouseId) {
+    throw UnimplementedError(
+        'getItemWeightedAverageCost is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<double> getItemCurrentQuantity(String itemId, String warehouseId) {
+    throw UnimplementedError(
+        'getItemCurrentQuantity is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> updateCostLayers(
+      InventoryMovementModel movement, CostingMethod costingMethod) {
+    throw UnimplementedError(
+        'updateCostLayers is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<CostMethodSetting> getCostingMethodSetting(String? warehouseId) {
+    throw UnimplementedError(
+        'getCostingMethodSetting is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> updateCostingMethodSetting(CostMethodSetting setting) {
+    throw UnimplementedError(
+        'updateCostingMethodSetting is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<Map<String, InventoryValuation>> getInventoryValuation(
+      {required String warehouseId,
+      required CostingMethod costingMethod,
+      List<String>? itemIds,
+      String? categoryId}) {
+    throw UnimplementedError(
+        'getInventoryValuation is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<PickingSuggestion>> getPickingSuggestions(
+      {required String itemId,
+      required String warehouseId,
+      required double quantity,
+      required PickingStrategy strategy}) {
+    throw UnimplementedError(
+        'getPickingSuggestions is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<Warehouse?> getWarehouse(String id) {
+    throw UnimplementedError(
+        'getWarehouse is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<Warehouse>> getWarehouses() {
+    throw UnimplementedError(
+        'getWarehouses is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<CompanySettings?> getCompanySettings() {
+    throw UnimplementedError(
+        'getCompanySettings is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> saveCompanySettings(CompanySettings settings) {
+    throw UnimplementedError(
+        'saveCompanySettings is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<InventoryMovementModel> saveMovement(InventoryMovementModel movement) {
+    throw UnimplementedError(
+        'saveMovement is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> updateInventoryQuantity(
+      String itemId, String warehouseId, double quantityChange) {
+    throw UnimplementedError(
+        'updateInventoryQuantity is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> saveCostLayer(CostLayer layer) {
+    throw UnimplementedError(
+        'saveCostLayer is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> deleteCostLayer(String id) {
+    throw UnimplementedError(
+        'deleteCostLayer is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<void> saveCostLayerConsumption(CostLayerConsumption consumption) {
+    throw UnimplementedError(
+        'saveCostLayerConsumption is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<CostLayerConsumption>> getCostLayerConsumptions(String itemId) {
+    throw UnimplementedError(
+        'getCostLayerConsumptions is not implemented in DairyInventoryRepository');
+  }
+
+  @override
+  Future<List<ItemCostHistoryEntry>> getItemCostHistory(
+      String itemId, DateTime startDate, DateTime endDate) {
+    throw UnimplementedError(
+        'getItemCostHistory is not implemented in DairyInventoryRepository');
+  }
+  // --- END: InventoryRepository required stubs ---
 }
 
 /// Provider for dairy inventory repository

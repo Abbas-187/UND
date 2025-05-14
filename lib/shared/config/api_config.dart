@@ -1,16 +1,5 @@
 /// Configuration class for API endpoints and authentication
 class ApiConfig {
-  /// Base URL for the CRM API
-  final String crmApiUrl;
-
-  /// API key for authenticating with the CRM API
-  final String crmApiKey;
-
-  /// Base URL for the inventory API
-  final String inventoryApiUrl;
-
-  /// API key for authenticating with the inventory API
-  final String inventoryApiKey;
 
   /// Default constructor with environment-specific configuration
   ApiConfig({
@@ -49,4 +38,15 @@ class ApiConfig {
       inventoryApiKey: 'test-inventory-api-key',
     );
   }
+  /// Base URL for the CRM API
+  final String crmApiUrl;
+
+  /// API key for authenticating with the CRM API
+  final String crmApiKey;
+
+  /// Base URL for the inventory API
+  final String inventoryApiUrl;
+
+  /// API key for authenticating with the inventory API
+  final String inventoryApiKey;
 }

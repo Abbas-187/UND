@@ -50,14 +50,6 @@ class SupplierAddress {
 }
 
 class SupplierMetrics {
-  const SupplierMetrics({
-    required this.onTimeDeliveryRate,
-    required this.qualityScore,
-    required this.responseTime,
-  });
-  final double onTimeDeliveryRate;
-  final int qualityScore;
-  final int responseTime;
 
   factory SupplierMetrics.fromJson(Map<String, dynamic> json) {
     return SupplierMetrics(
@@ -66,6 +58,14 @@ class SupplierMetrics {
       responseTime: json['responseTime'] as int,
     );
   }
+  const SupplierMetrics({
+    required this.onTimeDeliveryRate,
+    required this.qualityScore,
+    required this.responseTime,
+  });
+  final double onTimeDeliveryRate;
+  final int qualityScore;
+  final int responseTime;
   Map<String, dynamic> toJson() => {
         'onTimeDeliveryRate': onTimeDeliveryRate,
         'qualityScore': qualityScore,
@@ -84,14 +84,6 @@ class SupplierMetrics {
 }
 
 class QualityLog {
-  const QualityLog({
-    required this.date,
-    required this.score,
-    required this.notes,
-  });
-  final DateTime date;
-  final double score;
-  final String notes;
 
   factory QualityLog.fromJson(Map<String, dynamic> json) {
     return QualityLog(
@@ -100,6 +92,14 @@ class QualityLog {
       notes: json['notes'] as String,
     );
   }
+  const QualityLog({
+    required this.date,
+    required this.score,
+    required this.notes,
+  });
+  final DateTime date;
+  final double score;
+  final String notes;
   Map<String, dynamic> toJson() => {
         'date': date.toIso8601String(),
         'score': score,
@@ -118,6 +118,16 @@ class QualityLog {
 }
 
 class SupplierPerformanceMetrics {
+
+  /// Creates a [SupplierPerformanceMetrics] instance from a JSON map
+  factory SupplierPerformanceMetrics.fromJson(Map<String, dynamic> json) {
+    return SupplierPerformanceMetrics(
+      qualityScore: (json['quality_score'] ?? 0.0).toDouble(),
+      deliveryScore: (json['delivery_score'] ?? 0.0).toDouble(),
+      priceScore: (json['price_score'] ?? 0.0).toDouble(),
+      overallScore: (json['overall_score'] ?? 0.0).toDouble(),
+    );
+  }
   /// Creates a new immutable [SupplierPerformanceMetrics] instance
   const SupplierPerformanceMetrics({
     required this.qualityScore,
@@ -137,16 +147,6 @@ class SupplierPerformanceMetrics {
 
   /// Overall performance score of the supplier (0-5 scale)
   final double overallScore;
-
-  /// Creates a [SupplierPerformanceMetrics] instance from a JSON map
-  factory SupplierPerformanceMetrics.fromJson(Map<String, dynamic> json) {
-    return SupplierPerformanceMetrics(
-      qualityScore: (json['quality_score'] ?? 0.0).toDouble(),
-      deliveryScore: (json['delivery_score'] ?? 0.0).toDouble(),
-      priceScore: (json['price_score'] ?? 0.0).toDouble(),
-      overallScore: (json['overall_score'] ?? 0.0).toDouble(),
-    );
-  }
 
   /// Creates a copy of this [SupplierPerformanceMetrics] instance with the given fields replaced
   SupplierPerformanceMetrics copyWith({

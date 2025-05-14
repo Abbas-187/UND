@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../domain/providers/production_provider.dart';
@@ -17,8 +18,7 @@ class ProductionListScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () =>
-                Navigator.pushNamed(context, '/factory/production/create'),
+            onPressed: () => context.push('/factory/production/create'),
           ),
         ],
       ),
@@ -52,11 +52,8 @@ class ProductionListScreen extends ConsumerWidget {
                     backgroundColor: _getStatusColor(order.status),
                     labelStyle: const TextStyle(color: Colors.white),
                   ),
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    '/factory/production/detail',
-                    arguments: order.id,
-                  ),
+                  onTap: () => context.push('/factory/production/detail',
+                      extra: order.id),
                 ),
               );
             },

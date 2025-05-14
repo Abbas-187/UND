@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../../core/routes/app_router.dart';
+import '../../../../core/routes/app_go_router.dart';
 import '../../../../core/utils/app_reset_utility.dart';
 import '../../../../features/shared/models/app_modules.dart';
 import '../../../../features/shared/models/user_role.dart';
+import '../../../../features/shared/providers/selected_route_provider.dart';
+import '../../../../features/shared/providers/selected_screen_title_provider.dart';
 import '../../../../features/shared/providers/user_role_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -20,6 +23,10 @@ class HomeScreen extends ConsumerWidget {
 
     // Get current user role
     final userRole = ref.watch(userRoleProvider);
+
+    // Track the currently selected screen (route)
+    final selectedRoute = ref.watch(selectedRouteProvider);
+    final selectedScreenTitle = ref.watch(selectedScreenTitleProvider);
 
     return Scaffold(
       body: CustomScrollView(
@@ -73,6 +80,38 @@ class HomeScreen extends ConsumerWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
+                        if (selectedRoute != '/') ...[
+                          const SizedBox(width: 16),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color:
+                                  theme.colorScheme.onPrimary.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  size: 8,
+                                  color: theme.colorScheme.onPrimary
+                                      .withOpacity(0.8),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  selectedScreenTitle,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onPrimary
+                                        .withOpacity(0.95),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ],
@@ -114,7 +153,15 @@ class HomeScreen extends ConsumerWidget {
                   child: IconButton(
                     icon: const Icon(Icons.notifications_outlined),
                     onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.notifications);
+                      // Show feedback snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Opening notifications'),
+                          duration: const Duration(seconds: 1),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      context.push('/notifications');
                     },
                   ),
                 ),
@@ -124,7 +171,15 @@ class HomeScreen extends ConsumerWidget {
                   child: IconButton(
                     icon: const Icon(Icons.settings),
                     onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.settings);
+                      // Show feedback snackbar
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Opening settings'),
+                          duration: const Duration(seconds: 1),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      context.push('/settings');
                     },
                   ),
                 ),
@@ -133,7 +188,15 @@ class HomeScreen extends ConsumerWidget {
                 child: IconButton(
                   icon: const Icon(Icons.person),
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.userProfile);
+                    // Show feedback snackbar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Opening profile'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                    context.push('/profile');
                   },
                 ),
               ),
@@ -194,49 +257,6 @@ class HomeScreen extends ConsumerWidget {
           // Footer space
           const SliverToBoxAdapter(
             child: SizedBox(height: 24),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRoleIndicator(BuildContext context, UserRole userRole) {
-    final theme = Theme.of(context);
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primaryContainer.withOpacity(0.7),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            userRole.icon,
-            size: 18,
-            color: theme.colorScheme.onPrimaryContainer,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            'Current role: ${userRole.name}',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onPrimaryContainer,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Spacer(),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.settings);
-            },
-            child: Text(
-              'Change',
-              style: TextStyle(
-                color: theme.colorScheme.onPrimaryContainer.withOpacity(0.8),
-              ),
-            ),
           ),
         ],
       ),
@@ -311,7 +331,15 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.settings);
+                    // Show feedback snackbar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Opening settings to change role'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                    context.push('/settings');
                   },
                   style: TextButton.styleFrom(
                     padding:
@@ -395,33 +423,6 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-
-          // Reset app button
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16, right: 8),
-              child: TextButton.icon(
-                icon: Icon(
-                  Icons.refresh_rounded,
-                  color: theme.colorScheme.error.withOpacity(0.8),
-                  size: 16,
-                ),
-                label: Text(
-                  'Reset App',
-                  style: TextStyle(
-                    color: theme.colorScheme.error.withOpacity(0.8),
-                    fontSize: 12,
-                  ),
-                ),
-                style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                ),
-                onPressed: () => AppResetUtility.resetAppData(context, ref),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -478,19 +479,26 @@ class HomeScreen extends ConsumerWidget {
         .where((entry) => userRole.allowedModules.contains(entry.key))
         .toList();
 
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final entry = allowedModules[index];
-          final moduleKey = entry.key;
-          final module = entry.value;
-          final moduleName =
-              l10n.getModuleName(module.nameKey) ?? module.nameKey;
+    return Consumer(
+      builder: (context, ref, _) {
+        final selectedRoute = ref.watch(selectedRouteProvider);
 
-          return _buildModuleSection(context, moduleName, module);
-        },
-        childCount: allowedModules.length,
-      ),
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final module = allowedModules[index].value;
+
+              return _buildModuleSection(
+                context,
+                l10n.getModuleName(module.nameKey) ?? module.nameKey,
+                module,
+                selectedRoute,
+              );
+            },
+            childCount: allowedModules.length,
+          ),
+        );
+      },
     );
   }
 
@@ -501,28 +509,35 @@ class HomeScreen extends ConsumerWidget {
         .where((entry) => userRole.allowedModules.contains(entry.key))
         .toList();
 
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          childAspectRatio: 1.0,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final entry = allowedModules[index];
-            final moduleKey = entry.key;
-            final module = entry.value;
-            final moduleName =
-                l10n.getModuleName(module.nameKey) ?? module.nameKey;
+    return Consumer(
+      builder: (context, ref, _) {
+        final selectedRoute = ref.watch(selectedRouteProvider);
 
-            return _buildModuleCard(context, moduleName, module);
-          },
-          childCount: allowedModules.length,
-        ),
-      ),
+        return SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          sliver: SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              childAspectRatio: 1.0,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final module = allowedModules[index].value;
+
+                return _buildModuleCard(
+                  context,
+                  l10n.getModuleName(module.nameKey) ?? module.nameKey,
+                  module,
+                  selectedRoute,
+                );
+              },
+              childCount: allowedModules.length,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -530,6 +545,7 @@ class HomeScreen extends ConsumerWidget {
     BuildContext context,
     String title,
     AppModule module,
+    String selectedRoute,
   ) {
     final theme = Theme.of(context);
     final isLightColor = module.color.computeLuminance() > 0.5;
@@ -550,7 +566,19 @@ class HomeScreen extends ConsumerWidget {
             _showModuleScreenSelection(context, title, module);
           } else if (module.screens.isNotEmpty) {
             // If module has only one screen, navigate directly
-            Navigator.pushNamed(context, module.screens.first.route);
+            // Show feedback snackbar
+            final l10n = AppLocalizations.of(context);
+            final screenName =
+                l10n.getScreenName(module.screens.first.nameKey) ??
+                    module.screens.first.nameKey;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Navigating to: $screenName'),
+                duration: const Duration(seconds: 1),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+            context.push(module.screens.first.route);
           }
         },
         borderRadius: BorderRadius.circular(8),
@@ -612,6 +640,8 @@ class HomeScreen extends ConsumerWidget {
     String moduleTitle,
     AppModule module,
   ) {
+    // Capture GoRouter context for navigation
+    final goRouterContext = context;
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
@@ -619,7 +649,7 @@ class HomeScreen extends ConsumerWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (context) {
+      builder: (sheetContext) {
         return SafeArea(
           child: Container(
             decoration: BoxDecoration(
@@ -752,8 +782,18 @@ class HomeScreen extends ConsumerWidget {
                             : null,
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
-                          Navigator.pop(context); // Close the modal
-                          Navigator.pushNamed(context, screen.route);
+                          Navigator.pop(sheetContext); // Close the modal
+
+                          // Show feedback snackbar
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Navigating to: $screenName'),
+                              duration: const Duration(seconds: 1),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+
+                          goRouterContext.push(screen.route);
                         },
                       );
                     },
@@ -767,11 +807,8 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildModuleSection(
-    BuildContext context,
-    String title,
-    AppModule module,
-  ) {
+  Widget _buildModuleSection(BuildContext context, String title,
+      AppModule module, String selectedRoute) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -954,10 +991,9 @@ class HomeScreen extends ConsumerWidget {
                           title: screenName,
                           icon: screen.icon,
                           color: module.color,
-                          onTap: () {
-                            Navigator.pushNamed(context, screen.route);
-                          },
+                          onTap: () => context.push(screen.route),
                           tooltip: description,
+                          selectedRoute: selectedRoute,
                         );
                       },
                     ),
@@ -977,17 +1013,20 @@ class HomeScreen extends ConsumerWidget {
     required Color color,
     required VoidCallback onTap,
     String tooltip = '',
+    required String selectedRoute,
   }) {
     final theme = Theme.of(context);
+    // Check if this screen's route matches the currently selected route
+    final isSelected = selectedRoute == tooltip;
 
     return Card(
-      elevation: 1,
+      elevation: isSelected ? 4 : 1,
       shadowColor: color.withOpacity(0.2),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(
-          color: color.withOpacity(0.05),
-          width: 1,
+          color: isSelected ? color : color.withOpacity(0.05),
+          width: isSelected ? 2 : 1,
         ),
       ),
       child: Tooltip(
@@ -1004,13 +1043,15 @@ class HomeScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.08),
+                    color: isSelected
+                        ? color.withOpacity(0.2)
+                        : color.withOpacity(0.08),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
                     icon,
                     size: 20,
-                    color: color,
+                    color: isSelected ? theme.colorScheme.primary : color,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -1018,13 +1059,23 @@ class HomeScreen extends ConsumerWidget {
                   title,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                     fontSize: 11,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),
+                if (isSelected)
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    width: 24,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -1040,17 +1091,24 @@ class HomeScreen extends ConsumerWidget {
     // Filter quick actions based on user role
     final List<Map<String, dynamic>> quickActions = [
       {
+        'title': 'Inventory Report',
+        'icon': Icons.bar_chart,
+        'color': Colors.teal,
+        'route': '/inventory/report',
+        'moduleId': 'inventory',
+      },
+      {
         'title': 'Purchase Orders',
         'icon': Icons.shopping_cart,
         'color': Colors.purple,
-        'route': AppRoutes.purchaseOrders,
+        'route': '/procurement/purchase-orders',
         'moduleId': 'procurement',
       },
       {
         'title': 'Inventory',
         'icon': Icons.inventory_2,
         'color': Colors.blue,
-        'route': AppRoutes.inventoryDashboard,
+        'route': '/inventory',
         'moduleId': 'inventory',
       },
       {
@@ -1064,8 +1122,22 @@ class HomeScreen extends ConsumerWidget {
         'title': 'Analytics',
         'icon': Icons.analytics,
         'color': Colors.amber,
-        'route': AppRoutes.analyticsDashboard,
+        'route': '/analytics',
         'moduleId': 'analytics',
+      },
+      {
+        'title': 'Customer Management',
+        'icon': Icons.people,
+        'color': Colors.indigo,
+        'route': '/crm',
+        'moduleId': 'crm',
+      },
+      {
+        'title': 'Orders',
+        'icon': Icons.assignment,
+        'color': Colors.orange,
+        'route': '/order-management',
+        'moduleId': 'order_management',
       },
     ];
 
@@ -1120,8 +1192,18 @@ class HomeScreen extends ConsumerWidget {
                           allowedActions[i]['title'],
                           allowedActions[i]['icon'],
                           allowedActions[i]['color'],
-                          () => Navigator.pushNamed(
-                              context, allowedActions[i]['route']),
+                          () {
+                            // Show feedback snackbar
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Navigating to: ${allowedActions[i]['title']}'),
+                                duration: const Duration(seconds: 1),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                            context.push(allowedActions[i]['route']);
+                          },
                         ),
                         if (i < allowedActions.length - 1)
                           const SizedBox(width: 12),

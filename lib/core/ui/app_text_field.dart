@@ -1,23 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-  final String? hint;
-  final bool isPassword;
-  final bool enabled;
-  final int maxLines;
-  final int? maxLength;
-  final TextInputType keyboardType;
-  final Widget? prefixIcon;
-  final Widget? suffixIcon;
-  final String? Function(String?)? validator;
-  final void Function(String)? onChanged;
-  final void Function()? onTap;
-  final void Function(String)? onFieldSubmitted;
-  final FocusNode? focusNode;
-  final TextInputAction? textInputAction;
-  final bool autofocus;
 
   const AppTextField({
     super.key,
@@ -39,6 +22,23 @@ class AppTextField extends StatelessWidget {
     this.textInputAction,
     this.autofocus = false,
   });
+  final TextEditingController controller;
+  final String label;
+  final String? hint;
+  final bool isPassword;
+  final bool enabled;
+  final int maxLines;
+  final int? maxLength;
+  final TextInputType keyboardType;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final void Function()? onTap;
+  final void Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../domain/providers/recipe_provider.dart';
 
 class RecipeListScreen extends ConsumerWidget {
@@ -15,8 +16,7 @@ class RecipeListScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () =>
-                Navigator.pushNamed(context, '/factory/recipe/create'),
+            onPressed: () => context.push('/factory/recipe/create'),
           ),
         ],
       ),
@@ -47,16 +47,10 @@ class RecipeListScreen extends ConsumerWidget {
                           'Created: ${recipe.createdAt.toString().substring(0, 10)}'),
                     ],
                   ),
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    '/factory/recipe/detail',
-                    arguments: {'recipeId': recipe.id},
-                  ),
-                  onLongPress: () => Navigator.pushNamed(
-                    context,
-                    '/factory/recipe/edit',
-                    arguments: {'recipeId': recipe.id},
-                  ),
+                  onTap: () => context.push('/factory/recipe/detail',
+                      extra: {'recipeId': recipe.id}),
+                  onLongPress: () => context.push('/factory/recipe/edit',
+                      extra: {'recipeId': recipe.id}),
                 ),
               );
             },

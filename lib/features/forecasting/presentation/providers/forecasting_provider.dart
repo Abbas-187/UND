@@ -1,13 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../inventory/data/models/inventory_item_model.dart';
+import '../../../inventory/domain/entities/inventory_item.dart';
 import '../../../inventory/domain/providers/inventory_provider.dart';
+import '../../../inventory/domain/repositories/inventory_repository.dart';
 import '../../../sales/data/repositories/sales_repository.dart';
 import '../../data/models/sales_forecast_model.dart';
 import '../../domain/entities/time_series_point.dart';
 import '../../domain/services/forecasting_service.dart';
-import '../../../inventory/domain/repositories/inventory_repository.dart';
-import '../../../inventory/domain/entities/inventory_item.dart';
 
 /// States for the forecasting feature
 abstract class ForecastingState {}
@@ -91,7 +90,7 @@ class ForecastingNotifier extends StateNotifier<ForecastingState> {
 
       // For now, just use the mock data since we don't have the actual forecasting implementation
       final SalesForecastModel? forecast =
-          await _forecastingService.getForecastById("forecast-001");
+          await _forecastingService.getForecastById('forecast-001');
 
       if (forecast == null) {
         state = ForecastingErrorState(message: 'Failed to generate forecast');

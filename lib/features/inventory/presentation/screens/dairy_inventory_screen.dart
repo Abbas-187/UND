@@ -92,8 +92,8 @@ class _DairyInventoryScreenState extends ConsumerState<DairyInventoryScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddInventoryDialog(context, repository),
-        child: const Icon(Icons.add),
         tooltip: 'Add Dairy Product',
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -388,7 +388,8 @@ class _DairyInventoryScreenState extends ConsumerState<DairyInventoryScreen> {
                 }
 
                 try {
-                  await repository.adjustQuantity(item.id, adjustment, reason);
+                  await repository.adjustQuantity(
+                      item.id, adjustment, reason, 'SYSTEM');
                   if (mounted) {
                     Navigator.pop(context);
                     setState(() {}); // Refresh UI
@@ -506,8 +507,7 @@ class _DairyInventoryScreenState extends ConsumerState<DairyInventoryScreen> {
                             as Map<String, dynamic>)
                         .entries
                         .map((e) => _buildDetailItem(
-                            e.key.toString().capitalize(), e.value.toString()))
-                        .toList(),
+                            e.key.toString().capitalize(), e.value.toString())),
                   ],
                   const SizedBox(height: 16),
                   Align(
@@ -793,6 +793,9 @@ class _DairyInventoryScreenState extends ConsumerState<DairyInventoryScreen> {
                         'storageCondition': 'Refrigerated',
                         'pasteurized': true,
                       },
+                      appItemId: '',
+                      sapCode: '',
+                      subCategory: '',
                     );
 
                     await repository.addItem(newItem);

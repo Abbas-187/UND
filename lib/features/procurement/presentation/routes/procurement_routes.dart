@@ -8,10 +8,10 @@ import 'package:go_router/go_router.dart';
  */
 
 import '../screens/po_approval_screen.dart';
+import '../screens/procurement_dashboard_screen.dart';
 import '../screens/purchase_order/purchase_order_create_screen.dart';
 import '../screens/purchase_order/purchase_order_detail_screen.dart';
 import '../screens/purchase_order/purchase_order_list_screen.dart';
-import '../screens/procurement_dashboard_screen.dart';
 import '../screens/reports/procurement_dashboard_screen.dart' as reports;
 
 /// Route names for the procurement feature

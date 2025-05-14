@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/providers/batch_operations_provider.dart';
 import '../../domain/providers/inventory_provider.dart';
-import 'batch_barcode_scan_screen.dart';
 
 class BatchInventoryScreen extends ConsumerStatefulWidget {
   const BatchInventoryScreen({super.key});
@@ -40,7 +40,9 @@ class _BatchInventoryScreenState extends ConsumerState<BatchInventoryScreen> {
               data: (inventoryItems) {
                 // Filter to only show selected items
                 final selectedItems = inventoryItems
-                    .where((item) => batchSelectionState.contains(item.id))
+                    .where((item) =>
+                        item.id != null &&
+                        batchSelectionState.contains(item.id!))
                     .toList();
 
                 if (selectedItems.isEmpty) {
@@ -77,7 +79,7 @@ class _BatchInventoryScreenState extends ConsumerState<BatchInventoryScreen> {
                           onPressed: () {
                             ref
                                 .read(batchOperationsStateProvider.notifier)
-                                .toggleItemSelection(item.id);
+                                .toggleItemSelection(item.id!);
                           },
                         ),
                       ),
@@ -96,11 +98,7 @@ class _BatchInventoryScreenState extends ConsumerState<BatchInventoryScreen> {
       bottomNavigationBar: _buildBottomBar(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const BatchBarcodeScanScreen(),
-            ),
-          );
+          context.go('/inventory/batch-scan');
         },
         tooltip: 'Scan Barcode',
         child: const Icon(Icons.qr_code_scanner),

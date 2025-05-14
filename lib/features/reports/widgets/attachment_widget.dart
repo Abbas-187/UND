@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+
 import '../utils/file_service.dart';
 
 class AttachmentWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> attachments;
-  final bool editable;
-  final Future<void> Function(Map<String, dynamic> attachment)? onDelete;
-  final Future<void> Function(Map<String, dynamic> newAttachment)? onAdd;
-  final Future<void> Function(Map<String, dynamic> attachment)? onDownload;
 
   const AttachmentWidget({
     super.key,
@@ -17,6 +12,11 @@ class AttachmentWidget extends StatelessWidget {
     this.onAdd,
     this.onDownload,
   });
+  final List<Map<String, dynamic>> attachments;
+  final bool editable;
+  final Future<void> Function(Map<String, dynamic> attachment)? onDelete;
+  final Future<void> Function(Map<String, dynamic> newAttachment)? onAdd;
+  final Future<void> Function(Map<String, dynamic> attachment)? onDownload;
 
   void _showPreview(BuildContext context, Map<String, dynamic> attachment) {
     final url = attachment['url'] ?? '';

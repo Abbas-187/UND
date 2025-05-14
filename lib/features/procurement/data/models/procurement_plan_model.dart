@@ -1,22 +1,9 @@
-import 'dart:convert';
 
 import 'package:meta/meta.dart';
 import '../../domain/entities/procurement_plan.dart';
 
 @immutable
 class ProcurementPlanModel {
-  final String id;
-  final String name;
-  final DateTime creationDate;
-  final String createdBy;
-  final ProcurementPlanStatus status;
-  final List<ProcurementPlanItemModel> items;
-  final double estimatedTotalCost;
-  final String? notes;
-  final DateTime? approvalDate;
-  final String? approvedBy;
-  final double? budgetLimit;
-  final DateTime? requiredByDate;
 
   const ProcurementPlanModel({
     required this.id,
@@ -57,6 +44,37 @@ class ProcurementPlanModel {
     );
   }
 
+  factory ProcurementPlanModel.fromEntity(ProcurementPlan entity) {
+    return ProcurementPlanModel(
+      id: entity.id,
+      name: entity.name,
+      creationDate: entity.creationDate,
+      createdBy: entity.createdBy,
+      status: entity.status,
+      items: entity.items
+          .map((item) => ProcurementPlanItemModel.fromEntity(item))
+          .toList(),
+      estimatedTotalCost: entity.estimatedTotalCost,
+      notes: entity.notes,
+      approvalDate: entity.approvalDate,
+      approvedBy: entity.approvedBy,
+      budgetLimit: entity.budgetLimit,
+      requiredByDate: entity.requiredByDate,
+    );
+  }
+  final String id;
+  final String name;
+  final DateTime creationDate;
+  final String createdBy;
+  final ProcurementPlanStatus status;
+  final List<ProcurementPlanItemModel> items;
+  final double estimatedTotalCost;
+  final String? notes;
+  final DateTime? approvalDate;
+  final String? approvedBy;
+  final double? budgetLimit;
+  final DateTime? requiredByDate;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -90,43 +108,10 @@ class ProcurementPlanModel {
       requiredByDate: requiredByDate,
     );
   }
-
-  factory ProcurementPlanModel.fromEntity(ProcurementPlan entity) {
-    return ProcurementPlanModel(
-      id: entity.id,
-      name: entity.name,
-      creationDate: entity.creationDate,
-      createdBy: entity.createdBy,
-      status: entity.status,
-      items: entity.items
-          .map((item) => ProcurementPlanItemModel.fromEntity(item))
-          .toList(),
-      estimatedTotalCost: entity.estimatedTotalCost,
-      notes: entity.notes,
-      approvalDate: entity.approvalDate,
-      approvedBy: entity.approvedBy,
-      budgetLimit: entity.budgetLimit,
-      requiredByDate: entity.requiredByDate,
-    );
-  }
 }
 
 @immutable
 class ProcurementPlanItemModel {
-  final String id;
-  final String itemId;
-  final String itemName;
-  final double quantity;
-  final String unit;
-  final String preferredSupplierId;
-  final String preferredSupplierName;
-  final double estimatedUnitCost;
-  final double estimatedTotalCost;
-  final DateTime requiredByDate;
-  final ProcurementItemUrgency urgency;
-  final String? notes;
-  final String? productionPlanReference;
-  final double? inventoryLevel;
 
   const ProcurementPlanItemModel({
     required this.id,
@@ -165,6 +150,39 @@ class ProcurementPlanItemModel {
     );
   }
 
+  factory ProcurementPlanItemModel.fromEntity(ProcurementPlanItem entity) {
+    return ProcurementPlanItemModel(
+      id: entity.id,
+      itemId: entity.itemId,
+      itemName: entity.itemName,
+      quantity: entity.quantity,
+      unit: entity.unit,
+      preferredSupplierId: entity.preferredSupplierId,
+      preferredSupplierName: entity.preferredSupplierName,
+      estimatedUnitCost: entity.estimatedUnitCost,
+      estimatedTotalCost: entity.estimatedTotalCost,
+      requiredByDate: entity.requiredByDate,
+      urgency: entity.urgency,
+      notes: entity.notes,
+      productionPlanReference: entity.productionPlanReference,
+      inventoryLevel: entity.inventoryLevel,
+    );
+  }
+  final String id;
+  final String itemId;
+  final String itemName;
+  final double quantity;
+  final String unit;
+  final String preferredSupplierId;
+  final String preferredSupplierName;
+  final double estimatedUnitCost;
+  final double estimatedTotalCost;
+  final DateTime requiredByDate;
+  final ProcurementItemUrgency urgency;
+  final String? notes;
+  final String? productionPlanReference;
+  final double? inventoryLevel;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -200,25 +218,6 @@ class ProcurementPlanItemModel {
       notes: notes,
       productionPlanReference: productionPlanReference,
       inventoryLevel: inventoryLevel,
-    );
-  }
-
-  factory ProcurementPlanItemModel.fromEntity(ProcurementPlanItem entity) {
-    return ProcurementPlanItemModel(
-      id: entity.id,
-      itemId: entity.itemId,
-      itemName: entity.itemName,
-      quantity: entity.quantity,
-      unit: entity.unit,
-      preferredSupplierId: entity.preferredSupplierId,
-      preferredSupplierName: entity.preferredSupplierName,
-      estimatedUnitCost: entity.estimatedUnitCost,
-      estimatedTotalCost: entity.estimatedTotalCost,
-      requiredByDate: entity.requiredByDate,
-      urgency: entity.urgency,
-      notes: entity.notes,
-      productionPlanReference: entity.productionPlanReference,
-      inventoryLevel: entity.inventoryLevel,
     );
   }
 }

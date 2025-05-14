@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'firebase_module.dart';
 
 /// Helper class to initialize the app with mock Firebase
 class MockAppInitializer {
@@ -21,20 +19,21 @@ class MockAppInitializer {
   }
 
   /// Check if we're using mock Firebase
-  static bool get isMockEnabled => useMockFirebase;
+  static bool get isMockEnabled => false;
 
   /// Add a visual indicator to show we're using mock Firebase
   static Widget addMockIndicator(Widget child) {
-    if (!useMockFirebase) return child;
+    // if (!useMockFirebase) return child;
+    return child;
 
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: Banner(
-        message: 'MOCK',
-        location: BannerLocation.topEnd,
-        color: Colors.orange,
-        child: child,
-      ),
-    );
+    // return Directionality(
+    //   textDirection: TextDirection.ltr,
+    //   child: Banner(
+    //     message: 'MOCK',
+    //     location: BannerLocation.topEnd,
+    //     color: Colors.orange,
+    //     child: child,
+    //   ),
+    // );
   }
 }

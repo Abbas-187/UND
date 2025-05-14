@@ -15,12 +15,6 @@ abstract class InventoryRepository {
 
 /// Simple model for inventory item details.
 class InventoryItem {
-  final String id;
-  final String name;
-  final String unit;
-  final double currentQuantity;
-  final double safetyStock;
-  final double reorderPoint;
 
   const InventoryItem({
     required this.id,
@@ -30,4 +24,10 @@ class InventoryItem {
     required this.safetyStock,
     required this.reorderPoint,
   });
+  final String id;
+  final String name;
+  final String unit;
+  final double currentQuantity;
+  final double safetyStock;
+  final double reorderPoint;
 }

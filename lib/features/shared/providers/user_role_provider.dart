@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/user_role.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/user_role.dart';
+
 class UserRoleNotifier extends StateNotifier<UserRole> {
-  static const String _rolePrefsKey = 'current_user_role';
 
   UserRoleNotifier() : super(UserRoles.admin);
+  static const String _rolePrefsKey = 'current_user_role';
 
   /// Change the current user role
   Future<void> setRole(UserRole role) async {

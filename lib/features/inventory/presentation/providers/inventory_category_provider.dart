@@ -1,13 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/repositories/mock_inventory_category_repository.dart';
+import '../../data/repositories/inventory_category_repository_impl.dart';
 import '../../domain/entities/inventory_category.dart';
 import '../../domain/repositories/inventory_category_repository.dart';
 
 // Provider for the repository instance
 final inventoryCategoryRepositoryProvider =
     Provider<InventoryCategoryRepository>((ref) {
-  return MockInventoryCategoryRepository();
+  // Provide the Firebase-backed implementation
+  return InventoryCategoryRepositoryImpl();
 });
 
 // Provider for all categories
@@ -49,13 +50,12 @@ final editedCategoryProvider = StateProvider<InventoryCategory?>((ref) => null);
 
 // Class for selected category with children
 class CategoryWithChildren {
-  final InventoryCategory? category;
-  final List<InventoryCategory> children;
-
   CategoryWithChildren({
     this.category,
     required this.children,
   });
+  final InventoryCategory? category;
+  final List<InventoryCategory> children;
 }
 
 // Utility provider that combines selected category with its child categories

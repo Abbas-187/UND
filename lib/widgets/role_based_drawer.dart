@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../core/routes/navigation_item.dart';
 import '../models/user_model.dart';
@@ -292,7 +293,16 @@ class RoleBasedDrawer extends StatelessWidget {
                 leading: const Icon(Icons.logout),
                 title: const Text('Logout'),
                 onTap: () async {
-                  await _signOut(context);
+                  // Store Navigator and context.go in variables to capture context before awaiting
+                  final navigator = Navigator.of(context);
+                  final goRouter = GoRouter.of(context);
+                  await _signOut();
+
+                  // Check if the widget is still mounted before using context-dependent APIs
+                  if (navigator.mounted) {
+                    navigator.pop();
+                    goRouter.go('/login');
+                  }
                 },
               ),
             ],
@@ -339,7 +349,10 @@ class RoleBasedDrawer extends StatelessWidget {
             leading: Icon(item.icon),
             title: Text(item.title),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(item.route!);
+              // Close the drawer then navigate to the selected route
+              Navigator.of(context).pop();
+              // Use GoRouter for navigation
+              context.go(item.route!);
             },
           ),
         );
@@ -349,14 +362,12 @@ class RoleBasedDrawer extends StatelessWidget {
     return widgets;
   }
 
-  Future<void> _signOut(BuildContext context) async {
+  Future<void> _signOut() async {
     try {
       await _authService.signOut();
-      // Navigate to login screen
-      Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
       // Handle error
-      print('Error signing out: $e');
+      debugPrint('Error signing out: $e');
     }
   }
 }

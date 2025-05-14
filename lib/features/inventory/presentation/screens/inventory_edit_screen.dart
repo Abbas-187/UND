@@ -23,7 +23,9 @@ class InventoryEditScreen extends ConsumerStatefulWidget {
 class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
+  late final TextEditingController _sapCodeController; // Added
   late final TextEditingController _categoryController;
+  late final TextEditingController _subCategoryController; // Added
   late final TextEditingController _unitController;
   late final TextEditingController _quantityController;
   late final TextEditingController _minimumQuantityController;
@@ -39,7 +41,9 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
   void initState() {
     super.initState();
     _nameController = TextEditingController();
+    _sapCodeController = TextEditingController(); // Added
     _categoryController = TextEditingController();
+    _subCategoryController = TextEditingController(); // Added
     _unitController = TextEditingController();
     _quantityController = TextEditingController();
     _minimumQuantityController = TextEditingController();
@@ -66,7 +70,9 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
 
       if (item != null) {
         _nameController.text = item.name;
+        _sapCodeController.text = item.sapCode ?? ''; // Added
         _categoryController.text = item.category;
+        _subCategoryController.text = item.subCategory ?? ''; // Added
         _unitController.text = item.unit;
         _quantityController.text = item.quantity.toString();
         _minimumQuantityController.text = item.minimumQuantity.toString();
@@ -102,7 +108,9 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
   @override
   void dispose() {
     _nameController.dispose();
+    _sapCodeController.dispose(); // Added
     _categoryController.dispose();
+    _subCategoryController.dispose(); // Added
     _unitController.dispose();
     _quantityController.dispose();
     _minimumQuantityController.dispose();
@@ -151,6 +159,16 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
                         },
                       ),
                       const SizedBox(height: 16),
+                      TextFormField(
+                        // Added SAP Code
+                        controller: _sapCodeController,
+                        decoration: const InputDecoration(
+                          labelText: 'SAP Code',
+                          border: OutlineInputBorder(),
+                        ),
+                        // Optional: Add validator if needed
+                      ),
+                      const SizedBox(height: 16),
                       Row(
                         children: [
                           Expanded(
@@ -171,18 +189,13 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
                           const SizedBox(width: 16),
                           Expanded(
                             child: TextFormField(
-                              controller: _unitController,
+                              // Added SubCategory
+                              controller: _subCategoryController,
                               decoration: const InputDecoration(
-                                labelText: 'Unit',
+                                labelText: 'Sub-Category',
                                 border: OutlineInputBorder(),
-                                hintText: 'e.g., kg, liters, pieces',
                               ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter a unit';
-                                }
-                                return null;
-                              },
+                              // Optional: Add validator if needed
                             ),
                           ),
                         ],
@@ -450,7 +463,9 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
       final newItem = InventoryItem(
         id: widget.itemId ?? '',
         name: _nameController.text.trim(),
+        sapCode: _sapCodeController.text.trim(), // Added
         category: _categoryController.text.trim(),
+        subCategory: _subCategoryController.text.trim(), // Added
         unit: _unitController.text.trim(),
         quantity: double.parse(_quantityController.text),
         minimumQuantity: double.parse(_minimumQuantityController.text),
@@ -463,6 +478,8 @@ class _InventoryEditScreenState extends ConsumerState<InventoryEditScreen> {
         expiryDate: _expiryDate,
         additionalAttributes:
             _additionalAttributes.isEmpty ? null : _additionalAttributes,
+        appItemId:
+            _originalItem?.appItemId ?? '', // Preserve existing or set default
       );
 
       if (widget.itemId != null) {

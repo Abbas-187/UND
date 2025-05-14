@@ -1,0 +1,752 @@
+{
+  "328379af-1c24-4cfc-b2e3-1e839856828d": {
+    "id": "328379af-1c24-4cfc-b2e3-1e839856828d",
+    "product_code": "JU2875",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 648,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "8076cdb9-2be4-4920-852e-e8f82b2b6aaf": {
+    "id": "8076cdb9-2be4-4920-852e-e8f82b2b6aaf",
+    "product_code": "JU1219",
+    "product_name": "Orange Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 4,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "5873feff-66ed-4c03-b07e-046f6c3e31ae": {
+    "id": "5873feff-66ed-4c03-b07e-046f6c3e31ae",
+    "product_code": "JU9856",
+    "product_name": "Orange Nectar 50% Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 594,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "df98e8e9-2c16-4f25-a3d5-17162b932577": {
+    "id": "df98e8e9-2c16-4f25-a3d5-17162b932577",
+    "product_code": "JU1714",
+    "product_name": "Orange Beverage 4% Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 472,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "93dd9f48-2790-4680-a3f0-534cf6780cd4": {
+    "id": "93dd9f48-2790-4680-a3f0-534cf6780cd4",
+    "product_code": "JU1672",
+    "product_name": "Ready-To-Drink Lemon Drink 12% Brix",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 336,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "8a0e4e1a-f5a3-49c6-bed3-cf796b6ba8aa": {
+    "id": "8a0e4e1a-f5a3-49c6-bed3-cf796b6ba8aa",
+    "product_code": "JU3638",
+    "product_name": "Orange Nectar 50% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 878,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "b178da9f-38c4-4de0-97b9-2e196bd17f1c": {
+    "id": "b178da9f-38c4-4de0-97b9-2e196bd17f1c",
+    "product_code": "JU1419",
+    "product_name": "Apple Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 35,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "6037b12d-ae95-4ef0-9fc5-bbf39fbb97d5": {
+    "id": "6037b12d-ae95-4ef0-9fc5-bbf39fbb97d5",
+    "product_code": "JU7340",
+    "product_name": "Pomegranate Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 676,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "15ab1dc7-a552-4963-9a35-fcd54664064f": {
+    "id": "15ab1dc7-a552-4963-9a35-fcd54664064f",
+    "product_code": "JU5381",
+    "product_name": "Orange Beverage 8% Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 952,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "04130b61-bd5b-4987-8b2e-3348da039e11": {
+    "id": "04130b61-bd5b-4987-8b2e-3348da039e11",
+    "product_code": "JU5961",
+    "product_name": "Orange Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 798,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "5cfa58cf-5087-4783-9c8c-3c5cab8d5023": {
+    "id": "5cfa58cf-5087-4783-9c8c-3c5cab8d5023",
+    "product_code": "JU3143",
+    "product_name": "Ready-To-Drink Lemon Drink 12% Brix",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 663,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "45b9f579-1c80-4d35-bfe6-f65ffb20f7a6": {
+    "id": "45b9f579-1c80-4d35-bfe6-f65ffb20f7a6",
+    "product_code": "JU3603",
+    "product_name": "Apple Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 525,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "8b286807-57d3-4abe-9bd4-5aa82376a411": {
+    "id": "8b286807-57d3-4abe-9bd4-5aa82376a411",
+    "product_code": "JU7887",
+    "product_name": "Orange Juice Beverage 30% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 917,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "4b0e971e-2a3f-4cf5-ace9-9c38c84dd144": {
+    "id": "4b0e971e-2a3f-4cf5-ace9-9c38c84dd144",
+    "product_code": "JU1897",
+    "product_name": "Beverage Powder Mix",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 614,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "98e52ac9-2027-49b5-8a85-1115522de706": {
+    "id": "98e52ac9-2027-49b5-8a85-1115522de706",
+    "product_code": "JU6866",
+    "product_name": "Blueberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 923,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "9c1a33ba-7752-4b3a-9981-e61ac804758a": {
+    "id": "9c1a33ba-7752-4b3a-9981-e61ac804758a",
+    "product_code": "JU4773",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 390,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "32244e17-0f57-49fb-bdd3-d809dc198381": {
+    "id": "32244e17-0f57-49fb-bdd3-d809dc198381",
+    "product_code": "JU3561",
+    "product_name": "Orange Juice Beverage 30% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 230,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "a483cacf-6bed-4aca-bcd1-209f89097f54": {
+    "id": "a483cacf-6bed-4aca-bcd1-209f89097f54",
+    "product_code": "JU4875",
+    "product_name": "Beverage Powder Mix",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 208,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "868f996e-e378-4699-8d20-af56dafab4d4": {
+    "id": "868f996e-e378-4699-8d20-af56dafab4d4",
+    "product_code": "JU6435",
+    "product_name": "Orange Nectar 50% Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 857,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "8b1c0cc4-782f-4c5c-8521-a1309ae013d8": {
+    "id": "8b1c0cc4-782f-4c5c-8521-a1309ae013d8",
+    "product_code": "JU8855",
+    "product_name": "Orange Juice Beverage 30% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 292,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "5a858ec6-905d-4db4-8824-4d1af532d06b": {
+    "id": "5a858ec6-905d-4db4-8824-4d1af532d06b",
+    "product_code": "JU2750",
+    "product_name": "Orange Beverage 8% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 818,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "f3e75990-4699-4a3e-8761-79bc77b2e2db": {
+    "id": "f3e75990-4699-4a3e-8761-79bc77b2e2db",
+    "product_code": "JU7229",
+    "product_name": "Orange Beverage 8% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 318,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "e0dbfbde-64ac-4aa5-84a3-51007fbc102e": {
+    "id": "e0dbfbde-64ac-4aa5-84a3-51007fbc102e",
+    "product_code": "JU5477",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 887,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "1795ac39-6b56-4c04-8af7-22a10c8e4bd4": {
+    "id": "1795ac39-6b56-4c04-8af7-22a10c8e4bd4",
+    "product_code": "JU4132",
+    "product_name": "Apple Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 681,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "9d79c516-c18f-4336-9430-3d3d1d0776e6": {
+    "id": "9d79c516-c18f-4336-9430-3d3d1d0776e6",
+    "product_code": "JU6541",
+    "product_name": "Strawberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 823,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "a9414772-33c0-41e6-943c-be04de4b625d": {
+    "id": "a9414772-33c0-41e6-943c-be04de4b625d",
+    "product_code": "JU1374",
+    "product_name": "Orange Beverage 4% Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 319,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "cdfaeb0c-21a0-409d-bce3-d2b3191751fc": {
+    "id": "cdfaeb0c-21a0-409d-bce3-d2b3191751fc",
+    "product_code": "JU8047",
+    "product_name": "Strawberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 570,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "e8962917-ee7c-42c3-8837-18a65cb68ad2": {
+    "id": "e8962917-ee7c-42c3-8837-18a65cb68ad2",
+    "product_code": "JU4488",
+    "product_name": "Apple Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 923,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "a904b3c9-74f8-4e83-ae2d-33310c67fa4a": {
+    "id": "a904b3c9-74f8-4e83-ae2d-33310c67fa4a",
+    "product_code": "JU6233",
+    "product_name": "Mango Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 194,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "2332045c-5de8-421b-bea8-72a08403a4d6": {
+    "id": "2332045c-5de8-421b-bea8-72a08403a4d6",
+    "product_code": "JU5948",
+    "product_name": "Orange Juice Beverage 30% Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 273,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "204af0f2-a025-48e4-98c5-69d2bbe6652c": {
+    "id": "204af0f2-a025-48e4-98c5-69d2bbe6652c",
+    "product_code": "JU9075",
+    "product_name": "Pineapple Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 64,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "516aecaf-b3d2-47ca-95eb-a21d4c8e9c3f": {
+    "id": "516aecaf-b3d2-47ca-95eb-a21d4c8e9c3f",
+    "product_code": "JU1729",
+    "product_name": "Ready-To-Drink Lemon Drink 12% Brix",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 407,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "06474ca2-e21f-47fc-b814-6adb69a8d959": {
+    "id": "06474ca2-e21f-47fc-b814-6adb69a8d959",
+    "product_code": "JU4379",
+    "product_name": "Beverage Powder Mix",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 893,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "ec42c9b4-5701-4f5a-b03e-ea9c76d51174": {
+    "id": "ec42c9b4-5701-4f5a-b03e-ea9c76d51174",
+    "product_code": "JU7196",
+    "product_name": "Apple Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 443,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "3ae62eee-da9a-46a1-a550-24e0234011b1": {
+    "id": "3ae62eee-da9a-46a1-a550-24e0234011b1",
+    "product_code": "JU9228",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 549,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "01339c48-bcfc-4e86-884c-fc5570560864": {
+    "id": "01339c48-bcfc-4e86-884c-fc5570560864",
+    "product_code": "JU3131",
+    "product_name": "Pomegranate Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 440,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "6bd7b183-385a-42b6-97eb-4e33344d6c7a": {
+    "id": "6bd7b183-385a-42b6-97eb-4e33344d6c7a",
+    "product_code": "JU2001",
+    "product_name": "Orange Juice Beverage 30% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 261,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "182fb73f-793b-410a-9810-ccdc0bb3a3d8": {
+    "id": "182fb73f-793b-410a-9810-ccdc0bb3a3d8",
+    "product_code": "JU6260",
+    "product_name": "Mango Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 657,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "ff8912ba-94c8-4059-82f7-51fbb1eb0e16": {
+    "id": "ff8912ba-94c8-4059-82f7-51fbb1eb0e16",
+    "product_code": "JU1637",
+    "product_name": "Orange Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 461,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "6ca4492c-6918-44f7-a8b5-ef99d4d89b0d": {
+    "id": "6ca4492c-6918-44f7-a8b5-ef99d4d89b0d",
+    "product_code": "JU3382",
+    "product_name": "Ready-To-Drink Lemon Drink 12% Brix",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 937,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "f81d9080-3321-4a9d-a06e-3a8b1f44f798": {
+    "id": "f81d9080-3321-4a9d-a06e-3a8b1f44f798",
+    "product_code": "JU4486",
+    "product_name": "Orange Beverage 4% Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 387,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "a0ef358b-2da3-4e6f-bab7-e9f75eb09dc0": {
+    "id": "a0ef358b-2da3-4e6f-bab7-e9f75eb09dc0",
+    "product_code": "JU2666",
+    "product_name": "Orange Beverage 8% Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 176,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "66cb2b13-46a4-4982-bb21-83566d6cbc40": {
+    "id": "66cb2b13-46a4-4982-bb21-83566d6cbc40",
+    "product_code": "JU8427",
+    "product_name": "Pineapple Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 829,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "64ec8afd-d7d4-4259-8be7-55ed5eb6e05c": {
+    "id": "64ec8afd-d7d4-4259-8be7-55ed5eb6e05c",
+    "product_code": "JU5606",
+    "product_name": "Orange Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 54,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "78d2bd3c-720e-486e-a7ba-59dcc2a9da91": {
+    "id": "78d2bd3c-720e-486e-a7ba-59dcc2a9da91",
+    "product_code": "JU1848",
+    "product_name": "Pineapple Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 557,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "c9214987-1727-4c3b-8e7a-70a54173269f": {
+    "id": "c9214987-1727-4c3b-8e7a-70a54173269f",
+    "product_code": "JU3747",
+    "product_name": "Pineapple Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 670,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "8d507caf-3998-4f2a-8eb4-89359612996b": {
+    "id": "8d507caf-3998-4f2a-8eb4-89359612996b",
+    "product_code": "JU2802",
+    "product_name": "Strawberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 402,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "092e29ad-7648-4dca-81c9-8a828f814381": {
+    "id": "092e29ad-7648-4dca-81c9-8a828f814381",
+    "product_code": "JU6967",
+    "product_name": "Strawberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 591,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "5680ee62-a733-4806-a7ae-beade9f999ec": {
+    "id": "5680ee62-a733-4806-a7ae-beade9f999ec",
+    "product_code": "JU7214",
+    "product_name": "Orange Beverage 4% Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 255,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "aedebe0c-f4ee-4c39-8f56-9e6bf745ce61": {
+    "id": "aedebe0c-f4ee-4c39-8f56-9e6bf745ce61",
+    "product_code": "JU2339",
+    "product_name": "Strawberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 65,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "9a28531a-87f3-441f-b4a6-a614c9f7eb95": {
+    "id": "9a28531a-87f3-441f-b4a6-a614c9f7eb95",
+    "product_code": "JU6894",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 168,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "8eab6ed6-6625-4f13-9cbb-40ad0258d97e": {
+    "id": "8eab6ed6-6625-4f13-9cbb-40ad0258d97e",
+    "product_code": "JU2079",
+    "product_name": "Orange Beverage 4% Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 59,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "fa0704fd-1a1b-4f81-809b-f065713fbb11": {
+    "id": "fa0704fd-1a1b-4f81-809b-f065713fbb11",
+    "product_code": "JU4764",
+    "product_name": "Ready-To-Drink Lemon Drink 12% Brix",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 572,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "8ba76930-5c53-4dfd-a750-a9c97c7a0d82": {
+    "id": "8ba76930-5c53-4dfd-a750-a9c97c7a0d82",
+    "product_code": "JU4148",
+    "product_name": "Orange Juice Beverage 30% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 844,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "00164f64-8241-46c2-a6c4-a9ad15dd2c47": {
+    "id": "00164f64-8241-46c2-a6c4-a9ad15dd2c47",
+    "product_code": "JU6199",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 731,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "6ffe2bff-2478-49ef-ae5f-b04721875dde": {
+    "id": "6ffe2bff-2478-49ef-ae5f-b04721875dde",
+    "product_code": "JU3661",
+    "product_name": "Strawberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 620,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "68407dda-4c9c-4d36-955b-0924b7a356a6": {
+    "id": "68407dda-4c9c-4d36-955b-0924b7a356a6",
+    "product_code": "JU2771",
+    "product_name": "Apple Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 736,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "d65d0441-aeca-42a5-a31b-51dccc4662af": {
+    "id": "d65d0441-aeca-42a5-a31b-51dccc4662af",
+    "product_code": "JU7878",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 357,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "a987798f-bc49-4c01-b956-6e7b11321d36": {
+    "id": "a987798f-bc49-4c01-b956-6e7b11321d36",
+    "product_code": "JU1523",
+    "product_name": "Beverage Powder Mix",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 431,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "151a7d1e-3261-4014-b322-d418cc8febb4": {
+    "id": "151a7d1e-3261-4014-b322-d418cc8febb4",
+    "product_code": "JU8345",
+    "product_name": "Orange Beverage 8% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 541,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "8658f211-6e8d-41f4-80b7-607a3bbaeeb5": {
+    "id": "8658f211-6e8d-41f4-80b7-607a3bbaeeb5",
+    "product_code": "JU8685",
+    "product_name": "Orange Nectar 50% Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 168,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "fb8e2d6c-9d2f-43f6-85d5-af65d7b8f64d": {
+    "id": "fb8e2d6c-9d2f-43f6-85d5-af65d7b8f64d",
+    "product_code": "JU6484",
+    "product_name": "Ready-To-Drink Lemon Drink 12% Brix",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 606,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "5a5cb8db-ca38-4150-a895-155cd268c10f": {
+    "id": "5a5cb8db-ca38-4150-a895-155cd268c10f",
+    "product_code": "JU1617",
+    "product_name": "Orange Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 463,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "aae4f2ed-4529-4485-babe-0c6fc8205237": {
+    "id": "aae4f2ed-4529-4485-babe-0c6fc8205237",
+    "product_code": "JU3913",
+    "product_name": "Blueberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 179,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "73e2c845-93e2-4557-bdf5-111f7e9290c8": {
+    "id": "73e2c845-93e2-4557-bdf5-111f7e9290c8",
+    "product_code": "JU3508",
+    "product_name": "Beverage Powder Mix",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 969,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "fde81391-9f8a-4202-ba3c-eea841f8d6d1": {
+    "id": "fde81391-9f8a-4202-ba3c-eea841f8d6d1",
+    "product_code": "JU7096",
+    "product_name": "Strawberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 81,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "c9ce19de-775d-439b-bcd8-74d8d01f30ac": {
+    "id": "c9ce19de-775d-439b-bcd8-74d8d01f30ac",
+    "product_code": "JU2116",
+    "product_name": "Strawberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 73,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "f334246b-6132-4c14-a6ff-25583646a2e4": {
+    "id": "f334246b-6132-4c14-a6ff-25583646a2e4",
+    "product_code": "JU6937",
+    "product_name": "Orange Nectar 50% Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 50,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "3d5bc17f-05ee-4873-b7b0-661ff6fd6e9f": {
+    "id": "3d5bc17f-05ee-4873-b7b0-661ff6fd6e9f",
+    "product_code": "JU7774",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 454,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "579ef78b-d0ee-44f6-af84-f33818e97c74": {
+    "id": "579ef78b-d0ee-44f6-af84-f33818e97c74",
+    "product_code": "JU7874",
+    "product_name": "Mango Juice",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 259,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "af2eaaed-381f-46c2-a7a4-61caa3d74f8b": {
+    "id": "af2eaaed-381f-46c2-a7a4-61caa3d74f8b",
+    "product_code": "JU1218",
+    "product_name": "Ready-To-Drink Lemon Drink 12% Brix",
+    "category": "Juices",
+    "unit_of_measure": "packs",
+    "quantity_on_hand": 85,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "75de0f58-4799-4408-a824-528fe5d24850": {
+    "id": "75de0f58-4799-4408-a824-528fe5d24850",
+    "product_code": "JU1251",
+    "product_name": "Mixed Fruit",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 104,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "525cd59c-c475-4c9f-9d59-6e712914a53e": {
+    "id": "525cd59c-c475-4c9f-9d59-6e712914a53e",
+    "product_code": "JU9124",
+    "product_name": "Mango Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 428,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "b5d2f206-4d3f-4329-b4ee-99f80ace2ec1": {
+    "id": "b5d2f206-4d3f-4329-b4ee-99f80ace2ec1",
+    "product_code": "JU8650",
+    "product_name": "Apple Juice",
+    "category": "Juices",
+    "unit_of_measure": "bottles",
+    "quantity_on_hand": 491,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "9df3379a-93f3-460e-88e2-a9b9651b0c57": {
+    "id": "9df3379a-93f3-460e-88e2-a9b9651b0c57",
+    "product_code": "JU7302",
+    "product_name": "Blueberry Juice",
+    "category": "Juices",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 656,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  }
+}

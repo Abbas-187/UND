@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../data/models/order_model.dart';
 
 class OrderStatusChip extends StatelessWidget {
-
   const OrderStatusChip({
     super.key,
     required this.status,
@@ -32,8 +31,6 @@ class OrderStatusChip extends StatelessWidget {
         return Colors.red;
       case OrderStatus.onHold:
         return Colors.yellow.shade700;
-      default:
-        return Colors.grey;
     }
   }
 

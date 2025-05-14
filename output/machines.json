@@ -1,0 +1,200 @@
+{
+  "d3463831-0786-4bad-bb99-1683a8575e3a": {
+    "id": "d3463831-0786-4bad-bb99-1683a8575e3a",
+    "machine_code": "M7992",
+    "machine_name": "Promag Aseptic Filling Machine D-443",
+    "type": "Aseptic Filling Machine",
+    "manufacturer": "Promag",
+    "location": "HF-FLV",
+    "status": "Scheduled Maintenance",
+    "last_maintenance_date": "2024-07-11",
+    "next_maintenance_due": "2024-12-08"
+  },
+  "ccc2fdd1-5052-4987-a9dc-b8e01148070d": {
+    "id": "ccc2fdd1-5052-4987-a9dc-b8e01148070d",
+    "machine_code": "M8026",
+    "machine_name": "Tetra Pak Homogenizer -421",
+    "type": "Homogenizer",
+    "manufacturer": "Tetra Pak",
+    "location": "HF-FIN",
+    "status": "Out of Service",
+    "last_maintenance_date": "2025-03-20",
+    "next_maintenance_due": "2025-04-25"
+  },
+  "011fb457-c464-45ba-bcf3-76a50c406644": {
+    "id": "011fb457-c464-45ba-bcf3-76a50c406644",
+    "machine_code": "M7644",
+    "machine_name": "APV Pasteurizer A-708",
+    "type": "Pasteurizer",
+    "manufacturer": "APV",
+    "location": "HF-CLD",
+    "status": "Operational",
+    "last_maintenance_date": "2024-07-14",
+    "next_maintenance_due": "2024-11-19"
+  },
+  "30477d59-00bc-4db9-9f84-430784c76053": {
+    "id": "30477d59-00bc-4db9-9f84-430784c76053",
+    "machine_code": "M1506",
+    "machine_name": "APV Separator B-214",
+    "type": "Separator",
+    "manufacturer": "APV",
+    "location": "HF-CLD",
+    "status": "Under Maintenance",
+    "last_maintenance_date": "2024-06-22",
+    "next_maintenance_due": "2024-12-10"
+  },
+  "087ef2f0-62eb-4dbe-b288-ff72bdb891df": {
+    "id": "087ef2f0-62eb-4dbe-b288-ff72bdb891df",
+    "machine_code": "M6757",
+    "machine_name": "Technogel Pasteurizer A-610",
+    "type": "Pasteurizer",
+    "manufacturer": "Technogel",
+    "location": "HF-CLD",
+    "status": "Under Maintenance",
+    "last_maintenance_date": "2024-09-24",
+    "next_maintenance_due": "2025-01-12"
+  },
+  "9259a68f-f839-4f72-944a-7c096fc83c97": {
+    "id": "9259a68f-f839-4f72-944a-7c096fc83c97",
+    "machine_code": "M7438",
+    "machine_name": "APV Batch Mixer B-657",
+    "type": "Batch Mixer",
+    "manufacturer": "APV",
+    "location": "HF-FLV",
+    "status": "Operational",
+    "last_maintenance_date": "2024-07-14",
+    "next_maintenance_due": "2024-10-05"
+  },
+  "b3376abc-bcfa-42e1-99d5-688b350414cb": {
+    "id": "b3376abc-bcfa-42e1-99d5-688b350414cb",
+    "machine_code": "M8526",
+    "machine_name": "GEA CIP System -324",
+    "type": "CIP System",
+    "manufacturer": "GEA",
+    "location": "HF-AMB",
+    "status": "Out of Service",
+    "last_maintenance_date": "2024-05-10",
+    "next_maintenance_due": "2024-07-14"
+  },
+  "20f057c9-b5b7-4bf4-a452-fd3595a0fedf": {
+    "id": "20f057c9-b5b7-4bf4-a452-fd3595a0fedf",
+    "machine_code": "M5981",
+    "machine_name": "Tetra Pak Standardization Unit B-216",
+    "type": "Standardization Unit",
+    "manufacturer": "Tetra Pak",
+    "location": "HF-CLD",
+    "status": "Under Maintenance",
+    "last_maintenance_date": "2024-09-12",
+    "next_maintenance_due": "2024-11-30"
+  },
+  "8685f57e-0b38-4236-bed7-793c0ea979f2": {
+    "id": "8685f57e-0b38-4236-bed7-793c0ea979f2",
+    "machine_code": "M3423",
+    "machine_name": "SPX Homogenizer -985",
+    "type": "Homogenizer",
+    "manufacturer": "SPX",
+    "location": "HF-AMB",
+    "status": "Scheduled Maintenance",
+    "last_maintenance_date": "2025-01-19",
+    "next_maintenance_due": "2025-02-27"
+  },
+  "4dad8f87-b870-4614-9270-97f962efa457": {
+    "id": "4dad8f87-b870-4614-9270-97f962efa457",
+    "machine_code": "M8700",
+    "machine_name": "Tetrapak Homogenizer D-796",
+    "type": "Homogenizer",
+    "manufacturer": "Tetrapak",
+    "location": "HF-CLD",
+    "status": "Scheduled Maintenance",
+    "last_maintenance_date": "2024-06-26",
+    "next_maintenance_due": "2024-09-20"
+  },
+  "13b2ea12-f397-4882-9520-a817b8c75891": {
+    "id": "13b2ea12-f397-4882-9520-a817b8c75891",
+    "machine_code": "M8593",
+    "machine_name": "APV CIP System A-717",
+    "type": "CIP System",
+    "manufacturer": "APV",
+    "location": "HF-FLV",
+    "status": "Operational",
+    "last_maintenance_date": "2025-01-15",
+    "next_maintenance_due": "2025-02-17"
+  },
+  "75e1b605-a6a9-4fc3-9659-828a11339d26": {
+    "id": "75e1b605-a6a9-4fc3-9659-828a11339d26",
+    "machine_code": "M4525",
+    "machine_name": "GEA Batch Mixer C-294",
+    "type": "Batch Mixer",
+    "manufacturer": "GEA",
+    "location": "HF-FLV",
+    "status": "Under Maintenance",
+    "last_maintenance_date": "2024-12-12",
+    "next_maintenance_due": "2025-06-01"
+  },
+  "65040cfb-f507-4353-a386-8810a5dbd196": {
+    "id": "65040cfb-f507-4353-a386-8810a5dbd196",
+    "machine_code": "M2031",
+    "machine_name": "Tetra Pak Pasteurizer B-169",
+    "type": "Pasteurizer",
+    "manufacturer": "Tetra Pak",
+    "location": "HF-FLV",
+    "status": "Operational",
+    "last_maintenance_date": "2024-11-22",
+    "next_maintenance_due": "2024-12-31"
+  },
+  "4d6ab8aa-29ad-4177-91b8-4ae8839005d5": {
+    "id": "4d6ab8aa-29ad-4177-91b8-4ae8839005d5",
+    "machine_code": "M8180",
+    "machine_name": "APV Juice Extractor D-315",
+    "type": "Juice Extractor",
+    "manufacturer": "APV",
+    "location": "HF-FLV",
+    "status": "Out of Service",
+    "last_maintenance_date": "2025-04-01",
+    "next_maintenance_due": "2025-08-21"
+  },
+  "1fea6f02-282e-4044-9e0f-dac6fe737a82": {
+    "id": "1fea6f02-282e-4044-9e0f-dac6fe737a82",
+    "machine_code": "M3933",
+    "machine_name": "APV Aseptic Filling Machine -522",
+    "type": "Aseptic Filling Machine",
+    "manufacturer": "APV",
+    "location": "HF-CLD",
+    "status": "Out of Service",
+    "last_maintenance_date": "2025-03-28",
+    "next_maintenance_due": "2025-07-18"
+  },
+  "4eb445f1-cd92-4361-b29f-c185f4134263": {
+    "id": "4eb445f1-cd92-4361-b29f-c185f4134263",
+    "machine_code": "M3690",
+    "machine_name": "Carpigiani Juice Extractor B-187",
+    "type": "Juice Extractor",
+    "manufacturer": "Carpigiani",
+    "location": "HF-CLD",
+    "status": "Operational",
+    "last_maintenance_date": "2025-04-02",
+    "next_maintenance_due": "2025-06-28"
+  },
+  "bbf09789-edb0-4655-a7bd-0adf08484771": {
+    "id": "bbf09789-edb0-4655-a7bd-0adf08484771",
+    "machine_code": "M5549",
+    "machine_name": "APV CIP System C-330",
+    "type": "CIP System",
+    "manufacturer": "APV",
+    "location": "HF-FIN",
+    "status": "Scheduled Maintenance",
+    "last_maintenance_date": "2024-07-11",
+    "next_maintenance_due": "2024-11-21"
+  },
+  "b6fc29eb-df6b-4716-ab1d-c1b36c15f91b": {
+    "id": "b6fc29eb-df6b-4716-ab1d-c1b36c15f91b",
+    "machine_code": "M6039",
+    "machine_name": "Tetrapak Cream Processing Unit E-939",
+    "type": "Cream Processing Unit",
+    "manufacturer": "Tetrapak",
+    "location": "HF-CLD",
+    "status": "Operational",
+    "last_maintenance_date": "2024-09-11",
+    "next_maintenance_due": "2024-11-26"
+  }
+}

@@ -1,9 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:intl/intl.dart';
-import 'dart:typed_data';
-import 'package:flutter/services.dart' show rootBundle;
 
 class ReportPdfExport {
   static Future<pw.Font> _loadNotoSansFont() async {

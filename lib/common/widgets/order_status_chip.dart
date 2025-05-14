@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../features/sales/data/models/order_model.dart'; // Import OrderStatus enum
 
 class OrderStatusChip extends StatelessWidget {
-
   const OrderStatusChip({super.key, required this.status});
   final OrderStatus status;
 
@@ -27,8 +26,6 @@ class OrderStatusChip extends StatelessWidget {
         return Colors.red;
       case OrderStatus.onHold:
         return Colors.yellow.shade700;
-      default:
-        return Colors.grey;
     }
   }
 

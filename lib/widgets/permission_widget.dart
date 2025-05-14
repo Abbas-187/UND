@@ -8,7 +8,6 @@ enum PermissionCheckType {
 }
 
 class PermissionWidget extends StatefulWidget {
-
   const PermissionWidget({
     super.key,
     required this.permissions,

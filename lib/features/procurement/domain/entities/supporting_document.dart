@@ -1,10 +1,4 @@
 class SupportingDocument {
-  final String id;
-  final String fileName;
-  final String fileType;
-  final String filePath;
-  final DateTime uploadDate;
-  final String uploadedBy;
 
   const SupportingDocument({
     required this.id,
@@ -14,6 +8,12 @@ class SupportingDocument {
     required this.uploadDate,
     required this.uploadedBy,
   });
+  final String id;
+  final String fileName;
+  final String fileType;
+  final String filePath;
+  final DateTime uploadDate;
+  final String uploadedBy;
 
   SupportingDocument copyWith({
     String? id,

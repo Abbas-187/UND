@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../suppliers/presentation/providers/supplier_provider.dart';
 import '../../domain/entities/purchase_order.dart';
 import '../../domain/entities/purchase_order_approval.dart';
-import '../../domain/workflow/po_approval_workflow.dart';
-import '../../domain/security/biometric_validator.dart';
 import '../providers/po_approval_provider.dart';
-import '../../../suppliers/presentation/providers/supplier_provider.dart';
 
 /// Screen for approving or declining purchase orders.
 class POApprovalScreen extends ConsumerStatefulWidget {
-  final String purchaseOrderId;
 
   const POApprovalScreen({
-    Key? key,
+    super.key,
     required this.purchaseOrderId,
-  }) : super(key: key);
+  });
+  final String purchaseOrderId;
 
   @override
   ConsumerState<POApprovalScreen> createState() => _POApprovalScreenState();

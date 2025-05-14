@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import '../routes/app_router.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../l10n/app_localizations.dart';
+import '../routes/app_go_router.dart';
 
 class MainLayout extends StatefulWidget {
-  final Widget child;
-  final String currentRoute;
-
   const MainLayout({
     super.key,
     required this.child,
     required this.currentRoute,
   });
+  final Widget child;
+  final String currentRoute;
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -19,11 +20,15 @@ class MainLayout extends StatefulWidget {
 // Static variable to maintain nav rail visibility across all screens
 class _NavRailState {
   static bool isVisible = false;
+  static bool isPinned = false;
 }
 
 class _MainLayoutState extends State<MainLayout> {
   // Controls whether the navigation rail is visible
   bool _isNavRailVisible = _NavRailState.isVisible;
+  // Controls whether the navigation rail is pinned open
+  bool _isPinned = _NavRailState.isPinned;
+
   double _dragStartX = 0;
 
   @override
@@ -45,22 +50,34 @@ class _MainLayoutState extends State<MainLayout> {
             // For LTR: Swipe right to show, left to hide
             if (delta > 50 && !_isNavRailVisible) {
               _updateNavRailVisibility(true);
-            } else if (delta < -50 && _isNavRailVisible) {
+            } else if (delta < -50 && _isNavRailVisible && !_isPinned) {
               _updateNavRailVisibility(false);
             }
           } else {
             // For RTL: Swipe left to show, right to hide
             if (delta < -50 && !_isNavRailVisible) {
               _updateNavRailVisibility(true);
-            } else if (delta > 50 && _isNavRailVisible) {
+            } else if (delta > 50 && _isNavRailVisible && !_isPinned) {
               _updateNavRailVisibility(false);
             }
           }
         },
         child: Stack(
           children: [
-            // Main content
-            widget.child,
+            // Main content with padding when nav is visible
+            AnimatedPadding(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              padding: EdgeInsets.only(
+                left: textDirection == TextDirection.ltr && _isNavRailVisible
+                    ? 100
+                    : 0,
+                right: textDirection == TextDirection.rtl && _isNavRailVisible
+                    ? 100
+                    : 0,
+              ),
+              child: widget.child,
+            ),
 
             // Navigation rail with animation
             AnimatedPositioned(
@@ -98,7 +115,7 @@ class _MainLayoutState extends State<MainLayout> {
                       color: Theme.of(context)
                           .colorScheme
                           .primaryContainer
-                          .withOpacity(0.5),
+                          .withValues(alpha: 0.5 * 255),
                       borderRadius: BorderRadius.only(
                         topRight: textDirection == TextDirection.ltr
                             ? const Radius.circular(8)
@@ -128,16 +145,6 @@ class _MainLayoutState extends State<MainLayout> {
           ],
         ),
       ),
-      // Add a floating action button to toggle the navigation rail
-      floatingActionButton: FloatingActionButton(
-        mini: true,
-        onPressed: () {
-          _updateNavRailVisibility(!_isNavRailVisible);
-        },
-        child: Icon(_isNavRailVisible ? Icons.menu_open : Icons.menu),
-        tooltip:
-            _isNavRailVisible ? 'Hide Navigation Menu' : 'Show Navigation Menu',
-      ),
     );
   }
 
@@ -146,6 +153,14 @@ class _MainLayoutState extends State<MainLayout> {
     setState(() {
       _isNavRailVisible = isVisible;
       _NavRailState.isVisible = isVisible;
+    });
+  }
+
+  // Toggle pin state
+  void _togglePin() {
+    setState(() {
+      _isPinned = !_isPinned;
+      _NavRailState.isPinned = _isPinned;
     });
   }
 
@@ -168,7 +183,7 @@ class _MainLayoutState extends State<MainLayout> {
       {
         'icon': Icons.inventory_2,
         'label': Text(l10n.getModuleName('inventory') ?? 'Inventory'),
-        'route': AppRoutes.inventory,
+        'route': AppRoutes.inventoryDashboard,
       },
       {
         'icon': Icons.factory,
@@ -184,62 +199,32 @@ class _MainLayoutState extends State<MainLayout> {
       {
         'icon': Icons.water_drop,
         'label': Text(l10n.getModuleName('milkReception') ?? 'Milk Reception'),
-        'route': AppRoutes.milkReception,
+        'route': '/milk-reception',
       },
       {
         'icon': Icons.shopping_cart,
         'label': Text(l10n.getModuleName('procurement') ?? 'Procurement'),
-        'route': AppRoutes.procurement,
+        'route': AppRoutes.procurementMain,
       },
       {
         'icon': Icons.notifications,
         'label': Text(l10n.notifications),
-        'route': AppRoutes.notifications,
+        'route': '/notifications',
       },
       {
         'icon': Icons.analytics,
         'label': Text(l10n.getModuleName('analytics') ?? 'Analytics'),
-        'route': AppRoutes.analyticsDashboard,
+        'route': '/analytics',
       },
       {
         'icon': Icons.trending_up,
         'label': Text(l10n.getModuleName('forecasting') ?? 'Forecasting'),
-        'route': AppRoutes.forecasting,
+        'route': '/forecasting',
       },
       {
         'icon': Icons.settings,
         'label': Text(l10n.settings),
         'route': AppRoutes.settings,
-      },
-      {
-        'icon': Icons.menu_book,
-        'label': Text('Recipe List'),
-        'route': AppRoutes.recipes,
-      },
-      {
-        'icon': Icons.add_box,
-        'label': Text('Create Recipe'),
-        'route': AppRoutes.recipeCreate,
-      },
-      {
-        'icon': Icons.receipt_long,
-        'label': Text('Recipe Detail'),
-        'route': AppRoutes.recipeDetail,
-      },
-      {
-        'icon': Icons.list_alt,
-        'label': Text('Production List'),
-        'route': '/factory/production/orders',
-      },
-      {
-        'icon': Icons.info_outline,
-        'label': Text('Production Execution Detail'),
-        'route': AppRoutes.productionExecutionDetail,
-      },
-      {
-        'icon': Icons.precision_manufacturing,
-        'label': Text('Equipment Detail'),
-        'route': AppRoutes.equipmentMaintenanceDetail,
       },
     ];
 
@@ -284,8 +269,15 @@ class _MainLayoutState extends State<MainLayout> {
                   final item = navItems[index];
 
                   return InkWell(
-                    onTap: () =>
-                        Navigator.pushReplacementNamed(context, item['route']),
+                    onTap: () {
+                      // Only navigate if not already on this route
+                      if (widget.currentRoute != item['route']) {
+                        context.go(item['route']);
+                        if (!_isPinned) {
+                          _updateNavRailVisibility(false);
+                        }
+                      }
+                    },
                     child: Container(
                       width: double.infinity,
                       margin: const EdgeInsets.symmetric(
@@ -309,7 +301,8 @@ class _MainLayoutState extends State<MainLayout> {
                             item['icon'],
                             color: isSelected
                                 ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurface.withOpacity(0.7),
+                                : theme.colorScheme.onSurface
+                                    .withValues(alpha: 0.7 * 255),
                           ),
                           const SizedBox(height: 4),
                           DefaultTextStyle(
@@ -317,7 +310,7 @@ class _MainLayoutState extends State<MainLayout> {
                               color: isSelected
                                   ? theme.colorScheme.primary
                                   : theme.colorScheme.onSurface
-                                      .withOpacity(0.7),
+                                      .withValues(alpha: 0.7 * 255),
                             ),
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
@@ -333,13 +326,26 @@ class _MainLayoutState extends State<MainLayout> {
             ),
           ),
 
-          // Bottom close button
+          // Bottom controls: pin toggle and close
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: IconButton(
-              icon: const Icon(Icons.chevron_left),
-              onPressed: () => _updateNavRailVisibility(false),
-              tooltip: 'Close navigation',
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    _isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+                  ),
+                  onPressed: _togglePin,
+                  tooltip: _isPinned ? 'Unpin navigation' : 'Pin navigation',
+                ),
+                if (!_isPinned)
+                  IconButton(
+                    icon: const Icon(Icons.chevron_left),
+                    onPressed: () => _updateNavRailVisibility(false),
+                    tooltip: 'Close navigation',
+                  ),
+              ],
             ),
           ),
         ],
@@ -358,11 +364,11 @@ class _MainLayoutState extends State<MainLayout> {
       return 3;
     } else if (routeName.startsWith('/factory/equipment')) {
       return 4;
-    } else if (routeName.startsWith('/milk')) {
+    } else if (routeName.startsWith(AppRoutes.milkReception)) {
       return 5;
     } else if (routeName.startsWith('/procurement')) {
       return 6;
-    } else if (routeName == AppRoutes.notifications) {
+    } else if (routeName == '/notifications') {
       return 7;
     } else if (routeName.startsWith('/analytics')) {
       return 8;
@@ -370,18 +376,6 @@ class _MainLayoutState extends State<MainLayout> {
       return 9;
     } else if (routeName == AppRoutes.settings) {
       return 10;
-    } else if (routeName.startsWith('/recipes')) {
-      return 11;
-    } else if (routeName.startsWith('/recipe/create')) {
-      return 12;
-    } else if (routeName.startsWith('/recipe/detail')) {
-      return 13;
-    } else if (routeName.startsWith('/factory/production/orders')) {
-      return 14;
-    } else if (routeName.startsWith('/factory/production/execution')) {
-      return 15;
-    } else if (routeName.startsWith('/factory/equipment/detail')) {
-      return 16;
     }
 
     return 0;

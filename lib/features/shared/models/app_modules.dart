@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../../core/routes/app_router.dart';
+import '../../../core/routes/app_go_router.dart';
 
 @immutable
 class ModuleScreen {
-  final String nameKey;
-  final String route;
-  final IconData icon;
-  final String descriptionKey;
-
   const ModuleScreen({
     required this.nameKey,
     required this.route,
     required this.icon,
     required this.descriptionKey,
   });
+  final String nameKey;
+  final String route;
+  final IconData icon;
+  final String descriptionKey;
 
   ModuleScreen copyWith({
     String? nameKey,
@@ -49,17 +48,16 @@ class ModuleScreen {
 
 @immutable
 class AppModule {
-  final String nameKey;
-  final IconData icon;
-  final Color color;
-  final List<ModuleScreen> screens;
-
   const AppModule({
     required this.nameKey,
     required this.icon,
     required this.color,
     required this.screens,
   });
+  final String nameKey;
+  final IconData icon;
+  final Color color;
+  final List<ModuleScreen> screens;
 
   AppModule copyWith({
     String? nameKey,
@@ -103,7 +101,7 @@ final Map<String, AppModule> appModules = {
         descriptionKey: 'inventoryDashboardDesc',
       ),
       ModuleScreen(
-        nameKey: 'inventoryList',
+        nameKey: 'inventoryMain',
         route: AppRoutes.inventoryMain,
         icon: Icons.list,
         descriptionKey: 'inventoryListDesc',
@@ -115,7 +113,7 @@ final Map<String, AppModule> appModules = {
         descriptionKey: 'inventoryAlertsDesc',
       ),
       ModuleScreen(
-        nameKey: 'inventoryMovementsScreen',
+        nameKey: 'inventoryMovements',
         route: AppRoutes.inventoryMovements,
         icon: Icons.swap_horiz,
         descriptionKey: 'inventoryMovementsDesc',
@@ -128,15 +126,87 @@ final Map<String, AppModule> appModules = {
       ),
       ModuleScreen(
         nameKey: 'inventoryBatchScanner',
-        route: AppRoutes.inventoryBatchScanner,
+        route: AppRoutes.batchScanner,
         icon: Icons.qr_code_scanner,
         descriptionKey: 'inventoryBatchScannerDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryEdit',
+        route: AppRoutes.inventoryEdit,
+        icon: Icons.edit,
+        descriptionKey: 'inventoryEditDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryAnalytics',
+        route: AppRoutes.inventoryAnalytics,
+        icon: Icons.analytics,
+        descriptionKey: 'inventoryAnalyticsDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryTrends',
+        route: AppRoutes.inventoryTrends,
+        icon: Icons.trending_up,
+        descriptionKey: 'inventoryTrendsDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryBarcodeScan',
+        route: AppRoutes.batchBarcodeScan,
+        icon: Icons.qr_code,
+        descriptionKey: 'inventoryBarcodeScanDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryBatchInventory',
+        route: AppRoutes.batchInventory,
+        icon: Icons.inventory,
+        descriptionKey: 'inventoryBatchInventoryDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'dairyInventory',
+        route: AppRoutes.dairyInventory,
+        icon: Icons.water_drop,
+        descriptionKey: 'dairyInventoryDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'dairyInventoryDemo',
+        route: AppRoutes.dairyInventoryDemo,
+        icon: Icons.water_drop,
+        descriptionKey: 'dairyInventoryDemoDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryCategoryManagement',
+        route: AppRoutes.inventoryCategoryManagement,
+        icon: Icons.category,
+        descriptionKey: 'inventoryCategoryManagementDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryAdjustmentHistory',
+        route: AppRoutes.inventoryAdjustments,
+        icon: Icons.history,
+        descriptionKey: 'inventoryAdjustmentHistoryDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryReports',
+        route: AppRoutes.inventoryReports,
+        icon: Icons.summarize,
+        descriptionKey: 'inventoryReportsDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryReportDedicated',
+        route: AppRoutes.inventoryReport,
+        icon: Icons.assessment,
+        descriptionKey: 'inventoryReportDedicatedDesc',
       ),
       ModuleScreen(
         nameKey: 'inventorySettings',
         route: AppRoutes.inventorySettings,
         icon: Icons.settings,
         descriptionKey: 'inventorySettingsDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'inventoryDatabaseManagement',
+        route: AppRoutes.inventoryDatabaseManagement,
+        icon: Icons.storage,
+        descriptionKey: 'inventoryDatabaseManagementDesc',
       ),
     ],
   ),
@@ -158,6 +228,30 @@ final Map<String, AppModule> appModules = {
         descriptionKey: 'createProductionExecutionDesc',
       ),
       ModuleScreen(
+        nameKey: 'productionExecutionList',
+        route: AppRoutes.productionExecutionList,
+        icon: Icons.view_list,
+        descriptionKey: 'productionExecutionListDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'batchTracking',
+        route: AppRoutes.batchTracking,
+        icon: Icons.track_changes,
+        descriptionKey: 'batchTrackingDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'productionPlanDetail',
+        route: AppRoutes.productionPlanDetail,
+        icon: Icons.calendar_today,
+        descriptionKey: 'productionPlanDetailDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'productionScheduling',
+        route: AppRoutes.productionScheduling,
+        icon: Icons.schedule,
+        descriptionKey: 'productionSchedulingDesc',
+      ),
+      ModuleScreen(
         nameKey: 'equipmentMaintenance',
         route: AppRoutes.equipmentMaintenance,
         icon: Icons.build,
@@ -170,8 +264,14 @@ final Map<String, AppModule> appModules = {
         descriptionKey: 'createMaintenanceRecordDesc',
       ),
       ModuleScreen(
+        nameKey: 'addEditEquipment',
+        route: AppRoutes.addEditEquipment,
+        icon: Icons.edit,
+        descriptionKey: 'addEditEquipmentDesc',
+      ),
+      ModuleScreen(
         nameKey: 'productionList',
-        route: '/factory/production/orders',
+        route: AppRoutes.productionOrders,
         icon: Icons.list_alt,
         descriptionKey: 'productionListDesc',
       ),
@@ -204,6 +304,12 @@ final Map<String, AppModule> appModules = {
         route: AppRoutes.equipmentMaintenanceDetail,
         icon: Icons.precision_manufacturing,
         descriptionKey: 'equipmentDetailDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'maintenanceRecordDetail',
+        route: AppRoutes.maintenanceRecordDetail,
+        icon: Icons.article,
+        descriptionKey: 'maintenanceRecordDetailDesc',
       ),
     ],
   ),
@@ -296,7 +402,7 @@ final Map<String, AppModule> appModules = {
     screens: [
       ModuleScreen(
         nameKey: 'orderList',
-        route: AppRoutes.orders,
+        route: '/order-management',
         icon: Icons.list_alt,
         descriptionKey: 'orderListDesc',
       ),
@@ -305,6 +411,37 @@ final Map<String, AppModule> appModules = {
         route: AppRoutes.orderCreate,
         icon: Icons.add_box,
         descriptionKey: 'createOrderDesc',
+      ),
+    ],
+  ),
+  'crm': const AppModule(
+    nameKey: 'crm',
+    icon: Icons.people,
+    color: Colors.indigo,
+    screens: [
+      ModuleScreen(
+        nameKey: 'customerList',
+        route: '/crm',
+        icon: Icons.people_outline,
+        descriptionKey: 'customerListDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'customerDetails',
+        route: '/crm/customers/details',
+        icon: Icons.person,
+        descriptionKey: 'customerDetailsDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'leadManagement',
+        route: '/crm/leads',
+        icon: Icons.contact_phone,
+        descriptionKey: 'leadManagementDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'interactions',
+        route: '/crm/interactions',
+        icon: Icons.chat,
+        descriptionKey: 'interactionsDesc',
       ),
     ],
   ),

@@ -1,15 +1,16 @@
+import 'dart:math' as math;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-import 'dart:math' as math;
 
 import '../../data/models/sales_forecast_model.dart';
 import '../../data/repositories/sales_forecast_repository.dart';
-import '../entities/time_series_point.dart';
 import '../algorithms/arima.dart';
 import '../algorithms/exponential_smoothing.dart';
 import '../algorithms/linear_regression.dart';
 import '../algorithms/moving_average.dart';
 import '../algorithms/seasonal_decomposition.dart';
+import '../entities/time_series_point.dart';
 
 /// Forecasting methods supported by the service
 enum ForecastingMethod {
@@ -22,8 +23,6 @@ enum ForecastingMethod {
 
 /// Service that provides functionality for sales forecasting
 class ForecastingService {
-  // Singleton pattern for easy access
-  static final ForecastingService _instance = ForecastingService._internal();
 
   factory ForecastingService() {
     return _instance;
@@ -32,6 +31,8 @@ class ForecastingService {
   ForecastingService._internal()
       : _repository = SalesForecastRepository(),
         _firestore = FirebaseFirestore.instance;
+  // Singleton pattern for easy access
+  static final ForecastingService _instance = ForecastingService._internal();
 
   final SalesForecastRepository _repository;
   final FirebaseFirestore _firestore;

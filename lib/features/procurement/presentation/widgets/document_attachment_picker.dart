@@ -1,18 +1,19 @@
-import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../../../domain/entities/supporting_document.dart';
 
 /// Widget for selecting and managing document attachments.
 class DocumentAttachmentPicker extends StatefulWidget {
-  final List<SupportingDocument> documents;
-  final Function(List<SupportingDocument>) onDocumentsChanged;
 
   const DocumentAttachmentPicker({
-    Key? key,
+    super.key,
     required this.documents,
     required this.onDocumentsChanged,
-  }) : super(key: key);
+  });
+  final List<SupportingDocument> documents;
+  final Function(List<SupportingDocument>) onDocumentsChanged;
 
   @override
   State<DocumentAttachmentPicker> createState() =>

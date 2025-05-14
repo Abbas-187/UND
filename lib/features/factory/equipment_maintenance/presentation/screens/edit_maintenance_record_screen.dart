@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/providers/equipment_maintenance_provider.dart';
-import '../../data/models/maintenance_record_model.dart';
+
 import '../../data/models/maintenance_models.dart';
+import '../../data/models/maintenance_record_model.dart';
+import '../../domain/providers/equipment_maintenance_provider.dart';
 
 class EditMaintenanceRecordScreen extends ConsumerStatefulWidget {
-  final MaintenanceRecordModel record;
   const EditMaintenanceRecordScreen({super.key, required this.record});
+  final MaintenanceRecordModel record;
 
   @override
   ConsumerState<EditMaintenanceRecordScreen> createState() =>

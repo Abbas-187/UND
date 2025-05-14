@@ -7,8 +7,11 @@ extension InventoryItemModelExtensions on InventoryItemModel {
   Map<String, dynamic> toSimpleJson() {
     return {
       'id': id,
+      'appItemId': appItemId,
+      'sapCode': sapCode,
       'name': name,
       'category': category,
+      'subCategory': subCategory,
       'unit': unit,
       'quantity': quantity,
       'minimumQuantity': minimumQuantity,
@@ -20,13 +23,7 @@ extension InventoryItemModelExtensions on InventoryItemModel {
       'additionalAttributes': additionalAttributes,
       'cost': cost,
       'lowStockThreshold': lowStockThreshold,
-      'currentTemperature': currentTemperature,
-      'storageCondition': storageCondition,
-      'overallQualityStatus': overallQualityStatus?.toString().split('.').last,
-      'fatContent': fatContent,
-      'pasteurized': pasteurized,
-      'sourceInfo': sourceInfo,
-      'processingDate': processingDate?.toIso8601String(),
+      'supplier': supplier,
     };
   }
 }
@@ -35,24 +32,13 @@ extension InventoryItemModelExtensions on InventoryItemModel {
 extension InventoryItemModelFactory on InventoryItemModel {
   /// Create an InventoryItemModel from simple JSON representation
   static InventoryItemModel fromJson(Map<String, dynamic> json) {
-    // Parse quality status
-    QualityStatus? qualityStatus;
-    if (json['overallQualityStatus'] != null) {
-      try {
-        qualityStatus = QualityStatus.values.firstWhere(
-          (status) =>
-              status.toString().split('.').last == json['overallQualityStatus'],
-          orElse: () => QualityStatus.acceptable,
-        );
-      } catch (e) {
-        qualityStatus = QualityStatus.acceptable;
-      }
-    }
-
     return InventoryItemModel(
-      id: json['id'] as String,
+      id: json['id'] as String?,
+      appItemId: json['appItemId'] as String,
+      sapCode: json['sapCode'] as String? ?? '',
       name: json['name'] as String,
       category: json['category'] as String,
+      subCategory: json['subCategory'] as String? ?? '',
       unit: json['unit'] as String,
       quantity: (json['quantity'] as num).toDouble(),
       minimumQuantity: (json['minimumQuantity'] as num).toDouble(),
@@ -65,22 +51,9 @@ extension InventoryItemModelFactory on InventoryItemModel {
           : null,
       additionalAttributes:
           json['additionalAttributes'] as Map<String, dynamic>?,
-      searchTerms: json['searchTerms'] as List<String>?,
       cost: json['cost'] != null ? (json['cost'] as num).toDouble() : null,
       lowStockThreshold: (json['lowStockThreshold'] as num?)?.toInt() ?? 5,
-      currentTemperature: json['currentTemperature'] != null
-          ? (json['currentTemperature'] as num).toDouble()
-          : null,
-      storageCondition: json['storageCondition'] as String?,
-      overallQualityStatus: qualityStatus,
-      fatContent: json['fatContent'] != null
-          ? (json['fatContent'] as num).toDouble()
-          : null,
-      pasteurized: json['pasteurized'] as bool? ?? true,
-      sourceInfo: json['sourceInfo'] as Map<String, dynamic>?,
-      processingDate: json['processingDate'] != null
-          ? DateTime.parse(json['processingDate'] as String)
-          : null,
+      supplier: json['supplier'] as String?,
     );
   }
 }

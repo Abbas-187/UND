@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../routes/app_router.dart';
+import '../../routes/app_go_router.dart';
 import '../models/permission.dart';
 import '../services/auth_service.dart';
 
@@ -91,7 +91,6 @@ class AuthMiddleware {
 
 /// Helper widget to handle redirects
 class _AuthRedirect extends ConsumerWidget {
-
   const _AuthRedirect({required this.destination});
   final String destination;
 

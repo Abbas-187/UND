@@ -5,16 +5,16 @@ import '../../domain/entities/purchase_order.dart';
 
 /// Widget for displaying and editing a purchase order item.
 class PurchaseOrderItemForm extends StatefulWidget {
-  final PurchaseOrderItem item;
-  final Function(PurchaseOrderItem) onUpdate;
-  final VoidCallback onRemove;
 
   const PurchaseOrderItemForm({
-    Key? key,
+    super.key,
     required this.item,
     required this.onUpdate,
     required this.onRemove,
-  }) : super(key: key);
+  });
+  final PurchaseOrderItem item;
+  final Function(PurchaseOrderItem) onUpdate;
+  final VoidCallback onRemove;
 
   @override
   State<PurchaseOrderItemForm> createState() => _PurchaseOrderItemFormState();

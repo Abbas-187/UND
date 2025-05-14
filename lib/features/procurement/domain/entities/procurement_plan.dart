@@ -2,18 +2,6 @@ import 'package:meta/meta.dart';
 
 @immutable
 class ProcurementPlan {
-  final String id;
-  final String name;
-  final DateTime creationDate;
-  final String createdBy;
-  final ProcurementPlanStatus status;
-  final List<ProcurementPlanItem> items;
-  final double estimatedTotalCost;
-  final String? notes;
-  final DateTime? approvalDate;
-  final String? approvedBy;
-  final double? budgetLimit;
-  final DateTime? requiredByDate;
 
   const ProcurementPlan({
     required this.id,
@@ -29,6 +17,18 @@ class ProcurementPlan {
     this.budgetLimit,
     this.requiredByDate,
   });
+  final String id;
+  final String name;
+  final DateTime creationDate;
+  final String createdBy;
+  final ProcurementPlanStatus status;
+  final List<ProcurementPlanItem> items;
+  final double estimatedTotalCost;
+  final String? notes;
+  final DateTime? approvalDate;
+  final String? approvedBy;
+  final double? budgetLimit;
+  final DateTime? requiredByDate;
 
   ProcurementPlan copyWith({
     String? id,
@@ -96,20 +96,6 @@ class ProcurementPlan {
 
 @immutable
 class ProcurementPlanItem {
-  final String id;
-  final String itemId;
-  final String itemName;
-  final double quantity;
-  final String unit;
-  final String preferredSupplierId;
-  final String preferredSupplierName;
-  final double estimatedUnitCost;
-  final double estimatedTotalCost;
-  final DateTime requiredByDate;
-  final ProcurementItemUrgency urgency;
-  final String? notes;
-  final String? productionPlanReference;
-  final double? inventoryLevel;
 
   const ProcurementPlanItem({
     required this.id,
@@ -127,6 +113,20 @@ class ProcurementPlanItem {
     this.productionPlanReference,
     this.inventoryLevel,
   });
+  final String id;
+  final String itemId;
+  final String itemName;
+  final double quantity;
+  final String unit;
+  final String preferredSupplierId;
+  final String preferredSupplierName;
+  final double estimatedUnitCost;
+  final double estimatedTotalCost;
+  final DateTime requiredByDate;
+  final ProcurementItemUrgency urgency;
+  final String? notes;
+  final String? productionPlanReference;
+  final double? inventoryLevel;
 
   ProcurementPlanItem copyWith({
     String? id,

@@ -1,5 +1,4 @@
 // Non-freezed model implementation to avoid generation issues
-import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -221,11 +220,6 @@ class CustomerModel {
 
 @immutable
 class AddressModel {
-  final String street;
-  final String city;
-  final String state;
-  final String country;
-  final String postalCode;
 
   const AddressModel({
     required this.street,
@@ -244,6 +238,11 @@ class AddressModel {
       postalCode: json['postalCode'] as String,
     );
   }
+  final String street;
+  final String city;
+  final String state;
+  final String country;
+  final String postalCode;
 
   Map<String, dynamic> toJson() {
     return {

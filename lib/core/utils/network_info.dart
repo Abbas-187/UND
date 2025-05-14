@@ -2,10 +2,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 /// Utility class to check network connectivity
 class NetworkInfo {
-  final Connectivity _connectivity;
 
   NetworkInfo([Connectivity? connectivity])
       : _connectivity = connectivity ?? Connectivity();
+  final Connectivity _connectivity;
 
   /// Checks if the device is connected to the internet
   Future<bool> get isConnected async {

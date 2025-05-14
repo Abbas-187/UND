@@ -1,22 +1,23 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import '../models/production_job.dart';
-import '../../../core/exceptions/app_exception.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+
 import '../../../core/errors/exceptions.dart';
 import '../../../shared/constants/api_endpoints.dart';
+import '../models/production_job.dart';
 
 /// Service for handling production operations with API integration
 class ProductionService {
-  final http.Client _httpClient;
-  final DefaultCacheManager _cacheManager;
 
   ProductionService({
     http.Client? httpClient,
     DefaultCacheManager? cacheManager,
   })  : _httpClient = httpClient ?? http.Client(),
         _cacheManager = cacheManager ?? DefaultCacheManager();
+  final http.Client _httpClient;
+  final DefaultCacheManager _cacheManager;
 
   /// Start production for an order
   Future<ProductionJob> startProduction(
@@ -794,9 +795,9 @@ class ProductionService {
 
 /// Exception for production-related errors
 class ProductionException implements Exception {
-  final String message;
 
   ProductionException(this.message);
+  final String message;
 
   @override
   String toString() => 'ProductionException: $message';

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../routes/procurement_routes.dart';
 
 class TestNavigationScreen extends StatelessWidget {
-  const TestNavigationScreen({Key? key}) : super(key: key);
+  const TestNavigationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

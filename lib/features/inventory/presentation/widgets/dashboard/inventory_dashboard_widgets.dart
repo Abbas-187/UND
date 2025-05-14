@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../../l10n/app_localizations.dart';
 import '../../../data/models/inventory_movement_model.dart';
-import '../../../data/models/inventory_movement_type.dart';
-import '../../../providers/inventory_movement_providers.dart';
 import '../../screens/inventory_movement_list_page.dart';
 import '../../screens/movement_details_page.dart';
 
@@ -120,33 +119,54 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
     Color iconColor;
 
     switch (type) {
-      case InventoryMovementType.RECEIPT:
+      case InventoryMovementType.PO_RECEIPT:
         iconData = Icons.input;
         iconColor = Colors.blue;
         break;
-      case InventoryMovementType.TRANSFER:
+      case InventoryMovementType.TRANSFER_IN:
         iconData = Icons.swap_horiz;
         iconColor = Colors.green;
         break;
-      case InventoryMovementType.ISSUE:
+      case InventoryMovementType.PRODUCTION_ISSUE:
         iconData = Icons.remove;
         iconColor = Colors.orange;
         break;
-      case InventoryMovementType.RETURN:
+      case InventoryMovementType.SALES_RETURN:
         iconData = Icons.replay;
         iconColor = Colors.teal;
         break;
-      case InventoryMovementType.ADJUSTMENT:
+      case InventoryMovementType.ADJUSTMENT_OTHER:
         iconData = Icons.tune;
         iconColor = Colors.purple;
         break;
-      case InventoryMovementType.DISPOSAL:
-        iconData = Icons.delete;
+      case InventoryMovementType.PRODUCTION_OUTPUT:
+        iconData = Icons.add;
+        iconColor = Colors.indigo;
+        break;
+      case InventoryMovementType.TRANSFER_OUT:
+        iconData = Icons.logout;
+        iconColor = Colors.redAccent;
+        break;
+      case InventoryMovementType.SALE_SHIPMENT:
+        iconData = Icons.local_shipping;
+        iconColor = Colors.deepOrange;
+        break;
+      case InventoryMovementType.ADJUSTMENT_DAMAGE:
+        iconData = Icons.report_problem;
+        iconColor = Colors.brown;
+        break;
+      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
+        iconData = Icons.add_circle_outline;
+        iconColor = Colors.lightGreen;
+        break;
+      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
+        iconData = Icons.remove_circle_outline;
         iconColor = Colors.red;
         break;
-      default:
-        iconData = Icons.inventory_2;
-        iconColor = Colors.grey;
+      case InventoryMovementType.QUALITY_STATUS_UPDATE:
+        iconData = Icons.verified;
+        iconColor = Colors.blueGrey;
+        break;
     }
 
     return CircleAvatar(
@@ -204,7 +224,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
 
     // Use the movementsByTypeProvider for transfers since they often need approval
     final pendingMovementsAsync =
-        ref.watch(movementsByTypeProvider(InventoryMovementType.TRANSFER));
+        ref.watch(movementsByTypeProvider(InventoryMovementType.TRANSFER_IN));
 
     return Card(
       margin: const EdgeInsets.all(8.0),
@@ -306,9 +326,9 @@ class CriticalMovementsAlertWidget extends ConsumerWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
-    // Get movements with critical status (using RETURN as proxy for critical movements)
+    // Get movements with critical status (using SALES_RETURN as proxy for critical movements)
     final pendingMovementsAsync =
-        ref.watch(movementsByTypeProvider(InventoryMovementType.RETURN));
+        ref.watch(movementsByTypeProvider(InventoryMovementType.SALES_RETURN));
 
     return Card(
       margin: const EdgeInsets.all(8.0),

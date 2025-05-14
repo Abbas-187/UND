@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common/widgets/app_loading_indicator.dart';
 import '../../../../common/widgets/error_view.dart';
-import '../../../../core/routes/app_router.dart';
 import '../../data/models/sales_forecast_model.dart';
 import '../../domain/services/forecasting_service.dart';
 
@@ -56,8 +56,7 @@ class ForecastingListScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(AppRoutes.forecastingCreate);
+                    context.push('/forecasting/create');
                   },
                   icon: const Icon(Icons.add),
                   label: const Text('New Forecast'),
@@ -117,10 +116,7 @@ class ForecastingListScreen extends ConsumerWidget {
   void _openSavedForecast(BuildContext context, String? forecastId) {
     if (forecastId == null) return;
 
-    Navigator.of(context).pushNamed(
-      AppRoutes.forecastingDetail,
-      arguments: ForecastingDetailArgs(forecastId: forecastId),
-    );
+    context.push('/forecasting/detail/$forecastId');
   }
 }
 

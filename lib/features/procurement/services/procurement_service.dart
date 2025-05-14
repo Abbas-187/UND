@@ -1,24 +1,25 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import '../../order_management/models/order.dart';
-import '../../../core/exceptions/app_exception.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
+
 import '../../../core/errors/exceptions.dart';
 import '../../../shared/constants/api_endpoints.dart';
+import '../../order_management/data/models/order_model.dart';
 import '../models/procurement_request.dart';
 import '../models/procurement_status.dart';
 
 /// Service for handling procurement requests and integration with the ordering system
 class ProcurementService {
-  final http.Client _httpClient;
-  final DefaultCacheManager _cacheManager;
 
   ProcurementService({
     http.Client? httpClient,
     DefaultCacheManager? cacheManager,
   })  : _httpClient = httpClient ?? http.Client(),
         _cacheManager = cacheManager ?? DefaultCacheManager();
+  final http.Client _httpClient;
+  final DefaultCacheManager _cacheManager;
 
   /// Creates a procurement request for items needed for an order
   Future<String> createProcurementRequest(
@@ -377,8 +378,9 @@ class ProcurementService {
       // Build query parameters
       final Map<String, String> queryParams = {};
       if (status != null) queryParams['status'] = status.toString();
-      if (fromDate != null)
+      if (fromDate != null) {
         queryParams['fromDate'] = fromDate.toIso8601String();
+      }
       if (toDate != null) queryParams['toDate'] = toDate.toIso8601String();
       if (location != null) queryParams['location'] = location;
 
@@ -503,9 +505,9 @@ class ProcurementService {
 
 /// Exception specifically for procurement-related errors
 class ProcurementException implements Exception {
-  final String message;
 
   ProcurementException(this.message);
+  final String message;
 
   @override
   String toString() => 'ProcurementException: $message';

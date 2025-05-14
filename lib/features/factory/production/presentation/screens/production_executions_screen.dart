@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../../../../../core/routes/app_router.dart';
+
 import '../../../production/domain/models/production_execution_model.dart';
 import '../widgets/production_execution_card.dart';
 
@@ -300,8 +301,7 @@ class _ProductionExecutionsScreenState
             icon: const Icon(Icons.add),
             onPressed: () {
               // Navigate to create execution screen
-              Navigator.of(context)
-                  .pushNamed(AppRoutes.createProductionExecution);
+              context.go('/factory/production/create-execution');
             },
             tooltip: 'Create new production execution',
           ),
@@ -451,7 +451,7 @@ class _ProductionExecutionsScreenState
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigate to create new execution screen
-          Navigator.of(context).pushNamed(AppRoutes.createProductionExecution);
+          context.go('/factory/production/create-execution');
         },
         child: const Icon(Icons.add),
       ),
@@ -535,10 +535,7 @@ class _ProductionExecutionsScreenState
       execution: execution,
       onTap: () {
         // Navigate to detail screen
-        Navigator.of(context).pushNamed(
-          AppRoutes.productionExecutionDetail,
-          arguments: {'executionId': execution.id},
-        );
+        context.go('/factory/production/execution-detail', extra: execution.id);
       },
       // Pass callbacks for actions
       onStart: (id) {

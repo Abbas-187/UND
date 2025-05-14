@@ -5,10 +5,10 @@ import '../config/app_config.dart';
 
 /// Custom logger service for consistent logging across the app
 class LoggingService {
-  final Logger _logger;
-  final AppConfig _appConfig;
 
   LoggingService(this._logger, this._appConfig);
+  final Logger _logger;
+  final AppConfig _appConfig;
 
   /// Log a debug message
   void debug(String message, [dynamic error, StackTrace? stackTrace]) {

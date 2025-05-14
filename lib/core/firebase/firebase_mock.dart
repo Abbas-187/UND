@@ -9,9 +9,6 @@ import 'firebase_interface.dart';
 
 // Mock models
 class MockUser implements firebase_auth.User {
-  final String _uid;
-  String? _email;
-  String? _displayName;
 
   MockUser({
     required String uid,
@@ -20,6 +17,9 @@ class MockUser implements firebase_auth.User {
   })  : _uid = uid,
         _email = email,
         _displayName = displayName;
+  final String _uid;
+  final String? _email;
+  String? _displayName;
 
   @override
   String get uid => _uid;
@@ -70,6 +70,15 @@ class MockUserMetadata implements firebase_auth.UserMetadata {
 }
 
 class MockIdTokenResult implements firebase_auth.IdTokenResult {
+
+  MockIdTokenResult({
+    required this.claims,
+    required this.token,
+    required this.authTime,
+    required this.expirationTime,
+    required this.issuedAtTime,
+    required this.signInProvider,
+  });
   @override
   final Map<String, dynamic>? claims;
 
@@ -87,18 +96,11 @@ class MockIdTokenResult implements firebase_auth.IdTokenResult {
 
   @override
   final String? signInProvider;
-
-  MockIdTokenResult({
-    required this.claims,
-    required this.token,
-    required this.authTime,
-    required this.expirationTime,
-    required this.issuedAtTime,
-    required this.signInProvider,
-  });
 }
 
 class MockUserCredential implements firebase_auth.UserCredential {
+
+  MockUserCredential({this.user});
   @override
   final MockUser? user;
 
@@ -107,8 +109,6 @@ class MockUserCredential implements firebase_auth.UserCredential {
 
   @override
   final firebase_auth.AuthCredential? credential = null;
-
-  MockUserCredential({this.user});
 }
 
 // Mock implementations of Firebase interfaces
@@ -210,10 +210,10 @@ class FirebaseAuthMock implements AuthInterface {
 }
 
 class MockDocumentReference implements DocumentReference<Map<String, dynamic>> {
-  final String _path;
-  Map<String, dynamic> _data = {};
 
   MockDocumentReference(this._path);
+  final String _path;
+  Map<String, dynamic> _data = {};
 
   @override
   String get id => _path.split('/').last;
@@ -238,7 +238,7 @@ class MockDocumentReference implements DocumentReference<Map<String, dynamic>> {
     // This is a simple mock implementation that just replaces the data
     final Map<String, dynamic> castData = (data is! Map<String, dynamic>)
         ? (data as Map).cast<String, dynamic>()
-        : (data as Map<String, dynamic>);
+        : data;
 
     if (options?.merge == true) {
       // If merge is true, we only add fields from castData to _data
@@ -272,10 +272,10 @@ class MockDocumentReference implements DocumentReference<Map<String, dynamic>> {
 }
 
 class MockDocumentSnapshot implements DocumentSnapshot {
-  final String _path;
-  final Map<String, dynamic> _data;
 
   MockDocumentSnapshot(this._path, this._data);
+  final String _path;
+  final Map<String, dynamic> _data;
 
   @override
   bool exists = true;
@@ -300,18 +300,14 @@ class MockDocumentSnapshot implements DocumentSnapshot {
 
 class MockCollectionReference
     implements CollectionReference<Map<String, dynamic>> {
-  final String _path;
-  final Map<String, Map<String, dynamic>> _documents = {};
 
   MockCollectionReference(this._path);
+  final String _path;
+  final Map<String, Map<String, dynamic>> _documents = {};
 
   @override
   Future<DocumentReference<Map<String, dynamic>>> add(
       Map<String, dynamic> data) async {
-    if (data == null) {
-      throw ArgumentError('Data cannot be null');
-    }
-
     final docId = const Uuid().v4();
     final docRef = MockDocumentReference('$_path/$docId')
         as DocumentReference<Map<String, dynamic>>;
@@ -391,10 +387,10 @@ class MockCollectionReference
 }
 
 class MockQueryDocumentSnapshot implements QueryDocumentSnapshot {
-  final String _path;
-  final Map<String, dynamic> _data;
 
   MockQueryDocumentSnapshot(this._path, this._data);
+  final String _path;
+  final Map<String, dynamic> _data;
 
   @override
   bool exists = true;
@@ -418,9 +414,9 @@ class MockQueryDocumentSnapshot implements QueryDocumentSnapshot {
 }
 
 class MockQuerySnapshot implements QuerySnapshot<Map<String, dynamic>> {
-  final List<DocumentSnapshot> _docs;
 
   MockQuerySnapshot(this._docs);
+  final List<DocumentSnapshot> _docs;
 
   @override
   List<QueryDocumentSnapshot<Map<String, dynamic>>> get docs {
@@ -544,9 +540,9 @@ class MockWriteBatch implements WriteBatch {
 }
 
 class MockUploadTask implements UploadTask {
-  final TaskSnapshot _snapshot;
 
   MockUploadTask(this._snapshot);
+  final TaskSnapshot _snapshot;
 
   @override
   Stream<TaskSnapshot> get snapshotEvents => Stream.value(_snapshot);
@@ -583,10 +579,10 @@ class MockTaskSnapshot implements TaskSnapshot {
 }
 
 class MockStorageReference implements Reference {
-  final String _path;
-  final StorageMock _storage;
 
   MockStorageReference(this._path, this._storage);
+  final String _path;
+  final StorageMock _storage;
 
   @override
   String get bucket => 'mock-bucket';
@@ -632,6 +628,8 @@ class StorageMock implements StorageInterface {
 }
 
 class MockListResult implements ListResult {
+
+  MockListResult(this.items);
   @override
   final List<Reference> items;
 
@@ -643,6 +641,4 @@ class MockListResult implements ListResult {
 
   @override
   FirebaseStorage get storage => FirebaseStorage.instance;
-
-  MockListResult(this.items);
 }

@@ -4,12 +4,6 @@ import 'app_colors.dart';
 // Extension for success, warning, and information components
 @immutable
 class StatusColors extends ThemeExtension<StatusColors> {
-  final Color success;
-  final Color warning;
-  final Color information;
-  final Color onSuccess;
-  final Color onWarning;
-  final Color onInformation;
 
   const StatusColors({
     required this.success,
@@ -19,6 +13,12 @@ class StatusColors extends ThemeExtension<StatusColors> {
     required this.onWarning,
     required this.onInformation,
   });
+  final Color success;
+  final Color warning;
+  final Color information;
+  final Color onSuccess;
+  final Color onWarning;
+  final Color onInformation;
 
   // Light theme values
   static const light = StatusColors(
@@ -80,15 +80,15 @@ class StatusColors extends ThemeExtension<StatusColors> {
 // Extension for custom button styling
 @immutable
 class CustomButtonStyles extends ThemeExtension<CustomButtonStyles> {
-  final ButtonStyle successButton;
-  final ButtonStyle warningButton;
-  final ButtonStyle infoButton;
 
   const CustomButtonStyles({
     required this.successButton,
     required this.warningButton,
     required this.infoButton,
   });
+  final ButtonStyle successButton;
+  final ButtonStyle warningButton;
+  final ButtonStyle infoButton;
 
   // Light theme values
   static CustomButtonStyles light = CustomButtonStyles(

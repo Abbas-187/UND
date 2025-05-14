@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:uuid/uuid.dart';
 
-import '../core/firebase/firebase_module.dart';
 import '../features/milk_reception/domain/models/notification_model.dart';
 import '../models/user_model.dart';
 
@@ -29,13 +28,6 @@ class ReceptionNotificationService {
 
   /// Initialize the notification service
   Future<void> initialize() async {
-    // Skip initialization if using mock implementation
-    if (useMockFirebase) {
-      debugPrint(
-          'Using mock implementation - skipping real Firebase initialization');
-      return;
-    }
-
     // Request permission for notifications
     final settings = await (_messaging as FirebaseMessaging).requestPermission(
       alert: true,
@@ -48,12 +40,13 @@ class ReceptionNotificationService {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission for notifications');
+      debugPrint('User granted permission for notifications');
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      print('User granted provisional permission for notifications');
+      debugPrint('User granted provisional permission for notifications');
     } else {
-      print('User declined or has not accepted permission for notifications');
+      debugPrint(
+          'User declined or has not accepted permission for notifications');
     }
 
     // Initialize local notifications
@@ -73,8 +66,7 @@ class ReceptionNotificationService {
     );
 
     // Set up foreground notification presentation options
-    await (_messaging as FirebaseMessaging)
-        .setForegroundNotificationPresentationOptions(
+    await (_messaging).setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
@@ -85,7 +77,7 @@ class ReceptionNotificationService {
   void _handleNotificationTap(NotificationResponse response) {
     // This will be implemented to navigate to the appropriate screen
     // based on the notification type and data
-    print('Notification tapped: ${response.payload}');
+    debugPrint('Notification tapped: ${response.payload}');
   }
 
   /// Create a quality alert notification
@@ -416,7 +408,7 @@ class ReceptionNotificationService {
             },
           );
         } catch (e) {
-          print('Error sending push notification to token $token: $e');
+          debugPrint('Error sending push notification to token $token: $e');
         }
       }
     } else if (notification.targetRoleId != null) {
@@ -426,13 +418,13 @@ class ReceptionNotificationService {
       try {
         // Note: Firebase Cloud Messaging from the client SDK doesn't support direct sendToTopic
         // In a real app, this would be done through Firebase Functions or a server backend
-        print(
+        debugPrint(
             'Would send push notification to topic $topic with title: ${notification.title}');
 
         // For demonstration purposes, we'll log the intended notification
         // In production, use FCM HTTP v1 API via your server or Cloud Functions
       } catch (e) {
-        print('Error sending push notification to topic $topic: $e');
+        debugPrint('Error sending push notification to topic $topic: $e');
       }
     }
 
@@ -470,7 +462,7 @@ class ReceptionNotificationService {
   Future<void> _sendEmailNotification(
       NotificationModel notification, List<String>? targetUserIds) async {
     // This would connect to your email service
-    print('Sending email notification: ${notification.title}');
+    debugPrint('Sending email notification: ${notification.title}');
 
     // Example implementation would get user emails and send via a service like SendGrid
     if (targetUserIds != null && targetUserIds.isNotEmpty) {
@@ -486,7 +478,7 @@ class ReceptionNotificationService {
 
       // Here you would send the emails using your email service
       for (final email in emails) {
-        print('Would send email to $email: ${notification.title}');
+        debugPrint('Would send email to $email: ${notification.title}');
       }
     } else if (notification.targetRoleId != null) {
       // Send to users with the specific role
@@ -502,7 +494,7 @@ class ReceptionNotificationService {
 
       // Here you would send the emails using your email service
       for (final email in emails) {
-        print('Would send email to $email: ${notification.title}');
+        debugPrint('Would send email to $email: ${notification.title}');
       }
     }
   }
@@ -511,7 +503,7 @@ class ReceptionNotificationService {
   Future<void> _sendSmsNotification(
       NotificationModel notification, List<String>? targetUserIds) async {
     // This would connect to your SMS service
-    print('Sending SMS notification: ${notification.title}');
+    debugPrint('Sending SMS notification: ${notification.title}');
 
     // Example implementation would get user phone numbers and send via a service like Twilio
     if (targetUserIds != null && targetUserIds.isNotEmpty) {
@@ -527,7 +519,7 @@ class ReceptionNotificationService {
 
       // Here you would send the SMS using your SMS service
       for (final phone in phoneNumbers) {
-        print('Would send SMS to $phone: ${notification.title}');
+        debugPrint('Would send SMS to $phone: ${notification.title}');
       }
     } else if (notification.targetRoleId != null) {
       // Send to users with the specific role
@@ -543,7 +535,7 @@ class ReceptionNotificationService {
 
       // Here you would send the SMS using your SMS service
       for (final phone in phoneNumbers) {
-        print('Would send SMS to $phone: ${notification.title}');
+        debugPrint('Would send SMS to $phone: ${notification.title}');
       }
     }
   }
@@ -558,7 +550,7 @@ class ReceptionNotificationService {
     final userRole = userDoc.data()?['role'] as String?;
 
     // Query notifications for this user or their role
-    final notificationDocs = await (_firestore as FirebaseFirestore)
+    final notificationDocs = await (_firestore)
         .collection(_notificationsCollection)
         .where(Filter.or(
           Filter('targetUserId', isEqualTo: userId),
@@ -672,14 +664,11 @@ class ReceptionNotificationService {
     // Subscribe to other relevant topics based on role
     switch (role) {
       case UserRole.admin:
-        await (_messaging as FirebaseMessaging)
-            .subscribeToTopic('critical_alerts');
+        await (_messaging).subscribeToTopic('critical_alerts');
         break;
       case UserRole.factory:
-        await (_messaging as FirebaseMessaging)
-            .subscribeToTopic('reception_alerts');
-        await (_messaging as FirebaseMessaging)
-            .subscribeToTopic('quality_alerts');
+        await (_messaging).subscribeToTopic('reception_alerts');
+        await (_messaging).subscribeToTopic('quality_alerts');
         break;
       default:
         break;
@@ -695,14 +684,11 @@ class ReceptionNotificationService {
     // Unsubscribe from other relevant topics
     switch (role) {
       case UserRole.admin:
-        await (_messaging as FirebaseMessaging)
-            .unsubscribeFromTopic('critical_alerts');
+        await (_messaging).unsubscribeFromTopic('critical_alerts');
         break;
       case UserRole.factory:
-        await (_messaging as FirebaseMessaging)
-            .unsubscribeFromTopic('reception_alerts');
-        await (_messaging as FirebaseMessaging)
-            .unsubscribeFromTopic('quality_alerts');
+        await (_messaging).unsubscribeFromTopic('reception_alerts');
+        await (_messaging).unsubscribeFromTopic('quality_alerts');
         break;
       default:
         break;
@@ -759,7 +745,7 @@ class ReceptionNotificationService {
       await _sendSmsNotification(escalationNotification, null);
 
       // Update the original notification to mark it as escalated
-      await (_firestore as FirebaseFirestore)
+      await (_firestore)
           .collection(_notificationsCollection)
           .doc(notificationId)
           .update({

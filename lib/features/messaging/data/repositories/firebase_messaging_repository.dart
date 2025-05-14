@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:und_app/features/messaging/domain/models/conversation.dart';
-import 'package:und_app/features/messaging/domain/models/message.dart';
-import 'package:und_app/features/messaging/domain/repositories/messaging_repository.dart';
-import 'package:und_app/features/messaging/domain/models/conversation.dart';
-import 'package:und_app/features/messaging/domain/models/message.dart';
-import 'package:und_app/features/messaging/domain/repositories/messaging_repository.dart';
-import 'package:und_app/utils/audit_middleware.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+import '../../../../utils/audit_middleware.dart';
+import '../../domain/models/conversation.dart';
+import '../../domain/models/message.dart';
+import '../../domain/repositories/messaging_repository.dart';
 
 class FirebaseMessagingRepository implements MessagingRepository {
   FirebaseMessagingRepository({

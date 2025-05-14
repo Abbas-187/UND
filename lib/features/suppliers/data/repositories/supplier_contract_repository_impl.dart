@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import '../../domain/entities/supplier_contract.dart';
 import '../../domain/repositories/supplier_contract_repository.dart';
 import '../models/supplier_contract_model.dart';
 
 class SupplierContractRepositoryImpl implements SupplierContractRepository {
-
   SupplierContractRepositoryImpl(this._firestore, this._storage);
   final FirebaseFirestore _firestore;
   final FirebaseStorage _storage;
@@ -182,7 +182,7 @@ class SupplierContractRepositoryImpl implements SupplierContractRepository {
           await ref.delete();
         } catch (e) {
           // Continue even if file deletion fails
-          print('Failed to delete file from storage: $e');
+          debugPrint('Failed to delete file from storage: $e');
         }
       }
 
@@ -198,7 +198,7 @@ class SupplierContractRepositoryImpl implements SupplierContractRepository {
 
       return true;
     } catch (e) {
-      print('Error deleting attachment: $e');
+      debugPrint('Error deleting attachment: $e');
       return false;
     }
   }

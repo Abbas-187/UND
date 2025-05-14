@@ -31,11 +31,9 @@ class _CategoryListItemState extends State<CategoryListItem> {
     final hasChildren = widget.children.isNotEmpty;
     final category = widget.category;
 
-    final categoryColor = category.colorCode != null
-        ? Color(
-            int.tryParse('0xFF${category.colorCode!.replaceAll('#', '')}') ??
-                0xFFAAAAAA)
-        : Colors.grey.shade200;
+    final categoryColor = Color(
+        int.tryParse('0xFF${category.colorCode.replaceAll('#', '')}') ??
+            0xFFAAAAAA);
 
     return Column(
       children: [
@@ -97,7 +95,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
             ],
           ),
           selected: widget.isSelected,
-          selectedTileColor: Colors.blue.withOpacity(0.1),
+          selectedTileColor: Colors.blue.withValues(alpha: 0.1 * 255),
           onTap: () => widget.onSelect(category.id),
         ),
         if (_isExpanded && hasChildren)
@@ -107,22 +105,18 @@ class _CategoryListItemState extends State<CategoryListItem> {
               children: widget.children.map((child) {
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: child.colorCode != null
-                        ? Color(int.tryParse(
-                                '0xFF${child.colorCode!.replaceAll('#', '')}') ??
-                            0xFFAAAAAA)
-                        : Colors.grey.shade200,
+                    backgroundColor: Color(int.tryParse(
+                            '0xFF${child.colorCode.replaceAll('#', '')}') ??
+                        0xFFAAAAAA),
                     radius: 16,
                     child: Text(
                       child.name.substring(0, 1).toUpperCase(),
                       style: TextStyle(
                         fontSize: 12,
                         color: ThemeData.estimateBrightnessForColor(
-                                  child.colorCode != null
-                                      ? Color(int.tryParse(
-                                              '0xFF${child.colorCode!.replaceAll('#', '')}') ??
-                                          0xFFAAAAAA)
-                                      : Colors.grey.shade200,
+                                  Color(int.tryParse(
+                                          '0xFF${child.colorCode.replaceAll('#', '')}') ??
+                                      0xFFAAAAAA),
                                 ) ==
                                 Brightness.dark
                             ? Colors.white
@@ -159,7 +153,7 @@ class _CategoryListItemState extends State<CategoryListItem> {
                   ),
                   dense: true,
                   selected: widget.isSelected && child.id == widget.category.id,
-                  selectedTileColor: Colors.blue.withOpacity(0.1),
+                  selectedTileColor: Colors.blue.withValues(alpha: 0.1 * 255),
                   onTap: () => widget.onSelect(child.id),
                 );
               }).toList(),

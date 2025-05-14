@@ -98,12 +98,12 @@ Integrate comprehensive CRM capabilities with the existing order management syst
 - Customer lifecycle tracking
 - Custom fields and categorization
 - Customer health scoring
-- Dairy-specific customer attributes (product preferences, allergen info, etc.)
+- Factory-specific customer attributes (product preferences, allergen info, etc.)
 
 ### 2. Sales Pipeline Management
 - Lead capture and qualification
-- Opportunity tracking with stages customized for dairy industry
-- Sales forecasting and probability modeling
+- Opportunity tracking with stages customized for B2B factory operations
+- Sales forecasting aligned with manufacturing output
 - Quote management with approval workflows
 - Conversion to orders with seamless transition
 - Team collaboration on deals
@@ -145,7 +145,7 @@ Integrate comprehensive CRM capabilities with the existing order management syst
 
 ### 7. Loyalty & Retention
 - Points system based on order value/frequency
-- Tier-based benefits and privileges
+- Tier-based benefits and privileges for B2B clients
 - Reward redemption
 - Anniversary and special occasion recognition
 - Retention risk alerting
@@ -336,7 +336,7 @@ Integrate comprehensive CRM capabilities with the existing order management syst
 - User training and onboarding
 
 ### Phase 2: Sales Enablement (Months 2-4)
-- Pipeline management
+- Pipeline management with manufacturing considerations
 - Opportunity tracking
 - Lead management
 - Quote generation
@@ -425,41 +425,40 @@ Integrate comprehensive CRM capabilities with the existing order management syst
     - lead_qualification_form.dart
 
 ### State Management with Riverpod
-- `lib/features/crm/providers/`
-  - customer_providers.dart:
-    ```dart
-    final customerRepositoryProvider = Provider<CustomerRepository>((ref) {
-      return FirebaseCustomerRepository(ref.read(firebaseProvider));
-    });
-    
-    final customersProvider = FutureProvider<List<Customer>>((ref) {
-      return ref.watch(customerRepositoryProvider).getAllCustomers();
-    });
-    
-    final customerProvider = FutureProvider.family<Customer, String>((ref, id) {
-      return ref.watch(customerRepositoryProvider).getCustomer(id);
-    });
-    
-    final customerSearchProvider = StateNotifierProvider<CustomerSearchNotifier, AsyncValue<List<Customer>>>((ref) {
-      return CustomerSearchNotifier(ref.read(customerRepositoryProvider));
-    });
-    ```
-  
-  - pipeline_providers.dart:
-    ```dart
-    final opportunityRepositoryProvider = Provider<OpportunityRepository>((ref) {
-      return FirebaseOpportunityRepository(ref.read(firebaseProvider));
-    });
-    
-    final opportunitiesProvider = FutureProvider<List<Opportunity>>((ref) {
-      return ref.watch(opportunityRepositoryProvider).getAllOpportunities();
-    });
-    
-    final opportunitiesByStageProvider = FutureProvider<Map<String, List<Opportunity>>>((ref) {
-      final opportunities = ref.watch(opportunitiesProvider).value ?? [];
-      return groupOpportunitiesByStage(opportunities);
-    });
-    ```
+- `lib/features/crm/providers/customer_providers.dart`:
+  ```dart
+  final customerRepositoryProvider = Provider<CustomerRepository>((ref) {
+    return FirebaseCustomerRepository(ref.read(firebaseProvider));
+  });
+
+  final customersProvider = FutureProvider<List<Customer>>((ref) {
+    return ref.watch(customerRepositoryProvider).getAllCustomers();
+  });
+
+  final customerProvider = FutureProvider.family<Customer, String>((ref, id) {
+    return ref.watch(customerRepositoryProvider).getCustomer(id);
+  });
+
+  final customerSearchProvider = StateNotifierProvider<CustomerSearchNotifier, AsyncValue<List<Customer>>>((ref) {
+    return CustomerSearchNotifier(ref.read(customerRepositoryProvider));
+  });
+  ```
+
+- `lib/features/crm/providers/pipeline_providers.dart`:
+  ```dart
+  final opportunityRepositoryProvider = Provider<OpportunityRepository>((ref) {
+    return FirebaseOpportunityRepository(ref.read(firebaseProvider));
+  });
+
+  final opportunitiesProvider = FutureProvider<List<Opportunity>>((ref) {
+    return ref.watch(opportunityRepositoryProvider).getAllOpportunities();
+  });
+
+  final opportunitiesByStageProvider = FutureProvider<Map<String, List<Opportunity>>>((ref) {
+    final opportunities = ref.watch(opportunitiesProvider).value ?? [];
+    return groupOpportunitiesByStage(opportunities);
+  });
+  ```
 
 ### Database Schema
 - customers collection
@@ -574,26 +573,26 @@ Integrate comprehensive CRM capabilities with the existing order management syst
 ### Data Migration Risks
 - Incomplete customer history
 - Duplicate records
-- Data quality issues
-- **Mitigation**: Phased migration, verification processes, cleansing scripts
+- Data quality issues  
+**Mitigation**: Phased migration, verification processes, cleansing scripts
 
 ### Adoption Risks
 - User resistance
 - Process change difficulties
-- Learning curve challenges
-- **Mitigation**: Champions program, incentives, thorough training, gradual rollout
+- Learning curve challenges  
+**Mitigation**: Champions program, incentives, thorough training, gradual rollout
 
 ### Technical Risks
 - Integration complexities
 - Performance under scale
 - Mobile connectivity issues
-- Riverpod state management complexity
-- **Mitigation**: Thorough testing, offline capabilities, performance optimization, code reviews
+- Riverpod state management complexity  
+**Mitigation**: Thorough testing, offline capabilities, performance optimization, code reviews
 
 ### Business Continuity Risks
 - Disruption during transition
-- Critical functionality gaps
-- **Mitigation**: Parallel systems initially, critical path prioritization
+- Critical functionality gaps  
+**Mitigation**: Parallel systems initially, critical path prioritization
 
 ---
 

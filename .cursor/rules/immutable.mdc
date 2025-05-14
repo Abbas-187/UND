@@ -5,6 +5,7 @@ alwaysApply: true
 ---
 
 # Your rule content
-always change freezed model to immutable calsses
+always check other modules before creating files.
+always use relative import
 - You can @ files here
 - You can use markdown but dont have to

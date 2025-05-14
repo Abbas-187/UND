@@ -385,7 +385,7 @@ class _InventoryCategoryManagementScreenState
                                   value: category.id,
                                   child: Text(category.name),
                                 );
-                              }).toList(),
+                              }),
                             ],
                             onChanged: (value) {
                               setState(() {

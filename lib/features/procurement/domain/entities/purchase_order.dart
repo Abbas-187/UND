@@ -15,15 +15,6 @@ enum PurchaseOrderStatus {
 /// Represents a purchase order item.
 @immutable
 class PurchaseOrderItem {
-  final String id;
-  final String itemId;
-  final String itemName;
-  final double quantity;
-  final String unit;
-  final double unitPrice;
-  final double totalPrice;
-  final DateTime requiredByDate;
-  final String? notes;
 
   const PurchaseOrderItem({
     required this.id,
@@ -36,6 +27,15 @@ class PurchaseOrderItem {
     required this.requiredByDate,
     this.notes,
   });
+  final String id;
+  final String itemId;
+  final String itemName;
+  final double quantity;
+  final String unit;
+  final double unitPrice;
+  final double totalPrice;
+  final DateTime requiredByDate;
+  final String? notes;
 
   PurchaseOrderItem copyWith({
     String? id,
@@ -92,11 +92,6 @@ class PurchaseOrderItem {
 /// Document that can be attached to a purchase order.
 @immutable
 class SupportingDocument {
-  final String id;
-  final String name;
-  final String type;
-  final String url;
-  final DateTime uploadDate;
 
   const SupportingDocument({
     required this.id,
@@ -105,6 +100,11 @@ class SupportingDocument {
     required this.url,
     required this.uploadDate,
   });
+  final String id;
+  final String name;
+  final String type;
+  final String url;
+  final DateTime uploadDate;
 
   SupportingDocument copyWith({
     String? id,
@@ -145,24 +145,6 @@ class SupportingDocument {
 /// Represents a purchase order.
 @immutable
 class PurchaseOrder {
-  final String id;
-  final String procurementPlanId;
-  final String poNumber;
-  final DateTime requestDate;
-  final String requestedBy;
-  final String supplierId;
-  final String supplierName;
-  final PurchaseOrderStatus status;
-  final List<PurchaseOrderItem> items;
-  final double totalAmount;
-  final String reasonForRequest;
-  final String intendedUse;
-  final String quantityJustification;
-  final List<SupportingDocument> supportingDocuments;
-  final DateTime? approvalDate;
-  final String? approvedBy;
-  final DateTime? deliveryDate;
-  final DateTime? completionDate;
 
   const PurchaseOrder({
     required this.id,
@@ -184,6 +166,24 @@ class PurchaseOrder {
     this.deliveryDate,
     this.completionDate,
   });
+  final String id;
+  final String procurementPlanId;
+  final String poNumber;
+  final DateTime requestDate;
+  final String requestedBy;
+  final String supplierId;
+  final String supplierName;
+  final PurchaseOrderStatus status;
+  final List<PurchaseOrderItem> items;
+  final double totalAmount;
+  final String reasonForRequest;
+  final String intendedUse;
+  final String quantityJustification;
+  final List<SupportingDocument> supportingDocuments;
+  final DateTime? approvalDate;
+  final String? approvedBy;
+  final DateTime? deliveryDate;
+  final DateTime? completionDate;
 
   PurchaseOrder copyWith({
     String? id,

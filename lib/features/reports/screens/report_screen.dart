@@ -1,15 +1,17 @@
-import 'package:flutter/material.dart';
-import '../utils/report_aggregators.dart';
-import '../widgets/report_widgets.dart';
-import '../utils/report_pdf_export.dart';
-import 'package:intl/intl.dart';
-import 'dart:ui' as ui;
 import 'dart:typed_data';
+import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
+
+import '../utils/report_aggregators.dart';
+import '../utils/report_pdf_export.dart';
+import '../widgets/report_widgets.dart';
 
 class ReportScreen extends StatefulWidget {
-  final ReportAggregators aggregators;
   const ReportScreen({super.key, required this.aggregators});
+  final ReportAggregators aggregators;
 
   @override
   State<ReportScreen> createState() => _ReportScreenState();
@@ -39,11 +41,6 @@ class _ReportScreenState extends State<ReportScreen>
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  List<String> get categories {
-    final items = widget.aggregators.stockByItem();
-    return items.map((e) => e['category'].toString()).toSet().toList();
   }
 
   List<String> get expiryStatuses =>
@@ -89,40 +86,6 @@ class _ReportScreenState extends State<ReportScreen>
 
   @override
   Widget build(BuildContext context) {
-    // Stock data with category filter
-    final stockData = selectedCategory == null
-        ? widget.aggregators.stockByItem()
-        : widget.aggregators
-            .stockByItem()
-            .where((row) => row['category'] == selectedCategory)
-            .toList();
-    // Expiry data with status filter
-    final expiryData = selectedExpiryStatus == null
-        ? widget.aggregators.expiryStatus()
-        : widget.aggregators
-            .expiryStatus()
-            .where((row) => row['status'] == selectedExpiryStatus)
-            .toList();
-    // Valuation data with category filter
-    final valuationData = selectedCategory == null
-        ? widget.aggregators.valuationByItem()
-        : widget.aggregators
-            .valuationByItem()
-            .where((row) => row['category'] == selectedCategory)
-            .toList();
-    // Movements data with date range filter
-    final allMovements = widget.aggregators.movementTable();
-    final movementData = selectedDateRange == null
-        ? allMovements
-        : allMovements.where((row) {
-            final date = DateTime.tryParse(row['timestamp'].toString());
-            if (date == null) return false;
-            return date.isAfter(selectedDateRange!.start
-                    .subtract(const Duration(days: 1))) &&
-                date.isBefore(
-                    selectedDateRange!.end.add(const Duration(days: 1)));
-          }).toList();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inventory Reports'),
@@ -173,9 +136,15 @@ class _ReportScreenState extends State<ReportScreen>
                         );
                       }
                     }
+                    final stockData = await widget.aggregators.stockByItem();
                     ReportPdfExport.exportStockReportPdf(
                       context: context,
-                      data: stockData,
+                      data: selectedCategory == null
+                          ? stockData
+                          : stockData
+                              .where(
+                                  (row) => row['category'] == selectedCategory)
+                              .toList(),
                       categoryFilter: selectedCategory,
                       chartImage: chartImage,
                     );
@@ -191,7 +160,9 @@ class _ReportScreenState extends State<ReportScreen>
               children: [
                 _sectionHeader('Expiry Status'),
                 const SizedBox(height: 8),
-                ExpiryTableWidget(aggregators: widget.aggregators),
+                ExpiryTableWidget(
+                  aggregators: widget.aggregators,
+                ),
                 const SizedBox(height: 24),
                 _sectionHeader('Expiry Status Breakdown'),
                 const SizedBox(height: 8),
@@ -216,9 +187,15 @@ class _ReportScreenState extends State<ReportScreen>
                         );
                       }
                     }
+                    final expiryData = await widget.aggregators.expiryStatus();
                     ReportPdfExport.exportExpiryReportPdf(
                       context: context,
-                      data: expiryData,
+                      data: selectedExpiryStatus == null
+                          ? expiryData
+                          : expiryData
+                              .where((row) =>
+                                  row['status'] == selectedExpiryStatus)
+                              .toList(),
                       statusFilter: selectedExpiryStatus,
                       chartImage: chartImage,
                     );
@@ -234,7 +211,9 @@ class _ReportScreenState extends State<ReportScreen>
               children: [
                 _sectionHeader('Valuation by Item'),
                 const SizedBox(height: 8),
-                ValuationTableWidget(aggregators: widget.aggregators),
+                ValuationTableWidget(
+                  aggregators: widget.aggregators,
+                ),
                 const SizedBox(height: 24),
                 _sectionHeader('Valuation by Category'),
                 const SizedBox(height: 8),
@@ -261,9 +240,16 @@ class _ReportScreenState extends State<ReportScreen>
                         );
                       }
                     }
+                    final valuationData =
+                        await widget.aggregators.valuationByItem();
                     ReportPdfExport.exportValuationReportPdf(
                       context: context,
-                      data: valuationData,
+                      data: selectedCategory == null
+                          ? valuationData
+                          : valuationData
+                              .where(
+                                  (row) => row['category'] == selectedCategory)
+                              .toList(),
                       categoryFilter: selectedCategory,
                       chartImage: chartImage,
                     );
@@ -308,7 +294,9 @@ class _ReportScreenState extends State<ReportScreen>
                     ),
                 ]),
                 const SizedBox(height: 8),
-                MovementTableWidget(aggregators: widget.aggregators),
+                MovementTableWidget(
+                  aggregators: widget.aggregators,
+                ),
                 const SizedBox(height: 24),
                 _sectionHeader('Movements Breakdown'),
                 const SizedBox(height: 8),
@@ -337,6 +325,19 @@ class _ReportScreenState extends State<ReportScreen>
                         );
                       }
                     }
+                    final allMovements =
+                        await widget.aggregators.movementTable();
+                    final movementData = selectedDateRange == null
+                        ? allMovements
+                        : allMovements.where((row) {
+                            final date =
+                                DateTime.tryParse(row['timestamp'].toString());
+                            if (date == null) return false;
+                            return date.isAfter(selectedDateRange!.start
+                                    .subtract(const Duration(days: 1))) &&
+                                date.isBefore(selectedDateRange!.end
+                                    .add(const Duration(days: 1)));
+                          }).toList();
                     ReportPdfExport.exportMovementsReportPdf(
                       context: context,
                       data: movementData,

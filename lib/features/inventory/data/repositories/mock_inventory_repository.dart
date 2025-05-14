@@ -1,3 +1,4 @@
+/*
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/mock_data_service.dart';
 import '../../domain/entities/inventory_item.dart';
@@ -104,9 +105,6 @@ class MockInventoryRepository implements InventoryRepository {
     mockDataService.adjustQuantity(id, adjustment, reason);
     final item =
         mockDataService.inventoryItems.firstWhere((item) => item.id == id);
-    if (item == null) {
-      throw Exception('Item not found');
-    }
     return item.toDomain();
   }
 
@@ -221,10 +219,8 @@ class MockInventoryRepository implements InventoryRepository {
     // In mock implementation, just yield once if item exists
     final item =
         mockDataService.inventoryItems.firstWhere((item) => item.id == id);
-    if (item != null) {
-      yield item.toDomain();
+    yield item.toDomain();
     }
-  }
 
   @override
   Stream<List<InventoryItem>> watchLowStockItems() async* {
@@ -242,3 +238,4 @@ final mockInventoryRepositoryProvider =
   final mockDataService = ref.watch(mockDataServiceProvider);
   return MockInventoryRepository(mockDataService: mockDataService);
 });
+*/

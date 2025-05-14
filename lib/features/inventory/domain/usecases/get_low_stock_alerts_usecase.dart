@@ -2,7 +2,6 @@ import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
 
 class LowStockAlert {
-
   LowStockAlert({
     required this.item,
     required this.alertType,
@@ -16,7 +15,6 @@ class LowStockAlert {
 }
 
 class GetLowStockAlertsUseCase {
-
   GetLowStockAlertsUseCase(this.repository);
   final InventoryRepository repository;
 
@@ -77,8 +75,9 @@ class GetLowStockAlertsUseCase {
   }
 
   Stream<List<LowStockAlert>> watchAlerts() {
-    return repository.watchLowStockItems().map((items) {
+    return repository.watchAllItems().map((items) {
       final alerts = <LowStockAlert>[];
+      final now = DateTime.now();
       for (final item in items) {
         if (item.isLowStock) {
           alerts.add(
@@ -87,7 +86,7 @@ class GetLowStockAlertsUseCase {
               alertType: 'LOW_STOCK',
               message:
                   'Item ${item.name} is below minimum quantity (${item.quantity} ${item.unit} remaining)',
-              timestamp: DateTime.now(),
+              timestamp: now,
             ),
           );
         }
@@ -98,21 +97,37 @@ class GetLowStockAlertsUseCase {
               alertType: 'REORDER_NEEDED',
               message:
                   'Item ${item.name} needs to be reordered (${item.quantity} ${item.unit} remaining)',
-              timestamp: DateTime.now(),
+              timestamp: now,
             ),
           );
         }
-        if (item.isExpired) {
-          alerts.add(
-            LowStockAlert(
-              item: item,
-              alertType: 'EXPIRED',
-              message: 'Item ${item.name} has expired',
-              timestamp: DateTime.now(),
-            ),
-          );
+        if (item.expiryDate != null) {
+          if (item.expiryDate!.isBefore(now)) {
+            alerts.add(
+              LowStockAlert(
+                item: item,
+                alertType: 'EXPIRED',
+                message: 'Item ${item.name} has expired',
+                timestamp: now,
+              ),
+            );
+          } else if (item.expiryDate!.difference(now).inDays <= 30) {
+            final days = item.expiryDate!.difference(now).inDays;
+            alerts.add(
+              LowStockAlert(
+                item: item,
+                alertType: 'EXPIRING_SOON',
+                message: 'Item ${item.name} will expire in $days days',
+                timestamp: now,
+              ),
+            );
+          }
         }
       }
+
+      // Sort alerts by timestamp
+      alerts.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
       return alerts;
     });
   }

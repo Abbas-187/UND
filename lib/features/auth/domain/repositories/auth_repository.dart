@@ -1,8 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../entities/user.dart';
+import '../../data/datasources/firebase_auth_datasource.dart';
 import '../../data/datasources/mock_auth_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
+import '../entities/user.dart';
 
 part 'auth_repository.g.dart';
 
@@ -30,6 +31,6 @@ abstract class AuthRepository {
 /// Provider for the auth repository
 @riverpod
 AuthRepository authRepository(AuthRepositoryRef ref) {
-  final dataSource = ref.watch(authRemoteDataSourceProvider);
+  final dataSource = ref.watch(firebaseAuthDataSourceProvider);
   return AuthRepositoryImpl(dataSource);
 }

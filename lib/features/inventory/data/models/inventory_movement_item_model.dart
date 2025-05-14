@@ -1,67 +1,79 @@
-import 'package:meta/meta.dart';
-import 'quality_status.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-enum MovementItemStatus { IN_TRANSIT, RECEIVED, REJECTED, DAMAGED, LOST }
+part 'inventory_movement_item_model.freezed.dart';
+part 'inventory_movement_item_model.g.dart';
 
-@immutable
-class InventoryMovementItemModel {
-  const InventoryMovementItemModel({
-    required this.itemId,
-    required this.productId,
-    required this.productName,
-    required this.batchLotNumber,
-    required this.quantity,
-    required this.unitOfMeasurement,
-    required this.status,
-    required this.productionDate,
-    required this.expirationDate,
-    required this.qualityStatus,
-  });
+/// Model representing an inventory movement item (line item in a movement)
+@freezed
+abstract class InventoryMovementItemModel with _$InventoryMovementItemModel {
+  const InventoryMovementItemModel._(); // Added for custom methods
 
-  final String itemId;
-  final String productId;
-  final String productName;
-  final String batchLotNumber;
-  final double quantity;
-  final String unitOfMeasurement;
-  final MovementItemStatus status;
-  final DateTime productionDate;
-  final DateTime expirationDate;
-  final QualityStatus qualityStatus;
+  const factory InventoryMovementItemModel({
+    String? id,
+    required String itemId,
+    required String itemCode,
+    required String itemName,
+    required String uom,
+    required double quantity,
+    double? costAtTransaction,
+    String? batchLotNumber,
+    DateTime? expirationDate,
+    DateTime? productionDate,
 
-  Map<String, dynamic> toJson() {
-    return {
-      'itemId': itemId,
-      'productId': productId,
-      'productName': productName,
-      'batchLotNumber': batchLotNumber,
-      'quantity': quantity,
-      'unitOfMeasurement': unitOfMeasurement,
-      'status': status.toString().split('.').last,
-      'productionDate': productionDate.toIso8601String(),
-      'expirationDate': expirationDate.toIso8601String(),
-      'qualityStatus': qualityStatus.toString().split('.').last,
-    };
+    // new optional properties
+    Map<String, dynamic>? customAttributes,
+    String? warehouseId,
+    String? status,
+    String? qualityStatus,
+    String? notes,
+  }) = _InventoryMovementItemModel;
+
+  /// Creates an InventoryMovementItemModel from JSON
+  factory InventoryMovementItemModel.fromJson(Map<String, dynamic> json) =>
+      _$InventoryMovementItemModelFromJson(json);
+
+  /// Convert to Firestore document
+  Map<String, dynamic> toFirestore() {
+    final json = toJson();
+
+    // Convert DateTime objects to Timestamp for Firestore
+    if (expirationDate != null) {
+      json['expirationDate'] = Timestamp.fromDate(expirationDate!);
+    }
+
+    if (productionDate != null) {
+      json['productionDate'] = Timestamp.fromDate(productionDate!);
+    }
+
+    return json;
   }
 
-  factory InventoryMovementItemModel.fromJson(Map<String, dynamic> json) {
-    return InventoryMovementItemModel(
-      itemId: json['itemId'] as String,
-      productId: json['productId'] as String,
-      productName: json['productName'] as String,
-      batchLotNumber: json['batchLotNumber'] as String,
-      quantity: (json['quantity'] as num).toDouble(),
-      unitOfMeasurement: json['unitOfMeasurement'] as String,
-      status: MovementItemStatus.values.firstWhere(
-        (e) => e.toString() == 'MovementItemStatus.${json['status']}',
-        orElse: () => MovementItemStatus.IN_TRANSIT,
-      ),
-      productionDate: DateTime.parse(json['productionDate'] as String),
-      expirationDate: DateTime.parse(json['expirationDate'] as String),
-      qualityStatus: QualityStatus.values.firstWhere(
-        (e) => e.toString() == 'QualityStatus.${json['qualityStatus']}',
-        orElse: () => QualityStatus.excellent,
-      ),
-    );
+  /// Validates if the model has required batch and expiry information
+  /// for perishable or tracked items
+  bool hasRequiredBatchInfo(bool isPerishable, bool requiresBatchTracking) {
+    if (isPerishable) {
+      return batchLotNumber != null && expirationDate != null;
+    }
+
+    if (requiresBatchTracking) {
+      return batchLotNumber != null;
+    }
+
+    return true; // No batch tracking required for this item
   }
+
+  // Calculate total value of the item
+  double get totalValue => (costAtTransaction ?? 0) * quantity.abs();
+
+  // Computed getters to match UI and domain naming
+  String get productId => itemId;
+  String get productName => itemName;
+  String get unitOfMeasurement => uom;
+
+  /// Alias for warehouseId to match expected property
+  String? get locationId => warehouseId;
+
+  /// Alias for warehouseId as location name where applicable
+  String? get locationName => warehouseId;
 }

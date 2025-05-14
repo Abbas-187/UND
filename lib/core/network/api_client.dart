@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -12,10 +12,6 @@ import '../exceptions/app_exception.dart';
 
 /// HTTP API client for making REST API calls
 class ApiClient {
-  final String baseUrl;
-  final Logger logger;
-  final Map<String, String> defaultHeaders;
-  final Duration timeout;
 
   ApiClient({
     required this.baseUrl,
@@ -23,6 +19,10 @@ class ApiClient {
     this.defaultHeaders = const {'Content-Type': 'application/json'},
     this.timeout = const Duration(seconds: 30),
   });
+  final String baseUrl;
+  final Logger logger;
+  final Map<String, String> defaultHeaders;
+  final Duration timeout;
 
   /// Add authorization token to headers
   Map<String, String> _addAuthHeader(
@@ -127,7 +127,7 @@ class ApiClient {
         }
       } catch (e) {
         if (e is AppException) {
-          throw e;
+          rethrow;
         }
 
         throw AppException(
@@ -355,10 +355,10 @@ class ApiClient {
 
 /// API response model
 class ApiResponse {
-  final dynamic data;
-  final int statusCode;
 
   ApiResponse(this.data, this.statusCode);
+  final dynamic data;
+  final int statusCode;
 }
 
 /// Provider for the API client

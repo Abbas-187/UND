@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+
 import '../../../../l10n/app_localizations.dart';
 
 // Constants for SharedPreferences keys
@@ -122,6 +124,22 @@ enum ScanType { barcode, qrCode, both }
 
 // Model for inventory settings - immutable class
 class InventorySettings {
+
+  // Create from JSON from storage
+  factory InventorySettings.fromJson(Map<String, dynamic> json) {
+    return InventorySettings(
+      defaultUnit: json['defaultUnit'] as String? ?? 'kg',
+      defaultLocation: json['defaultLocation'] as String? ?? 'Main Warehouse',
+      lowStockThreshold: json['lowStockThreshold'] as int? ?? 5,
+      automaticReorder: json['automaticReorder'] as bool? ?? false,
+      reorderMethod: ReorderMethod.values[json['reorderMethod'] as int? ?? 0],
+      lowStockNotifications: json['lowStockNotifications'] as bool? ?? true,
+      expiryNotifications: json['expiryNotifications'] as bool? ?? true,
+      expiryNotificationDays: json['expiryNotificationDays'] as int? ?? 30,
+      defaultScanType: ScanType.values[json['defaultScanType'] as int? ?? 0],
+      autoGenerateBarcodes: json['autoGenerateBarcodes'] as bool? ?? true,
+    );
+  }
   const InventorySettings({
     required this.defaultUnit,
     required this.defaultLocation,
@@ -188,22 +206,6 @@ class InventorySettings {
       'defaultScanType': defaultScanType.index,
       'autoGenerateBarcodes': autoGenerateBarcodes,
     };
-  }
-
-  // Create from JSON from storage
-  factory InventorySettings.fromJson(Map<String, dynamic> json) {
-    return InventorySettings(
-      defaultUnit: json['defaultUnit'] as String? ?? 'kg',
-      defaultLocation: json['defaultLocation'] as String? ?? 'Main Warehouse',
-      lowStockThreshold: json['lowStockThreshold'] as int? ?? 5,
-      automaticReorder: json['automaticReorder'] as bool? ?? false,
-      reorderMethod: ReorderMethod.values[json['reorderMethod'] as int? ?? 0],
-      lowStockNotifications: json['lowStockNotifications'] as bool? ?? true,
-      expiryNotifications: json['expiryNotifications'] as bool? ?? true,
-      expiryNotificationDays: json['expiryNotificationDays'] as int? ?? 30,
-      defaultScanType: ScanType.values[json['defaultScanType'] as int? ?? 0],
-      autoGenerateBarcodes: json['autoGenerateBarcodes'] as bool? ?? true,
-    );
   }
 }
 

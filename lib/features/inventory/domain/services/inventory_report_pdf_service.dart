@@ -5,11 +5,6 @@ import 'package:pdf/widgets.dart' as pw;
 import '../../data/models/inventory_movement_model.dart';
 
 class InventoryReportPdfOptions {
-  final DateTime startDate;
-  final DateTime endDate;
-  final bool includeImages;
-  final bool includeCharts;
-  final bool includeDetails;
 
   const InventoryReportPdfOptions({
     required this.startDate,
@@ -18,6 +13,11 @@ class InventoryReportPdfOptions {
     this.includeCharts = true,
     this.includeDetails = true,
   });
+  final DateTime startDate;
+  final DateTime endDate;
+  final bool includeImages;
+  final bool includeCharts;
+  final bool includeDetails;
 }
 
 class InventoryReportPdfService {

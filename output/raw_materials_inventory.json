@@ -1,0 +1,752 @@
+{
+  "25ccc8c9-9b16-465e-a050-cc4c3b11f012": {
+    "id": "25ccc8c9-9b16-465e-a050-cc4c3b11f012",
+    "product_code": "RM9894",
+    "product_name": "Clouding agent",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 752,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "37b370a6-a32d-4c94-93cc-05c9af15b1d0": {
+    "id": "37b370a6-a32d-4c94-93cc-05c9af15b1d0",
+    "product_code": "RM4154",
+    "product_name": "Milk",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 867,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "2ce676c3-a284-42e0-93bf-8bd6595438d0": {
+    "id": "2ce676c3-a284-42e0-93bf-8bd6595438d0",
+    "product_code": "RM5236",
+    "product_name": "Ascorbic acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 374,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "329b5941-927c-4300-81fc-b9a36b9ced77": {
+    "id": "329b5941-927c-4300-81fc-b9a36b9ced77",
+    "product_code": "RM4365",
+    "product_name": "Orange juice concentrate",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 602,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "b6102c7a-33e8-4291-94b6-2d1d93c7011c": {
+    "id": "b6102c7a-33e8-4291-94b6-2d1d93c7011c",
+    "product_code": "RM6190",
+    "product_name": "Lemon flavor",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 476,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "a8970756-174b-4af1-b2af-462341cd74e1": {
+    "id": "a8970756-174b-4af1-b2af-462341cd74e1",
+    "product_code": "RM4201",
+    "product_name": "Milk",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 948,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "b29e0888-6e9a-40c9-96df-1ea5514977fa": {
+    "id": "b29e0888-6e9a-40c9-96df-1ea5514977fa",
+    "product_code": "RM9282",
+    "product_name": "Carrageenan gum",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 869,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "4b2fdc20-10df-4119-a7a4-8504b9fe37be": {
+    "id": "4b2fdc20-10df-4119-a7a4-8504b9fe37be",
+    "product_code": "RM9577",
+    "product_name": "Water",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 271,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "73bc7eb8-be6e-4ca8-9423-01d35aed0e2e": {
+    "id": "73bc7eb8-be6e-4ca8-9423-01d35aed0e2e",
+    "product_code": "RM4757",
+    "product_name": "Orange juice concentrate",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 660,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "5c25631f-5053-4766-b6b6-24152ac8a71f": {
+    "id": "5c25631f-5053-4766-b6b6-24152ac8a71f",
+    "product_code": "RM8624",
+    "product_name": "Carrageenan gum",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 568,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "25e535b2-5db6-4abb-84be-7b6248d3c8b1": {
+    "id": "25e535b2-5db6-4abb-84be-7b6248d3c8b1",
+    "product_code": "RM4377",
+    "product_name": "Cream",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 843,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "27263042-34f1-4382-b452-be2aafe000ed": {
+    "id": "27263042-34f1-4382-b452-be2aafe000ed",
+    "product_code": "RM1610",
+    "product_name": "Anhydrous citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 287,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "0c66b102-d8f1-4aa3-87ef-bfdb6148a9d3": {
+    "id": "0c66b102-d8f1-4aa3-87ef-bfdb6148a9d3",
+    "product_code": "RM8884",
+    "product_name": "Cream",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 488,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "943b0eca-bd05-4d59-bc15-7998524ffd95": {
+    "id": "943b0eca-bd05-4d59-bc15-7998524ffd95",
+    "product_code": "RM9023",
+    "product_name": "Crystalline fructose",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 238,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "b8ee31a2-0a53-4681-bb16-c019582b0740": {
+    "id": "b8ee31a2-0a53-4681-bb16-c019582b0740",
+    "product_code": "RM4838",
+    "product_name": "Anhydrous citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 515,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "376a3295-d430-45b7-bd76-f3fea13de94b": {
+    "id": "376a3295-d430-45b7-bd76-f3fea13de94b",
+    "product_code": "RM1619",
+    "product_name": "Stabilizers",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 197,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "4dce0383-fa3f-45e4-9bad-c6c5207d7395": {
+    "id": "4dce0383-fa3f-45e4-9bad-c6c5207d7395",
+    "product_code": "RM3575",
+    "product_name": "Orange juice concentrate",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 109,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "e373471d-b2da-4360-8bde-ea6daaf2ef2d": {
+    "id": "e373471d-b2da-4360-8bde-ea6daaf2ef2d",
+    "product_code": "RM2891",
+    "product_name": "Fruit Concentrates",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 589,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "587fdd56-46cd-48bb-b7f2-171fcf193488": {
+    "id": "587fdd56-46cd-48bb-b7f2-171fcf193488",
+    "product_code": "RM3028",
+    "product_name": "Clouding agent",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 396,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "e7911361-41fd-4680-898f-2c7c62664140": {
+    "id": "e7911361-41fd-4680-898f-2c7c62664140",
+    "product_code": "RM7625",
+    "product_name": "Lemon flavor",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 527,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "b9ae396b-9aa4-43f8-9550-15b7c1af1ad5": {
+    "id": "b9ae396b-9aa4-43f8-9550-15b7c1af1ad5",
+    "product_code": "RM9227",
+    "product_name": "Ascorbic acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 957,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "31fe8372-1778-4b71-b12a-330caf4fcc87": {
+    "id": "31fe8372-1778-4b71-b12a-330caf4fcc87",
+    "product_code": "RM3463",
+    "product_name": "Carrageenan gum",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 462,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "3cc6dee7-231f-4b64-9094-a71a632b4a06": {
+    "id": "3cc6dee7-231f-4b64-9094-a71a632b4a06",
+    "product_code": "RM7061",
+    "product_name": "Lemon Base",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 638,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "8b6a76bc-80b0-47dd-b0eb-b40103f8add2": {
+    "id": "8b6a76bc-80b0-47dd-b0eb-b40103f8add2",
+    "product_code": "RM2058",
+    "product_name": "Milk",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 979,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "af4f4d37-33f3-4147-b626-f82c5c3d9a9f": {
+    "id": "af4f4d37-33f3-4147-b626-f82c5c3d9a9f",
+    "product_code": "RM8049",
+    "product_name": "Water",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 591,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "1f6dcb71-ae7c-4f04-ab8b-6e460ca35cd8": {
+    "id": "1f6dcb71-ae7c-4f04-ab8b-6e460ca35cd8",
+    "product_code": "RM5137",
+    "product_name": "Ascorbic acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 134,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "0314f0f7-e938-42c7-905d-0780fbf4f8fe": {
+    "id": "0314f0f7-e938-42c7-905d-0780fbf4f8fe",
+    "product_code": "RM2618",
+    "product_name": "Citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 136,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "0f4cbc48-f82b-48a6-b064-0e4f12eba19d": {
+    "id": "0f4cbc48-f82b-48a6-b064-0e4f12eba19d",
+    "product_code": "RM1767",
+    "product_name": "Carrageenan gum",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 304,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "c504de3a-2893-418f-9b27-c95c4ac38336": {
+    "id": "c504de3a-2893-418f-9b27-c95c4ac38336",
+    "product_code": "RM8419",
+    "product_name": "Clouding agent",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 896,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "956455a2-f4ee-476e-8d79-de7bebe0df65": {
+    "id": "956455a2-f4ee-476e-8d79-de7bebe0df65",
+    "product_code": "RM1064",
+    "product_name": "Anhydrous citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 97,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "c81a8b67-4c7f-47c0-b2d9-687799e6fc61": {
+    "id": "c81a8b67-4c7f-47c0-b2d9-687799e6fc61",
+    "product_code": "RM3966",
+    "product_name": "Citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 208,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "4876056e-0e63-4656-89af-f3962d8fb24b": {
+    "id": "4876056e-0e63-4656-89af-f3962d8fb24b",
+    "product_code": "RM9486",
+    "product_name": "Anhydrous citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 632,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "ae83ba39-8d25-4cee-b9fc-82614b09d9dc": {
+    "id": "ae83ba39-8d25-4cee-b9fc-82614b09d9dc",
+    "product_code": "RM6811",
+    "product_name": "Citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 956,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "4d00eb0b-cf51-4044-87b9-415c77a9afa0": {
+    "id": "4d00eb0b-cf51-4044-87b9-415c77a9afa0",
+    "product_code": "RM2467",
+    "product_name": "Sugar",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 647,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "b78cec7b-a92f-4057-b7e0-628c897aa8f8": {
+    "id": "b78cec7b-a92f-4057-b7e0-628c897aa8f8",
+    "product_code": "RM5864",
+    "product_name": "Citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 688,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "845b4cbf-61b1-46d1-b902-879603e80f38": {
+    "id": "845b4cbf-61b1-46d1-b902-879603e80f38",
+    "product_code": "RM9524",
+    "product_name": "Dry Sugar",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 807,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "bb568bad-de97-4ed2-8e77-140ea1d99554": {
+    "id": "bb568bad-de97-4ed2-8e77-140ea1d99554",
+    "product_code": "RM6222",
+    "product_name": "Water",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 805,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "22bbb695-761e-439a-91e0-2794a4cc30de": {
+    "id": "22bbb695-761e-439a-91e0-2794a4cc30de",
+    "product_code": "RM3854",
+    "product_name": "Water",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 66,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "c57bd776-061d-49eb-8d65-cb96e8b76d34": {
+    "id": "c57bd776-061d-49eb-8d65-cb96e8b76d34",
+    "product_code": "RM1714",
+    "product_name": "Cream",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 959,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "2189c5eb-ace0-4670-bd28-9c03f190b29f": {
+    "id": "2189c5eb-ace0-4670-bd28-9c03f190b29f",
+    "product_code": "RM6449",
+    "product_name": "Processed water",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 374,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "ccc5f5ac-2f67-490a-99bc-32ab53c6c512": {
+    "id": "ccc5f5ac-2f67-490a-99bc-32ab53c6c512",
+    "product_code": "RM6563",
+    "product_name": "Sugar",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 578,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "36aeebca-c588-45a3-b369-0d6242eddbc4": {
+    "id": "36aeebca-c588-45a3-b369-0d6242eddbc4",
+    "product_code": "RM8345",
+    "product_name": "Ascorbic acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 490,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "ca5e91ae-f6c4-4903-b4cc-8a08199efff2": {
+    "id": "ca5e91ae-f6c4-4903-b4cc-8a08199efff2",
+    "product_code": "RM2247",
+    "product_name": "Processed water",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 135,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "ee69b333-578e-4cac-9261-23a61a95c1ab": {
+    "id": "ee69b333-578e-4cac-9261-23a61a95c1ab",
+    "product_code": "RM5932",
+    "product_name": "Anhydrous citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 693,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "5edab8d5-4c89-4ed1-be55-35f2551dd0ae": {
+    "id": "5edab8d5-4c89-4ed1-be55-35f2551dd0ae",
+    "product_code": "RM1681",
+    "product_name": "Cream",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 926,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "2d4846db-b3e9-4fa8-b95e-526012956f18": {
+    "id": "2d4846db-b3e9-4fa8-b95e-526012956f18",
+    "product_code": "RM2036",
+    "product_name": "Ascorbic acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 786,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "a1f249de-de07-4eab-8f7c-5be18b4042ab": {
+    "id": "a1f249de-de07-4eab-8f7c-5be18b4042ab",
+    "product_code": "RM8606",
+    "product_name": "Ascorbic acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 56,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "6b428c5d-8e92-4da4-b783-c4eba086ca9d": {
+    "id": "6b428c5d-8e92-4da4-b783-c4eba086ca9d",
+    "product_code": "RM3696",
+    "product_name": "Milk",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 810,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "2daeb53f-c648-4ae5-8c9a-776ccec942c5": {
+    "id": "2daeb53f-c648-4ae5-8c9a-776ccec942c5",
+    "product_code": "RM9386",
+    "product_name": "Crystalline fructose",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 346,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "e448f51a-96e9-4e93-acdf-0612576d562f": {
+    "id": "e448f51a-96e9-4e93-acdf-0612576d562f",
+    "product_code": "RM1318",
+    "product_name": "Stabilizers",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 708,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "c0a0a861-9c98-412b-9da1-0e02577e5f90": {
+    "id": "c0a0a861-9c98-412b-9da1-0e02577e5f90",
+    "product_code": "RM9070",
+    "product_name": "Sugar",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 245,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "6b5124c2-d7af-4463-8ec4-81f9010e16ca": {
+    "id": "6b5124c2-d7af-4463-8ec4-81f9010e16ca",
+    "product_code": "RM3998",
+    "product_name": "Clouding agent",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 506,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "6f34b19d-2dd1-4c33-9617-94d97f2732c1": {
+    "id": "6f34b19d-2dd1-4c33-9617-94d97f2732c1",
+    "product_code": "RM1787",
+    "product_name": "Orange juice concentrate",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 817,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "e8d968c3-03ee-44f1-a024-da2308e79d54": {
+    "id": "e8d968c3-03ee-44f1-a024-da2308e79d54",
+    "product_code": "RM5159",
+    "product_name": "Citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 340,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "34c9a1f9-2df3-4f61-86c8-0854170ee02c": {
+    "id": "34c9a1f9-2df3-4f61-86c8-0854170ee02c",
+    "product_code": "RM4085",
+    "product_name": "Lemon flavor",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 194,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "c8f4b7f3-33e2-4d24-ba54-7b5c38453e60": {
+    "id": "c8f4b7f3-33e2-4d24-ba54-7b5c38453e60",
+    "product_code": "RM9373",
+    "product_name": "Riboflavin",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 162,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "95bbb860-3029-4745-a45c-81e0237c37e3": {
+    "id": "95bbb860-3029-4745-a45c-81e0237c37e3",
+    "product_code": "RM2358",
+    "product_name": "Anhydrous citric acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 44,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "93a4dc5e-c5bb-4dc3-8244-0af8b0551258": {
+    "id": "93a4dc5e-c5bb-4dc3-8244-0af8b0551258",
+    "product_code": "RM3149",
+    "product_name": "Orange juice concentrate",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 956,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "c326070d-7702-49a8-b8c7-bf732cc688b4": {
+    "id": "c326070d-7702-49a8-b8c7-bf732cc688b4",
+    "product_code": "RM5594",
+    "product_name": "Processed water",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 364,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "79314b69-0d1b-4436-9476-bd919a19eb10": {
+    "id": "79314b69-0d1b-4436-9476-bd919a19eb10",
+    "product_code": "RM2673",
+    "product_name": "Ascorbic acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 2,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "5467f748-70f6-4b92-8c46-127177a567f3": {
+    "id": "5467f748-70f6-4b92-8c46-127177a567f3",
+    "product_code": "RM2982",
+    "product_name": "Stevia",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 882,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "b2af1360-2a75-4e00-a8a3-77beefd5702b": {
+    "id": "b2af1360-2a75-4e00-a8a3-77beefd5702b",
+    "product_code": "RM9460",
+    "product_name": "Carrageenan gum",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 294,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "1538129f-c0dc-485d-babf-06a6a707bf3f": {
+    "id": "1538129f-c0dc-485d-babf-06a6a707bf3f",
+    "product_code": "RM8115",
+    "product_name": "Water",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 571,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "954f86cf-b4ab-4d1d-a1c0-7f08b47fa316": {
+    "id": "954f86cf-b4ab-4d1d-a1c0-7f08b47fa316",
+    "product_code": "RM9536",
+    "product_name": "Lemon flavor",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 147,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "a39d47f3-fddb-4eb1-b750-baf08f859f3d": {
+    "id": "a39d47f3-fddb-4eb1-b750-baf08f859f3d",
+    "product_code": "RM1652",
+    "product_name": "Clouding agent",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 317,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "f7541d86-8750-4500-89be-3c9ac1401557": {
+    "id": "f7541d86-8750-4500-89be-3c9ac1401557",
+    "product_code": "RM4946",
+    "product_name": "Stabilizers",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 634,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "a96f6120-94ee-4963-a556-10e987010cbc": {
+    "id": "a96f6120-94ee-4963-a556-10e987010cbc",
+    "product_code": "RM9401",
+    "product_name": "Cream",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 875,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "da7f9c55-1c67-4af8-9789-a60db2e44d14": {
+    "id": "da7f9c55-1c67-4af8-9789-a60db2e44d14",
+    "product_code": "RM4480",
+    "product_name": "Riboflavin",
+    "category": "Raw Materials",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 320,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "914f5af8-e9f7-4452-af88-a5fbe4704ea6": {
+    "id": "914f5af8-e9f7-4452-af88-a5fbe4704ea6",
+    "product_code": "RM2411",
+    "product_name": "Orange juice concentrate",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 299,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "257aaf31-edbe-4f26-bce6-9e2ad8f009f1": {
+    "id": "257aaf31-edbe-4f26-bce6-9e2ad8f009f1",
+    "product_code": "RM9199",
+    "product_name": "Clouding agent",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 165,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "840a63da-0031-4add-8d83-ff8b4e75c633": {
+    "id": "840a63da-0031-4add-8d83-ff8b4e75c633",
+    "product_code": "RM1136",
+    "product_name": "Lemon Base",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 46,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "381d05df-820c-40a3-999f-548c83f95779": {
+    "id": "381d05df-820c-40a3-999f-548c83f95779",
+    "product_code": "RM5113",
+    "product_name": "Sugar",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 677,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "e726570e-37bc-4552-b364-f349f7c4f4de": {
+    "id": "e726570e-37bc-4552-b364-f349f7c4f4de",
+    "product_code": "RM2604",
+    "product_name": "Sugar",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 81,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "00402385-1051-4463-a0db-e5a0f00c505d": {
+    "id": "00402385-1051-4463-a0db-e5a0f00c505d",
+    "product_code": "RM8820",
+    "product_name": "Ascorbic acid",
+    "category": "Raw Materials",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 90,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "efd076cc-e6b1-4976-ab14-102d642cdb79": {
+    "id": "efd076cc-e6b1-4976-ab14-102d642cdb79",
+    "product_code": "RM2099",
+    "product_name": "Carrageenan gum",
+    "category": "Raw Materials",
+    "unit_of_measure": "tons",
+    "quantity_on_hand": 381,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  }
+}

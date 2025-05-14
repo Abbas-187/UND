@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../../l10n/app_localizations.dart';
 import '../../../domain/entities/inventory_alert.dart';
 import '../../../domain/services/alerts/inventory_alerts_service.dart';
-import '../../../../../l10n/app_localizations.dart';
 
 /// Widget to display inventory alerts
 class InventoryAlertsWidget extends StatelessWidget {

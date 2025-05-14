@@ -1,81 +1,186 @@
 import 'package:flutter/material.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 
 class InventoryItemCard extends StatelessWidget {
   const InventoryItemCard({
     super.key,
     required this.item,
-    this.onTap,
+    required this.onTap,
   });
+
   final InventoryItem item;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
-    final isLowStock = item.quantity <= item.minimumQuantity;
+    final bool isLowStock = item.quantity <= item.lowStockThreshold;
+    final bool needsReorder = item.quantity <= item.reorderPoint;
+    final bool isExpired = item.isExpired;
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      margin: const EdgeInsets.only(bottom: 8.0),
+      elevation: 2,
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(4.0),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Text(
-                      item.name,
-                      style: theme.textTheme.titleMedium,
-                      overflow: TextOverflow.ellipsis,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.name,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Code: ${item.sapCode}',
+                          style: theme.textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${item.category} > ${item.subCategory}',
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: isLowStock
-                          ? Colors.red.shade100
-                          : Colors.green.shade100,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      '${item.quantity} ${item.unit}',
-                      style: TextStyle(
-                        color: isLowStock
-                            ? Colors.red.shade900
-                            : Colors.green.shade900,
-                        fontWeight: FontWeight.bold,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: _getStatusColor(
+                              isLowStock, needsReorder, isExpired),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          _getStatusText(isLowStock, needsReorder, isExpired),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${item.quantity.toStringAsFixed(2)} ${item.unit}',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: _getQuantityColor(
+                              isLowStock, needsReorder, isExpired),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
-                '${l10n.itemCategory}: ${item.category}',
-                style: theme.textTheme.bodyMedium,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Supplier info
+                  if (item.supplier != null && item.supplier!.isNotEmpty)
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Icon(Icons.business, size: 16),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              item.supplier!,
+                              style: theme.textTheme.bodySmall,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  // Location info
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Icon(Icons.location_on, size: 16),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            item.location,
+                            style: theme.textTheme.bodySmall,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 4),
-              Text(
-                '${l10n.location}: ${item.location}',
-                style: theme.textTheme.bodyMedium,
-              ),
-              if (item.expiryDate != null) ...[
-                const SizedBox(height: 4),
-                Text(
-                  '${l10n.itemExpires}: ${_formatDate(item.expiryDate!)}',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: _isNearExpiry(item.expiryDate!) ? Colors.red : null,
+              // Batch and expiry info if available
+              if (item.batchNumber != null || item.expiryDate != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    children: [
+                      if (item.batchNumber != null)
+                        Expanded(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.inventory_2, size: 16),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  'Batch: ${item.batchNumber}',
+                                  style: theme.textTheme.bodySmall,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if (item.expiryDate != null)
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Icon(
+                                Icons.event,
+                                size: 16,
+                                color: isExpired ? Colors.red : null,
+                              ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  'Exp: ${_formatDate(item.expiryDate!)}',
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: isExpired ? Colors.red : null,
+                                    fontWeight:
+                                        isExpired ? FontWeight.bold : null,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-              ],
             ],
           ),
         ),
@@ -83,13 +188,28 @@ class InventoryItemCard extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
-    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  String _getStatusText(bool isLowStock, bool needsReorder, bool isExpired) {
+    if (isExpired) return 'EXPIRED';
+    if (isLowStock) return 'LOW STOCK';
+    if (needsReorder) return 'REORDER';
+    return 'IN STOCK';
   }
 
-  bool _isNearExpiry(DateTime expiryDate) {
-    final now = DateTime.now();
-    final daysUntilExpiry = expiryDate.difference(now).inDays;
-    return daysUntilExpiry <= 30;
+  Color _getStatusColor(bool isLowStock, bool needsReorder, bool isExpired) {
+    if (isExpired) return Colors.red;
+    if (isLowStock) return Colors.red.shade700;
+    if (needsReorder) return Colors.orange;
+    return Colors.green;
+  }
+
+  Color _getQuantityColor(bool isLowStock, bool needsReorder, bool isExpired) {
+    if (isExpired) return Colors.red;
+    if (isLowStock) return Colors.red.shade700;
+    if (needsReorder) return Colors.orange;
+    return Colors.black87;
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 }

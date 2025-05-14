@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../domain/models/production_execution_model.dart';
 import '../providers/production_execution_providers.dart';
-import 'production_execution_detail_screen.dart';
 
 /// Parameters for filtering production executions
 class FilteredExecutionsParams {
@@ -352,14 +353,8 @@ class _ProductionExecutionListScreenState
         ),
         onTap: () {
           // Navigate to execution detail screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProductionExecutionDetailScreen(
-                executionId: execution.id,
-              ),
-            ),
-          );
+          context.go('/factory/production/execution-detail',
+              extra: execution.id);
         },
       ),
     );

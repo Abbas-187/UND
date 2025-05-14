@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../common/widgets/detail_appbar.dart';
-import '../../../../core/routes/app_router.dart';
+import '../../../../core/routes/app_go_router.dart';
 import '../../domain/entities/supplier.dart';
 import '../providers/supplier_provider.dart';
 
@@ -17,30 +19,34 @@ class SupplierDetailsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final supplierAsyncValue = ref.watch(supplierProvider(supplierId));
 
-    return Scaffold(
-      appBar: DetailAppBar(
-        title: 'Supplier Details',
-        actions: [
-          supplierAsyncValue.when(
-            data: (supplier) => IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.supplierEdit,
-                  arguments: SupplierEditArgs(supplier: supplier),
-                );
-              },
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        GoRouter.of(context).go(AppRoutes.suppliers);
+      },
+      child: Scaffold(
+        appBar: DetailAppBar(
+          title: 'Supplier Details',
+          actions: [
+            supplierAsyncValue.when(
+              data: (supplier) => IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  context.push(AppRoutes.supplierEdit,
+                      extra: SupplierEditArgs(supplier: supplier));
+                },
+              ),
+              loading: () => const SizedBox.shrink(),
+              error: (_, __) => const SizedBox.shrink(),
             ),
-            loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
-          ),
-        ],
-      ),
-      body: supplierAsyncValue.when(
-        data: (supplier) => _buildSupplierDetails(context, supplier),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => Center(child: Text('Error: $error')),
+          ],
+        ),
+        body: supplierAsyncValue.when(
+          data: (supplier) => _buildSupplierDetails(context, supplier),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => Center(child: Text('Error: $error')),
+        ),
       ),
     );
   }
@@ -297,4 +303,9 @@ class SupplierDetailsScreen extends ConsumerWidget {
       }),
     );
   }
+}
+
+class SupplierEditArgs {
+  SupplierEditArgs({required this.supplier});
+  final Supplier supplier;
 }

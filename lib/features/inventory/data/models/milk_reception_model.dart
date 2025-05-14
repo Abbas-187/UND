@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 enum MilkAcceptanceStatus {
   accepted,
   rejected,
-  conditionally_accepted,
+  conditionallyAccepted,
   pending,
-  on_hold
+  onHold
 }
 
 /// Organoleptic evaluation parameters
@@ -22,7 +22,6 @@ enum OrganolepticParameter {
 
 /// Organoleptic evaluation result
 class OrganolepticEvaluation {
-
   const OrganolepticEvaluation({
     required this.scores,
     this.comments,
@@ -133,7 +132,6 @@ class OrganolepticEvaluation {
 
 /// Quality test result for received milk
 class MilkQualityTest {
-
   const MilkQualityTest({
     required this.testName,
     required this.value,
@@ -232,7 +230,6 @@ class MilkQualityTest {
 
 /// Supplier information for milk reception
 class SupplierInfo {
-
   const SupplierInfo({
     required this.supplierId,
     required this.supplierName,
@@ -315,7 +312,6 @@ class SupplierInfo {
 
 /// Main model for milk reception at the dairy factory
 class MilkReceptionModel {
-
   const MilkReceptionModel({
     this.id,
     required this.receptionCode,

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../../common/widgets/detail_appbar.dart';
 import '../../../../../common/widgets/loading_overlay.dart';
 import '../../../../../common/widgets/status_badge.dart';
-import '../../../domain/entities/purchase_order.dart';
-import '../../providers/purchase_order_providers.dart';
-import '../../../domain/services/purchase_order_print_service.dart';
 import '../../../../suppliers/presentation/providers/supplier_provider.dart';
+import '../../../domain/entities/purchase_order.dart';
+import '../../../domain/services/purchase_order_print_service.dart';
+import '../../providers/purchase_order_providers.dart';
 
 /// Provider for PurchaseOrderPrintService to resolve the missing reference
 final purchaseOrderPrintServiceProvider =
@@ -28,50 +30,57 @@ class PurchaseOrderDetailScreen extends ConsumerWidget {
     final poDetailState =
         ref.watch(purchaseOrderDetailNotifierProvider(orderId));
 
-    return Scaffold(
-      appBar: DetailAppBar(
-        title: 'Purchase Order Details',
-        actions: [
-          if (poDetailState.purchaseOrder != null &&
-              poDetailState.purchaseOrder!.status ==
-                  PurchaseOrderStatus.approved)
-            IconButton(
-              icon: const Icon(Icons.print),
-              onPressed: () => _printPurchaseOrder(
-                  context, ref, poDetailState.purchaseOrder!),
-              tooltip: 'Print Approved PO',
-            ),
-        ],
-      ),
-      body: LoadingOverlay(
-        isLoading: poDetailState.isLoading,
-        child: poDetailState.hasError
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.error_outline,
-                        size: 48, color: Colors.red),
-                    const SizedBox(height: 16),
-                    Text(
-                      poDetailState.errorMessage ?? 'An error occurred',
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: () => ref
-                          .read(purchaseOrderDetailNotifierProvider(orderId)
-                              .notifier)
-                          .refreshPurchaseOrder(),
-                      child: const Text('Retry'),
-                    ),
-                  ],
-                ),
-              )
-            : poDetailState.purchaseOrder == null
-                ? const Center(child: Text('Purchase order not found'))
-                : _buildPurchaseOrderDetails(
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        GoRouter.of(context).go('/procurement/purchase-orders');
+      },
+      child: Scaffold(
+        appBar: DetailAppBar(
+          title: 'Purchase Order Details',
+          actions: [
+            if (poDetailState.purchaseOrder != null &&
+                poDetailState.purchaseOrder!.status ==
+                    PurchaseOrderStatus.approved)
+              IconButton(
+                icon: const Icon(Icons.print),
+                onPressed: () => _printPurchaseOrder(
                     context, ref, poDetailState.purchaseOrder!),
+                tooltip: 'Print Approved PO',
+              ),
+          ],
+        ),
+        body: LoadingOverlay(
+          isLoading: poDetailState.isLoading,
+          child: poDetailState.hasError
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.error_outline,
+                          size: 48, color: Colors.red),
+                      const SizedBox(height: 16),
+                      Text(
+                        poDetailState.errorMessage ?? 'An error occurred',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () => ref
+                            .read(purchaseOrderDetailNotifierProvider(orderId)
+                                .notifier)
+                            .refreshPurchaseOrder(),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                )
+              : poDetailState.purchaseOrder == null
+                  ? const Center(child: Text('Purchase order not found'))
+                  : _buildPurchaseOrderDetails(
+                      context, ref, poDetailState.purchaseOrder!),
+        ),
       ),
     );
   }
@@ -269,93 +278,90 @@ class PurchaseOrderDetailScreen extends ConsumerWidget {
                 ),
 
                 // Table rows
-                ...purchaseOrder.items
-                    .map((item) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                ...purchaseOrder.items.map((item) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 5,
-                                    child: Text(
-                                      item.itemName,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      '${item.quantity} ${item.unit}',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      currencyFormat.format(item.unitPrice),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      currencyFormat.format(item.totalPrice),
-                                      textAlign: TextAlign.end,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4.0),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    flex: 5,
-                                    child: Text(
-                                      'Required by:',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 6,
-                                    child: Text(
-                                      dateFormat.format(item.requiredByDate),
-                                      style: const TextStyle(
-                                        fontSize: 12.0,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              if (item.notes != null &&
-                                  item.notes!.isNotEmpty) ...[
-                                const SizedBox(height: 4.0),
-                                Text(
-                                  'Notes: ${item.notes}',
+                              Expanded(
+                                flex: 5,
+                                child: Text(
+                                  item.itemName,
                                   style: const TextStyle(
-                                    fontSize: 12.0,
-                                    fontStyle: FontStyle.italic,
-                                  ),
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              ],
-                              // Divider after each item except the last one
-                              if (item != purchaseOrder.items.last)
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 8.0),
-                                  child: Divider(),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  '${item.quantity} ${item.unit}',
+                                  textAlign: TextAlign.center,
                                 ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  currencyFormat.format(item.unitPrice),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  currencyFormat.format(item.totalPrice),
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ],
                           ),
-                        ))
-                    .toList(),
+                          const SizedBox(height: 4.0),
+                          Row(
+                            children: [
+                              const Expanded(
+                                flex: 5,
+                                child: Text(
+                                  'Required by:',
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: Text(
+                                  dateFormat.format(item.requiredByDate),
+                                  style: const TextStyle(
+                                    fontSize: 12.0,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (item.notes != null && item.notes!.isNotEmpty) ...[
+                            const SizedBox(height: 4.0),
+                            Text(
+                              'Notes: ${item.notes}',
+                              style: const TextStyle(
+                                fontSize: 12.0,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
+                          // Divider after each item except the last one
+                          if (item != purchaseOrder.items.last)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Divider(),
+                            ),
+                        ],
+                      ),
+                    )),
 
                 // Total row at the bottom
                 Container(

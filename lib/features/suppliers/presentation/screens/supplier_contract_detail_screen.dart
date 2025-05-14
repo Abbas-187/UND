@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
+import '../../../reports/widgets/attachment_widget.dart';
 import '../../domain/entities/supplier_contract.dart';
 import '../providers/supplier_contract_provider.dart';
-import '../../../reports/widgets/attachment_widget.dart';
 
 class SupplierContractDetailScreen extends ConsumerStatefulWidget {
   const SupplierContractDetailScreen({super.key, this.contractId});

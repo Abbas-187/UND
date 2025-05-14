@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../production/domain/models/production_execution_model.dart';
@@ -80,11 +81,11 @@ final tempProductionExecutionDetailProvider =
 
 /// Detailed screen for a specific production execution
 class ProductionExecutionDetailScreen extends ConsumerStatefulWidget {
-
   const ProductionExecutionDetailScreen({
     super.key,
     required this.executionId,
   });
+
   /// Route name for navigation
   static const routeName = '/production-execution-detail';
 
@@ -123,131 +124,138 @@ class _ProductionExecutionDetailScreenState
     final executionAsync =
         ref.watch(tempProductionExecutionDetailProvider(widget.executionId));
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Production Execution Details'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              // Refresh data
-              ref.invalidate(
-                  tempProductionExecutionDetailProvider(widget.executionId));
-            },
-            tooltip: 'Refresh',
-          ),
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              // Handle menu selection
-              switch (value) {
-                case 'export_pdf':
-                  // Export to PDF logic
-                  break;
-                case 'share':
-                  // Share logic
-                  break;
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'export_pdf',
-                child: Row(
-                  children: [
-                    Icon(Icons.picture_as_pdf),
-                    SizedBox(width: 8),
-                    Text('Export to PDF'),
-                  ],
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        context.go('/factory/production/executions');
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Production Execution Details'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                // Refresh data
+                ref.invalidate(
+                    tempProductionExecutionDetailProvider(widget.executionId));
+              },
+              tooltip: 'Refresh',
+            ),
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                // Handle menu selection
+                switch (value) {
+                  case 'export_pdf':
+                    // Export to PDF logic
+                    break;
+                  case 'share':
+                    // Share logic
+                    break;
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 'export_pdf',
+                  child: Row(
+                    children: [
+                      Icon(Icons.picture_as_pdf),
+                      SizedBox(width: 8),
+                      Text('Export to PDF'),
+                    ],
+                  ),
                 ),
-              ),
-              const PopupMenuItem(
-                value: 'share',
-                child: Row(
-                  children: [
-                    Icon(Icons.share),
-                    SizedBox(width: 8),
-                    Text('Share'),
-                  ],
+                const PopupMenuItem(
+                  value: 'share',
+                  child: Row(
+                    children: [
+                      Icon(Icons.share),
+                      SizedBox(width: 8),
+                      Text('Share'),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      body: executionAsync.when(
-        data: (execution) {
-          // Set notes text
-          if (_notesController.text.isEmpty && execution.notes != null) {
-            _notesController.text = execution.notes!;
-          }
-
-          return Column(
-            children: [
-              // Header with basic details
-              _buildHeader(execution),
-
-              // Tab bar
-              ColoredBox(
-                color: Colors.white,
-                child: TabBar(
-                  controller: _tabController,
-                  labelColor: Theme.of(context).primaryColor,
-                  tabs: const [
-                    Tab(text: 'Overview'),
-                    Tab(text: 'Quality'),
-                    Tab(text: 'Timeline'),
-                  ],
-                ),
-              ),
-
-              // Tab content
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    // Overview tab
-                    _buildOverviewTab(execution),
-
-                    // Quality tab
-                    _buildQualityTab(execution),
-
-                    // Timeline tab
-                    _buildTimelineTab(execution),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
-      ),
-      bottomNavigationBar: executionAsync.when(
-        data: (execution) => Container(
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 4,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: ProductionActionButton(
-            status: execution.status,
-            onActionPressed: () {
-              // Primary action handler
-              _handlePrimaryAction(execution);
-            },
-            onSecondaryActionPressed: () {
-              // Secondary action handler
-              _handleSecondaryAction(execution);
-            },
-          ),
+              ],
+            ),
+          ],
         ),
-        loading: () => const SizedBox.shrink(),
-        error: (_, __) => const SizedBox.shrink(),
+        body: executionAsync.when(
+          data: (execution) {
+            // Set notes text
+            if (_notesController.text.isEmpty && execution.notes != null) {
+              _notesController.text = execution.notes!;
+            }
+
+            return Column(
+              children: [
+                // Header with basic details
+                _buildHeader(execution),
+
+                // Tab bar
+                ColoredBox(
+                  color: Colors.white,
+                  child: TabBar(
+                    controller: _tabController,
+                    labelColor: Theme.of(context).primaryColor,
+                    tabs: const [
+                      Tab(text: 'Overview'),
+                      Tab(text: 'Quality'),
+                      Tab(text: 'Timeline'),
+                    ],
+                  ),
+                ),
+
+                // Tab content
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      // Overview tab
+                      _buildOverviewTab(execution),
+
+                      // Quality tab
+                      _buildQualityTab(execution),
+
+                      // Timeline tab
+                      _buildTimelineTab(execution),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('Error: $error')),
+        ),
+        bottomNavigationBar: executionAsync.when(
+          data: (execution) => Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1 * 255),
+                  blurRadius: 4,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: ProductionActionButton(
+              status: execution.status,
+              onActionPressed: () {
+                // Primary action handler
+                _handlePrimaryAction(execution);
+              },
+              onSecondaryActionPressed: () {
+                // Secondary action handler
+                _handleSecondaryAction(execution);
+              },
+            ),
+          ),
+          loading: () => const SizedBox.shrink(),
+          error: (_, __) => const SizedBox.shrink(),
+        ),
       ),
     );
   }
@@ -693,7 +701,7 @@ class _ProductionExecutionDetailScreenState
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: ratingColor.withOpacity(0.1),
+        color: ratingColor.withValues(alpha: 0.1 * 255),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: ratingColor),
       ),

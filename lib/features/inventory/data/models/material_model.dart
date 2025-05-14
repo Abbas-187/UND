@@ -3,21 +3,21 @@ import 'package:meta/meta.dart';
 
 /// Material types enum for dairy industry products
 enum MaterialType {
-  raw_milk,
+  rawMilk,
   cultures,
   additives,
-  packaging_material,
-  finished_good,
-  semi_finished_good,
+  packagingMaterial,
+  finishedGood,
+  semiFinishedGood,
   other
 }
 
 /// Regulatory classification enum for dairy products
 enum RegulatoryClassification {
   organic,
-  hormone_free,
-  antibiotic_free,
-  gmo_free,
+  hormoneFree,
+  antibioticFree,
+  gmoFree,
   kosher,
   halal,
   standard,

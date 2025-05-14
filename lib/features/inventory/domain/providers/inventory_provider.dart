@@ -1,17 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../entities/inventory_item.dart';
-import '../repositories/inventory_repository.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../data/models/inventory_item_model.dart';
 import '../../data/models/inventory_transaction_model.dart';
-import '../../data/repositories/inventory_repository.dart' as data_repo;
-import '../../data/repositories/mock_inventory_repository.dart';
+import '../../data/repositories/inventory_repository_impl.dart';
+import '../entities/inventory_item.dart';
+import '../repositories/inventory_repository.dart';
+
+part 'inventory_provider.freezed.dart';
+part 'inventory_provider.g.dart';
 
 // Repository provider
 final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
-  // Use the mock repository by default
-  return ref.watch(mockInventoryRepositoryProvider);
+  // Use the real Firebase-based repository
+  return InventoryRepositoryImpl();
 });
 
 // Inventory items provider
@@ -588,61 +591,19 @@ final inventoryItemProvider =
 });
 
 /// Immutable filter class for inventory items
-class InventoryFilter {
-  const InventoryFilter({
-    this.searchQuery = '',
-    this.showLowStock = false,
-    this.showNeedsReorder = false,
-    this.showExpiringSoon = false,
-    this.selectedCategory,
-    this.selectedLocation,
-  });
-
-  final String searchQuery;
-  final bool showLowStock;
-  final bool showNeedsReorder;
-  final bool showExpiringSoon;
-  final String? selectedCategory;
-  final String? selectedLocation;
-
-  InventoryFilter copyWith({
-    String? searchQuery,
-    bool? showLowStock,
-    bool? showNeedsReorder,
-    bool? showExpiringSoon,
+@freezed
+class InventoryFilter with _$InventoryFilter {
+  const factory InventoryFilter({
+    @Default('') String searchQuery,
+    @Default(false) bool showLowStock,
+    @Default(false) bool showNeedsReorder,
+    @Default(false) bool showExpiringSoon,
     String? selectedCategory,
     String? selectedLocation,
-  }) {
-    return InventoryFilter(
-      searchQuery: searchQuery ?? this.searchQuery,
-      showLowStock: showLowStock ?? this.showLowStock,
-      showNeedsReorder: showNeedsReorder ?? this.showNeedsReorder,
-      showExpiringSoon: showExpiringSoon ?? this.showExpiringSoon,
-      selectedCategory: selectedCategory ?? this.selectedCategory,
-      selectedLocation: selectedLocation ?? this.selectedLocation,
-    );
-  }
+  }) = _InventoryFilter;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is InventoryFilter &&
-          runtimeType == other.runtimeType &&
-          searchQuery == other.searchQuery &&
-          showLowStock == other.showLowStock &&
-          showNeedsReorder == other.showNeedsReorder &&
-          showExpiringSoon == other.showExpiringSoon &&
-          selectedCategory == other.selectedCategory &&
-          selectedLocation == other.selectedLocation;
-
-  @override
-  int get hashCode =>
-      searchQuery.hashCode ^
-      showLowStock.hashCode ^
-      showNeedsReorder.hashCode ^
-      showExpiringSoon.hashCode ^
-      selectedCategory.hashCode ^
-      selectedLocation.hashCode;
+  factory InventoryFilter.fromJson(Map<String, dynamic> json) =>
+      _$InventoryFilterFromJson(json);
 }
 
 // Filter provider

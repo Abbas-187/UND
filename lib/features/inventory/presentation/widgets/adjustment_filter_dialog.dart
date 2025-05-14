@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_adjustment.dart';
 import '../providers/inventory_adjustment_provider.dart';
-import '../../../../l10n/app_localizations.dart';
 
 class AdjustmentFilterDialog extends StatefulWidget {
-  final AdjustmentFilterState initialFilter;
-  final Function(AdjustmentFilterState) onFilterChanged;
 
   const AdjustmentFilterDialog({
     super.key,
     required this.initialFilter,
     required this.onFilterChanged,
   });
+  final AdjustmentFilterState initialFilter;
+  final Function(AdjustmentFilterState) onFilterChanged;
 
   @override
   State<AdjustmentFilterDialog> createState() => _AdjustmentFilterDialogState();

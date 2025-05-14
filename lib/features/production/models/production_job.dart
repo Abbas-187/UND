@@ -126,20 +126,6 @@ enum ProductionPriority {
 
 /// Represents a production job in the system
 class ProductionJob {
-  final String id;
-  final String orderId;
-  final String location;
-  final DateTime startTime;
-  final DateTime estimatedEndTime;
-  final ProductionJobStatus status;
-  final ProductionPriority priority;
-  final double? percentComplete;
-  final String? assignedTo;
-  final String? notes;
-  final List<QualityCheck>? qualityChecks;
-  final List<ProductionIssue>? issues;
-  final DateTime? completedAt;
-  final DateTime? updatedAt;
 
   /// Creates a new production job
   ProductionJob({
@@ -197,6 +183,20 @@ class ProductionJob {
           'Error parsing production job: ${e.toString()}');
     }
   }
+  final String id;
+  final String orderId;
+  final String location;
+  final DateTime startTime;
+  final DateTime estimatedEndTime;
+  final ProductionJobStatus status;
+  final ProductionPriority priority;
+  final double? percentComplete;
+  final String? assignedTo;
+  final String? notes;
+  final List<QualityCheck>? qualityChecks;
+  final List<ProductionIssue>? issues;
+  final DateTime? completedAt;
+  final DateTime? updatedAt;
 
   /// Converts this production job to a JSON map
   Map<String, dynamic> toJson() {
@@ -293,12 +293,6 @@ class ProductionJob {
 
 /// Represents a quality check in a production job
 class QualityCheck {
-  final String id;
-  final String checkName;
-  final bool passed;
-  final String? notes;
-  final DateTime timestamp;
-  final String performedBy;
 
   /// Creates a new quality check
   QualityCheck({
@@ -326,6 +320,12 @@ class QualityCheck {
           'Error parsing quality check: ${e.toString()}');
     }
   }
+  final String id;
+  final String checkName;
+  final bool passed;
+  final String? notes;
+  final DateTime timestamp;
+  final String performedBy;
 
   /// Converts this quality check to a JSON map
   Map<String, dynamic> toJson() {
@@ -342,15 +342,6 @@ class QualityCheck {
 
 /// Represents an issue in a production job
 class ProductionIssue {
-  final String id;
-  final String description;
-  final String severity;
-  final DateTime reportedAt;
-  final String reportedBy;
-  final String? assignedTo;
-  final bool resolved;
-  final String? resolution;
-  final DateTime? resolvedAt;
 
   /// Creates a new production issue
   ProductionIssue({
@@ -386,6 +377,15 @@ class ProductionIssue {
           'Error parsing production issue: ${e.toString()}');
     }
   }
+  final String id;
+  final String description;
+  final String severity;
+  final DateTime reportedAt;
+  final String reportedBy;
+  final String? assignedTo;
+  final bool resolved;
+  final String? resolution;
+  final DateTime? resolvedAt;
 
   /// Converts this production issue to a JSON map
   Map<String, dynamic> toJson() {

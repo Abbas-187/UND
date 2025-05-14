@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/inventory_movement_model.dart';
-import '../../../data/models/inventory_movement_type.dart';
 
 class MovementListItem extends StatelessWidget {
   const MovementListItem({
@@ -22,26 +21,50 @@ class MovementListItem extends StatelessWidget {
         return Colors.red;
       case ApprovalStatus.CANCELLED:
         return Colors.grey;
-      default:
-        return Colors.grey;
     }
   }
 
   IconData _getMovementTypeIcon(InventoryMovementType type) {
     switch (type) {
-      case InventoryMovementType.RECEIPT:
+      case InventoryMovementType.PO_RECEIPT:
         return Icons.input;
-      case InventoryMovementType.TRANSFER:
+      case InventoryMovementType.TRANSFER_IN:
         return Icons.swap_horiz;
-      case InventoryMovementType.ISSUE:
+      case InventoryMovementType.PRODUCTION_ISSUE:
         return Icons.remove;
-      case InventoryMovementType.RETURN:
+      case InventoryMovementType.SALES_RETURN:
         return Icons.replay;
-      case InventoryMovementType.ADJUSTMENT:
+      case InventoryMovementType.ADJUSTMENT_OTHER:
         return Icons.tune;
-      case InventoryMovementType.DISPOSAL:
-        return Icons.delete;
-      default:
+      // Explicitly handle all other enum values
+      case InventoryMovementType.receipt:
+      case InventoryMovementType.issue:
+      case InventoryMovementType.return_:
+      case InventoryMovementType.transfer:
+      case InventoryMovementType.adjustment:
+      case InventoryMovementType.production:
+      case InventoryMovementType.consumption:
+      case InventoryMovementType.waste:
+      case InventoryMovementType.expiry:
+      case InventoryMovementType.qualityStatusChange:
+      case InventoryMovementType.repack:
+      case InventoryMovementType.sample:
+      case InventoryMovementType.salesIssue:
+      case InventoryMovementType.purchaseReceipt:
+      case InventoryMovementType.productionConsumption:
+      case InventoryMovementType.productionOutput:
+      case InventoryMovementType.interWarehouseTransfer:
+      case InventoryMovementType.intraWarehouseTransfer:
+      case InventoryMovementType.scrapDisposal:
+      case InventoryMovementType.qualityHold:
+      case InventoryMovementType.initialBalanceAdjustment:
+      case InventoryMovementType.reservationAdjustment:
+      case InventoryMovementType.TRANSFER_OUT:
+      case InventoryMovementType.SALE_SHIPMENT:
+      case InventoryMovementType.ADJUSTMENT_DAMAGE:
+      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
+      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
+      case InventoryMovementType.QUALITY_STATUS_UPDATE:
         return Icons.inventory_2;
     }
   }
@@ -121,8 +144,9 @@ class MovementListItem extends StatelessWidget {
                           style: theme.textTheme.bodySmall,
                         ),
                         Text(
-                          movement.sourceLocationName.isNotEmpty
-                              ? movement.sourceLocationName
+                          movement.sourceLocationName != null &&
+                                  movement.sourceLocationName!.isNotEmpty
+                              ? movement.sourceLocationName!
                               : 'N/A',
                           style: theme.textTheme.bodyMedium,
                         ),
@@ -132,8 +156,9 @@ class MovementListItem extends StatelessWidget {
                           style: theme.textTheme.bodySmall,
                         ),
                         Text(
-                          movement.destinationLocationName.isNotEmpty
-                              ? movement.destinationLocationName
+                          movement.destinationLocationName != null &&
+                                  movement.destinationLocationName!.isNotEmpty
+                              ? movement.destinationLocationName!
                               : 'N/A',
                           style: theme.textTheme.bodyMedium,
                         ),

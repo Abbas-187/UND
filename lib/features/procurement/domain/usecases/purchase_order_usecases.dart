@@ -97,7 +97,7 @@ class UpdatePurchaseOrderStatusUseCase {
     if (!_isValidStatusTransition(currentOrder.status, status)) {
       throw AppException(
         message:
-            'Invalid status transition from \\${currentOrder.status} to \\${status}',
+            'Invalid status transition from \\${currentOrder.status} to \\$status',
       );
     }
     final result = await repository.updatePurchaseOrderStatus(id, status);

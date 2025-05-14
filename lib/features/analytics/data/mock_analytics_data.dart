@@ -1,17 +1,19 @@
+/*
+import 'dart:math' as math;
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 /// Class that provides mock data for analytics charts and metrics
 class MockAnalyticsData {
-  /// Singleton pattern
-  static final MockAnalyticsData _instance = MockAnalyticsData._internal();
 
   factory MockAnalyticsData() {
     return _instance;
   }
 
   MockAnalyticsData._internal();
+  /// Singleton pattern
+  static final MockAnalyticsData _instance = MockAnalyticsData._internal();
 
   /// Generate data for the inventory distribution pie chart
   List<PieChartSectionData> getInventoryDistributionData() {
@@ -198,3 +200,4 @@ class MockAnalyticsData {
     };
   }
 }
+*/

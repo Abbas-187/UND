@@ -2,25 +2,24 @@ import 'package:flutter/material.dart';
 
 /// Data model for supplier performance
 class SupplierPerformance {
+  SupplierPerformance({required this.name, required this.score});
   final String name;
   final double score;
-  SupplierPerformance({required this.name, required this.score});
 }
 
 /// Robust, feature-rich SupplierPerformanceChart widget
 class SupplierPerformanceChart extends StatefulWidget {
-  final List<SupplierPerformance> data;
-  final String title;
-  final Color barColor;
-  final Color backgroundColor;
-
   const SupplierPerformanceChart({
-    Key? key,
+    super.key,
     required this.data,
     this.title = 'Supplier Performance',
     this.barColor = Colors.blue,
     this.backgroundColor = Colors.white,
-  }) : super(key: key);
+  });
+  final List<SupplierPerformance> data;
+  final String title;
+  final Color barColor;
+  final Color backgroundColor;
 
   @override
   State<SupplierPerformanceChart> createState() =>
@@ -145,12 +144,11 @@ class _SupplierPerformanceChartState extends State<SupplierPerformanceChart> {
 }
 
 class _BarChartPainter extends CustomPainter {
+  _BarChartPainter(
+      {required this.data, required this.barColor, this.tappedBarIndex});
   final List<SupplierPerformance> data;
   final Color barColor;
   final int? tappedBarIndex;
-
-  _BarChartPainter(
-      {required this.data, required this.barColor, this.tappedBarIndex});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -169,8 +167,9 @@ class _BarChartPainter extends CustomPainter {
       final barHeight = maxScore == 0 ? 0 : (score / maxScore) * chartHeight;
       final x = (i * 2 + 1) * barWidth;
       final y = size.height - barHeight - yOffset;
-      paint.color =
-          (tappedBarIndex == i) ? barColor.withOpacity(0.7) : barColor;
+      paint.color = (tappedBarIndex == i)
+          ? barColor.withAlpha((0.7 * 255).toInt())
+          : barColor;
       final rect = Rect.fromLTWH(
         x.toDouble(),
         y.toDouble(),

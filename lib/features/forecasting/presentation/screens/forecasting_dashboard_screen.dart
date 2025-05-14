@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../common/widgets/app_loading_indicator.dart';
 import '../../../../core/widgets/error_view.dart';
-import '../../../../core/routes/app_router.dart';
 import '../../../inventory/data/models/inventory_item_model.dart';
 import '../../../inventory/domain/providers/inventory_provider.dart';
 
@@ -52,7 +53,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.forecastingCreate);
+          context.push('/forecasting/create');
         },
         label: const Text('New Forecast'),
         icon: const Icon(Icons.add),
@@ -188,7 +189,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
               Icons.insights,
               Colors.blue,
               () {
-                Navigator.of(context).pushNamed(AppRoutes.forecasting);
+                context.go('/forecasting');
               },
             ),
             _buildActionButton(
@@ -197,7 +198,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
               Icons.inventory_2,
               Colors.green,
               () {
-                Navigator.of(context).pushNamed(AppRoutes.inventory);
+                context.go('/inventory');
               },
             ),
             _buildActionButton(
@@ -390,10 +391,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
                 const SizedBox(height: 4),
                 OutlinedButton(
                   onPressed: () {
-                    // Create forecast for this item
-                    Navigator.of(context).pushNamed(
-                      AppRoutes.forecastingCreate,
-                    );
+                    context.push('/forecasting/create');
                   },
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
@@ -429,7 +427,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(AppRoutes.forecasting);
+                context.go('/forecasting');
               },
               child: const Text('View All'),
             ),
@@ -481,8 +479,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(AppRoutes.forecastingDetail,
-              arguments: ForecastingDetailArgs(forecastId: 'dummy-id'));
+          context.push('/forecasting/detail/dummy-id');
         },
         child: Padding(
           padding: const EdgeInsets.all(12.0),

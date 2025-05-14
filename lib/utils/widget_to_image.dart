@@ -1,6 +1,7 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -26,12 +27,12 @@ Future<Uint8List?> widgetToImageBytes({
   );
 
   final overlay = OverlayEntry(builder: (_) => widgetApp);
-  final context = WidgetsBinding.instance.renderViewElement;
+  final context = WidgetsBinding.instance.rootElement;
   if (context == null) {
     completer.complete(null);
     return completer.future;
   }
-  Overlay.of(context, rootOverlay: true)?.insert(overlay);
+  Overlay.of(context, rootOverlay: true).insert(overlay);
 
   await Future.delayed(const Duration(milliseconds: 100));
 

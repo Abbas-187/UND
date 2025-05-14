@@ -139,7 +139,7 @@ final deletePurchaseOrderUseCaseProvider =
 typedef DeletePurchaseOrderUseCaseRef
     = AutoDisposeProviderRef<DeletePurchaseOrderUseCase>;
 String _$purchaseOrderRepositoryHash() =>
-    r'a4d5ced0286f000b3ab0b3ae59141bb84e0a05cf';
+    r'2a7a046c487fbbaafa261dbf0128f97cdf08832b';
 
 /// Provider for purchase order repository (to be implemented in the data layer)
 ///

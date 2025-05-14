@@ -1,8 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/services/mock_data_service.dart';
 import '../../../inventory/data/providers/mock_inventory_provider.dart';
-import '../models/recipe_model.dart';
 import '../models/recipe_ingredient_model.dart';
+import '../models/recipe_model.dart';
 
 /// Provides mock recipe data that integrates with inventory
 class MockRecipeProvider {
@@ -156,3 +157,4 @@ final mockRecipeProvider = Provider<MockRecipeProvider>((ref) {
     mockInventoryProvider: inventoryProvider,
   );
 });
+*/

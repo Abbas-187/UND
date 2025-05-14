@@ -1,0 +1,752 @@
+{
+  "6ed52657-8bfb-4686-a792-4dcfbfa0caa4": {
+    "id": "6ed52657-8bfb-4686-a792-4dcfbfa0caa4",
+    "product_code": "PA4316",
+    "product_name": "Plastic Bottles PET 200ml",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 246,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "eb786a27-e5e2-49ea-8a34-f63d927fd6b6": {
+    "id": "eb786a27-e5e2-49ea-8a34-f63d927fd6b6",
+    "product_code": "PA3799",
+    "product_name": "Plastic Bottles PET 1.85L",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 53,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "6c88f57f-ad22-4c39-a1d9-aad066c0669a": {
+    "id": "6c88f57f-ad22-4c39-a1d9-aad066c0669a",
+    "product_code": "PA2360",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 70,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "590685ef-1207-4419-8e60-f4a6830b8861": {
+    "id": "590685ef-1207-4419-8e60-f4a6830b8861",
+    "product_code": "PA7009",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 74,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "7dfe74f1-3a43-4b37-95df-81365373585c": {
+    "id": "7dfe74f1-3a43-4b37-95df-81365373585c",
+    "product_code": "PA1416",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 357,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "824787ad-7b79-4983-af93-f9f439a80f68": {
+    "id": "824787ad-7b79-4983-af93-f9f439a80f68",
+    "product_code": "PA4476",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 531,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "faf93ace-b5ad-4daf-9264-9788775d9b3c": {
+    "id": "faf93ace-b5ad-4daf-9264-9788775d9b3c",
+    "product_code": "PA9581",
+    "product_name": "Tray Yoghurt 150g (6 pcs)",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 866,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "db8068f3-9686-4bd3-a184-16a9cd1d8e1d": {
+    "id": "db8068f3-9686-4bd3-a184-16a9cd1d8e1d",
+    "product_code": "PA8769",
+    "product_name": "Plastic Bottles PET 1L",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 299,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "e9e218ff-9895-431f-bba9-f49089558fc4": {
+    "id": "e9e218ff-9895-431f-bba9-f49089558fc4",
+    "product_code": "PA9233",
+    "product_name": "Tubs 500g",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 647,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "ed206758-48a8-48c3-8e55-cae074af8707": {
+    "id": "ed206758-48a8-48c3-8e55-cae074af8707",
+    "product_code": "PA7610",
+    "product_name": "Plastic Bottles PET 1L",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 314,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "d7c214ca-ea6f-4eb1-8dbb-66217a73a16d": {
+    "id": "d7c214ca-ea6f-4eb1-8dbb-66217a73a16d",
+    "product_code": "PA5461",
+    "product_name": "Tubs 500g",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 957,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "5aba74ce-fa06-4c15-809e-25ff3c309edc": {
+    "id": "5aba74ce-fa06-4c15-809e-25ff3c309edc",
+    "product_code": "PA6556",
+    "product_name": "Tray Yoghurt 150g (6 pcs)",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 753,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "7c8b9449-6898-4a68-8f73-58e2174a3da0": {
+    "id": "7c8b9449-6898-4a68-8f73-58e2174a3da0",
+    "product_code": "PA3056",
+    "product_name": "Plastic Bottles PET 200ml",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 951,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "73530472-00b5-4faf-94e3-334261fe131f": {
+    "id": "73530472-00b5-4faf-94e3-334261fe131f",
+    "product_code": "PA8880",
+    "product_name": "Plastic Bottles PET 1L",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 83,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "453367e7-cf0d-438f-af7d-3aa86f03d1b9": {
+    "id": "453367e7-cf0d-438f-af7d-3aa86f03d1b9",
+    "product_code": "PA8552",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 85,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "c028e076-b321-4638-b0d1-8f1a5e907ab5": {
+    "id": "c028e076-b321-4638-b0d1-8f1a5e907ab5",
+    "product_code": "PA2134",
+    "product_name": "Cups 150g",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 164,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "550f1eba-459c-41bb-abe6-78c2652e4785": {
+    "id": "550f1eba-459c-41bb-abe6-78c2652e4785",
+    "product_code": "PA8620",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 86,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "fac42f28-3e59-427b-a453-1d2afe168179": {
+    "id": "fac42f28-3e59-427b-a453-1d2afe168179",
+    "product_code": "PA1576",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 143,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "63b969b1-8f78-4357-99a9-ff86e6576882": {
+    "id": "63b969b1-8f78-4357-99a9-ff86e6576882",
+    "product_code": "PA9935",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 110,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "c992ec52-89eb-4ace-b961-9967e6f715ca": {
+    "id": "c992ec52-89eb-4ace-b961-9967e6f715ca",
+    "product_code": "PA2085",
+    "product_name": "Bucket 10kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 798,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "1cfa52c9-2be1-4ebd-8a17-8516d048aeb9": {
+    "id": "1cfa52c9-2be1-4ebd-8a17-8516d048aeb9",
+    "product_code": "PA6940",
+    "product_name": "Cups 150g",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 239,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "ce23cbe7-399d-4e01-96e4-605363a30882": {
+    "id": "ce23cbe7-399d-4e01-96e4-605363a30882",
+    "product_code": "PA5815",
+    "product_name": "Bucket 2.25kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 976,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "f9540bf1-272d-4cff-8b79-d7c03b6f7679": {
+    "id": "f9540bf1-272d-4cff-8b79-d7c03b6f7679",
+    "product_code": "PA2920",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 340,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "7a0a4b44-4820-40b9-a826-acd0809a7239": {
+    "id": "7a0a4b44-4820-40b9-a826-acd0809a7239",
+    "product_code": "PA8368",
+    "product_name": "Bucket 10kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 953,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "249ce720-9946-4d1e-8bdf-335b7140694b": {
+    "id": "249ce720-9946-4d1e-8bdf-335b7140694b",
+    "product_code": "PA5646",
+    "product_name": "Tubs 500g",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 701,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "3f9a773b-371c-464d-9095-aaa2071332cd": {
+    "id": "3f9a773b-371c-464d-9095-aaa2071332cd",
+    "product_code": "PA3075",
+    "product_name": "Bucket 2.25kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 157,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "a97a222a-c8ae-40d3-8afc-51356baafef3": {
+    "id": "a97a222a-c8ae-40d3-8afc-51356baafef3",
+    "product_code": "PA6244",
+    "product_name": "Bucket 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 462,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "51a012a8-bbdd-4d40-b81b-f3402bf5d033": {
+    "id": "51a012a8-bbdd-4d40-b81b-f3402bf5d033",
+    "product_code": "PA3825",
+    "product_name": "Bucket 5kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 689,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "cfe98986-2009-49ae-b348-fdf144943aa6": {
+    "id": "cfe98986-2009-49ae-b348-fdf144943aa6",
+    "product_code": "PA1312",
+    "product_name": "Bucket 10kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 927,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "b8d6d651-9502-4567-b3e1-884f6361722e": {
+    "id": "b8d6d651-9502-4567-b3e1-884f6361722e",
+    "product_code": "PA1774",
+    "product_name": "Plastic Bottles PET 1.85L",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 748,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "5be720d2-c000-4258-bd2f-8ccbc768dba9": {
+    "id": "5be720d2-c000-4258-bd2f-8ccbc768dba9",
+    "product_code": "PA5119",
+    "product_name": "Bucket 5kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 719,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "15b5571d-4822-493e-9a7d-fe9bdfeeb6af": {
+    "id": "15b5571d-4822-493e-9a7d-fe9bdfeeb6af",
+    "product_code": "PA8513",
+    "product_name": "Bucket 10kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 322,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "ff2a8895-e677-48ae-823d-fdd0f7d05273": {
+    "id": "ff2a8895-e677-48ae-823d-fdd0f7d05273",
+    "product_code": "PA7064",
+    "product_name": "Tubs 500g",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 824,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "dd15c12e-ed2e-4605-abdf-fc91b553cb59": {
+    "id": "dd15c12e-ed2e-4605-abdf-fc91b553cb59",
+    "product_code": "PA6228",
+    "product_name": "Plastic Bottles PET 200ml",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 996,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "626225a3-225e-49aa-8169-0139eb3925b0": {
+    "id": "626225a3-225e-49aa-8169-0139eb3925b0",
+    "product_code": "PA6961",
+    "product_name": "Tray Yoghurt 150g (6 pcs)",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 448,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "09a7c8ea-14ef-4928-ad58-169b7432561b": {
+    "id": "09a7c8ea-14ef-4928-ad58-169b7432561b",
+    "product_code": "PA9628",
+    "product_name": "Bucket 10kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 36,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "3e7be1d7-a7f9-40d3-b92b-6779f85bf2f0": {
+    "id": "3e7be1d7-a7f9-40d3-b92b-6779f85bf2f0",
+    "product_code": "PA4089",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 347,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "5e3eb3cb-88ec-440c-8e97-30ed0322e8d8": {
+    "id": "5e3eb3cb-88ec-440c-8e97-30ed0322e8d8",
+    "product_code": "PA4283",
+    "product_name": "Bucket 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 793,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "28939b0a-a25d-4388-ae1b-d365f1b5bd07": {
+    "id": "28939b0a-a25d-4388-ae1b-d365f1b5bd07",
+    "product_code": "PA9497",
+    "product_name": "Bucket 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 340,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "577d19e7-6e4a-4bff-ba2e-0bbef0e6bc3c": {
+    "id": "577d19e7-6e4a-4bff-ba2e-0bbef0e6bc3c",
+    "product_code": "PA3787",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 185,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "2075c2f3-ce2b-46a3-86a6-9de76780ba32": {
+    "id": "2075c2f3-ce2b-46a3-86a6-9de76780ba32",
+    "product_code": "PA9216",
+    "product_name": "Bucket 2.25kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 308,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "2af7d368-6c26-4efc-85fd-7e14da3c8671": {
+    "id": "2af7d368-6c26-4efc-85fd-7e14da3c8671",
+    "product_code": "PA1806",
+    "product_name": "Tubs 500g",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 922,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "e132ded1-7606-4c9e-898d-3a1bc81972c1": {
+    "id": "e132ded1-7606-4c9e-898d-3a1bc81972c1",
+    "product_code": "PA5619",
+    "product_name": "Bucket 2.25kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 472,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "ba66df32-6df8-494d-b8b9-268108c77814": {
+    "id": "ba66df32-6df8-494d-b8b9-268108c77814",
+    "product_code": "PA3924",
+    "product_name": "Bucket 10kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 132,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "1a68c503-060f-45a6-8728-94141fe034a0": {
+    "id": "1a68c503-060f-45a6-8728-94141fe034a0",
+    "product_code": "PA7306",
+    "product_name": "Plastic Bottles PET 1.85L",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 317,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "a7c9d8cf-c781-4718-9a8b-5f65aa8ce97d": {
+    "id": "a7c9d8cf-c781-4718-9a8b-5f65aa8ce97d",
+    "product_code": "PA3492",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 161,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "c9b9b469-bcdd-4d08-ae7d-d4631dbe3e24": {
+    "id": "c9b9b469-bcdd-4d08-ae7d-d4631dbe3e24",
+    "product_code": "PA7318",
+    "product_name": "Tubs 500g",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 80,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "bdcd5bf8-9004-4ff3-8a2e-a56efaffe9fc": {
+    "id": "bdcd5bf8-9004-4ff3-8a2e-a56efaffe9fc",
+    "product_code": "PA2728",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 148,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "511ae9c5-20db-418f-8d14-13be02f9e05f": {
+    "id": "511ae9c5-20db-418f-8d14-13be02f9e05f",
+    "product_code": "PA1089",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 16,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "310797ee-2866-4c95-bbdc-456caeaf031c": {
+    "id": "310797ee-2866-4c95-bbdc-456caeaf031c",
+    "product_code": "PA7763",
+    "product_name": "Cups 150g",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 713,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "2e02e9e2-762f-41b0-a22b-57135ecde3b4": {
+    "id": "2e02e9e2-762f-41b0-a22b-57135ecde3b4",
+    "product_code": "PA2969",
+    "product_name": "Plastic Bottles PET 200ml",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 975,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "55941b61-f5cc-4beb-bed0-076c4d6ce168": {
+    "id": "55941b61-f5cc-4beb-bed0-076c4d6ce168",
+    "product_code": "PA6119",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 257,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "9ec93cbc-58f5-414b-9365-8722f8374e4f": {
+    "id": "9ec93cbc-58f5-414b-9365-8722f8374e4f",
+    "product_code": "PA9912",
+    "product_name": "Bucket 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 697,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "8c42b3e9-97f8-4cb7-a3c6-17b9325a21a2": {
+    "id": "8c42b3e9-97f8-4cb7-a3c6-17b9325a21a2",
+    "product_code": "PA8431",
+    "product_name": "Bucket 2.25kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 910,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "9e18f670-3e14-409c-871c-3fa6bc1ae685": {
+    "id": "9e18f670-3e14-409c-871c-3fa6bc1ae685",
+    "product_code": "PA5576",
+    "product_name": "Cups 150g",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 893,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "c2273c73-2e96-4c3b-b4e3-388d248cacbe": {
+    "id": "c2273c73-2e96-4c3b-b4e3-388d248cacbe",
+    "product_code": "PA7740",
+    "product_name": "Plastic Bottles PET 200ml",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 348,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "f4544108-ede2-451e-aed5-61a7bcfce0b9": {
+    "id": "f4544108-ede2-451e-aed5-61a7bcfce0b9",
+    "product_code": "PA9147",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 661,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "ee1caeca-67a7-4fab-b0a4-ff8668e9bb3e": {
+    "id": "ee1caeca-67a7-4fab-b0a4-ff8668e9bb3e",
+    "product_code": "PA1658",
+    "product_name": "Cups 150g",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 113,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "59ba5c1b-935a-46e0-8c97-d21edae2c7d2": {
+    "id": "59ba5c1b-935a-46e0-8c97-d21edae2c7d2",
+    "product_code": "PA9638",
+    "product_name": "Tubs 500g",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 599,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "748002ee-948b-43e8-b1a7-76caad11c047": {
+    "id": "748002ee-948b-43e8-b1a7-76caad11c047",
+    "product_code": "PA8502",
+    "product_name": "Bucket 5kg",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 810,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "14933f77-340d-429e-a6e5-179b3e18c15e": {
+    "id": "14933f77-340d-429e-a6e5-179b3e18c15e",
+    "product_code": "PA5720",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 694,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "a042eef2-9add-437f-87fb-942fa341457b": {
+    "id": "a042eef2-9add-437f-87fb-942fa341457b",
+    "product_code": "PA1035",
+    "product_name": "Bucket 5kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 418,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "b4525dfd-e05c-4583-8fc4-037fc9c199bf": {
+    "id": "b4525dfd-e05c-4583-8fc4-037fc9c199bf",
+    "product_code": "PA1320",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 836,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "0d1a03d1-40c6-4fa5-b71b-27e146033d40": {
+    "id": "0d1a03d1-40c6-4fa5-b71b-27e146033d40",
+    "product_code": "PA7849",
+    "product_name": "Cups 150g",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 572,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "c6692991-37b1-4484-bdfc-f7c2e7602437": {
+    "id": "c6692991-37b1-4484-bdfc-f7c2e7602437",
+    "product_code": "PA1237",
+    "product_name": "Bucket 10kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 897,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "19f1bf99-8fb0-42a5-a5df-0e50bf9183c2": {
+    "id": "19f1bf99-8fb0-42a5-a5df-0e50bf9183c2",
+    "product_code": "PA3957",
+    "product_name": "Plastic Bottles PET 200ml",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 926,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "3eac0c5c-cd4f-4542-8490-98be27745142": {
+    "id": "3eac0c5c-cd4f-4542-8490-98be27745142",
+    "product_code": "PA9696",
+    "product_name": "Tray Yoghurt 150g (6 pcs)",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 900,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "a33fdba7-f627-47b7-abc6-4b95594391fa": {
+    "id": "a33fdba7-f627-47b7-abc6-4b95594391fa",
+    "product_code": "PA8488",
+    "product_name": "Tray Yoghurt 150g (6 pcs)",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 732,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "3a758b3a-5796-45ea-b133-ed85dc93c91a": {
+    "id": "3a758b3a-5796-45ea-b133-ed85dc93c91a",
+    "product_code": "PA7049",
+    "product_name": "Cups 150g",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 824,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "7b2ee09a-bec9-449a-aa92-66f04c02a194": {
+    "id": "7b2ee09a-bec9-449a-aa92-66f04c02a194",
+    "product_code": "PA1669",
+    "product_name": "Plastic Bottles PET 1.85L",
+    "category": "Packaging",
+    "unit_of_measure": "units",
+    "quantity_on_hand": 177,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "67308dc7-fdba-4fd0-8332-4821bd2f809e": {
+    "id": "67308dc7-fdba-4fd0-8332-4821bd2f809e",
+    "product_code": "PA9560",
+    "product_name": "Cups 150g",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 817,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "0cb26b2e-b308-4da2-9920-672e69e0821d": {
+    "id": "0cb26b2e-b308-4da2-9920-672e69e0821d",
+    "product_code": "PA3645",
+    "product_name": "Tubs 500g",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 949,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "e9756626-61cd-4792-8c7f-67bb1c945861": {
+    "id": "e9756626-61cd-4792-8c7f-67bb1c945861",
+    "product_code": "PA2540",
+    "product_name": "Bucket 16kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 391,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "b63681c8-2a61-4937-a0d1-21f80994a339": {
+    "id": "b63681c8-2a61-4937-a0d1-21f80994a339",
+    "product_code": "PA6077",
+    "product_name": "Bucket 10kg",
+    "category": "Packaging",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 315,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "5271bc4e-1893-4704-85d3-2932353ac35c": {
+    "id": "5271bc4e-1893-4704-85d3-2932353ac35c",
+    "product_code": "PA2940",
+    "product_name": "Tubs 1kg",
+    "category": "Packaging",
+    "unit_of_measure": "boxes",
+    "quantity_on_hand": 79,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  }
+}

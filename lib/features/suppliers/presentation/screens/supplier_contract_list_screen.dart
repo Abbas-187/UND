@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
 import '../../domain/entities/supplier_contract.dart';
 import '../providers/supplier_contract_provider.dart';
-import 'supplier_contract_detail_screen.dart';
 
 class SupplierContractListScreen extends ConsumerStatefulWidget {
-
   const SupplierContractListScreen({super.key, this.supplierId});
   final String? supplierId;
 
@@ -166,11 +166,7 @@ class _SupplierContractListScreenState
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const SupplierContractDetailScreen(),
-            ),
-          );
+          context.go('/suppliers/contracts/detail');
         },
         child: const Icon(Icons.add),
       ),
@@ -216,12 +212,8 @@ class _SupplierContractListScreenState
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) =>
-                  SupplierContractDetailScreen(contractId: contract.id),
-            ),
-          );
+          context.go('/suppliers/contracts/detail',
+              extra: {'contractId': contract.id});
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -244,7 +236,7 @@ class _SupplierContractListScreenState
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 4.0),
                     decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.1),
+                      color: statusColor.withValues(alpha: 0.1 * 255),
                       borderRadius: BorderRadius.circular(4.0),
                       border: Border.all(color: statusColor),
                     ),
@@ -324,7 +316,7 @@ class _SupplierContractListScreenState
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6.0, vertical: 2.0),
                       decoration: BoxDecoration(
-                        color: colorScheme.primary.withOpacity(0.1),
+                        color: colorScheme.primary.withValues(alpha: 0.1 * 255),
                         borderRadius: BorderRadius.circular(4.0),
                       ),
                       child: Text(
@@ -639,12 +631,8 @@ class ContractNotificationsDialog extends ConsumerWidget {
                   subtitle: Text(message),
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SupplierContractDetailScreen(
-                            contractId: contract.id),
-                      ),
-                    );
+                    context.go('/suppliers/contracts/detail',
+                        extra: {'contractId': contract.id});
                   },
                 );
               },

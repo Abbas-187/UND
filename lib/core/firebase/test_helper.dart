@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'firebase_module.dart';
-import 'firebase_interface.dart';
 import 'firebase_mock.dart';
+import 'firebase_module.dart';
 
 /// A helper class for Firebase testing utilities
 class FirebaseTestHelper {

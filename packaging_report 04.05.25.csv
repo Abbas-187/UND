@@ -1,0 +1,300 @@
+M. code,Material,Category,Sub Category,Location,UoM,Balance,Min Stock ,Reorder Point
+20000020,Bottle 2 ltr white,Packaging,BOTTLE,Main Warehouse,Pc,71568,45000,54000
+20000021,Bollte 2 ltr Natural,Packaging,BOTTLE,Main Warehouse,Pc,116648,40000,48000
+20001383,Bottle HDPE White (Laban) 1.85 Ltr,Packaging,BOTTLE,Main Warehouse,Pc,65934,45000,54000
+20001382,Bottle HDPE Natural 1.85 Ltr,Packaging,BOTTLE,Main Warehouse,Pc,69454,40000,48000
+20000022,Bottle 200ml white ,Packaging,BOTTLE,Main Warehouse,Pc,0,380000,420000
+20000023,Bottle 200ml natural,Packaging,BOTTLE,Main Warehouse,Pc,0,228000,252000
+20000943,Pet bottle 1.5 natural clear milk,Packaging,BOTTLE,Main Warehouse,Pc,20988,25200,27000
+20001088,Pet bottle 1.5 white,Packaging,BOTTLE,Main Warehouse,Pc,0,5600,6000
+20001099,Pet bottle 200ml clear natural,Packaging,BOTTLE,Main Warehouse,Pc,219912,228000,252000
+20001259,Pet bottle 200ml PET white ,Packaging,BOTTLE,Main Warehouse,Pc,407484,418000,462000
+20000187,Pet bottle 1L milk FF,Packaging,BOTTLE,Main Warehouse,Pc,0,17600,18400
+20000189,Pet bottle 1L milk LF,Packaging,BOTTLE,Main Warehouse,Pc,13608,9800,10200
+20000199,Pet bottle 1L Laban FF,Packaging,BOTTLE,Main Warehouse,Pc,0,17600,18400
+20000200,Pet bottle 1L Laban LF,Packaging,BOTTLE,Main Warehouse,Pc,0,9800,10200
+20000973,Pet bottle 225ml straw. (Greek yog),Packaging,BOTTLE,Main Warehouse,Pc,36000,0,0
+20000971,Pet bottle 225ml Mongo (Greek yog),Packaging,BOTTLE,Main Warehouse,Pc,36000,0,0
+20000975,Pet bottle 225ml Plain (Greek yog),Packaging,BOTTLE,Main Warehouse,Pc,36000,0,0
+20000977,Pet bottle 225ml laban peach (Greek yog),Packaging,BOTTLE,Main Warehouse,Pc,36000,0,0
+20000976,Pet bottle 225ml laban straw. (Greek yog),Packaging,BOTTLE,Main Warehouse,Pc,36000,0,0
+20000974,Pet bottle 225ml mix berry (Greek yog),Packaging,BOTTLE,Main Warehouse,Pc,36000,0,0
+20000972,Pet bottle 225ml yog peach(Greek yog),Packaging,BOTTLE,Main Warehouse,Pc,36000,0,0
+20000010,Fresh yoghurt cups FF 150gram,Packaging,CUPS,Main Warehouse,Pc,956000,960000,1040000
+20000011,Fresh yoghurt cups LF 150gram,Packaging,CUPS,Main Warehouse,Pc,338000,144000,156000
+20000001,Fresh yoghurt cups FF 170 gram,Packaging,CUPS,Main Warehouse,Pc,350000,1240000,1320000
+20000002,Fresh yoghurt cups LF 170 gram,Packaging,CUPS,Main Warehouse,Pc,0,186000,198000
+20000993,Greek yoghurt plain cup 150gram,Packaging,CUPS,Main Warehouse,Pc,86000,12000,13000
+20000989,Greek yoghurt Mango cup 150gram,Packaging,CUPS,Main Warehouse,Pc,166000,12000,13000
+20000991,Greek yoghurt Straw. cup 150gram,Packaging,CUPS,Main Warehouse,Pc,150000,12000,13000
+20000990,Greek yoghurt peach cup 150gram,Packaging,CUPS,Main Warehouse,Pc,158000,12000,13000
+20000992,Greek yoghurt mix berry cup 150gram,Packaging,CUPS,Main Warehouse,Pc,144000,7200,7800
+20001072,Turkish labneh 500 gram tub,Packaging,CUPS,Main Warehouse,Pc,25660,6000,6500
+20001073,Turkish labneh 500 gram lid,Packaging,CUPS,Main Warehouse,Pc,24840,6000,6500
+20001074,Fresh labneh 500 gram tub,Packaging,CUPS,Main Warehouse,Pc,14040,12000,13000
+20001075,Fresh labneh 500 gram lid,Packaging,CUPS,Main Warehouse,Pc,12960,12000,13000
+20000000,Fresh labneh cup 200 gram,Packaging,CUPS,Main Warehouse,Pc,99750,4800,5200
+20000156,Transparent lids for lebnah 200ml,Packaging,CUPS,Main Warehouse,Pc,99450,5600,6000
+20000909,Lebnah 2.25 kg full cream tub,Packaging,CUPS,Main Warehouse,Pc,28188,0,0
+20000006,Lebnah 1.5 kg tub,Packaging,CUPS,Main Warehouse,Pc,1200,0,0
+20000910,Lebnah lids for 2.25kg,Packaging,CUPS,Main Warehouse,Pc,27600,0,0
+20001145,Brown RSC. Carton 355x355x155mm,Packaging,CUPS,Main Warehouse,Pc,3150,3500,3700
+20000888,Corrogated crtns for turkish style labneh 2.25kg,Packaging,CUPS,Main Warehouse,Pc,0,7000,7400
+20001262,Rayan mozz. Cheese block 2.15kg brown cartoon,Packaging,CUPS,Main Warehouse,Pc,1070,0,0
+20001130,RSC. Crtns. Turkish lebnah 2.25 kg 355x355x155,Packaging,CUPS,Main Warehouse,Pc,0,5250,5550
+20000958,Lebnah plain 500 gram cup,Packaging,CUPS,Main Warehouse,Pc,56000,7000,7400
+20000961,Lebnah plain 500 gram lid,Packaging,CUPS,Main Warehouse,Pc,56000,7000,7400
+20001129,Cheese crtns 1KGX10 400x330x22,Packaging,CUPS,Main Warehouse,Pc,4290,7000,7400
+20001128,Cheese crtns 500gramX10 400x330x22,Packaging,CUPS,Main Warehouse,Pc,2305,7000,7400
+20001098,RSC. Cheese box 200gramx20(392x296x160),Packaging,CUPS,Main Warehouse,Pc,3040,5250,5550
+20000905,Fresh cream normal 100gram cup ,Packaging,CUPS,Main Warehouse,Pc,174000,25200,26400
+20000906,Fresh cream lite 100gram cup,Packaging,CUPS,Main Warehouse,Pc,45300,16800,17600
+20000608,New lebnah tub and lids 1.5kg,Packaging,CUPS,Main Warehouse,Pc,9180,0,200
+20000908,Lebnah 110 gram turkish style cup,Packaging,CUPS,Main Warehouse,Pc,64500,16800,17600
+20000931,Transparent lids for cream 95.5mm,Packaging,CUPS,Main Warehouse,Pc,66990,33600,36000
+20001122,Pnossed cheese 500gram normal tub & lid,Packaging,CUPS,Main Warehouse,Pc,480,0,0
+20000182,Yoghurt pail 1kg ,Packaging,BUCKET (PR),Main Warehouse,Pc,20976,10500,11100
+20000179,Yoghurt lid 1kg ,Packaging,BUCKET (PR),Main Warehouse,Pc,20976,10500,11100
+20000181,Yoghurt pail 2KG,Packaging,BUCKET (PR),Main Warehouse,Pc,49968,35000,37000
+20000178,Yoghurt lid 2KG,Packaging,BUCKET (PR),Main Warehouse,Pc,50784,35000,37000
+20000842,Lebnah 1 kg plain Tub & lid,Packaging,BUCKET,Main Warehouse,Pc,7040,2000,2400
+20000841,Lebnah 2 kg pail ,Packaging,BUCKET,Main Warehouse,Pc,25170,5000,6000
+20000889,Lebnah 2 kg lid,Packaging,BUCKET,Main Warehouse,Pc,3324,5000,6000
+20000884,Pail 5 kg for lebanh ,Packaging,BUCKET,Main Warehouse,Pc,3324,500,600
+20000889,Lid 5 kg for lebnah ,Packaging,BUCKET,Main Warehouse,Pc,3324,500,600
+20000410,Yoghurt 10 kg pail,Packaging,BUCKET,Main Warehouse,Pc,10560,10000,12000
+20000411,Yoghurt 10 kg lid,Packaging,BUCKET,Main Warehouse,Pc,10560,10000,12000
+20000800,10 kg square pail with lid ,Packaging,BUCKET,Main Warehouse,Pc,0,100,120
+20001168,16 kgs square pail ,Packaging,BUCKET,Main Warehouse,Pc,6792,700,840
+20001169,16 kgs square lid,Packaging,BUCKET,Main Warehouse,Pc,6794,700,840
+20000009,Water cup PS Natural 180 gram,Packaging,BUCKET,Main Warehouse,Pc,152800,0,0
+20000008,Kilnar pail with lid 750 gram,Packaging,BUCKET,Main Warehouse,Pc,1100,0,0
+20001119,Cheese 200gram cup & lid,Packaging,BUCKET,Main Warehouse,Pc,46200,0,0
+20001120,Cheese analogue 200GM tub & lid,Packaging,BUCKET,Main Warehouse,Pc,40950,0,0
+20001121,Cheese spredable 500gram tub & lid,Packaging,BUCKET,Main Warehouse,Pc,49680,250,300
+20001122,Cheese analogue 500ml tub and lid,Packaging,BUCKET,Main Warehouse,Pc,480,200,240
+20000884,5.6 ltrs pail w/o w/handle (Kanar),Packaging,BUCKET,Main Warehouse,Pc,3324,0,0
+20000889,5.6 ltrs lid w/off (Kanar),Packaging,BUCKET,Main Warehouse,Pc,3324,0,0
+20000149,Fresh yoghurt 150gram FF,Packaging,FOIL,Main Warehouse,Pc,175100,1176000,1232000
+20000150,Fresh yoghurt 150gram LF,Packaging,FOIL,Main Warehouse,Pc,62900,252000,264000
+20000898,Fresh cream 100gram normal 95.5mm,Packaging,FOIL,Main Warehouse,Pc,162300,42000,44000
+20000899,Fresh cream 100gram Lite 95.5mm,Packaging,FOIL,Main Warehouse,Pc,153000,12600,13200
+20000930,Turkish lebnah 110gram 95.5mm,Packaging,FOIL,Main Warehouse,Pc,171700,12600,13200
+20000157,Fresh lebnah 200gram (116.5mm),Packaging,FOIL,Main Warehouse,Pc,198900,8400,8800
+20000998,Greek plain yoghurt 150gram,Packaging,FOIL,Main Warehouse,Pc,120700,12600,13200
+20000994,Greek Mango yoghurt 150gram,Packaging,FOIL,Main Warehouse,Pc,164900,12600,13200
+20000996,Greek Strawberry yoghurt 150gram,Packaging,FOIL,Main Warehouse,Pc,146200,12600,13200
+20000995,Greek peach yoghurt 150gram,Packaging,FOIL,Main Warehouse,Pc,166600,12600,13200
+20000997,Greek Mixed berry yoghurt 150gram,Packaging,FOIL,Main Warehouse,Pc,159800,12600,13200
+20000857,Alumunium foil lid (11.7cm ),Packaging,FOIL,Main Warehouse,Pc,83200,0,0
+20000858,Alumunium foil lid (9x14cm ),Packaging,FOIL,Main Warehouse,Pc,53642,21000,22000
+20000941,Alumunium foil lid ovac cup (96x12.6cm),Packaging,FOIL,Main Warehouse,Pc,100000,0,0
+20000942,Alumunium foil lids round cup (11.2x12cm),Packaging,FOIL,Main Warehouse,Pc,100000,0,0
+20000007,Foil for water cup 180gram (95.5mm),Packaging,FOIL,Main Warehouse,Pc,754200,0,0
+20000319,Foil plain for lebnah 200gram(116.5mm),Packaging,FOIL,Main Warehouse,Pc,24000,0,0
+20000180,Yoghurt tray B.23,Packaging,TRAY,Main Warehouse,Pc,96000,192000,208000
+20001356,Rayan full fat yoghurt tray 6pcs,Packaging,TRAY,Main Warehouse,Pc,489600,160800,174200
+20001357,Rayan low fat yoghurt tray 6pcs,Packaging,TRAY,Main Warehouse,Pc,110800,24000,26000
+20000152,Yellow lids 2L(Lemon 2L),Packaging,LID,Main Warehouse,Pc,239500,34000,38000
+20000154,Blue lids 2L(Milk 2L),Packaging,LID,Main Warehouse,Pc,123000,68000,76000
+20000153,Orange lids 2L,Packaging,LID,Main Warehouse,Pc,154000,98000,105000
+20000151,Light green lids 2L(Laban 2L),Packaging,LID,Main Warehouse,Pc,210000,85000,95000
+20000165,Dark green 2L(Ayran 2L),Packaging,LID,Main Warehouse,Pc,75000,17000,19000
+20000164,Brown lids 2L,Packaging,LID,Main Warehouse,Pc,112000,28000,30000
+20000155,Red lids 2L(LF Milk & LF Laban 2L),Packaging,LID,Main Warehouse,Pc,39000,14000,15000
+20000175,Light blue lids 2L,Packaging,LID,Main Warehouse,Pc,0,28000,30000
+20000159,Yellow lids 250ml(Lemon 200ml),Packaging,LID,Main Warehouse,Pc,155000,196000,210000
+20000162,Blue lids 200ml(Milk 200ml),Packaging,LID,Main Warehouse,Pc,45500,196000,210000
+20000158,Orange lids 200ml(Mango Laban 200ml),Packaging,LID,Main Warehouse,Pc,72000,84000,90000
+20000161,Dark green lids 200ml(Ayran/Mint/Cumin 200ml),Packaging,LID,Main Warehouse,Pc,56000,280000,300000
+20000160,Red lids 200ml(LF Milk & Laban 200ml),Packaging,LID,Main Warehouse,Pc,15000,70000,75000
+20000163,Brown lids 200ml,Packaging,LID,Main Warehouse,Pc,160000,42000,45000
+20000166,Light green lids 250ml(Laban 200ml),Packaging,LID,Main Warehouse,Pc,84000,616000,660000
+20000327,Pink lids 200ml,Packaging,LID,Main Warehouse,Pc,0,0,0
+20000169,Red lids 38mm for 1L PET Bottle(mixfruit 1.5L/200ml),Packaging,LID,Main Warehouse,Pc,126000,84000,90000
+20000173,Light green lids for 38mm,Packaging,LID,Main Warehouse,Pc,0,425000,475000
+20000174,Blue lid 38mm for PET Btl(Milk 1L/Berry 1.5L &200ml,Packaging,LID,Main Warehouse,Pc,100000,51000,57000
+20000170,Orange lids 38mm for 200ml PET BTL(Orange 1.5L/200ml),Packaging,LID,Main Warehouse,Pc,130000,51000,57000
+20000168,Brown lids 38mm for PET btl(Tamarind 1.5L/200ML),Packaging,LID,Main Warehouse,Pc,75000,140000,150000
+20000167,Dark orange lids 38mm,Packaging,LID,Main Warehouse,Pc,0,336000,360000
+20000172,Yellow lids 38mm(Lemon 1.5L/200ML),Packaging,LID,Main Warehouse,Pc,105000,85000,95000
+20000171,Dark green lids 38mm(Mango 1.5L & 200ml/Labn drink 1.5L,Packaging,LID,Main Warehouse,Pc,265000,425000,475000
+20001123,Golden lids 38mm(Pineapple 1.5L & 200ml),Packaging,LID,Main Warehouse,Pc,381500,4200,4500
+20000177,Light blue lids 38mm(FF Milk 1.5L),Packaging,LID,Main Warehouse,Pc,0,2800,3000
+20000176,Voilet lids 38mm(Grape 1.5L & 200ml),Packaging,LID,Main Warehouse,Pc,0,4200,4500
+20001124,Dark green lids 38mm (P 357 ),Packaging,LID,Main Warehouse,Pc,0,2800,3000
+20001394,Label Lemon Drink Reconst.1.85LTR(75x159,Packaging,STICKER,Main Warehouse,Pc,92000,16800,18400
+20001389,Label Fresh Milk FC 1.85 LTR(75x159),Packaging,STICKER,Main Warehouse,Pc,37000,94500,103500
+20001390,Label Fresh Milk LF 1.85 LTR (75x159),Packaging,STICKER,Main Warehouse,Pc,12000,5250,5750
+20001391,Label Fresh Laban FC 1.85 LTR (75x159),Packaging,STICKER,Main Warehouse,Pc,129000,94500,103500
+20001392,Label Fresh Laban LF 1.85 LTR (75x159),Packaging,STICKER,Main Warehouse,Pc,10000,5250,5750
+20001393,Label Ayran Laban Plain 1.85 LTR(75x159),Packaging,STICKER,Main Warehouse,Pc,49000,42000,46000
+20000081,Fresh laban 2L,Packaging,STICKER,Main Warehouse,Pc,23000,94500,103500
+20000065,Fresh laban 200ml,Packaging,STICKER,Main Warehouse,Pc,318000,420000,460000
+20000764,Milk 200ml LF,Packaging,STICKER,Main Warehouse,Pc,105000,14700,16100
+20000763,Laban 200ml LF,Packaging,STICKER,Main Warehouse,Pc,27000,21000,23000
+20000980,Laban kool 200ml,Packaging,STICKER,Main Warehouse,Pc,109800,46200,50600
+20000117,Laban kool 250ml,Packaging,STICKER,Main Warehouse,Pc,252000,0,0
+20000982,Laban mint 200ml,Packaging,STICKER,Main Warehouse,Pc,93400,63000,69000
+20000981,Laban cumin 200ml,Packaging,STICKER,Main Warehouse,Pc,148500,63000,69000
+20000033,Fresh milk 2L FF,Packaging,STICKER,Main Warehouse,Pc,74000,94500,103500
+20000024,Fresh milk 200ml FF,Packaging,STICKER,Main Warehouse,Pc,233100,63000,69000
+20000048,Fresh milk 250 ml,Packaging,STICKER,Main Warehouse,Pc,164700,0,0
+20000053,Fresh laban 2L LF,Packaging,STICKER,Main Warehouse,Pc,13000,5250,5750
+20000051,Fresh milk 2L LF,Packaging,STICKER,Main Warehouse,Pc,3000,5250,5750
+20000068,Mango laban 200ml,Packaging,STICKER,Main Warehouse,Pc,174000,63000,69000
+20000983,Laban kool 2L,Packaging,STICKER,Main Warehouse,Pc,68000,42000,46000
+20000127,Cardamom milk 2L,Packaging,STICKER,Main Warehouse,Pc,14000,0,0
+20000134,Kool laban 2L P.W.D.,Packaging,STICKER,Main Warehouse,Pc,27000,0,0
+20000074,Orange 2L,Packaging,STICKER,Main Warehouse,Pc,17000,0,0
+20000026,Orange 200ml,Packaging,STICKER,Main Warehouse,Pc,108000,0,0
+20000091,Orange 2L (Promotion),Packaging,STICKER,Main Warehouse,Pc,11000,0,0
+20000036,Mango 2L,Packaging,STICKER,Main Warehouse,Pc,17000,0,0
+20000027,Mango 200ml,Packaging,STICKER,Main Warehouse,Pc,60000,0,0
+20000094,Mango 2L (Promotion),Packaging,STICKER,Main Warehouse,Pc,28000,0,0
+20000025,Mixfruit 2L,Packaging,STICKER,Main Warehouse,Pc,12000,0,0
+20000028,Mix fruit 200ml,Packaging,STICKER,Main Warehouse,Pc,47200,0,0
+20000030,Mix fruit 2L (Promotion),Packaging,STICKER,Main Warehouse,Pc,21000,0,0
+20000037,Mix fruit 2L,Packaging,STICKER,Main Warehouse,Pc,51000,0,0
+20000029,Grape 200ml ,Packaging,STICKER,Main Warehouse,Pc,23800,0,0
+20000090,Grape 2L (Promotion),Packaging,STICKER,Main Warehouse,Pc,15000,0,0
+20000076,Lemon 2L,Packaging,STICKER,Main Warehouse,Pc,11000,16800,18400
+20000069,Lemon 2L (Promotion),Packaging,STICKER,Main Warehouse,Pc,19400,0,0
+20000138,Lemon 200ml,Packaging,STICKER,Main Warehouse,Pc,232000,94500,103500
+20000093,Kiwi lime 2L,Packaging,STICKER,Main Warehouse,Pc,2000,0,0
+20000140,Kiwi lime 200ML,Packaging,STICKER,Main Warehouse,Pc,24000,0,0
+20000031,Kiwi lime 2L (Promotion),Packaging,STICKER,Main Warehouse,Pc,111000,0,0
+20000106,Mixed berry 2L,Packaging,STICKER,Main Warehouse,Pc,20000,0,0
+20000379,Mixed berry 200ml,Packaging,STICKER,Main Warehouse,Pc,54000,0,0
+20000109,Mixed berry 2L (Promotion),Packaging,STICKER,Main Warehouse,Pc,5000,0,0
+20000071,Tamarind 2L,Packaging,STICKER,Main Warehouse,Pc,34000,0,0
+20000144,Tamarind 200ml,Packaging,STICKER,Main Warehouse,Pc,126000,0,0
+20000136,Lemon mind 2L,Packaging,STICKER,Main Warehouse,Pc,5000,2100,2300
+20000137,Lemon mint 200ml,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20000953,Orange juice 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,47500,14000,15000
+20001033,Orange juice 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,47500,14000,15000
+20000950,Mango with mix fruit 1.5 FR,Packaging,STICKER,Main Warehouse,Pc,15000,14000,15000
+20001036,Mango with mix fruit 1.5 Back,Packaging,STICKER,Main Warehouse,Pc,12500,14000,15000
+20000946,Apple juice 1.5 FR,Packaging,STICKER,Main Warehouse,Pc,15000,0,0
+20001040,Apple juice 1.5 Back,Packaging,STICKER,Main Warehouse,Pc,13500,0,0
+20000945,Grape juice 1.5 FR,Packaging,STICKER,Main Warehouse,Pc,2500,2800,3000
+20001041,Grape juice 1.5 Back,Packaging,STICKER,Main Warehouse,Pc,2500,2800,3000
+20000952,Mixed fruit juice 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,0,2800,3000
+20001034,Mixed fruit juice 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,2500,4200,4500
+20000951,Tamarind Juice 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,14500,5600,6000
+20001035,Tamarind Juice 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,12500,5600,6000
+20000947,Mixed berry Juice 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,14500,8400,9000
+20001039,Mixed berry Juice 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,15000,8400,9000
+20000948,Lemon with mixed fruit 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,7500,4200,4500
+20001038,Lemon with mixed fruit 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,6000,4200,4500
+20000944,Pine apple juice 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,10000,4676,5010
+20001042,Pine apple juice 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,12500,4676,5010
+20000949,Lemon and mint 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,17500,8400,9000
+20001037,Lemon and mint 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,15000,8400,9000
+20001048,Fresh milk 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,26500,14000,15000
+20001049,Fresh milk 1.5L Back ,Packaging,STICKER,Main Warehouse,Pc,24500,14000,15000
+20001050,Fresh laban 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,17500,14000,15000
+20001051,Fresh laban 1.5L Back ,Packaging,STICKER,Main Warehouse,Pc,20000,14000,15000
+20001052,Laban drink 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,27000,14000,15000
+20001053,Laban drink 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,27000,14000,15000
+20001054,Fresh milk 1.5L Vitamin-D FR,Packaging,STICKER,Main Warehouse,Pc,72500,5600,6000
+20001055,Fresh milk 1.5L Vitamin-D Back,Packaging,STICKER,Main Warehouse,Pc,72500,5600,6000
+20001101,Lacto milk 1.5L FR,Packaging,STICKER,Main Warehouse,Pc,85500,5600,6000
+20001100,Lacto milk 1.5L Back,Packaging,STICKER,Main Warehouse,Pc,77500,5600,6000
+20001102,Orange 200ml (100%),Packaging,STICKER,Main Warehouse,Pc,87000,52500,57500
+20001106,Mango nector 200ml (100%),Packaging,STICKER,Main Warehouse,Pc,30000,42000,46000
+20001105,Apple juice 200ml (100%),Packaging,STICKER,Main Warehouse,Pc,123000,18900,20700
+20001104,Grape juice 200ml (100%),Packaging,STICKER,Main Warehouse,Pc,84000,21000,23000
+20001108,Mix fruit nector 200ml,Packaging,STICKER,Main Warehouse,Pc,0,21000,23000
+20001112,Tamarind drink 200ml (100%),Packaging,STICKER,Main Warehouse,Pc,53000,21000,23000
+20001107,Mix berry necter 200ml (100%),Packaging,STICKER,Main Warehouse,Pc,22800,25200,27600
+20001110,Lemon drink 200ml(100%),Packaging,STICKER,Main Warehouse,Pc,152000,21000,23000
+20001103,Pine apple juice 200ml (100%),Packaging,STICKER,Main Warehouse,Pc,66000,10500,11500
+20001111,Lemon with mint 200ml,Packaging,STICKER,Main Warehouse,Pc,183000,10500,11500
+20001260,Yoghurt 1KG,Packaging,STICKER,Main Warehouse,Pc,0,0,9200
+20000892,Yoghurt 2KG,Packaging,STICKER,Main Warehouse,Pc,13000,24000,23000
+20001293,Yoghurt 5KG,Packaging,STICKER,Main Warehouse,Pc,4700,2388,4600
+20000418,Yoghurt 10kg,Packaging,STICKER,Main Warehouse,Pc,39500,9000,23000
+20000844,Art paper Yoghurt 150gram FF (6PC),Packaging,STICKER,Main Warehouse,Pc,100000,135000,195500
+20000845,Art paper Yoghurt 150gram LF (6PC),Packaging,STICKER,Main Warehouse,Pc,80000,90000,34500
+20000918,Wraparound tray FF Yoghurt (Bahrain),Packaging,STICKER,Main Warehouse,Pc,60000,60000,0
+20000919,Wraparound tray LF Yoghurt (Bahrain),Packaging,STICKER,Main Warehouse,Pc,26400,26400,0
+20000728,Art paper Yoghurt 150gram FF (Bahrain),Packaging,STICKER,Main Warehouse,Pc,125000,125000,0
+20000729,Art paper Yoghurt 150gram LF (Bahrain),Packaging,STICKER,Main Warehouse,Pc,15000,15000,0
+20000668,Art paper Yoghurt 150gram FF (5+1),Packaging,STICKER,Main Warehouse,Pc,300000,300000,0
+20000669,Art paper Yoghurt 150gram LF (5+1),Packaging,STICKER,Main Warehouse,Pc,154000,154000,0
+20000145,Label yoghurt 150gram FF family pack SR 5,Packaging,STICKER,Main Warehouse,Pc,42500,42500,0
+20000146,Label yoghurt 150gram LF  family pack SR 5,Packaging,STICKER,Main Warehouse,Pc,199600,199600,0
+20000147,Label yoghurt 150gram FF family pack 500 Fills,Packaging,STICKER,Main Warehouse,Pc,80000,30000,0
+20000147,Label yoghurt 150gram LF family pack 500 Fills,Packaging,STICKER,Main Warehouse,Pc,80000,50000,0
+20000964,Lebnah turkish style FC 500gram,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20000968,Lebnah turkish style FC 500gram Top,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20000965,Fresh lebnah 500gram,Packaging,STICKER,Main Warehouse,Pc,5000,0,0
+20000967,Fresh lebnah 500gram top,Packaging,STICKER,Main Warehouse,Pc,6000,0,0
+20000901,Fresh lebnah 1KG,Packaging,STICKER,Main Warehouse,Pc,25500,0,0
+20001000,Natural butter 450gram,Packaging,STICKER,Main Warehouse,Pc,18000,0,0
+20000999,Natural butter 900gram,Packaging,STICKER,Main Warehouse,Pc,18000,0,0
+20001032,Natural butter Top 450gram & 900gram,Packaging,STICKER,Main Warehouse,Pc,15000,0,0
+20001002,Pure ghee 450gram,Packaging,STICKER,Main Warehouse,Pc,6000,0,0
+20001031,Pure ghee 900gram,Packaging,STICKER,Main Warehouse,Pc,21000,0,0
+20001001,Pure ghee top 450gram & 900gram,Packaging,STICKER,Main Warehouse,Pc,6000,0,0
+20000955,Halloumi cheese 10 kg,Packaging,STICKER,Main Warehouse,Pc,24000,0,0
+20000956,Nabulsi cheese 10kg,Packaging,STICKER,Main Warehouse,Pc,25000,0,0
+20000957,White cheese FF 10KG,Packaging,STICKER,Main Warehouse,Pc,25000,0,0
+20000963,Ricota cheese 500gram,Packaging,STICKER,Main Warehouse,Pc,1400,0,0
+20000962,Ricota cheese 500gram Top,Packaging,STICKER,Main Warehouse,Pc,9000,0,0
+20001008,Mozzerella cheese packet 1 kg,Packaging,STICKER,Main Warehouse,Pc,29200,0,0
+20001007,Mozzerella cheese packet 500gram,Packaging,STICKER,Main Warehouse,Pc,12000,0,0
+20001006,Mozzerella cheese packet 200gram,Packaging,STICKER,Main Warehouse,Pc,27000,0,0
+20001005,Mozzerella cheese mini ball 200gram pkt,Packaging,STICKER,Main Warehouse,Pc,18000,0,0
+20001143,Taybat turkish lebanh 2.25kg FC(4x225kg) Crtns,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20001144,Taybat turkish lebanh 2.25kg FC,Packaging,STICKER,Main Warehouse,Pc,6000,0,0
+20001069,Rayan analogue cream 10kg,Packaging,STICKER,Main Warehouse,Pc,23100,0,0
+20000802,Pure ghee 14kg,Packaging,STICKER,Main Warehouse,Pc,8000,0,0
+20001179,Majed turkish lebnah 2.25kg analogue ,Packaging,STICKER,Main Warehouse,Pc,2000,0,0
+20001180,Turkish lebnah full cream analogue 2.25kg,Packaging,STICKER,Main Warehouse,Pc,6000,0,0
+20001181,Rayan turkish lebnah 2.25 kg natural,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20001172,Rayan Feta cheese analogue 16kg,Packaging,STICKER,Main Warehouse,Pc,19800,0,0
+20001148,Rayan analogue cream 1kg,Packaging,STICKER,Main Warehouse,Pc,20000,0,0
+20000900,Akawi cheese 10 kg,Packaging,STICKER,Main Warehouse,Pc,3000,0,0
+20000882,Lebnah 5 kg ,Packaging,STICKER,Main Warehouse,Pc,1000,0,0
+20000891,Fresh lebnah 5 kg laminated ,Packaging,STICKER,Main Warehouse,Pc,4000,0,0
+20001184,Mozzarellah cheese block 1.10kg,Packaging,STICKER,Main Warehouse,Pc,8000,0,0
+20001185,Mozzarellah cheese block 1.10kg N,Packaging,STICKER,Main Warehouse,Pc,13000,0,0
+20001220,Rayan cheese curd  15 kg,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20001142,Al atiyah turkish lebnah 2.25kg,Packaging,STICKER,Main Warehouse,Pc,4000,0,0
+20001141,Al atiyah turkish lebnah 2.25kg crtns,Packaging,STICKER,Main Warehouse,Pc,8000,0,0
+20000903,Lebnah turkish style 2.25 kg ,Packaging,STICKER,Main Warehouse,Pc,39000,0,0
+20000929,Soft cheese 1kg,Packaging,STICKER,Main Warehouse,Pc,38000,0,0
+20001022,Orange 200ml,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20001024,Mango 200ml,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20000969,Apple drink 200ml,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20001023,Grape 200ml ,Packaging,STICKER,Main Warehouse,Pc,6000,0,0
+20001025,Mix berry 200ml,Packaging,STICKER,Main Warehouse,Pc,36000,0,0
+20000970,Pine apple 200ml,Packaging,STICKER,Main Warehouse,Pc,36000,0,0
+20001028,Lemon 200ml,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20001029,Lemon with mint 200ml,Packaging,STICKER,Main Warehouse,Pc,24000,0,0
+20001030,Tamarind 200ml,Packaging,STICKER,Main Warehouse,Pc,27000,0,0
+20000987,Mozzarella 1KG FF,Packaging,STICKER,Main Warehouse,Pc,27650,0,0
+20000966,Mozzarella 500Gram FF,Packaging,STICKER,Main Warehouse,Pc,31350,0,0
+20000986,Mozzarella 200Gram FF,Packaging,STICKER,Main Warehouse,Pc,46000,0,0
+20000985,Mozzarella 200Gram FF mini ball,Packaging,STICKER,Main Warehouse,Pc,43500,0,0
+20001186,Mozzarella cheese block 2.15kg(A),Packaging,STICKER,Main Warehouse,Pc,16500,0,0
+20001187,Mozzarella cheese block 2.15kg(N),Packaging,STICKER,Main Warehouse,Pc,16300,0,0
+20001252,Mozzarelline cheese mini 650 gram,Packaging,STICKER,Main Warehouse,Pc,6000,0,0
+20001278,Al tur mozzarella FF Lable 2.15 kg,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20001240,Ld plain bag 60*90 cm 35 mic,Packaging,STICKER,Main Warehouse,Pc,0,0,0
+20001241,Ld plain sheet 30*35 cm 35 mic,Packaging,STICKER,Main Warehouse,Pc,140,0,0
+20001258,Rayan Mozzareline mini 3 KG,Packaging,STICKER,Main Warehouse,Pc,9000,,0
+20000014,Shrink film 380x45micr,Packaging,ROLL,Main Warehouse,Pc,280,0,
+20000015,Strech roll 50x500 mtrsx20mic,Packaging,ROLL,Main Warehouse,Pc,1120,0,
+20001178,Shrink film 330x30micr,Packaging,ROLL,Main Warehouse,Pc,4450,0,
+20000017,Shrink film 320x45micr for Rawabi 200ml,Packaging,ROLL,Main Warehouse,Pc,0,0,
+20000331,Shrink film 44x1200mtrsx50mic,Packaging,ROLL,Main Warehouse,Pc,900,0,
+20000529,Shrink roll 520x40micr,Packaging,ROLL,Main Warehouse,Pc,3757.5,5600,9800
+20001251,Shrink roll 520x40micr design,Packaging,ROLL,Main Warehouse,Pc,980,0,0
+20000318,Shrink roll 520x50micr,Packaging,ROLL,Main Warehouse,Pc,6280,5600,9800
+20000848,Mechine stretch roll with 500 lenth 1500x23mic,Packaging,ROLL,Main Warehouse,Pc,1552,2800,4900
+20000013,Plastic shrink wrap roll for Yoghurt ,Packaging,ROLL,Main Warehouse,Pc,50,140,245
+20000183,Woodant pallates,Packaging,PALLAET,Main Warehouse,Pc,282,5,800
+20001239,HD Plain sheet 80*100cm 11mic,Packaging,ROLL,Main Warehouse,Pc,80,,

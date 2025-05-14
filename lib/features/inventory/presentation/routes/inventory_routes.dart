@@ -22,7 +22,6 @@ import '../screens/inventory_edit_screen.dart';
 import '../screens/inventory_item_details_screen.dart';
 import '../screens/inventory_movement_history_screen.dart';
 import '../screens/inventory_movement_list_page.dart';
-import '../screens/inventory_reports_screen.dart';
 import '../screens/inventory_screen.dart';
 import '../screens/inventory_settings_screen.dart';
 import '../screens/inventory_transfer_screen.dart';

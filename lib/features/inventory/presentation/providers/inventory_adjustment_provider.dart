@@ -1,19 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/repositories/mock_inventory_adjustment_repository.dart';
+import '../../data/repositories/inventory_adjustment_repository_impl.dart';
 import '../../domain/entities/inventory_adjustment.dart';
 import '../../domain/repositories/inventory_adjustment_repository.dart';
 
 // Filter state immutable class
 class AdjustmentFilterState {
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final AdjustmentType? type;
-  final String? itemId;
-  final String? categoryId;
-  final AdjustmentApprovalStatus? status;
-  final String searchQuery;
-
   const AdjustmentFilterState({
     this.startDate,
     this.endDate,
@@ -23,6 +15,13 @@ class AdjustmentFilterState {
     this.status,
     this.searchQuery = '',
   });
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final AdjustmentType? type;
+  final String? itemId;
+  final String? categoryId;
+  final AdjustmentApprovalStatus? status;
+  final String searchQuery;
 
   AdjustmentFilterState copyWith({
     DateTime? startDate,
@@ -77,7 +76,7 @@ class AdjustmentFilterState {
 // Provider for the repository instance
 final inventoryAdjustmentRepositoryProvider =
     Provider<InventoryAdjustmentRepository>((ref) {
-  return MockInventoryAdjustmentRepository();
+  return InventoryAdjustmentRepositoryImpl();
 });
 
 // Provider for the filter state

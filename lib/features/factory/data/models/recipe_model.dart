@@ -1,12 +1,6 @@
 import 'recipe_step_model.dart';
 
 class RecipeHistoryEntry {
-  final DateTime timestamp;
-  final String user;
-  final String action;
-  final Map<String, dynamic>? before;
-  final Map<String, dynamic>? after;
-  final String? note;
 
   RecipeHistoryEntry({
     required this.timestamp,
@@ -27,6 +21,12 @@ class RecipeHistoryEntry {
       note: json['note'] as String?,
     );
   }
+  final DateTime timestamp;
+  final String user;
+  final String action;
+  final Map<String, dynamic>? before;
+  final Map<String, dynamic>? after;
+  final String? note;
 
   Map<String, dynamic> toJson() {
     return {

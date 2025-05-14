@@ -4,17 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/firebase/firebase_interface.dart';
-import '../../../../core/firebase/firebase_mock.dart';
-import '../../../../core/firebase/firebase_module.dart';
 import '../../../../utils/exceptions.dart';
 import '../../domain/models/milk_reception_model.dart';
 
 /// Provider for the milk reception repository
 final milkReceptionRepositoryProvider =
     Provider<MilkReceptionRepository>((ref) {
-  final firestoreInstance =
-      useMockFirebase ? FirestoreMock() : FirebaseFirestore.instance;
+  final firestoreInstance = FirebaseFirestore.instance;
   return FirestoreMilkReceptionRepository(firestore: firestoreInstance);
 });
 
@@ -79,14 +75,8 @@ class FirestoreMilkReceptionRepository implements MilkReceptionRepository {
 
   // Utility getter for collection reference
   CollectionReference<Map<String, dynamic>> get _receptions {
-    if (useMockFirebase) {
-      return (_firestoreInstance as FirestoreInterface)
-              .collection(_receptionCollection)
-          as CollectionReference<Map<String, dynamic>>;
-    } else {
-      return (_firestoreInstance as FirebaseFirestore)
-          .collection(_receptionCollection);
-    }
+    return (_firestoreInstance as FirebaseFirestore)
+        .collection(_receptionCollection);
   }
 
   @override

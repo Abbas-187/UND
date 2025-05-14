@@ -14,10 +14,6 @@ enum ApprovalStage {
 
 @immutable
 class PurchaseOrderApprovalHistory {
-  final String purchaseOrderId;
-  final ApprovalStage currentStage;
-  final ApprovalStatus currentStatus;
-  final List<ApprovalAction> actions;
 
   const PurchaseOrderApprovalHistory({
     required this.purchaseOrderId,
@@ -25,16 +21,14 @@ class PurchaseOrderApprovalHistory {
     required this.currentStatus,
     required this.actions,
   });
+  final String purchaseOrderId;
+  final ApprovalStage currentStage;
+  final ApprovalStatus currentStatus;
+  final List<ApprovalAction> actions;
 }
 
 @immutable
 class ApprovalAction {
-  final String userId;
-  final String userName;
-  final ApprovalStage stage;
-  final ApprovalStatus decision;
-  final DateTime timestamp;
-  final String? notes;
 
   const ApprovalAction({
     required this.userId,
@@ -44,4 +38,10 @@ class ApprovalAction {
     required this.timestamp,
     this.notes,
   });
+  final String userId;
+  final String userName;
+  final ApprovalStage stage;
+  final ApprovalStatus decision;
+  final DateTime timestamp;
+  final String? notes;
 }

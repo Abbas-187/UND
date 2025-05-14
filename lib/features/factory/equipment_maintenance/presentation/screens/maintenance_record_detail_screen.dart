@@ -3,8 +3,8 @@ import '../../data/models/maintenance_record_model.dart';
 import 'edit_maintenance_record_screen.dart';
 
 class MaintenanceRecordDetailScreen extends StatelessWidget {
-  final MaintenanceRecordModel record;
   const MaintenanceRecordDetailScreen({super.key, required this.record});
+  final MaintenanceRecordModel record;
 
   @override
   Widget build(BuildContext context) {

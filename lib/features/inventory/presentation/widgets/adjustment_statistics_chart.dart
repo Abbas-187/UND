@@ -1,12 +1,14 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_adjustment.dart';
 import '../providers/inventory_adjustment_provider.dart';
-import '../../../../l10n/app_localizations.dart';
 
 class AdjustmentStatisticsChart extends ConsumerWidget {
+  const AdjustmentStatisticsChart({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statisticsAsync = ref.watch(adjustmentStatisticsProvider);

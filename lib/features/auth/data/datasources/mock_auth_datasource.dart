@@ -1,3 +1,4 @@
+/*
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -17,10 +18,10 @@ AuthRemoteDataSource authRemoteDataSource(AuthRemoteDataSourceRef ref) {
 
 /// Implementation of AuthRemoteDataSource that uses AuthInterface
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final AuthInterface _authInterface;
 
   AuthRemoteDataSourceImpl({required AuthInterface authInterface})
       : _authInterface = authInterface;
+  final AuthInterface _authInterface;
 
   @override
   Future<User> login(String email, String password) async {
@@ -78,3 +79,4 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     );
   }
 }
+*/

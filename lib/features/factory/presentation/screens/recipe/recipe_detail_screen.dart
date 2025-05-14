@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../domain/providers/recipe_provider.dart';
 import 'package:intl/intl.dart';
+
 import '../../../data/models/recipe_model.dart';
+import '../../../domain/providers/recipe_provider.dart';
 
 class RecipeDetailScreen extends ConsumerWidget {
   const RecipeDetailScreen({super.key, required this.recipeId});
@@ -176,7 +177,7 @@ class RecipeDetailScreen extends ConsumerWidget {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const SizedBox(height: 8),
-                        if (recipe.steps != null && recipe.steps.isNotEmpty)
+                        if (recipe.steps.isNotEmpty)
                           ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -282,8 +283,8 @@ class RecipeDetailScreen extends ConsumerWidget {
 }
 
 class _HistoryEntryTile extends StatefulWidget {
-  final RecipeHistoryEntry entry;
   const _HistoryEntryTile({required this.entry});
+  final RecipeHistoryEntry entry;
 
   @override
   State<_HistoryEntryTile> createState() => _HistoryEntryTileState();

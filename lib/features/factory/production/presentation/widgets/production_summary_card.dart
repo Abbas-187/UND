@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../../core/routes/app_router.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../../core/routes/app_go_router.dart';
 
 class ProductionSummaryCard extends ConsumerWidget {
   const ProductionSummaryCard({super.key});
@@ -36,8 +37,7 @@ class ProductionSummaryCard extends ConsumerWidget {
                 ),
                 FilledButton.tonal(
                   onPressed: () {
-                    Navigator.pushNamed(
-                        context, AppRoutes.productionExecutions);
+                    context.go(AppRoutes.productionExecutions);
                   },
                   child: const Text('View All'),
                 ),
@@ -103,8 +103,7 @@ class ProductionSummaryCard extends ConsumerWidget {
               alignment: Alignment.centerRight,
               child: TextButton.icon(
                 onPressed: () {
-                  Navigator.pushNamed(
-                      context, AppRoutes.createProductionExecution);
+                  context.go(AppRoutes.createProductionExecution);
                 },
                 icon: const Icon(Icons.add),
                 label: const Text('Start New Production'),

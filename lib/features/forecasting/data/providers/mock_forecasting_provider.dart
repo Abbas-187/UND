@@ -1,9 +1,10 @@
+/*
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/services/mock_data_service.dart';
 import '../../../inventory/data/providers/mock_inventory_provider.dart';
-import '../models/sales_forecast_model.dart';
 import '../../domain/entities/time_series_point.dart';
-import 'package:intl/intl.dart';
+import '../models/sales_forecast_model.dart';
 
 /// Provides mock forecasting data that integrates with inventory
 class MockForecastingProvider {
@@ -200,3 +201,4 @@ final mockForecastingProvider = Provider<MockForecastingProvider>((ref) {
     mockInventoryProvider: inventoryProvider,
   );
 });
+*/

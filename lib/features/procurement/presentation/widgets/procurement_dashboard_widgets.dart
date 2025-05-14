@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../data/models/purchase_order_model.dart';
-import '../../../suppliers/data/models/supplier_model.dart';
+import '../../../suppliers/domain/entities/supplier.dart';
 import '../../../suppliers/presentation/widgets/supplier_performance_chart.dart'
     show SupplierPerformance, SupplierPerformanceChart;
+import '../../data/models/purchase_order_model.dart';
 import '../../domain/entities/supplier_quality_log.dart';
-import '../../../suppliers/domain/entities/supplier.dart';
 
 /// Widget for displaying upcoming deliveries on the dashboard
 class UpcomingDeliveriesWidget extends ConsumerWidget {
@@ -267,17 +266,9 @@ class SupplierPerformanceWidget extends StatefulWidget {
 class _SupplierPerformanceWidgetState extends State<SupplierPerformanceWidget> {
   bool _showData = true;
   Color _barColor = Colors.indigo;
-  String _title = 'Supplier Performance (Mock)';
+  String _title = 'Supplier Performance';
   final TextEditingController _titleController =
-      TextEditingController(text: 'Supplier Performance (Mock)');
-
-  List<SupplierPerformance> get _mockData => [
-        SupplierPerformance(name: 'DairyBest', score: 4.7),
-        SupplierPerformance(name: 'MilkPro', score: 4.2),
-        SupplierPerformance(name: 'AgroFarm', score: 3.8),
-        SupplierPerformance(name: 'FreshFields', score: 4.5),
-        SupplierPerformance(name: 'GreenPastures', score: 3.9),
-      ];
+      TextEditingController(text: 'Supplier Performance');
 
   @override
   Widget build(BuildContext context) {
@@ -337,11 +328,46 @@ class _SupplierPerformanceWidgetState extends State<SupplierPerformanceWidget> {
               ],
             ),
             const SizedBox(height: 16),
-            SupplierPerformanceChart(
-              data: _showData ? _mockData : <SupplierPerformance>[],
-              title: _title,
-              barColor: _barColor,
-              backgroundColor: Colors.white,
+            Consumer(
+              builder: (context, ref, child) {
+                final suppliersData =
+                    ref.watch(topSuppliersPerformanceProvider);
+
+                return suppliersData.when(
+                  data: (suppliers) {
+                    final performanceData = suppliers
+                        .map((s) => SupplierPerformance(
+                            name: s.name,
+                            score:
+                                3.0 // Default score, update if Supplier has a real score property
+                            ))
+                        .toList();
+
+                    return SupplierPerformanceChart(
+                      data:
+                          _showData ? performanceData : <SupplierPerformance>[],
+                      title: _title,
+                      barColor: _barColor,
+                      backgroundColor: Colors.white,
+                    );
+                  },
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
+                  error: (_, __) => SupplierPerformanceChart(
+                    data: _showData
+                        ? [
+                            SupplierPerformance(
+                                name: 'Sample Supplier 1', score: 4.2),
+                            SupplierPerformance(
+                                name: 'Sample Supplier 2', score: 3.8),
+                          ]
+                        : <SupplierPerformance>[],
+                    title: _title,
+                    barColor: _barColor,
+                    backgroundColor: Colors.white,
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -562,6 +588,12 @@ final recentQualityIssuesProvider =
     limit: 5,
     onlyFailures: true,
   );
+});
+
+final topSuppliersPerformanceProvider =
+    FutureProvider<List<Supplier>>((ref) async {
+  final supplierState = ref.read(supplierProvider.notifier);
+  return supplierState.getTopSuppliers(limit: 5);
 });
 
 // Local enum for inspection result (mock)

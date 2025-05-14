@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/auth/services/auth_service.dart';
-import '../../../../core/routes/app_router.dart';
+import '../../../../core/routes/app_go_router.dart';
 import '../../../../core/widgets/primary_button.dart';
 
 /// Screen for displaying and editing the current user's profile
@@ -21,7 +22,7 @@ class UserProfileScreen extends ConsumerWidget {
           if (user == null) {
             // Not authenticated, redirect to login
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+              context.go(AppRoutes.login);
             });
 
             return const Center(
@@ -224,7 +225,7 @@ class UserProfileScreen extends ConsumerWidget {
       final authService = ref.read(authServiceProvider);
       await authService.signOut();
       if (context.mounted) {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+        context.go(AppRoutes.login);
       }
     } catch (e) {
       if (context.mounted) {

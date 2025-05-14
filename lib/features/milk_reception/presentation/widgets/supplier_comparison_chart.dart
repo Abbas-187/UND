@@ -55,7 +55,7 @@ class SupplierComparisonChart extends StatelessWidget {
     // Default colors
     final defaultGradientColors = [
       theme.colorScheme.primary,
-      theme.colorScheme.primary.withOpacity(0.6),
+      theme.colorScheme.primary.withValues(alpha: 0.6 * 255),
     ];
 
     // Sort and limit suppliers
@@ -302,8 +302,6 @@ class SupplierComparisonChart extends StatelessWidget {
         return value.toStringAsFixed(1);
       case SupplierMetric.rejectionRate:
         return value.toStringAsFixed(1);
-      default:
-        return value.toString();
     }
   }
 
@@ -315,7 +313,9 @@ class SupplierComparisonChart extends StatelessWidget {
       case SupplierMetric.fatContent:
       case SupplierMetric.proteinContent:
         return value.toStringAsFixed(1);
-      default:
+      case SupplierMetric.volume:
+      case SupplierMetric.averageVolume:
+      case SupplierMetric.qualityScore:
         return value.toInt().toString();
     }
   }
@@ -333,8 +333,6 @@ class SupplierComparisonChart extends StatelessWidget {
         return '%';
       case SupplierMetric.qualityScore:
         return 'pts';
-      default:
-        return '';
     }
   }
 
@@ -354,7 +352,6 @@ enum SupplierMetric {
 
 /// Data class for supplier metrics
 class SupplierMetricData {
-
   const SupplierMetricData({
     required this.supplierId,
     required this.supplierName,

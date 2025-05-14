@@ -118,8 +118,8 @@ class EquipmentMaintenanceScreen extends ConsumerWidget {
                     ),
                   );
                 },
-                child: const Icon(Icons.add),
                 tooltip: 'Add Maintenance Record',
+                child: const Icon(Icons.add),
               )
             : null,
         loading: () => null,

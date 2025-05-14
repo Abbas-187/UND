@@ -1,0 +1,752 @@
+{
+  "117db597-6918-4d0f-876b-71fc135339a1": {
+    "id": "117db597-6918-4d0f-876b-71fc135339a1",
+    "product_code": "DA1995",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 827,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "b65160cf-509f-4480-9ba2-58cdc3ffa10b": {
+    "id": "b65160cf-509f-4480-9ba2-58cdc3ffa10b",
+    "product_code": "DA5644",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 770,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "ba536be4-c955-4dbb-90ca-3255f7763246": {
+    "id": "ba536be4-c955-4dbb-90ca-3255f7763246",
+    "product_code": "DA8503",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 770,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "6b986fdf-42bd-4ab9-97b2-76e9d1a85742": {
+    "id": "6b986fdf-42bd-4ab9-97b2-76e9d1a85742",
+    "product_code": "DA6410",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 162,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "eb1cf625-2183-423c-9213-e0be471b267d": {
+    "id": "eb1cf625-2183-423c-9213-e0be471b267d",
+    "product_code": "DA7278",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 802,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "bb4e394e-61d4-46c1-9734-248cf1733118": {
+    "id": "bb4e394e-61d4-46c1-9734-248cf1733118",
+    "product_code": "DA6207",
+    "product_name": "Butter",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 243,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "8d46509b-6811-43ac-aefc-9fb27b305ec6": {
+    "id": "8d46509b-6811-43ac-aefc-9fb27b305ec6",
+    "product_code": "DA1580",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 493,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "a0ec745f-a699-46f2-809a-72251382eb0f": {
+    "id": "a0ec745f-a699-46f2-809a-72251382eb0f",
+    "product_code": "DA9084",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 814,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "aeff2043-0627-4e46-a20a-66c402c9e29d": {
+    "id": "aeff2043-0627-4e46-a20a-66c402c9e29d",
+    "product_code": "DA3098",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 398,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "c3b39359-2016-499a-ab6c-3322fcb74f71": {
+    "id": "c3b39359-2016-499a-ab6c-3322fcb74f71",
+    "product_code": "DA3696",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 571,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "4103255a-9843-47ff-8124-f59d66d5a00f": {
+    "id": "4103255a-9843-47ff-8124-f59d66d5a00f",
+    "product_code": "DA7820",
+    "product_name": "Cheese",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 915,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "59307d29-1218-420a-ace9-47775db19d17": {
+    "id": "59307d29-1218-420a-ace9-47775db19d17",
+    "product_code": "DA5715",
+    "product_name": "Butter",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 238,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "e1e907b0-de13-474b-a430-fd3d6df901b5": {
+    "id": "e1e907b0-de13-474b-a430-fd3d6df901b5",
+    "product_code": "DA5351",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 494,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "48c58a75-356c-498b-a7fd-b123183a7c92": {
+    "id": "48c58a75-356c-498b-a7fd-b123183a7c92",
+    "product_code": "DA1664",
+    "product_name": "Cheese",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 903,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "10d52432-58bf-42d4-81f6-35f8524f69d6": {
+    "id": "10d52432-58bf-42d4-81f6-35f8524f69d6",
+    "product_code": "DA3203",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 910,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "5ab9fad9-9a32-4f98-90b5-d8a403a84a28": {
+    "id": "5ab9fad9-9a32-4f98-90b5-d8a403a84a28",
+    "product_code": "DA1975",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 417,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "dcc7eb4d-fb93-440e-92e3-a1abe445f41b": {
+    "id": "dcc7eb4d-fb93-440e-92e3-a1abe445f41b",
+    "product_code": "DA5534",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 171,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "1fb9fa88-f7ed-48b5-8c05-e45728f9564d": {
+    "id": "1fb9fa88-f7ed-48b5-8c05-e45728f9564d",
+    "product_code": "DA1973",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 914,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "50d89a87-45ab-43a3-9125-c5cac6ad6c31": {
+    "id": "50d89a87-45ab-43a3-9125-c5cac6ad6c31",
+    "product_code": "DA7103",
+    "product_name": "Cheese",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 436,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "ed6f547d-8a83-402c-9c3d-0f966cc6e2c0": {
+    "id": "ed6f547d-8a83-402c-9c3d-0f966cc6e2c0",
+    "product_code": "DA7547",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 108,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "e6ef5de0-80b9-4075-9f39-fe54a124a757": {
+    "id": "e6ef5de0-80b9-4075-9f39-fe54a124a757",
+    "product_code": "DA3732",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 13,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "7ed36d62-3d81-4abc-a2fb-797fcc38005e": {
+    "id": "7ed36d62-3d81-4abc-a2fb-797fcc38005e",
+    "product_code": "DA6982",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 411,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "d98e378b-2608-4996-877c-d7fab006f539": {
+    "id": "d98e378b-2608-4996-877c-d7fab006f539",
+    "product_code": "DA2181",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 963,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "0bfefc50-1ccd-486b-8e56-f5b48a927a1b": {
+    "id": "0bfefc50-1ccd-486b-8e56-f5b48a927a1b",
+    "product_code": "DA4794",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 3,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "3ae00f32-b712-4739-95a4-f38cbbdd7883": {
+    "id": "3ae00f32-b712-4739-95a4-f38cbbdd7883",
+    "product_code": "DA8532",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 136,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "071ef112-8ad5-4730-9d86-bceef25b1f63": {
+    "id": "071ef112-8ad5-4730-9d86-bceef25b1f63",
+    "product_code": "DA5724",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 963,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "c4c17457-3aca-448d-9136-05f8bd2e2407": {
+    "id": "c4c17457-3aca-448d-9136-05f8bd2e2407",
+    "product_code": "DA3651",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 720,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "74edf766-ec92-4fa8-8500-756fa08f3a92": {
+    "id": "74edf766-ec92-4fa8-8500-756fa08f3a92",
+    "product_code": "DA8335",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 852,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "78e4228a-6858-465a-8d4f-29eb18ac4ce5": {
+    "id": "78e4228a-6858-465a-8d4f-29eb18ac4ce5",
+    "product_code": "DA5577",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 623,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "2dc0bafa-745a-4149-81f9-2f21b303915e": {
+    "id": "2dc0bafa-745a-4149-81f9-2f21b303915e",
+    "product_code": "DA5072",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 636,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "16015ef6-2f4f-4d0f-ada9-ae171b325b8a": {
+    "id": "16015ef6-2f4f-4d0f-ada9-ae171b325b8a",
+    "product_code": "DA1158",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 194,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "001b1e02-c81a-4cfc-9f77-d6a4edad3442": {
+    "id": "001b1e02-c81a-4cfc-9f77-d6a4edad3442",
+    "product_code": "DA7761",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 752,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "aa5ab1d5-e3c2-4646-b12d-1833f3974994": {
+    "id": "aa5ab1d5-e3c2-4646-b12d-1833f3974994",
+    "product_code": "DA3333",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 748,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "3d4aeb92-a5c6-4aff-937f-a709c051a7ea": {
+    "id": "3d4aeb92-a5c6-4aff-937f-a709c051a7ea",
+    "product_code": "DA5242",
+    "product_name": "Cheese",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 73,
+    "location": "HF-FLV",
+    "status": "Discontinued"
+  },
+  "0510316f-be03-476b-986c-5559e561c0e3": {
+    "id": "0510316f-be03-476b-986c-5559e561c0e3",
+    "product_code": "DA4365",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 888,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "ad041d02-d3f2-46d1-bc2e-b37156bcc97e": {
+    "id": "ad041d02-d3f2-46d1-bc2e-b37156bcc97e",
+    "product_code": "DA2112",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 633,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "b840bb59-8ce6-437d-8894-a6c9147f95c0": {
+    "id": "b840bb59-8ce6-437d-8894-a6c9147f95c0",
+    "product_code": "DA3979",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 243,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "0025bf60-e324-4bea-81ca-a7213cf280fe": {
+    "id": "0025bf60-e324-4bea-81ca-a7213cf280fe",
+    "product_code": "DA3981",
+    "product_name": "Butter",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 682,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "04070635-d064-42db-b975-7a3aede216f2": {
+    "id": "04070635-d064-42db-b975-7a3aede216f2",
+    "product_code": "DA5090",
+    "product_name": "Cheese",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 313,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "c7348cc3-8ff0-4a72-8436-8a4623e19521": {
+    "id": "c7348cc3-8ff0-4a72-8436-8a4623e19521",
+    "product_code": "DA7266",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 986,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "d7ae7dc7-bebc-44c6-af40-b25c892daec3": {
+    "id": "d7ae7dc7-bebc-44c6-af40-b25c892daec3",
+    "product_code": "DA7423",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 747,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "5d759971-3b8b-4e03-b2fa-c9534507572a": {
+    "id": "5d759971-3b8b-4e03-b2fa-c9534507572a",
+    "product_code": "DA6675",
+    "product_name": "Butter",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 81,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "e4b8ed59-d0ee-4ae1-b2ff-22de2bad857f": {
+    "id": "e4b8ed59-d0ee-4ae1-b2ff-22de2bad857f",
+    "product_code": "DA7909",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 440,
+    "location": "HF-AMB",
+    "status": "Discontinued"
+  },
+  "a994489a-7b06-4212-89ee-8a1315af53d0": {
+    "id": "a994489a-7b06-4212-89ee-8a1315af53d0",
+    "product_code": "DA6806",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 26,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "897999cb-6d98-4f62-9344-7301f37722fb": {
+    "id": "897999cb-6d98-4f62-9344-7301f37722fb",
+    "product_code": "DA6489",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 33,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "daa74371-1809-4932-8572-a282d33faa24": {
+    "id": "daa74371-1809-4932-8572-a282d33faa24",
+    "product_code": "DA7850",
+    "product_name": "Butter",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 828,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "ae9a0659-86a5-46d6-b1c6-5749aea265e8": {
+    "id": "ae9a0659-86a5-46d6-b1c6-5749aea265e8",
+    "product_code": "DA4742",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 109,
+    "location": "HF-CLD",
+    "status": "Available"
+  },
+  "9f80f980-7982-4502-83d9-be0c25a7639e": {
+    "id": "9f80f980-7982-4502-83d9-be0c25a7639e",
+    "product_code": "DA7647",
+    "product_name": "Cheese",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 121,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "d06a37f4-ad2d-49d4-955b-c8005d02d3b2": {
+    "id": "d06a37f4-ad2d-49d4-955b-c8005d02d3b2",
+    "product_code": "DA7641",
+    "product_name": "Butter",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 747,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "2d112330-5579-4595-857e-978b7d877a74": {
+    "id": "2d112330-5579-4595-857e-978b7d877a74",
+    "product_code": "DA1560",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 891,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "970bd406-5ec1-4552-96aa-a6c6ef15668a": {
+    "id": "970bd406-5ec1-4552-96aa-a6c6ef15668a",
+    "product_code": "DA5525",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 384,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "cc533f73-4e78-457b-8852-c2591bfd71e9": {
+    "id": "cc533f73-4e78-457b-8852-c2591bfd71e9",
+    "product_code": "DA6735",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 303,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "09b7f7fe-8f38-476a-b0b2-4a76e156607e": {
+    "id": "09b7f7fe-8f38-476a-b0b2-4a76e156607e",
+    "product_code": "DA3691",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 8,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "2fb75092-40c9-4da4-95b7-7ee251717d02": {
+    "id": "2fb75092-40c9-4da4-95b7-7ee251717d02",
+    "product_code": "DA4476",
+    "product_name": "Butter",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 557,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "d51ae9e4-72e3-4181-95e0-8673122a4bfe": {
+    "id": "d51ae9e4-72e3-4181-95e0-8673122a4bfe",
+    "product_code": "DA6187",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 714,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "d1c7194b-248e-48cd-9931-7c64123b3a6a": {
+    "id": "d1c7194b-248e-48cd-9931-7c64123b3a6a",
+    "product_code": "DA8461",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 2,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "2fe6bcac-493a-4acf-b9ee-c41f1d215b14": {
+    "id": "2fe6bcac-493a-4acf-b9ee-c41f1d215b14",
+    "product_code": "DA3940",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 311,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "d90bb84b-5ae6-4d1d-ac0e-36b887540835": {
+    "id": "d90bb84b-5ae6-4d1d-ac0e-36b887540835",
+    "product_code": "DA4864",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 255,
+    "location": "HF-AMB",
+    "status": "Out of Stock"
+  },
+  "2a8bece4-5c9a-4258-a997-b729b49cb00c": {
+    "id": "2a8bece4-5c9a-4258-a997-b729b49cb00c",
+    "product_code": "DA4482",
+    "product_name": "Cheese",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 642,
+    "location": "HF-AMB",
+    "status": "Available"
+  },
+  "ff688d28-6e3f-42f9-bee9-cce4ff868c6c": {
+    "id": "ff688d28-6e3f-42f9-bee9-cce4ff868c6c",
+    "product_code": "DA1491",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 521,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "8e6f10f0-1473-455c-84ab-66ee8f60ef30": {
+    "id": "8e6f10f0-1473-455c-84ab-66ee8f60ef30",
+    "product_code": "DA6503",
+    "product_name": "Butter",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 643,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "305c3327-1dcf-4f59-99eb-ecc27e9aaf1d": {
+    "id": "305c3327-1dcf-4f59-99eb-ecc27e9aaf1d",
+    "product_code": "DA9209",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 895,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "87e71fea-1f8e-47b7-aaba-d90019f23c30": {
+    "id": "87e71fea-1f8e-47b7-aaba-d90019f23c30",
+    "product_code": "DA6420",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 921,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  },
+  "d878dd22-3649-496b-bbe0-f2cf4566636b": {
+    "id": "d878dd22-3649-496b-bbe0-f2cf4566636b",
+    "product_code": "DA6582",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 256,
+    "location": "SH-CLD",
+    "status": "Discontinued"
+  },
+  "33cd2221-722b-4049-8599-df4fa2d642b6": {
+    "id": "33cd2221-722b-4049-8599-df4fa2d642b6",
+    "product_code": "DA8108",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 221,
+    "location": "HF-FIN",
+    "status": "Discontinued"
+  },
+  "d7a4799f-1f9e-4c6a-9a1f-6730a2ed71b5": {
+    "id": "d7a4799f-1f9e-4c6a-9a1f-6730a2ed71b5",
+    "product_code": "DA4769",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "kg",
+    "quantity_on_hand": 990,
+    "location": "HF-FLV",
+    "status": "Available"
+  },
+  "8694ff84-fa14-4348-8968-b750f8e7e0fc": {
+    "id": "8694ff84-fa14-4348-8968-b750f8e7e0fc",
+    "product_code": "DA5015",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 84,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "a02214f6-0c5a-41ce-94e3-c742dbabbbe0": {
+    "id": "a02214f6-0c5a-41ce-94e3-c742dbabbbe0",
+    "product_code": "DA4774",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 7,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "06e91bec-0d37-4208-9f2e-4f89e866fb06": {
+    "id": "06e91bec-0d37-4208-9f2e-4f89e866fb06",
+    "product_code": "DA5423",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 407,
+    "location": "HF-CLD",
+    "status": "Out of Stock"
+  },
+  "8e2322de-9f7d-4952-9a03-850e3aa3e8e3": {
+    "id": "8e2322de-9f7d-4952-9a03-850e3aa3e8e3",
+    "product_code": "DA5760",
+    "product_name": "Flavored Milk",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 351,
+    "location": "HF-FIN",
+    "status": "Available"
+  },
+  "3dac4210-c430-4ff5-afa3-31c47db206b9": {
+    "id": "3dac4210-c430-4ff5-afa3-31c47db206b9",
+    "product_code": "DA4241",
+    "product_name": "Ice Cream",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 3,
+    "location": "HF-CLD",
+    "status": "Discontinued"
+  },
+  "0af7b820-f29c-4bc3-8fc3-65ac28192f4b": {
+    "id": "0af7b820-f29c-4bc3-8fc3-65ac28192f4b",
+    "product_code": "DA7162",
+    "product_name": "Plain Milk",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 437,
+    "location": "HF-FIN",
+    "status": "Out of Stock"
+  },
+  "0b04374a-e3c1-459f-840f-20215f34fb86": {
+    "id": "0b04374a-e3c1-459f-840f-20215f34fb86",
+    "product_code": "DA3977",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 600,
+    "location": "SH-CLD",
+    "status": "Available"
+  },
+  "61a3506e-4f43-4d1d-8e04-87668b1160a8": {
+    "id": "61a3506e-4f43-4d1d-8e04-87668b1160a8",
+    "product_code": "DA5241",
+    "product_name": "Laban",
+    "category": "Dairy",
+    "unit_of_measure": "pieces",
+    "quantity_on_hand": 609,
+    "location": "SH-CLD",
+    "status": "Out of Stock"
+  },
+  "e6fee64e-c555-4600-a9a2-1b2507ad27c0": {
+    "id": "e6fee64e-c555-4600-a9a2-1b2507ad27c0",
+    "product_code": "DA1997",
+    "product_name": "Yogurt",
+    "category": "Dairy",
+    "unit_of_measure": "liters",
+    "quantity_on_hand": 911,
+    "location": "HF-FLV",
+    "status": "Out of Stock"
+  }
+}

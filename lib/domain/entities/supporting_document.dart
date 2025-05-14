@@ -26,13 +26,6 @@ DocumentType documentTypeFromString(String type) {
 /// Represents a supporting document.
 @immutable
 class SupportingDocument {
-  final String id;
-  final String name;
-  final String url;
-  final DocumentType type;
-  final DateTime uploadDate;
-  final String uploadedBy;
-  final String? description;
 
   const SupportingDocument({
     required this.id,
@@ -43,6 +36,13 @@ class SupportingDocument {
     required this.uploadedBy,
     this.description,
   });
+  final String id;
+  final String name;
+  final String url;
+  final DocumentType type;
+  final DateTime uploadDate;
+  final String uploadedBy;
+  final String? description;
 
   SupportingDocument copyWith({
     String? id,

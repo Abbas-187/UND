@@ -1,47 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/entities/inventory_item.dart';
 
 /// Provider for all inventory items
 final inventoryItemsProvider = FutureProvider<List<InventoryItem>>((ref) async {
-  // In a real app, this would fetch from a repository
-  await Future.delayed(
-      const Duration(milliseconds: 500)); // Simulate network delay
-
-  return [
-    InventoryItem(
-      id: 'item-1',
-      name: 'Raw Milk',
-      category: 'Raw Materials',
-      quantity: 1000,
-      unit: 'liters',
-      price: 1.2,
-      reorderPoint: 200,
-      minimumQuantity: 100,
-      supplierIds: ['supplier-1'],
-    ),
-    InventoryItem(
-      id: 'item-2',
-      name: 'Sugar',
-      category: 'Raw Materials',
-      quantity: 500,
-      unit: 'kg',
-      price: 2.0,
-      reorderPoint: 100,
-      minimumQuantity: 50,
-      supplierIds: ['supplier-1', 'supplier-2'],
-    ),
-    InventoryItem(
-      id: 'item-3',
-      name: 'Plastic Bottles',
-      category: 'Packaging',
-      quantity: 5000,
-      unit: 'pieces',
-      price: 0.15,
-      reorderPoint: 1000,
-      minimumQuantity: 500,
-      supplierIds: ['supplier-2'],
-    ),
-  ];
+  final snapshot =
+      await FirebaseFirestore.instance.collection('inventory item').get();
+  return snapshot.docs
+      .map((doc) => InventoryItem.fromJson(doc.data()))
+      .toList();
 });
 
 /// Mock usage rate provider

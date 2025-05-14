@@ -6,9 +6,9 @@ import '../../../factory/domain/providers/production_provider.dart';
 import '../../../logistics/domain/providers/delivery_provider.dart';
 import '../../../sales/data/models/order_model.dart';
 import '../../../sales/domain/providers/order_provider.dart';
-import '../repositories/inventory_repository.dart';
 import '../../domain/providers/inventory_provider.dart';
 import '../entities/inventory_item.dart';
+import '../repositories/inventory_repository.dart';
 
 /// Service that handles integration between Inventory and other modules
 class ModuleIntegrationService {
@@ -51,12 +51,14 @@ class ModuleIntegrationService {
 
     // Reserve inventory items for shipment
     for (final item in shipment.items ?? []) {
-      await _reserveInventory(
-        item['productId'],
-        item['quantity'],
-        'Shipment reservation: $shipmentId',
-        referenceId: shipmentId,
-      );
+      if (item.type.isNotEmpty) {
+        await _reserveInventory(
+          item['productId'],
+          item['quantity'],
+          'Shipment reservation: $shipmentId',
+          referenceId: shipmentId,
+        );
+      }
     }
   }
 
@@ -166,7 +168,10 @@ class ModuleIntegrationService {
     // Return empty item if not found
     return InventoryItem(
       id: productId,
+      appItemId: '',
+      sapCode: '',
       name: 'Unknown Item',
+      subCategory: '',
       category: 'Unknown',
       unit: 'each',
       quantity: 0,

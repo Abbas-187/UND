@@ -102,6 +102,34 @@ class EquipmentModel {
       metadata: json['metadata'] as Map<String, dynamic>,
     );
   }
+
+  static EquipmentModel dummy() {
+    return EquipmentModel(
+      id: 'dummy',
+      name: 'Dummy Equipment',
+      type: EquipmentType.other,
+      status: EquipmentStatus.inactive,
+      locationId: 'dummy-location',
+      locationName: 'Dummy Location',
+      manufacturer: 'Dummy Manufacturer',
+      model: 'Dummy Model',
+      serialNumber: '0000',
+      installDate: DateTime(2000, 1, 1),
+      lastMaintenanceDate: null,
+      nextMaintenanceDate: null,
+      maintenanceIntervalDays: 30,
+      responsiblePersonId: null,
+      responsiblePersonName: null,
+      lastSanitizationDate: null,
+      sanitizationIntervalHours: 24,
+      requiresSanitization: false,
+      runningHoursTotal: 0.0,
+      runningHoursSinceLastMaintenance: null,
+      specifications: const {},
+      metadata: const {},
+    );
+  }
+
   final String id;
   final String name;
   final EquipmentType type;

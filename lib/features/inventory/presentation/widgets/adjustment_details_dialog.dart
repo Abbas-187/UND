@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
-import '../../domain/entities/inventory_adjustment.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import '../../../../l10n/app_localizations.dart';
+import '../../domain/entities/inventory_adjustment.dart';
 
 class AdjustmentDetailsDialog extends StatelessWidget {
-  final InventoryAdjustment adjustment;
-
   const AdjustmentDetailsDialog({
     super.key,
     required this.adjustment,
   });
+  final InventoryAdjustment adjustment;
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +95,7 @@ class AdjustmentDetailsDialog extends StatelessWidget {
                           _formatAdjustmentType(adjustment.adjustmentType)),
                       _buildDetailRow(
                           context, l10n.reasonLabel, adjustment.reason),
-                      if (adjustment.notes != null &&
-                          adjustment.notes!.isNotEmpty)
+                      if (adjustment.notes?.isNotEmpty ?? false)
                         _buildDetailRow(context, l10n.notes, adjustment.notes!),
                       const Divider(height: 32),
 
@@ -125,9 +124,8 @@ class AdjustmentDetailsDialog extends StatelessWidget {
                           adjustment.documentReference != null) ...[
                         _buildSectionTitle(context, l10n.additionalInfo),
                         const SizedBox(height: 8),
-                        if (adjustment.categoryName != null)
-                          _buildDetailRow(
-                              context, l10n.category, adjustment.categoryName!),
+                        _buildDetailRow(
+                            context, l10n.category, adjustment.categoryName),
                         if (adjustment.documentReference != null)
                           _buildDetailRow(context, l10n.referenceDocuments,
                               adjustment.documentReference!),

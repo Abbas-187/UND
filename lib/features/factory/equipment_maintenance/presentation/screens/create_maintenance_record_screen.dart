@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../data/models/equipment_model.dart' as factory_equipment;
-import '../../domain/providers/equipment_maintenance_provider.dart';
-import '../../data/models/maintenance_record_model.dart';
 import '../../data/models/maintenance_models.dart';
+import '../../data/models/maintenance_record_model.dart';
+import '../../domain/providers/equipment_maintenance_provider.dart';
 
 class CreateMaintenanceRecordScreen extends ConsumerStatefulWidget {
   const CreateMaintenanceRecordScreen({super.key, required this.equipment});

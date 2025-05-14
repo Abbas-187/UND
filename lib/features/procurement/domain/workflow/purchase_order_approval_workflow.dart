@@ -4,11 +4,11 @@ import '../security/biometric_validator.dart';
 
 @immutable
 class PurchaseOrderApprovalWorkflow {
-  final BiometricValidator biometricValidator;
 
   const PurchaseOrderApprovalWorkflow({
     required this.biometricValidator,
   });
+  final BiometricValidator biometricValidator;
 
   Future<void> processApprovalAction(
     PurchaseOrderApprovalHistory approvalHistory,

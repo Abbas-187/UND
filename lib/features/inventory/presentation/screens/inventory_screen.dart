@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../providers/inventory_provider.dart';
@@ -7,13 +9,6 @@ import '../widgets/inventory_analytics_card.dart';
 import '../widgets/inventory_filter_bar.dart';
 import '../widgets/inventory_item_card.dart';
 import '../widgets/low_stock_alerts_banner.dart';
-import 'inventory_analytics_dashboard_screen.dart';
-import 'inventory_edit_screen.dart';
-import 'inventory_item_details_screen.dart';
-import 'inventory_settings_screen.dart';
-import '../../../reports/screens/report_screen.dart';
-import '../../../reports/utils/report_aggregators.dart';
-import '../../../../core/services/mock_data_service.dart';
 
 class InventoryScreen extends ConsumerWidget {
   const InventoryScreen({super.key});
@@ -24,6 +19,12 @@ class InventoryScreen extends ConsumerWidget {
     final filteredItems = ref.watch(filteredInventoryItemsProvider);
     final filter = ref.watch(inventoryFilterProvider);
 
+    // Fetch unique values for filter dropdowns
+    final uniqueCategories = ref.watch(uniqueCategoriesProvider);
+    final uniqueSubCategories = ref.watch(uniqueSubCategoriesProvider);
+    final uniqueLocations = ref.watch(uniqueLocationsProvider);
+    final uniqueSuppliers = ref.watch(uniqueSuppliersProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.inventoryManagement),
@@ -32,50 +33,33 @@ class InventoryScreen extends ConsumerWidget {
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const InventorySettingsScreen(),
-                ),
-              );
+              context.go('/inventory/settings');
             },
           ),
           IconButton(
             icon: const Icon(Icons.description),
             tooltip: l10n.inventoryReports,
             onPressed: () {
-              // Best Practice: Use a provider or service locator for dataService in production.
-              // Now using Riverpod provider for MockDataService.
-              final mockDataService = ref.watch(mockDataServiceProvider);
-              final aggregators = ReportAggregators(mockDataService);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ReportScreen(aggregators: aggregators),
-                ),
-              );
+              context.go('/inventory/reports');
             },
           ),
           IconButton(
             icon: const Icon(Icons.analytics_outlined),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const InventoryAnalyticsDashboardScreen(),
-                ),
-              );
+              context.go('/inventory/analytics');
             },
           ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const InventoryEditScreen(),
-                ),
-              );
+              context.go('/inventory/edit');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.storage),
+            tooltip: 'Database Management',
+            onPressed: () {
+              context.go('/inventory/database-management');
             },
           ),
         ],
@@ -92,6 +76,10 @@ class InventoryScreen extends ConsumerWidget {
             onFilterChanged: (newFilter) {
               ref.read(inventoryFilterProvider.notifier).state = newFilter;
             },
+            availableCategories: uniqueCategories,
+            availableSubCategories: uniqueSubCategories,
+            availableLocations: uniqueLocations,
+            availableSuppliers: uniqueSuppliers,
           ),
 
           // Analytics summary
@@ -128,14 +116,7 @@ class InventoryScreen extends ConsumerWidget {
         return InventoryItemCard(
           item: item,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => InventoryItemDetailsScreen(
-                  itemId: item.id,
-                ),
-              ),
-            );
+            context.go('/inventory/item-details/${item.id}');
           },
         );
       },

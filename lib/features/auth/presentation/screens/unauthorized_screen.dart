@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../core/routes/app_router.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/routes/app_go_router.dart';
 import '../../../../core/widgets/primary_button.dart';
 
 /// Screen shown when a user attempts to access a page they don't have permission for
@@ -45,7 +46,7 @@ class UnauthorizedScreen extends StatelessWidget {
               PrimaryButton(
                 text: 'Go Back',
                 onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+                  context.go(AppRoutes.home);
                 },
                 icon: Icons.home,
               ),

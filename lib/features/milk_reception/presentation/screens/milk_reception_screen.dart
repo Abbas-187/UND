@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/models/milk_reception_model.dart';
-import '../../domain/providers/milk_reception_provider.dart';
-import '../widgets/milk_reception_form.dart';
-import 'milk_reception_details_screen.dart';
-import '../../../../theme/app_theme_extensions.dart';
-
 class MilkReceptionScreen extends ConsumerWidget {
   const MilkReceptionScreen({super.key});
 

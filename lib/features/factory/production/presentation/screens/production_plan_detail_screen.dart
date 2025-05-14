@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../forecasting/data/models/production_plan_model.dart';
@@ -8,11 +9,11 @@ import '../providers/production_integration_providers.dart';
 
 /// Detail screen for a production plan
 class ProductionPlanDetailScreen extends ConsumerStatefulWidget {
-
   const ProductionPlanDetailScreen({
     super.key,
     required this.planId,
   });
+
   /// Route name for navigation
   static const routeName = '/production-plan-detail';
 
@@ -233,11 +234,8 @@ class _ProductionPlanDetailScreenState
           );
 
           // Navigate to the execution detail screen
-          Navigator.pushReplacementNamed(
-            context,
-            '/production-execution-detail',
-            arguments: result.data!.id,
-          );
+          context.go('/factory/production/execution-detail',
+              extra: result.data!.id);
         }
       } else {
         if (mounted) {

@@ -2,9 +2,6 @@ import '../entities/procurement_plan.dart';
 
 /// Result of a validation operation.
 class ValidationResult {
-  final bool isValid;
-  final List<String> errors;
-  final List<String> warnings;
 
   const ValidationResult({
     required this.isValid,
@@ -22,6 +19,9 @@ class ValidationResult {
   /// Creates a valid result with warnings.
   factory ValidationResult.withWarnings(List<String> warnings) =>
       ValidationResult(isValid: true, warnings: warnings);
+  final bool isValid;
+  final List<String> errors;
+  final List<String> warnings;
 }
 
 /// Validator for procurement plans.

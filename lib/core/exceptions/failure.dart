@@ -30,7 +30,6 @@ class NotFoundFailure extends Failure {
 
 /// Input validation failures
 class ValidationFailure extends Failure {
-  final Map<String, List<String>>? validationErrors;
 
   const ValidationFailure(
     super.message, {
@@ -39,6 +38,7 @@ class ValidationFailure extends Failure {
     super.stackTrace,
     this.validationErrors,
   });
+  final Map<String, List<String>>? validationErrors;
 }
 
 /// Unknown or unexpected failures

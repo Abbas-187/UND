@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../../../data/models/recipe_model.dart';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../../../data/models/recipe_model.dart';
+
 class RecipeHistoryScreen extends StatelessWidget {
-  final String recipeId;
-  final List<dynamic> history;
   const RecipeHistoryScreen(
       {super.key, required this.recipeId, required this.history});
+  final String recipeId;
+  final List<dynamic> history;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +30,8 @@ class RecipeHistoryScreen extends StatelessWidget {
 }
 
 class _HistoryEntryTile extends StatefulWidget {
-  final RecipeHistoryEntry entry;
   const _HistoryEntryTile({required this.entry});
+  final RecipeHistoryEntry entry;
 
   @override
   State<_HistoryEntryTile> createState() => _HistoryEntryTileState();

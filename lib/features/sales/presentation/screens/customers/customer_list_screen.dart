@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/custom_search_bar.dart';
 import '../../../domain/providers/customer_provider.dart';
@@ -132,11 +133,8 @@ class _CustomerListScreenState extends ConsumerState<CustomerListScreen> {
                             const Icon(Icons.chevron_right),
                           ],
                         ),
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          '/sales/customers/details',
-                          arguments: customer.id,
-                        ),
+                        onTap: () => context.go('/sales/customers/details',
+                            extra: customer.id),
                       ),
                     );
                   },
@@ -152,8 +150,7 @@ class _CustomerListScreenState extends ConsumerState<CustomerListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () =>
-            Navigator.pushNamed(context, '/sales/customers/create'),
+        onPressed: () => context.go('/sales/customers/create'),
       ),
     );
   }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../providers/inventory_movement_providers.dart';
 import '../widgets/dashboard/inventory_dashboard_widgets.dart';
-import 'create_movement_page.dart';
-import 'inventory_movement_list_page.dart';
 
 class InventoryDashboardPage extends ConsumerWidget {
   const InventoryDashboardPage({super.key});
@@ -17,16 +15,7 @@ class InventoryDashboardPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.inventoryDashboard),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            tooltip: l10n.refreshData,
-            onPressed: () {
-              // Refresh providers
-              ref.invalidate(movementsByDateRangeProvider);
-            },
-          ),
-        ],
+        actions: [],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -65,12 +54,7 @@ class InventoryDashboardPage extends ConsumerWidget {
                       icon: const Icon(Icons.add),
                       label: Text(l10n.newMovement),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CreateMovementPage(),
-                          ),
-                        );
+                        context.go('/inventory/create-movement');
                       },
                     ),
                   ],
@@ -111,12 +95,7 @@ class InventoryDashboardPage extends ConsumerWidget {
                 icon: const Icon(Icons.list),
                 label: Text(l10n.viewAllMovements),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const InventoryMovementListPage(),
-                    ),
-                  );
+                  context.go('/inventory/movements');
                 },
               ),
             ),

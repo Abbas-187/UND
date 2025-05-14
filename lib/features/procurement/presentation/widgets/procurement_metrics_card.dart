@@ -1,18 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ProcurementMetricsCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-  final Color color;
-  final String? subtitle;
-  final String? tooltip;
-  final VoidCallback? onTap;
-  final bool isLoading;
-  final String? errorMessage;
-
   const ProcurementMetricsCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
     required this.icon,
@@ -22,7 +12,16 @@ class ProcurementMetricsCard extends StatelessWidget {
     this.onTap,
     this.isLoading = false,
     this.errorMessage,
-  }) : super(key: key);
+  });
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+  final String? subtitle;
+  final String? tooltip;
+  final VoidCallback? onTap;
+  final bool isLoading;
+  final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class ProcurementMetricsCard extends StatelessWidget {
       content = Row(
         children: [
           CircleAvatar(
-            backgroundColor: color.withOpacity(0.1),
+            backgroundColor: color.withValues(alpha: 0.1 * 255),
             child: Icon(icon, color: color),
           ),
           const SizedBox(width: 16),

@@ -59,7 +59,7 @@ class ReceptionVolumeChart extends StatelessWidget {
     final defaultColor = theme.colorScheme.primary;
     final defaultGradientColors = [
       theme.colorScheme.primary,
-      theme.colorScheme.secondary.withOpacity(0.7),
+      theme.colorScheme.secondary.withValues(alpha: 0.7 * 255),
     ];
 
     // Prepare data
@@ -234,8 +234,6 @@ class ReceptionVolumeChart extends StatelessWidget {
         return _groupByWeek(filteredReceptions);
       case GroupBy.month:
         return _groupByMonth(filteredReceptions);
-      default:
-        return _groupByDay(filteredReceptions);
     }
   }
 
@@ -339,8 +337,6 @@ class ReceptionVolumeChart extends StatelessWidget {
       case GroupBy.month:
         // For month, return only the month part (e.g., 01, 12)
         return label.substring(5);
-      default:
-        return label;
     }
   }
 }

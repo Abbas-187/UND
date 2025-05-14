@@ -23,12 +23,6 @@ enum AppExceptionType {
 
 /// Standard application exception class for handling errors consistently
 class AppException implements Exception {
-  final String message;
-  final String? details;
-  final int? statusCode;
-  final dynamic data;
-  final AppExceptionType type;
-  final StackTrace? stackTrace;
 
   const AppException({
     required this.message,
@@ -38,6 +32,12 @@ class AppException implements Exception {
     this.type = AppExceptionType.unknown,
     this.stackTrace,
   });
+  final String message;
+  final String? details;
+  final int? statusCode;
+  final dynamic data;
+  final AppExceptionType type;
+  final StackTrace? stackTrace;
 
   @override
   String toString() {

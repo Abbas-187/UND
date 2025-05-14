@@ -39,9 +39,8 @@ class _BatchScannerScreenState extends ConsumerState<BatchScannerScreen> {
     _isScanning = true;
   }
 
-  void _handleScanResult(ScanResult result) {
-    // In a real app, we would look up the inventory item from the database
-    // For demo purposes, we'll create a mock item
+  void _handleScanResult(ScanResult result) async {
+    // TODO: lookup scanned item in database via repository
     if (!mounted) return;
 
     // Show a snackbar when a code is scanned
@@ -53,31 +52,13 @@ class _BatchScannerScreenState extends ConsumerState<BatchScannerScreen> {
       ),
     );
 
-    // Add a mock item to the list - in a real app, we would fetch from DB
-    setState(() {
-      if (!_scannedItems.any((item) => item.id == result.code)) {
-        _scannedItems.add(_createMockItem(result));
-      }
-    });
-  }
-
-  InventoryItemModel _createMockItem(ScanResult result) {
-    // Extract the ID from the result.code (format is ITEM-{id})
-    final id = result.code.startsWith('ITEM-')
-        ? result.code.substring(5)
-        : result.code;
-
-    return InventoryItemModel(
-      id: id,
-      name: 'Item ${_scannedItems.length + 1}',
-      category: 'Scanned Items',
-      unit: 'pcs',
-      quantity: 10,
-      minimumQuantity: 5,
-      reorderPoint: 3,
-      location: 'Warehouse A',
-      lastUpdated: DateTime.now(),
-    );
+    // Example: fetch item from repository (replace with real lookup)
+    // final item = await ref.read(inventoryRepositoryProvider).getItemByBarcode(result.code);
+    // if (item != null) {
+    //   setState(() {
+    //     _scannedItems.add(item);
+    //   });
+    // }
   }
 
   void _toggleScanning() {

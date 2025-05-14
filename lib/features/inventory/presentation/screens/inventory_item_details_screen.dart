@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
-import '../providers/inventory_provider.dart';
-import 'inventory_edit_screen.dart';
-import 'inventory_movement_history_screen.dart';
-import 'inventory_transfer_screen.dart';
 import '../../domain/providers/inventory_provider.dart';
+import '../providers/inventory_provider.dart';
 
 class InventoryItemDetailsScreen extends ConsumerWidget {
   const InventoryItemDetailsScreen({
@@ -62,12 +60,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => InventoryEditScreen(itemId: itemId),
-                    ),
-                  );
+                  context.go('/inventory/edit', extra: itemId);
                 },
               ),
               PopupMenuButton<String>(
@@ -300,13 +293,8 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                               icon: Icons.swap_horiz,
                               label: 'Transfer',
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => InventoryTransferScreen(
-                                        sourceItemId: itemId),
-                                  ),
-                                );
+                                context.go('/inventory/transfer',
+                                    extra: itemId);
                               },
                             ),
                           ],
@@ -343,16 +331,8 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    // Navigate to full history screen
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            InventoryMovementHistoryScreen(
-                                          itemId: itemId,
-                                        ),
-                                      ),
-                                    );
+                                    context.go('/inventory/movement-history',
+                                        extra: itemId);
                                   },
                                   child: const Text('See All'),
                                 ),
@@ -544,6 +524,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                     item.id,
                     isAddition ? quantity : -quantity,
                     reason,
+                    'SYSTEM', // Replace with actual employee ID from auth if available
                   );
                   if (context.mounted) {
                     Navigator.pop(context);

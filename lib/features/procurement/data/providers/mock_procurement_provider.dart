@@ -1,10 +1,13 @@
+/*
+import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../core/services/mock_data_service.dart';
 import '../../../inventory/data/providers/mock_inventory_provider.dart';
-import '../models/purchase_order_model.dart';
 import '../../../suppliers/data/models/supplier_model.dart';
+import '../models/purchase_order_model.dart';
 import '../models/vendor_evaluation_model.dart';
-import 'dart:math';
 
 /// Provides mock procurement data that integrates with inventory
 class MockProcurementProvider {
@@ -272,10 +275,10 @@ class MockProcurementProvider {
 
   /// Update an existing supplier
   SupplierModel updateSupplier(SupplierModel supplier) {
-    if (supplier.id == null || !_suppliers.containsKey(supplier.id)) {
+    if (!_suppliers.containsKey(supplier.id)) {
       throw Exception('Supplier not found');
     }
-    _suppliers[supplier.id!] = supplier;
+    _suppliers[supplier.id] = supplier;
     return supplier;
   }
 
@@ -538,31 +541,29 @@ class MockProcurementProvider {
   void _loadMockVendorEvaluations() {
     // Create sample vendor evaluations
     for (final supplier in _suppliers.values) {
-      if (supplier.id != null) {
-        final id =
-            'eval-${supplier.id}-${DateTime.now().millisecondsSinceEpoch}';
-        final random = Random(supplier.id.hashCode);
+      final id =
+          'eval-${supplier.id}-${DateTime.now().millisecondsSinceEpoch}';
+      final random = Random(supplier.id.hashCode);
 
-        _vendorEvaluations[id] = VendorEvaluationModel(
-          id: id,
-          vendorId: supplier.id!,
-          vendorName: supplier.name,
-          evaluationDate:
-              DateTime.now().subtract(Duration(days: random.nextInt(30))),
-          evaluator: 'Mock Evaluator',
-          qualityScore: 70.0 + random.nextDouble() * 30.0,
-          deliveryScore: 70.0 + random.nextDouble() * 30.0,
-          priceScore: 70.0 + random.nextDouble() * 30.0,
-          serviceScore: 70.0 + random.nextDouble() * 30.0,
-          overallScore: 70.0 + random.nextDouble() * 30.0,
-          status: 'completed',
-          comments: 'Mock evaluation comments',
-          strengths: 'Good quality products',
-          weaknesses: 'Occasionally late deliveries',
-          recommendations: 'Recommended for continued business',
-        );
-      }
-    }
+      _vendorEvaluations[id] = VendorEvaluationModel(
+        id: id,
+        vendorId: supplier.id,
+        vendorName: supplier.name,
+        evaluationDate:
+            DateTime.now().subtract(Duration(days: random.nextInt(30))),
+        evaluator: 'Mock Evaluator',
+        qualityScore: 70.0 + random.nextDouble() * 30.0,
+        deliveryScore: 70.0 + random.nextDouble() * 30.0,
+        priceScore: 70.0 + random.nextDouble() * 30.0,
+        serviceScore: 70.0 + random.nextDouble() * 30.0,
+        overallScore: 70.0 + random.nextDouble() * 30.0,
+        status: 'completed',
+        comments: 'Mock evaluation comments',
+        strengths: 'Good quality products',
+        weaknesses: 'Occasionally late deliveries',
+        recommendations: 'Recommended for continued business',
+      );
+        }
   }
 
   void _loadMockProcurementPlans() {
@@ -621,3 +622,4 @@ final mockProcurementProvider = Provider<MockProcurementProvider>((ref) {
 
   return provider;
 });
+*/

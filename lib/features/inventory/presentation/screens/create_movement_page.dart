@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-import '../../../../l10n/app_localizations.dart';
 
-import '../../domain/services/inventory_movement_service.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/inventory_movement_item_model.dart';
 import '../../data/models/inventory_movement_model.dart';
-import '../../data/models/inventory_movement_type.dart';
-import '../../data/models/quality_status.dart';
-
-// Import MovementItemStatus enum explicitly
-import '../../data/models/inventory_movement_item_model.dart'
-    show MovementItemStatus;
+import '../../presentation/providers/inventory_movement_provider.dart';
 
 class CreateMovementPage extends ConsumerStatefulWidget {
   const CreateMovementPage({super.key});
@@ -28,7 +22,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
   bool _isProcessing = false;
 
   // Form data
-  InventoryMovementType _movementType = InventoryMovementType.TRANSFER;
+  InventoryMovementType _movementType = InventoryMovementType.TRANSFER_IN;
   String _sourceLocationId = '';
   String _sourceLocationName = '';
   String _destinationLocationId = '';
@@ -40,16 +34,16 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
   final List<InventoryMovementItemModel> _items = [];
 
   // Current item being added
-  String _currentProductId = '';
-  String _currentProductName = '';
+  String _currentItemId = '';
+  String _currentItemCode = '';
+  String _currentItemName = '';
   String _currentBatchLotNumber = '';
   double _currentQuantity = 0.0;
-  String _currentUnitOfMeasurement = 'kg';
-  final MovementItemStatus _currentItemStatus = MovementItemStatus.IN_TRANSIT;
-  final DateTime _currentProductionDate = DateTime.now();
-  final DateTime _currentExpirationDate =
-      DateTime.now().add(const Duration(days: 365));
-  final QualityStatus _currentQualityStatus = QualityStatus.good;
+  String _currentUom = 'kg';
+  String? _currentStatus = 'IN_TRANSIT';
+  DateTime? _currentProductionDate;
+  DateTime? _currentExpirationDate;
+  String? _currentQualityStatus = 'good';
 
   @override
   Widget build(BuildContext context) {
@@ -189,9 +183,9 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
 
   // Step 2: Source and Destination
   Widget _buildLocationsStep() {
-    final showSourceField = _movementType != InventoryMovementType.RECEIPT;
+    final showSourceField = _movementType != InventoryMovementType.PO_RECEIPT;
     final showDestinationField =
-        _movementType != InventoryMovementType.DISPOSAL;
+        _movementType != InventoryMovementType.ADJUSTMENT_OTHER;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,7 +344,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _currentProductId = value;
+                    _currentItemId = value;
                   });
                 },
               ),
@@ -374,7 +368,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
           ),
           onChanged: (value) {
             setState(() {
-              _currentProductName = value;
+              _currentItemName = value;
             });
           },
         ),
@@ -427,7 +421,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
             Expanded(
               flex: 1,
               child: DropdownButtonFormField<String>(
-                value: _currentUnitOfMeasurement,
+                value: _currentUom,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Unit',
@@ -441,7 +435,65 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                 onChanged: (value) {
                   if (value != null) {
                     setState(() {
-                      _currentUnitOfMeasurement = value;
+                      _currentUom = value;
+                    });
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        // Production Date picker
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                readOnly: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Production Date',
+                  hintText: _currentProductionDate != null
+                      ? DateFormat('yyyy-MM-dd').format(_currentProductionDate!)
+                      : '',
+                ),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _currentProductionDate ?? DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      _currentProductionDate = picked;
+                    });
+                  }
+                },
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: TextFormField(
+                readOnly: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Expiration Date',
+                  hintText: _currentExpirationDate != null
+                      ? DateFormat('yyyy-MM-dd').format(_currentExpirationDate!)
+                      : '',
+                ),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: _currentExpirationDate ?? DateTime.now(),
+                    firstDate: _currentProductionDate ?? DateTime.now(),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    setState(() {
+                      _currentExpirationDate = picked;
                     });
                   }
                 },
@@ -468,13 +520,13 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
               return Card(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  title: Text(item.productName),
+                  title: Text(item.itemName),
                   subtitle: Text('Batch: ${item.batchLotNumber}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '${item.quantity} ${item.unitOfMeasurement}',
+                        '${item.quantity} ${item.uom}',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       IconButton(
@@ -558,7 +610,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                if (_movementType != InventoryMovementType.RECEIPT) ...[
+                if (_movementType != InventoryMovementType.PO_RECEIPT) ...[
                   Row(
                     children: [
                       const Text('From: ',
@@ -567,7 +619,8 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                     ],
                   ),
                 ],
-                if (_movementType != InventoryMovementType.DISPOSAL) ...[
+                if (_movementType !=
+                    InventoryMovementType.ADJUSTMENT_OTHER) ...[
                   Row(
                     children: [
                       const Text('To: ',
@@ -625,7 +678,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    item.productName,
+                                    item.itemName,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -634,7 +687,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                               ),
                             ),
                             Text(
-                              '${item.quantity} ${item.unitOfMeasurement}',
+                              '${item.quantity} ${item.uom}',
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -675,8 +728,9 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
   }
 
   void _addCurrentItem() {
-    if (_currentProductId.isEmpty ||
-        _currentProductName.isEmpty ||
+    if (_currentItemId.isEmpty ||
+        _currentItemCode.isEmpty ||
+        _currentItemName.isEmpty ||
         _currentBatchLotNumber.isEmpty ||
         _currentQuantity <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -689,26 +743,30 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
     }
 
     final newItem = InventoryMovementItemModel(
-      itemId: const Uuid().v4(),
-      productId: _currentProductId,
-      productName: _currentProductName,
-      batchLotNumber: _currentBatchLotNumber,
+      itemId: _currentItemId,
+      itemCode: _currentItemCode,
+      itemName: _currentItemName,
+      uom: _currentUom,
       quantity: _currentQuantity,
-      unitOfMeasurement: _currentUnitOfMeasurement,
-      status: _currentItemStatus,
+      batchLotNumber: _currentBatchLotNumber,
       productionDate: _currentProductionDate,
       expirationDate: _currentExpirationDate,
+      status: _currentStatus,
       qualityStatus: _currentQualityStatus,
     );
 
     setState(() {
       _items.add(newItem);
-
-      // Reset current item fields
-      _currentProductId = '';
-      _currentProductName = '';
+      _currentItemId = '';
+      _currentItemCode = '';
+      _currentItemName = '';
       _currentBatchLotNumber = '';
       _currentQuantity = 0.0;
+      _currentUom = 'kg';
+      _currentStatus = 'IN_TRANSIT';
+      _currentProductionDate = null;
+      _currentExpirationDate = null;
+      _currentQualityStatus = 'good';
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -730,7 +788,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
       }
     } else if (_currentStep == 1) {
       // Validate source and destination based on movement type
-      if (_movementType == InventoryMovementType.RECEIPT &&
+      if (_movementType == InventoryMovementType.PO_RECEIPT &&
           _destinationLocationId.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -740,7 +798,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
           ),
         );
         return;
-      } else if (_movementType == InventoryMovementType.DISPOSAL &&
+      } else if (_movementType == InventoryMovementType.ADJUSTMENT_OTHER &&
           _sourceLocationId.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -811,8 +869,9 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
     // TODO: Implementation would go here
     // Simulated response for now
     setState(() {
-      _currentProductId = 'PROD-001';
-      _currentProductName = 'Raw Milk';
+      _currentItemId = 'PROD-001';
+      _currentItemCode = 'ITEM-001';
+      _currentItemName = 'Raw Milk';
     });
   }
 
@@ -831,32 +890,35 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
     });
 
     try {
+      final now = DateTime.now();
       final newMovement = InventoryMovementModel(
-        movementId: const Uuid().v4(),
-        timestamp: DateTime.now(),
+        documentNumber: 'DOC-${const Uuid().v4()}',
+        movementDate: now,
         movementType: _movementType,
-        sourceLocationId: _sourceLocationId,
-        sourceLocationName: _sourceLocationName,
-        destinationLocationId: _destinationLocationId,
-        destinationLocationName: _destinationLocationName,
+        warehouseId:
+            _sourceLocationId.isNotEmpty ? _sourceLocationId : 'WH-001',
+        items: _items,
+        createdAt: now,
+        updatedAt: now,
         initiatingEmployeeId: _initiatingEmployeeId.isNotEmpty
             ? _initiatingEmployeeId
             : 'EMP-001',
         initiatingEmployeeName: _initiatingEmployeeName.isNotEmpty
             ? _initiatingEmployeeName
             : 'Current User',
-        approvalStatus: ApprovalStatus.PENDING,
-        approverEmployeeId: null,
-        approverEmployeeName: null,
         reasonNotes: _reasonNotes,
         referenceDocuments: _referenceDocuments,
-        items: _items,
       );
 
-      final service = ref.read(inventoryMovementServiceProvider);
-      await service.createMovement(newMovement);
+      final notifier = ref.read(inventoryMovementProvider.notifier);
+      await notifier.saveMovement(
+        documentNumber: newMovement.documentNumber,
+        movementDate: newMovement.movementDate,
+        movementType: newMovement.movementType,
+        warehouseId: newMovement.warehouseId,
+        reasonNotes: newMovement.reasonNotes,
+      );
 
-      // Show success message and pop back to list
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -864,19 +926,16 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
             backgroundColor: Colors.green,
           ),
         );
-
-        // Navigate back to the list
         Navigator.of(context).pop();
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error creating movement: $e'),
+            content: Text('Error creating movement: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
-
         setState(() {
           _isProcessing = false;
         });

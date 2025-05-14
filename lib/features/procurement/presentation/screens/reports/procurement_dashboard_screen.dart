@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../../core/routes/app_router.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../suppliers/presentation/providers/supplier_provider.dart';
+import '../../../../suppliers/presentation/widgets/supplier_performance_chart.dart';
 import '../../widgets/procurement_metrics_card.dart';
 import '../../widgets/purchase_order_list.dart';
-import '../../../../suppliers/presentation/widgets/supplier_performance_chart.dart';
-import '../../../../suppliers/presentation/providers/supplier_provider.dart';
 
 class ProcurementDashboardScreen extends ConsumerWidget {
   const ProcurementDashboardScreen({super.key});
@@ -18,7 +19,7 @@ class ProcurementDashboardScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.createPurchaseOrder);
+              context.push('/procurement/purchase-orders/create');
             },
           ),
         ],
@@ -80,7 +81,7 @@ class ProcurementDashboardScreen extends ConsumerWidget {
             Icons.add,
             Colors.blue,
             () {
-              Navigator.pushNamed(context, AppRoutes.createPurchaseOrder);
+              context.push('/procurement/purchase-orders/create');
             },
           ),
         ),
@@ -92,7 +93,7 @@ class ProcurementDashboardScreen extends ConsumerWidget {
             Icons.people,
             Colors.green,
             () {
-              Navigator.pushNamed(context, AppRoutes.suppliers);
+              context.push('/suppliers');
             },
           ),
         ),
@@ -226,7 +227,7 @@ class ProcurementDashboardScreen extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.purchaseOrders);
+                context.push('/procurement/purchase-orders');
               },
               child: const Text('View All'),
             ),
@@ -277,15 +278,6 @@ class ProcurementDashboardScreen extends ConsumerWidget {
 }
 
 class _MetricData {
-  final String title;
-  final String value;
-  final IconData icon;
-  final Color color;
-  final String? subtitle;
-  final String? tooltip;
-  final VoidCallback? onTap;
-  final bool isLoading;
-  final String? errorMessage;
   const _MetricData({
     required this.title,
     required this.value,
@@ -297,4 +289,13 @@ class _MetricData {
     this.isLoading = false,
     this.errorMessage,
   });
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+  final String? subtitle;
+  final String? tooltip;
+  final VoidCallback? onTap;
+  final bool isLoading;
+  final String? errorMessage;
 }

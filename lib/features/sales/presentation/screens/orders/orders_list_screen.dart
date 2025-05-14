@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../../common/widgets/custom_search_bar.dart';
@@ -117,7 +118,7 @@ class _OrdersListScreenState extends ConsumerState<OrdersListScreen>
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, '/sales/orders/create'),
+        onPressed: () => context.go('/sales/orders/create'),
       ),
     );
   }
@@ -260,11 +261,7 @@ class _OrdersListScreenState extends ConsumerState<OrdersListScreen>
                     const Icon(Icons.chevron_right),
                   ],
                 ),
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  '/sales/orders/details',
-                  arguments: id,
-                ),
+                onTap: () => context.go('/sales/orders/details', extra: id),
               ),
             );
           },

@@ -1,32 +1,34 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/*import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../features/analytics/data/mock_analytics_data.dart';
+import '../../features/factory/equipment_maintenance/data/models/equipment_model.dart';
+import '../../features/factory/equipment_maintenance/data/models/maintenance_models.dart';
+import '../../features/factory/equipment_maintenance/data/models/maintenance_record_model.dart';
 import '../../features/inventory/data/models/inventory_item_model.dart'
     hide QualityStatus;
 import '../../features/inventory/data/models/inventory_location_model.dart';
-import '../../features/inventory/data/models/inventory_movement_type.dart';
-import '../../features/inventory/data/models/inventory_movement_model.dart';
 import '../../features/inventory/data/models/inventory_movement_item_model.dart';
+import '../../features/inventory/data/models/inventory_movement_model.dart';
+import '../../features/inventory/data/models/inventory_movement_type.dart';
 import '../../features/inventory/data/models/quality_status.dart';
-import '../../features/analytics/data/mock_analytics_data.dart';
-import 'dart:math' as math;
-import '../../features/factory/equipment_maintenance/data/models/equipment_model.dart';
-import '../../features/factory/equipment_maintenance/data/models/maintenance_record_model.dart';
-import '../../features/factory/equipment_maintenance/data/models/maintenance_models.dart';
+import '../../features/inventory/data/models/location_model.dart';
 
 /// Global singleton service to provide centralized mock data
 /// This ensures mock data is synchronized between all modules
 class MockDataService {
-  // Singleton pattern implementation
-  static final MockDataService _instance = MockDataService._internal();
-
   factory MockDataService() {
     return _instance;
   }
 
   MockDataService._internal();
+  // Singleton pattern implementation
+  static final MockDataService _instance = MockDataService._internal();
 
   // Mock inventory items - shared across inventory features and modules
   final List<InventoryItemModel> inventoryItems = [
+    // Commented out as it's no longer needed
+    /*
     // Milk and Dairy Products
     InventoryItemModel(
       id: 'inv-001',
@@ -53,496 +55,69 @@ class MockDataService {
         'region': 'Riyadh Province',
       },
     ),
-    InventoryItemModel(
-      id: 'inv-002',
-      name: 'Laban (لبن)',
-      category: 'Dairy',
-      unit: 'Liters',
-      quantity: 110.0,
-      minimumQuantity: 100.0,
-      reorderPoint: 150.0,
-      location: 'Cold Storage B',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 1)),
-      batchNumber: 'BATCH002',
-      expiryDate: DateTime.now().add(const Duration(days: 5)),
-      cost: 4.2,
-      currentTemperature: 4.0,
-      storageCondition: 'refrigerated',
-      overallQualityStatus: null,
-      searchTerms: ['laban', 'buttermilk', 'dairy', 'لبن'],
-    ),
-    InventoryItemModel(
-      id: 'inv-003',
-      name: 'Jibnah (جبنة)',
-      category: 'Dairy',
-      unit: 'Kg',
-      quantity: 250.0,
-      minimumQuantity: 50.0,
-      reorderPoint: 75.0,
-      location: 'Cold Storage B',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 2)),
-      batchNumber: 'BATCH003',
-      expiryDate: DateTime.now().add(const Duration(days: 30)),
-      cost: 12.5,
-      currentTemperature: 4.0,
-      storageCondition: 'refrigerated',
-      overallQualityStatus: null,
-      searchTerms: ['jibnah', 'cheese', 'dairy', 'جبنة'],
-    ),
-    InventoryItemModel(
-      id: 'inv-004',
-      name: 'Qishta (قشطة)',
-      category: 'Dairy',
-      unit: 'Kg',
-      quantity: 100.0,
-      minimumQuantity: 20.0,
-      reorderPoint: 30.0,
-      location: 'Cold Storage A',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 1)),
-      batchNumber: 'BATCH004',
-      expiryDate: DateTime.now().add(const Duration(days: 10)),
-      cost: 8.2,
-      currentTemperature: 4.0,
-      storageCondition: 'refrigerated',
-      overallQualityStatus: null,
-      fatContent: 45.0,
-      searchTerms: ['qishta', 'cream', 'dairy', 'قشطة'],
-    ),
-    InventoryItemModel(
-      id: 'inv-014',
-      name: 'Cow Milk',
-      category: 'Dairy',
-      unit: 'Liters',
-      quantity: 250.0,
-      minimumQuantity: 300.0,
-      reorderPoint: 350.0,
-      location: 'Cold Storage A',
-      lastUpdated: DateTime.now().subtract(const Duration(hours: 8)),
-      batchNumber: 'BATCH014',
-      expiryDate: DateTime.now().add(const Duration(days: 10)),
-      cost: 4.5,
-      currentTemperature: 4.0,
-      storageCondition: 'refrigerated',
-      overallQualityStatus: null,
-      fatContent: 3.2,
-      pasteurized: true,
-      searchTerms: ['milk', 'cow', 'dairy'],
-      additionalAttributes: {
-        'source': 'Local Dairy Farm',
-        'organicCertified': true,
-        'region': 'Riyadh Province',
-      },
-    ),
-
-    // Ingredients
-    InventoryItemModel(
-      id: 'inv-005',
-      name: 'Date Syrup (دبس التمر)',
-      category: 'Ingredients',
-      unit: 'Kg',
-      quantity: 500.0,
-      minimumQuantity: 100.0,
-      reorderPoint: 150.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 5)),
-      batchNumber: 'BATCH005',
-      expiryDate: DateTime.now().add(const Duration(days: 180)),
-      cost: 3.5,
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['date', 'syrup', 'ingredient', 'دبس', 'تمر'],
-    ),
-    InventoryItemModel(
-      id: 'inv-006',
-      name: 'Saffron (زعفران)',
-      category: 'Ingredients',
-      unit: 'g',
-      quantity: 300.0,
-      minimumQuantity: 50.0,
-      reorderPoint: 80.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 10)),
-      batchNumber: 'BATCH006',
-      expiryDate: DateTime.now().add(const Duration(days: 365)),
-      cost: 12.8,
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['saffron', 'spice', 'ingredient', 'زعفران'],
-    ),
-    InventoryItemModel(
-      id: 'inv-007',
-      name: 'Pure Water',
-      category: 'Ingredients',
-      unit: 'Liters',
-      quantity: 20.0,
-      minimumQuantity: 5.0,
-      reorderPoint: 8.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 15)),
-      batchNumber: 'BATCH007',
-      expiryDate: DateTime.now().add(const Duration(days: 180)),
-      cost: 9.5,
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['pure', 'water', 'ingredient', 'flavoring'],
-    ),
-
-    // Fruits
-    InventoryItemModel(
-      id: 'inv-008',
-      name: 'Dates (تمر)',
-      category: 'Fruits',
-      unit: 'Kg',
-      quantity: 80.0,
-      minimumQuantity: 20.0,
-      reorderPoint: 30.0,
-      location: 'Cold Storage A',
-      lastUpdated: DateTime.now().subtract(const Duration(hours: 6)),
-      batchNumber: 'BATCH008',
-      expiryDate: DateTime.now().add(const Duration(days: 90)),
-      cost: 6.0,
-      currentTemperature: 18.0,
-      storageCondition: 'cool dry',
-      overallQualityStatus: null,
-      searchTerms: ['dates', 'fruit', 'تمر'],
-    ),
-    InventoryItemModel(
-      id: 'inv-009',
-      name: 'Pomegranate (رمان)',
-      category: 'Fruits',
-      unit: 'Kg',
-      quantity: 60.0,
-      minimumQuantity: 15.0,
-      reorderPoint: 25.0,
-      location: 'Cold Storage A',
-      lastUpdated: DateTime.now().subtract(const Duration(hours: 6)),
-      batchNumber: 'BATCH009',
-      expiryDate: DateTime.now().add(const Duration(days: 14)),
-      cost: 8.0,
-      currentTemperature: 4.0,
-      storageCondition: 'refrigerated',
-      overallQualityStatus: null,
-      searchTerms: ['pomegranate', 'fruit', 'رمان'],
-    ),
-
-    // Packaging
-    InventoryItemModel(
-      id: 'inv-010',
-      name: 'Halal-Certified Containers 500ml',
-      category: 'Packaging',
-      unit: 'Units',
-      quantity: 2000.0,
-      minimumQuantity: 500.0,
-      reorderPoint: 800.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 20)),
-      batchNumber: 'BATCH010',
-      cost: 0.25,
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['container', 'plastic', 'packaging', '500ml', 'halal'],
-    ),
-    InventoryItemModel(
-      id: 'inv-011',
-      name: 'Traditional Glass Bottles 1L',
-      category: 'Packaging',
-      unit: 'Units',
-      quantity: 1500.0,
-      minimumQuantity: 300.0,
-      reorderPoint: 500.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 20)),
-      batchNumber: 'BATCH011',
-      cost: 0.45,
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['bottle', 'glass', 'packaging', '1L', 'traditional'],
-    ),
-
-    // Low Stock Items (for testing)
-    InventoryItemModel(
-      id: 'inv-015',
-      name: 'Strawberry Syrup',
-      category: 'Ingredients',
-      unit: 'Liters',
-      quantity: 8.0,
-      minimumQuantity: 10.0,
-      reorderPoint: 15.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 5)),
-      batchNumber: 'BATCH015',
-      expiryDate: DateTime.now().add(const Duration(days: 180)),
-      cost: 12.0,
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['strawberry', 'syrup', 'flavoring', 'ingredient'],
-    ),
-    InventoryItemModel(
-      id: 'inv-016',
-      name: 'Chocolate Powder',
-      category: 'Ingredients',
-      unit: 'Kg',
-      quantity: 45.0,
-      minimumQuantity: 10.0,
-      reorderPoint: 15.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 7)),
-      batchNumber: 'BATCH016',
-      expiryDate: DateTime.now().add(const Duration(days: 240)),
-      cost: 18.0,
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['chocolate', 'powder', 'cocoa', 'flavoring', 'ingredient'],
-    ),
-    InventoryItemModel(
-      id: 'inv-017',
-      name: 'Banana Extract',
-      category: 'Ingredients',
-      unit: 'Liters',
-      quantity: 30.0,
-      minimumQuantity: 5.0,
-      reorderPoint: 10.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 8)),
-      batchNumber: 'BATCH017',
-      expiryDate: DateTime.now().add(const Duration(days: 365)),
-      cost: 15.0,
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['banana', 'extract', 'flavoring', 'ingredient'],
-    ),
-    // Additional mock items for Ingredients and Packaging
-    InventoryItemModel(
-      id: 'inv-018',
-      name: 'Cardamom Pods',
-      category: 'Ingredients',
-      unit: 'Kg',
-      quantity: 60.0,
-      minimumQuantity: 10.0,
-      reorderPoint: 20.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 3)),
-      batchNumber: 'BATCH018',
-      expiryDate: DateTime.now().add(const Duration(days: 365)),
-      cost: 80.0, // 80 ﷼ per Kg
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['cardamom', 'spice', 'ingredient'],
-    ),
-    InventoryItemModel(
-      id: 'inv-019',
-      name: 'Rose Water',
-      category: 'Ingredients',
-      unit: 'Liters',
-      quantity: 25.0,
-      minimumQuantity: 5.0,
-      reorderPoint: 10.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 2)),
-      batchNumber: 'BATCH019',
-      expiryDate: DateTime.now().add(const Duration(days: 180)),
-      cost: 15.0, // 15 ﷼ per Liter
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['rose', 'water', 'ingredient'],
-    ),
-    InventoryItemModel(
-      id: 'inv-020',
-      name: 'Pistachio Nuts',
-      category: 'Ingredients',
-      unit: 'Kg',
-      quantity: 40.0,
-      minimumQuantity: 8.0,
-      reorderPoint: 15.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 4)),
-      batchNumber: 'BATCH020',
-      expiryDate: DateTime.now().add(const Duration(days: 300)),
-      cost: 120.0, // 120 ﷼ per Kg
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['pistachio', 'nut', 'ingredient'],
-    ),
-    InventoryItemModel(
-      id: 'inv-021',
-      name: 'Vanilla Beans',
-      category: 'Ingredients',
-      unit: 'g',
-      quantity: 500.0,
-      minimumQuantity: 100.0,
-      reorderPoint: 200.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 6)),
-      batchNumber: 'BATCH021',
-      expiryDate: DateTime.now().add(const Duration(days: 400)),
-      cost: 200.0, // 200 ﷼ per 100g
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['vanilla', 'bean', 'ingredient'],
-    ),
-    InventoryItemModel(
-      id: 'inv-022',
-      name: 'Plastic Cups 250ml',
-      category: 'Packaging',
-      unit: 'Units',
-      quantity: 5000.0,
-      minimumQuantity: 1000.0,
-      reorderPoint: 2000.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 10)),
-      batchNumber: 'BATCH022',
-      cost: 0.15, // 0.15 ﷼ per unit
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['cup', 'plastic', 'packaging', '250ml'],
-    ),
-    InventoryItemModel(
-      id: 'inv-023',
-      name: 'Paper Labels',
-      category: 'Packaging',
-      unit: 'Units',
-      quantity: 10000.0,
-      minimumQuantity: 2000.0,
-      reorderPoint: 4000.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 12)),
-      batchNumber: 'BATCH023',
-      cost: 0.02, // 0.02 ﷼ per unit
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['label', 'paper', 'packaging'],
-    ),
-    InventoryItemModel(
-      id: 'inv-024',
-      name: 'Shrink Wrap Film',
-      category: 'Packaging',
-      unit: 'Rolls',
-      quantity: 60.0,
-      minimumQuantity: 10.0,
-      reorderPoint: 20.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 8)),
-      batchNumber: 'BATCH024',
-      cost: 8.0, // 8 ﷼ per roll
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['shrink', 'wrap', 'film', 'packaging'],
-    ),
-    InventoryItemModel(
-      id: 'inv-025',
-      name: 'Aluminum Foil Lids',
-      category: 'Packaging',
-      unit: 'Units',
-      quantity: 8000.0,
-      minimumQuantity: 2000.0,
-      reorderPoint: 3000.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 7)),
-      batchNumber: 'BATCH025',
-      cost: 0.03, // 0.03 ﷼ per unit
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['foil', 'lid', 'aluminum', 'packaging'],
-    ),
-    // ... (repeat similar for 30+ items, varying expiry, cost, quantity, location, etc.)
-    // Example expired and expiring soon items:
-    InventoryItemModel(
-      id: 'inv-026',
-      name: 'Expired Yeast',
-      category: 'Ingredients',
-      unit: 'Kg',
-      quantity: 5.0,
-      minimumQuantity: 2.0,
-      reorderPoint: 4.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 20)),
-      batchNumber: 'BATCH026',
-      expiryDate: DateTime.now().subtract(const Duration(days: 1)),
-      cost: 10.0, // 10 ﷼ per Kg
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['yeast', 'ingredient', 'expired'],
-    ),
-    InventoryItemModel(
-      id: 'inv-027',
-      name: 'Salt (ملح)',
-      category: 'Ingredients',
-      unit: 'Kg',
-      quantity: 100.0,
-      minimumQuantity: 20.0,
-      reorderPoint: 40.0,
-      location: 'Dry Storage',
-      lastUpdated: DateTime.now().subtract(const Duration(days: 2)),
-      batchNumber: 'BATCH027',
-      expiryDate: DateTime.now().add(const Duration(days: 2)),
-      cost: 1.0, // 1 ﷼ per Kg
-      storageCondition: 'dry',
-      overallQualityStatus: null,
-      searchTerms: ['salt', 'ingredient'],
-    ),
-    // ... (add more items up to 30+ for robust demo)
+    */
   ];
 
   // Mock inventory locations - shared across inventory features
-  final List<InventoryLocationModel> inventoryLocations = [
-    InventoryLocationModel(
+  final List<LocationModel> inventoryLocations = [
+    LocationModel.inventory(
       locationId: 'loc-001',
       locationName: 'Cold Storage A (مخزن بارد أ)',
-      locationType: LocationType.COLD_STORAGE,
+      locationType: LocationType.coldStorage,
       temperatureCondition: '4°C',
       storageCapacity: 2000.0,
       currentUtilization: 1200.0,
       isActive: true,
     ),
-    InventoryLocationModel(
+    LocationModel.inventory(
       locationId: 'loc-002',
       locationName: 'Cold Storage B (مخزن بارد ب)',
-      locationType: LocationType.COLD_STORAGE,
+      locationType: LocationType.coldStorage,
       temperatureCondition: '4°C',
       storageCapacity: 1800.0,
       currentUtilization: 900.0,
       isActive: true,
     ),
-    InventoryLocationModel(
+    LocationModel.inventory(
       locationId: 'loc-003',
       locationName: 'Dry Storage (مخزن جاف)',
-      locationType: LocationType.DRY_STORAGE,
+      locationType: LocationType.dryStorage,
       temperatureCondition: '22°C',
       storageCapacity: 3000.0,
       currentUtilization: 1500.0,
       isActive: true,
     ),
-    InventoryLocationModel(
+    LocationModel.inventory(
       locationId: 'loc-004',
       locationName: 'Freezer (مجمد)',
-      locationType: LocationType.FREEZER,
+      locationType: LocationType.freezer,
       temperatureCondition: '-18°C',
       storageCapacity: 1500.0,
       currentUtilization: 600.0,
       isActive: true,
     ),
-    InventoryLocationModel(
+    LocationModel.inventory(
       locationId: 'loc-005',
       locationName: 'Production Area (منطقة الإنتاج)',
-      locationType: LocationType.PRODUCTION_AREA,
+      locationType: LocationType.productionArea,
       temperatureCondition: '18°C',
       storageCapacity: 800.0,
       currentUtilization: 400.0,
       isActive: true,
     ),
-    InventoryLocationModel(
+    LocationModel.inventory(
       locationId: 'loc-006',
       locationName: 'Quality Control (مراقبة الجودة)',
-      locationType: LocationType.QUALITY_CONTROL,
+      locationType: LocationType.qualityControl,
       temperatureCondition: '20°C',
       storageCapacity: 300.0,
       currentUtilization: 100.0,
       isActive: true,
     ),
-    InventoryLocationModel(
+    LocationModel.inventory(
       locationId: 'loc-007',
       locationName: 'Dispatch Area (منطقة الشحن)',
-      locationType: LocationType.DISPATCH_AREA,
+      locationType: LocationType.dispatchArea,
       temperatureCondition: '18°C',
       storageCapacity: 500.0,
       currentUtilization: 200.0,
@@ -555,7 +130,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-001',
       timestamp: DateTime.now().subtract(const Duration(days: 2)),
-      movementType: InventoryMovementType.RECEIPT,
+      movementType: InventoryMovementType.PO_RECEIPT,
       sourceLocationId: 'external-supplier-001',
       sourceLocationName: 'Al-Marai Camel Farm (مزرعة المراعي للإبل)',
       destinationLocationId: 'loc-001',
@@ -585,7 +160,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-002',
       timestamp: DateTime.now().subtract(const Duration(days: 1)),
-      movementType: InventoryMovementType.ISSUE,
+      movementType: InventoryMovementType.PRODUCTION_ISSUE,
       sourceLocationId: 'loc-001',
       sourceLocationName: 'Cold Storage A (مخزن بارد أ)',
       destinationLocationId: 'loc-005',
@@ -628,7 +203,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-003',
       timestamp: DateTime.now().subtract(const Duration(hours: 12)),
-      movementType: InventoryMovementType.TRANSFER,
+      movementType: InventoryMovementType.TRANSFER_IN,
       sourceLocationId: 'loc-003',
       sourceLocationName: 'Dry Storage (مخزن جاف)',
       destinationLocationId: 'loc-005',
@@ -670,7 +245,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-004',
       timestamp: DateTime.now().subtract(const Duration(hours: 6)),
-      movementType: InventoryMovementType.ISSUE,
+      movementType: InventoryMovementType.PRODUCTION_ISSUE,
       sourceLocationId: 'loc-005',
       sourceLocationName: 'Production Area (منطقة الإنتاج)',
       destinationLocationId: 'loc-001',
@@ -700,7 +275,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-005',
       timestamp: DateTime.now().subtract(const Duration(days: 3)),
-      movementType: InventoryMovementType.RECEIPT,
+      movementType: InventoryMovementType.PO_RECEIPT,
       sourceLocationId: 'external-supplier-002',
       sourceLocationName: 'Organic Fruits Co.',
       destinationLocationId: 'loc-003',
@@ -742,7 +317,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-006',
       timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-      movementType: InventoryMovementType.TRANSFER,
+      movementType: InventoryMovementType.TRANSFER_IN,
       sourceLocationId: 'loc-001',
       sourceLocationName: 'Cold Storage A (مخزن بارد أ)',
       destinationLocationId: 'loc-006',
@@ -772,7 +347,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-007',
       timestamp: DateTime.now().subtract(const Duration(minutes: 45)),
-      movementType: InventoryMovementType.ADJUSTMENT,
+      movementType: InventoryMovementType.ADJUSTMENT_OTHER,
       sourceLocationId: 'loc-003',
       sourceLocationName: 'Dry Storage (مخزن جاف)',
       destinationLocationId: 'loc-003',
@@ -803,7 +378,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-008',
       timestamp: DateTime.now().subtract(const Duration(days: 4)),
-      movementType: InventoryMovementType.ADJUSTMENT,
+      movementType: InventoryMovementType.ADJUSTMENT_OTHER,
       sourceLocationId: 'loc-003',
       sourceLocationName: 'Dry Storage (مخزن جاف)',
       destinationLocationId: 'loc-003',
@@ -833,7 +408,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-009',
       timestamp: DateTime.now().subtract(const Duration(days: 8)),
-      movementType: InventoryMovementType.RECEIPT,
+      movementType: InventoryMovementType.PO_RECEIPT,
       sourceLocationId: 'external-supplier-003',
       sourceLocationName: 'Desert Fruit Farms',
       destinationLocationId: 'loc-003',
@@ -863,7 +438,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-012',
       timestamp: DateTime.now().subtract(const Duration(days: 10)),
-      movementType: InventoryMovementType.RECEIPT,
+      movementType: InventoryMovementType.PO_RECEIPT,
       sourceLocationId: 'external-supplier-004',
       sourceLocationName: 'Saudi Spice Merchants',
       destinationLocationId: 'loc-003',
@@ -893,7 +468,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-013',
       timestamp: DateTime.now().subtract(const Duration(days: 2)),
-      movementType: InventoryMovementType.ISSUE,
+      movementType: InventoryMovementType.PRODUCTION_ISSUE,
       sourceLocationId: 'loc-003',
       sourceLocationName: 'Dry Storage (مخزن جاف)',
       destinationLocationId: 'loc-005',
@@ -923,7 +498,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-014',
       timestamp: DateTime.now().subtract(const Duration(days: 5)),
-      movementType: InventoryMovementType.TRANSFER,
+      movementType: InventoryMovementType.TRANSFER_IN,
       sourceLocationId: 'loc-002',
       sourceLocationName: 'Cold Storage B (مخزن بارد ب)',
       destinationLocationId: 'loc-007',
@@ -953,7 +528,7 @@ class MockDataService {
     InventoryMovementModel(
       movementId: 'mov-015',
       timestamp: DateTime.now().subtract(const Duration(days: 7)),
-      movementType: InventoryMovementType.ADJUSTMENT,
+      movementType: InventoryMovementType.ADJUSTMENT_OTHER,
       sourceLocationId: 'loc-001',
       sourceLocationName: 'Cold Storage A (مخزن بارد أ)',
       destinationLocationId: 'loc-001',
@@ -1744,3 +1319,4 @@ extension MockAnalyticsDataReset on MockAnalyticsData {
 final mockDataServiceProvider = Provider<MockDataService>((ref) {
   return MockDataService();
 });
+*/

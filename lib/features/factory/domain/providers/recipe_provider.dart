@@ -1,7 +1,8 @@
+import 'package:collection/collection.dart';
 import 'package:riverpod/riverpod.dart';
+
 import '../../data/models/recipe_model.dart';
 import '../../data/repositories/recipe_repository.dart';
-import 'package:collection/collection.dart';
 
 /// Provider for recipes and related CRUD operations.
 ///

@@ -3,16 +3,6 @@ import 'package:meta/meta.dart';
 /// Represents an inventory item.
 @immutable
 class InventoryItem {
-  final String id;
-  final String name;
-  final String category;
-  final double quantity;
-  final String unit;
-  final double price;
-  final double reorderPoint;
-  final double minimumQuantity;
-  final List<String> supplierIds;
-
   const InventoryItem({
     required this.id,
     required this.name,
@@ -24,6 +14,15 @@ class InventoryItem {
     required this.minimumQuantity,
     required this.supplierIds,
   });
+  final String id;
+  final String name;
+  final String category;
+  final double quantity;
+  final String unit;
+  final double price;
+  final double reorderPoint;
+  final double minimumQuantity;
+  final List<String> supplierIds;
 
   InventoryItem copyWith({
     String? id,
@@ -46,6 +45,23 @@ class InventoryItem {
       reorderPoint: reorderPoint ?? this.reorderPoint,
       minimumQuantity: minimumQuantity ?? this.minimumQuantity,
       supplierIds: supplierIds ?? this.supplierIds,
+    );
+  }
+
+  factory InventoryItem.fromJson(Map<String, dynamic> json) {
+    return InventoryItem(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      category: json['category'] ?? '',
+      quantity: (json['quantity'] as num?)?.toDouble() ?? 0.0,
+      unit: json['unit'] ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      reorderPoint: (json['reorderPoint'] as num?)?.toDouble() ?? 0.0,
+      minimumQuantity: (json['minimumQuantity'] as num?)?.toDouble() ?? 0.0,
+      supplierIds: (json['supplierIds'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
     );
   }
 

@@ -3,12 +3,12 @@ import '../../../production/domain/models/production_execution_model.dart';
 
 /// A widget that displays the status of a production execution as a colored badge
 class ProductionStatusBadge extends StatelessWidget {
-
   const ProductionStatusBadge({
     super.key,
     required this.status,
     this.mini = false,
   });
+
   /// The status to display
   final ProductionExecutionStatus status;
 
@@ -30,8 +30,6 @@ class ProductionStatusBadge extends StatelessWidget {
         return Colors.red;
       case ProductionExecutionStatus.failed:
         return Colors.deepOrange;
-      default:
-        return Colors.grey;
     }
   }
 
@@ -50,8 +48,6 @@ class ProductionStatusBadge extends StatelessWidget {
         return 'Cancelled';
       case ProductionExecutionStatus.failed:
         return 'Failed';
-      default:
-        return 'Unknown';
     }
   }
 

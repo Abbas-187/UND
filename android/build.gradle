@@ -9,6 +9,20 @@ allprojects {
         // Instead of using release option, set source and target compatibility
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        
+        // Remove the enable-preview flag that's causing compilation errors
+    }
+}
+
+// Add buildscript block for plugins not using version catalog
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Add dependencies for MultiDex support
+        classpath 'androidx.multidex:multidex:2.0.1'
     }
 }
 

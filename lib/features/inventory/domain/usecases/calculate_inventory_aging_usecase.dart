@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../data/models/inventory_item_model.dart';
-import '../repositories/inventory_repository.dart';
+
 import '../entities/inventory_item.dart';
+import '../repositories/inventory_repository.dart';
 
 class CalculateInventoryAgingUsecase {
   CalculateInventoryAgingUsecase({

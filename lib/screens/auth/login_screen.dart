@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../providers/auth_provider.dart';
+
+/// Set this to true to bypass authentication checks (for development/testing only)
+const bool bypassAuthChecks = false;
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key, this.redirectTo});
@@ -11,6 +16,17 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Bypass login screen during testing
+    if (bypassAuthChecks) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.go('/');
+      });
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -57,9 +73,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (next == AuthState.authenticated) {
         // Navigate after successful authentication
         if (widget.redirectTo != null) {
-          Navigator.of(context).pushReplacementNamed(widget.redirectTo!);
+          context.go(widget.redirectTo!);
         } else {
-          Navigator.of(context).pushReplacementNamed('/');
+          context.go('/');
         }
       }
     });
@@ -163,7 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/forgot-password');
+                            context.go('/forgot-password');
                           },
                           child: Text('Forgot Password?'),
                         ),

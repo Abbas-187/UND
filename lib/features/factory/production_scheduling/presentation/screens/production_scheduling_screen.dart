@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../domain/providers/production_scheduling_provider.dart';
 import '../../data/models/production_schedule_model.dart';
-import '../widgets/create_production_schedule_screen.dart';
 import '../widgets/production_line_timeline.dart';
 import '../widgets/production_schedule_calendar.dart';
-import '../widgets/production_slot_detail_screen.dart';
 
 class ProductionSchedulingScreen extends ConsumerWidget {
   const ProductionSchedulingScreen({super.key});
@@ -27,13 +26,7 @@ class ProductionSchedulingScreen extends ConsumerWidget {
               userAsync.when(
                 data: (user) {
                   if (user != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const CreateProductionScheduleScreen(),
-                      ),
-                    );
+                    context.go('/factory/production-scheduling/create');
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -74,18 +67,11 @@ class ProductionSchedulingScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          // Get current user status
           final userAsync = ref.read(currentUserProvider);
           userAsync.when(
             data: (user) {
               if (user != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        const CreateProductionScheduleScreen(),
-                  ),
-                );
+                context.go('/factory/production-scheduling/create');
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -137,13 +123,7 @@ class ProductionSchedulingScreen extends ConsumerWidget {
               icon: const Icon(Icons.add),
               label: const Text('Create Schedule'),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        const CreateProductionScheduleScreen(),
-                  ),
-                );
+                context.go('/factory/production-scheduling/create');
               },
             ),
           ],
@@ -163,19 +143,13 @@ class ProductionSchedulingScreen extends ConsumerWidget {
           child: ProductionScheduleCalendar(
             schedules: schedules,
             onScheduleTap: (schedule) {
-              // Show schedule details
               final slots = schedule.slots;
               if (slots.isNotEmpty) {
-                // Navigate to the detail screen for the first slot
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProductionSlotDetailScreen(
-                      slot: slots.first,
-                      scheduleId: schedule.id,
-                    ),
-                  ),
-                );
+                context
+                    .go('/factory/production-scheduling/slot-detail', extra: {
+                  'slot': slots.first,
+                  'scheduleId': schedule.id,
+                });
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

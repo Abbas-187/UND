@@ -29,6 +29,8 @@ class ProductCatalogModel {
     this.nutritionalInfo,
     this.ingredients,
     this.searchTerms = const [],
+    this.isBatchTracked = false, // New field
+    this.isPerishable = false, // New field
   });
 
   factory ProductCatalogModel.fromJson(Map<String, dynamic> json) {
@@ -88,6 +90,8 @@ class ProductCatalogModel {
       searchTerms: json['searchTerms'] != null
           ? List<String>.from(json['searchTerms'] as List)
           : const [],
+      isBatchTracked: json['isBatchTracked'] as bool? ?? false, // New field
+      isPerishable: json['isPerishable'] as bool? ?? false, // New field
     );
   }
   final String? id;
@@ -118,6 +122,8 @@ class ProductCatalogModel {
   final String? nutritionalInfo;
   final String? ingredients;
   final List<String> searchTerms;
+  final bool isBatchTracked; // New field
+  final bool isPerishable; // New field
 
   ProductCatalogModel copyWith({
     String? id,
@@ -147,7 +153,9 @@ class ProductCatalogModel {
     double? targetStockLevel,
     String? nutritionalInfo,
     String? ingredients,
-    List<String>? searchTerms,
+    List<String>? searchTerms, // Made nullable
+    bool? isBatchTracked, // Made nullable
+    bool? isPerishable, // Made nullable
   }) {
     return ProductCatalogModel(
       id: id ?? this.id,
@@ -180,6 +188,8 @@ class ProductCatalogModel {
       nutritionalInfo: nutritionalInfo ?? this.nutritionalInfo,
       ingredients: ingredients ?? this.ingredients,
       searchTerms: searchTerms ?? this.searchTerms,
+      isBatchTracked: isBatchTracked ?? this.isBatchTracked,
+      isPerishable: isPerishable ?? this.isPerishable,
     );
   }
 
@@ -217,6 +227,8 @@ class ProductCatalogModel {
       if (nutritionalInfo != null) 'nutritionalInfo': nutritionalInfo,
       if (ingredients != null) 'ingredients': ingredients,
       'searchTerms': searchTerms,
+      'isBatchTracked': isBatchTracked, // New field
+      'isPerishable': isPerishable, // New field
     };
   }
 }

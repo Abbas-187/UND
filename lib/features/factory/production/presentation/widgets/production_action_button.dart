@@ -3,7 +3,6 @@ import '../../../production/domain/models/production_execution_model.dart';
 
 /// Widget to display action buttons based on the current production execution status
 class ProductionActionButton extends StatelessWidget {
-
   const ProductionActionButton({
     super.key,
     required this.status,
@@ -14,6 +13,7 @@ class ProductionActionButton extends StatelessWidget {
     this.actionIcon,
     this.secondaryActionIcon,
   });
+
   /// Current status of the production execution
   final ProductionExecutionStatus status;
 
@@ -97,8 +97,6 @@ class ProductionActionButton extends StatelessWidget {
         return 'Review Issues';
       case ProductionExecutionStatus.cancelled:
         return 'Review Details';
-      default:
-        return 'Next Action';
     }
   }
 
@@ -116,8 +114,6 @@ class ProductionActionButton extends StatelessWidget {
       case ProductionExecutionStatus.failed:
         return 'Try Again';
       case ProductionExecutionStatus.cancelled:
-        return null;
-      default:
         return null;
     }
   }
@@ -137,8 +133,6 @@ class ProductionActionButton extends StatelessWidget {
         return Icons.error_outline;
       case ProductionExecutionStatus.cancelled:
         return Icons.info_outline;
-      default:
-        return Icons.arrow_forward;
     }
   }
 
@@ -156,8 +150,6 @@ class ProductionActionButton extends StatelessWidget {
       case ProductionExecutionStatus.failed:
         return Icons.refresh;
       case ProductionExecutionStatus.cancelled:
-        return null;
-      default:
         return null;
     }
   }
@@ -177,8 +169,6 @@ class ProductionActionButton extends StatelessWidget {
         return Colors.red.shade700;
       case ProductionExecutionStatus.cancelled:
         return Colors.grey.shade700;
-      default:
-        return Colors.blue;
     }
   }
 
@@ -195,7 +185,7 @@ class ProductionActionButton extends StatelessWidget {
         return Colors.green;
       case ProductionExecutionStatus.failed:
         return Colors.blue;
-      default:
+      case ProductionExecutionStatus.cancelled:
         return Colors.grey.shade700;
     }
   }

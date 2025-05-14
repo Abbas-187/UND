@@ -1,13 +1,12 @@
+import 'package:flutter/widgets.dart'; // Added import
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/analytics/inventory_analytics_service.dart';
 import '../../domain/entities/inventory_item.dart';
-import '../../domain/repositories/inventory_repository.dart';
+import '../../domain/providers/inventory_provider.dart';
 import '../../domain/usecases/adjust_quantity_usecase.dart';
 import '../../domain/usecases/get_inventory_analytics_usecase.dart';
 import '../../domain/usecases/get_low_stock_alerts_usecase.dart';
-import '../../domain/analytics/inventory_analytics_service.dart';
-import 'package:intl/intl.dart';
-import '../../domain/providers/inventory_provider.dart';
 
 // Use case providers
 final adjustQuantityUseCaseProvider = Provider<AdjustQuantityUseCase>((ref) {
@@ -78,18 +77,26 @@ class InventoryFilter {
     this.showNeedsReorder = false,
     this.showExpiringSoon = false,
     this.selectedCategory,
+    this.selectedSubCategory, // New
     this.selectedLocation,
+    this.selectedSupplier, // New
     this.availableCategories = const [],
+    this.availableSubCategories = const [], // New
     this.availableLocations = const [],
+    this.availableSuppliers = const [], // New
   });
   final String searchQuery;
   final bool showLowStock;
   final bool showNeedsReorder;
   final bool showExpiringSoon;
   final String? selectedCategory;
+  final String? selectedSubCategory; // New
   final String? selectedLocation;
+  final String? selectedSupplier; // New
   final List<String> availableCategories;
+  final List<String> availableSubCategories; // New
   final List<String> availableLocations;
+  final List<String> availableSuppliers; // New
 
   InventoryFilter copyWith({
     String? searchQuery,
@@ -97,9 +104,13 @@ class InventoryFilter {
     bool? showNeedsReorder,
     bool? showExpiringSoon,
     String? selectedCategory,
+    String? selectedSubCategory, // New
     String? selectedLocation,
+    String? selectedSupplier, // New
     List<String>? availableCategories,
+    List<String>? availableSubCategories, // New
     List<String>? availableLocations,
+    List<String>? availableSuppliers, // New
   }) {
     return InventoryFilter(
       searchQuery: searchQuery ?? this.searchQuery,
@@ -107,9 +118,15 @@ class InventoryFilter {
       showNeedsReorder: showNeedsReorder ?? this.showNeedsReorder,
       showExpiringSoon: showExpiringSoon ?? this.showExpiringSoon,
       selectedCategory: selectedCategory ?? this.selectedCategory,
+      selectedSubCategory:
+          selectedSubCategory ?? this.selectedSubCategory, // New
       selectedLocation: selectedLocation ?? this.selectedLocation,
+      selectedSupplier: selectedSupplier ?? this.selectedSupplier, // New
       availableCategories: availableCategories ?? this.availableCategories,
+      availableSubCategories:
+          availableSubCategories ?? this.availableSubCategories, // New
       availableLocations: availableLocations ?? this.availableLocations,
+      availableSuppliers: availableSuppliers ?? this.availableSuppliers, // New
     );
   }
 }
@@ -119,6 +136,63 @@ final inventoryFilterProvider = StateProvider<InventoryFilter>((ref) {
   return const InventoryFilter();
 });
 
+// Provider to get all inventory items without any filters
+// This is useful for deriving filter options like unique categories, locations etc.
+final allInventoryItemsStreamProvider =
+    StreamProvider<List<InventoryItem>>((ref) {
+  final repository = ref.watch(inventoryRepositoryProvider);
+  return repository.watchAllItems();
+});
+
+// Providers for unique filter options
+final uniqueCategoriesProvider = Provider<List<String>>((ref) {
+  final allItemsAsyncValue = ref.watch(allInventoryItemsStreamProvider);
+  return allItemsAsyncValue.when(
+    data: (items) =>
+        items.map((item) => item.category).toSet().toList()..sort(),
+    loading: () => [],
+    error: (_, __) => [],
+  );
+});
+
+final uniqueSubCategoriesProvider = Provider<List<String>>((ref) {
+  final allItemsAsyncValue = ref.watch(allInventoryItemsStreamProvider);
+  return allItemsAsyncValue.when(
+    data: (items) => items
+        .where((item) => item.subCategory.isNotEmpty) // Removed null check
+        .map((item) => item.subCategory) // Removed null assertion
+        .toSet()
+        .toList()
+      ..sort(),
+    loading: () => [],
+    error: (_, __) => [],
+  );
+});
+
+final uniqueLocationsProvider = Provider<List<String>>((ref) {
+  final allItemsAsyncValue = ref.watch(allInventoryItemsStreamProvider);
+  return allItemsAsyncValue.when(
+    data: (items) =>
+        items.map((item) => item.location).toSet().toList()..sort(),
+    loading: () => [],
+    error: (_, __) => [],
+  );
+});
+
+final uniqueSuppliersProvider = Provider<List<String>>((ref) {
+  final allItemsAsyncValue = ref.watch(allInventoryItemsStreamProvider);
+  return allItemsAsyncValue.when(
+    data: (items) => items
+        .where((item) => item.supplier != null && item.supplier!.isNotEmpty)
+        .map((item) => item.supplier!)
+        .toSet()
+        .toList()
+      ..sort(),
+    loading: () => [],
+    error: (_, __) => [],
+  );
+});
+
 // Filtered items provider
 final filteredInventoryItemsProvider =
     StreamProvider<List<InventoryItem>>((ref) {
@@ -126,20 +200,78 @@ final filteredInventoryItemsProvider =
   final filter = ref.watch(inventoryFilterProvider);
 
   return repository.watchAllItems().map((items) {
+    // Populate available filter options dynamically
+    final categories = items.map((item) => item.category).toSet().toList()
+      ..sort();
+    final subCategories = items
+        .where((item) => item.subCategory.isNotEmpty) // Removed null check
+        .map((item) => item.subCategory) // Removed null assertion
+        .toSet()
+        .toList()
+      ..sort();
+    final locations = items.map((item) => item.location).toSet().toList()
+      ..sort();
+    final suppliers = items
+        .where((item) => item.supplier != null && item.supplier!.isNotEmpty)
+        .map((item) => item.supplier!)
+        .toSet()
+        .toList()
+      ..sort();
+
+    // Update the filter object with the latest available options
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (ref.read(inventoryFilterProvider).availableCategories.isEmpty &&
+          categories.isNotEmpty) {
+        ref
+            .read(inventoryFilterProvider.notifier)
+            .update((state) => state.copyWith(availableCategories: categories));
+      }
+      if (ref.read(inventoryFilterProvider).availableSubCategories.isEmpty &&
+          subCategories.isNotEmpty) {
+        ref.read(inventoryFilterProvider.notifier).update(
+            (state) => state.copyWith(availableSubCategories: subCategories));
+      }
+      if (ref.read(inventoryFilterProvider).availableLocations.isEmpty &&
+          locations.isNotEmpty) {
+        ref
+            .read(inventoryFilterProvider.notifier)
+            .update((state) => state.copyWith(availableLocations: locations));
+      }
+      if (ref.read(inventoryFilterProvider).availableSuppliers.isEmpty &&
+          suppliers.isNotEmpty) {
+        ref
+            .read(inventoryFilterProvider.notifier)
+            .update((state) => state.copyWith(availableSuppliers: suppliers));
+      }
+    });
+
     return items.where((item) {
       // Apply search filter
       if (filter.searchQuery.isNotEmpty) {
         final searchLower = filter.searchQuery.toLowerCase();
-        if (!item.name.toLowerCase().contains(searchLower) &&
-            !item.category.toLowerCase().contains(searchLower) &&
-            !item.location.toLowerCase().contains(searchLower)) {
-          return false;
-        }
+        bool matchesSearch = item.name.toLowerCase().contains(searchLower) ||
+            item.category.toLowerCase().contains(searchLower) ||
+            item.subCategory
+                .toLowerCase()
+                .contains(searchLower) || // Removed null-aware operator
+            item.location.toLowerCase().contains(searchLower) ||
+            (item.supplier?.toLowerCase().contains(searchLower) ?? false) ||
+            (item.batchNumber?.toLowerCase().contains(searchLower) ?? false) ||
+            (item.additionalAttributes?.entries.any((e) =>
+                    e.value.toString().toLowerCase().contains(searchLower)) ??
+                false);
+        if (!matchesSearch) return false;
       }
 
       // Apply category filter
       if (filter.selectedCategory != null &&
           item.category != filter.selectedCategory) {
+        return false;
+      }
+
+      // Apply subCategory filter
+      if (filter.selectedSubCategory != null &&
+          item.subCategory != filter.selectedSubCategory) {
         return false;
       }
 
@@ -149,8 +281,16 @@ final filteredInventoryItemsProvider =
         return false;
       }
 
+      // Apply supplier filter
+      if (filter.selectedSupplier != null &&
+          item.supplier != filter.selectedSupplier) {
+        return false;
+      }
+
       // Apply stock status filters
-      if (filter.showLowStock && item.quantity > item.minimumQuantity) {
+      if (filter.showLowStock &&
+          (item.quantity > item.minimumQuantity &&
+              item.quantity > item.lowStockThreshold)) {
         return false;
       }
 

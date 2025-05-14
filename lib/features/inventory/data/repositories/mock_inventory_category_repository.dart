@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 
 import 'package:uuid/uuid.dart';
@@ -239,3 +240,4 @@ class MockInventoryCategoryRepository implements InventoryCategoryRepository {
     return Map.from(_itemCounts);
   }
 }
+*/
