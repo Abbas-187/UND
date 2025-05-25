@@ -1,5 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../../core/exceptions/failure.dart';
 import '../../../../../core/exceptions/result.dart';
+import '../integration/factory_quality_control_inventory_integration_provider.dart';
 import '../models/quality_control_result_model.dart';
 import '../repositories/quality_control_repository.dart';
 
@@ -8,7 +11,6 @@ import '../repositories/quality_control_repository.dart';
 /// This class encapsulates the business logic for recording and managing
 /// quality control checks during the manufacturing process.
 class RecordQualityControlUseCase {
-
   /// Constructor that allows dependency injection of the repository
   const RecordQualityControlUseCase(this.repository);
   final QualityControlRepository repository;
@@ -18,7 +20,12 @@ class RecordQualityControlUseCase {
   /// Takes a [QualityControlResultModel] as input and validates it before recording.
   /// Returns a [Result] with the recorded [QualityControlResultModel] or a [Failure].
   Future<Result<QualityControlResultModel>> recordQualityControlResult(
-      QualityControlResultModel result) async {
+    QualityControlResultModel result, {
+    required WidgetRef ref,
+    required String inventoryItemId,
+    String? batchLotNumber,
+    required String userId,
+  }) async {
     try {
       // Validate input
       if (result.batchId.isEmpty) {
@@ -37,10 +44,20 @@ class RecordQualityControlUseCase {
       if (result.measurements.isEmpty) {
         return Result.failure(
             ValidationFailure('Measurements cannot be empty'));
+      } // Call repository to record the quality control result
+      final qcResult = await repository.recordQualityControlResult(result);
+      // If successful, update inventory quality status
+      if (qcResult.isSuccess) {
+        final integration =
+            ref.read(factoryQualityControlInventoryIntegrationProvider);
+        await integration.handleQcResult(
+          inventoryItemId: inventoryItemId,
+          batchLotNumber: batchLotNumber,
+          qcResult: qcResult.data!,
+          userId: userId,
+        );
       }
-
-      // Call repository to record the quality control result
-      return await repository.recordQualityControlResult(result);
+      return qcResult;
     } catch (e) {
       return Result.failure(UnknownFailure(
           'Failed to record quality control result',

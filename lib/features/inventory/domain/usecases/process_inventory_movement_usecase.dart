@@ -7,7 +7,6 @@ import '../validators/inventory_movement_validator.dart';
 
 /// Result class for movement processing operations
 class MovementProcessingResult {
-
   const MovementProcessingResult({
     required this.success,
     this.movementId,
@@ -20,7 +19,6 @@ class MovementProcessingResult {
 
 /// UseCase for processing inventory movements with FIFO/LIFO costing
 class ProcessInventoryMovementUseCase {
-
   const ProcessInventoryMovementUseCase(this._repository);
   final InventoryRepository _repository;
 
@@ -43,7 +41,8 @@ class ProcessInventoryMovementUseCase {
 
     // Validate the movement for audit compliance
     final movementValidator = InventoryMovementValidator();
-    final movementValidationResult = movementValidator.validate(movement);
+    final movementValidationResult =
+        await movementValidator.validateAsync(movement);
 
     if (!movementValidationResult.isValid) {
       errors.addAll(movementValidationResult.errors);
@@ -67,10 +66,11 @@ class ProcessInventoryMovementUseCase {
           if (inventoryItem == null) continue;
 
           final requiresBatchTracking =
-              inventoryItem.customAttributes?['requiresBatchTracking'] == true;
+              inventoryItem.additionalAttributes?['requiresBatchTracking'] ==
+                  true;
 
           final isPerishable =
-              inventoryItem.customAttributes?['isPerishable'] == true;
+              inventoryItem.additionalAttributes?['isPerishable'] == true;
 
           // Use the dedicated validator for perishable items
           if (isPerishable) {
@@ -108,11 +108,11 @@ class ProcessInventoryMovementUseCase {
       }
 
       // Save the movement record
-      final savedMovement = await _repository.saveMovement(movement);
+      await _repository.saveMovement(movement);
 
       return MovementProcessingResult(
         success: true,
-        movementId: savedMovement.id,
+        movementId: movement.id ?? '',
       );
     } catch (e) {
       errors.add('Error processing movement: ${e.toString()}');
@@ -135,7 +135,7 @@ class ProcessInventoryMovementUseCase {
       initialQuantity: item.quantity,
       remainingQuantity: item.quantity,
       costAtTransaction: item.costAtTransaction ?? 0.0,
-      movementId: movement.id,
+      movementId: movement.id ?? '',
       movementDate: movement.movementDate,
       expirationDate: item.expirationDate,
       productionDate: item.productionDate,
@@ -169,7 +169,6 @@ class ProcessInventoryMovementUseCase {
 
     // The quantity we need to consume (absolute value)
     double remainingQuantityToConsume = item.quantity.abs();
-    double totalCost = 0.0;
 
     // Go through each cost layer and consume quantity
     for (final layer in costLayers) {
@@ -184,7 +183,6 @@ class ProcessInventoryMovementUseCase {
 
       // Calculate cost for this consumption
       final cost = quantityToConsumeFromLayer * layer.costAtTransaction;
-      totalCost += cost;
 
       // Update the layer's remaining quantity
       final updatedLayer = layer.copyWith(
@@ -199,7 +197,7 @@ class ProcessInventoryMovementUseCase {
         costLayerId: layer.id,
         itemId: item.itemId,
         warehouseId: movement.warehouseId,
-        movementId: movement.id,
+        movementId: movement.id ?? '',
         movementDate: movement.movementDate,
         quantity: quantityToConsumeFromLayer,
         cost: cost,
@@ -218,11 +216,6 @@ class ProcessInventoryMovementUseCase {
       throw Exception(
           'Insufficient quantity available for item ${item.itemName}');
     }
-
-    // Update the item's cost
-    final updatedItem = item.copyWith(
-      costAtTransaction: totalCost / item.quantity.abs(),
-    );
 
     // Update inventory quantity (negative for outbound)
     await _repository.updateInventoryQuantity(item.itemId, movement.warehouseId,

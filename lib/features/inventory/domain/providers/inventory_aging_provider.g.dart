@@ -6,7 +6,7 @@ part of 'inventory_aging_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$inventoryAgingHash() => r'3cf893fb244503c3d3fb11864f73400d7cb8084e';
+String _$inventoryAgingHash() => r'1d48632c047fdb08402d9052e02b8f82a86362ee';
 
 /// Copied from Dart SDK
 class _SystemHash {

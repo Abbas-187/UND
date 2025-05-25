@@ -5,7 +5,6 @@ import 'package:pdf/widgets.dart' as pw;
 import '../../data/models/inventory_movement_model.dart';
 
 class InventoryReportPdfOptions {
-
   const InventoryReportPdfOptions({
     required this.startDate,
     required this.endDate,
@@ -104,7 +103,7 @@ class InventoryReportPdfService {
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
-          pw.Text('Total Movements: \\${movements.length}',
+          pw.Text('Total Movements: ${movements.length}',
               style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
           // Add more summary stats as needed
         ],
@@ -114,7 +113,7 @@ class InventoryReportPdfService {
 
   pw.Widget _buildMovementsTable(List<InventoryMovementModel> movements,
       InventoryReportPdfOptions options) {
-    return pw.Table.fromTextArray(
+    return pw.TableHelper.fromTextArray(
       border: pw.TableBorder.all(color: PdfColors.grey400),
       cellAlignment: pw.Alignment.centerLeft,
       headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
@@ -171,7 +170,7 @@ class InventoryReportPdfService {
                     pw.Text('Approved By: ${m.approverEmployeeName}'),
                   pw.Text(
                       'Status: ${m.approvalStatus.toString().split('.').last}'),
-                  if (m.reasonNotes.isNotEmpty)
+                  if (m.reasonNotes?.isNotEmpty ?? false)
                     pw.Text('Notes: ${m.reasonNotes}'),
                   pw.SizedBox(height: 4),
                   pw.Text('Items:',

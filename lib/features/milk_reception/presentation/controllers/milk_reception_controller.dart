@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 
 import '../../../../features/inventory/domain/repositories/inventory_repository.dart';
+import '../../../../features/procurement/domain/repositories/purchase_order_repository.dart';
 import '../../../../features/suppliers/domain/repositories/supplier_repository.dart';
 import '../../../../services/reception_notification_service.dart';
 import '../../domain/models/milk_reception_model.dart';
@@ -28,12 +29,13 @@ final milkReceptionServiceProvider = Provider<MilkReceptionService>((ref) {
       ref.watch(milkReceptionInventoryRepositoryProvider);
   final supplierRepository = ref.watch(milkReceptionSupplierRepositoryProvider);
   final notificationService = ref.watch(receptionNotificationServiceProvider);
-
   return MilkReceptionService(
     receptionRepository: receptionRepository,
     inventoryRepository: inventoryRepository,
     supplierRepository: supplierRepository,
     notificationService: notificationService,
+    purchaseOrderRepository:
+        ref.watch(milkReceptionPurchaseOrderRepositoryProvider),
   );
 });
 
@@ -47,6 +49,13 @@ final milkReceptionInventoryRepositoryProvider =
 /// Provider for supplier repository
 final milkReceptionSupplierRepositoryProvider =
     Provider<SupplierRepository>((ref) {
+  // Implementation would depend on your actual repository setup
+  throw UnimplementedError('This provider should be implemented in your app');
+});
+
+/// Provider for purchase order repository
+final milkReceptionPurchaseOrderRepositoryProvider =
+    Provider<PurchaseOrderRepository>((ref) {
   // Implementation would depend on your actual repository setup
   throw UnimplementedError('This provider should be implemented in your app');
 });

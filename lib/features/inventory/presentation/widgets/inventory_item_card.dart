@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/inventory_item.dart';
+import 'quality_status_chip.dart';
 
 class InventoryItemCard extends StatelessWidget {
   const InventoryItemCard({
@@ -17,12 +18,19 @@ class InventoryItemCard extends StatelessWidget {
     final bool isLowStock = item.quantity <= item.lowStockThreshold;
     final bool needsReorder = item.quantity <= item.reorderPoint;
     final bool isExpired = item.isExpired;
+    final String? qualityStatus =
+        item.additionalAttributes?['qualityStatus'] as String?;
+    // Restrict actions if quality is not acceptable
+    bool isQualityAcceptable = qualityStatus == null ||
+        qualityStatus == 'excellent' ||
+        qualityStatus == 'good' ||
+        qualityStatus == 'acceptable';
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8.0),
       elevation: 2,
       child: InkWell(
-        onTap: onTap,
+        onTap: isQualityAcceptable ? onTap : null,
         borderRadius: BorderRadius.circular(4.0),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -54,6 +62,11 @@ class InventoryItemCard extends StatelessWidget {
                           '${item.category} > ${item.subCategory}',
                           style: theme.textTheme.bodySmall,
                         ),
+                        if (qualityStatus != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: QualityStatusChip(status: qualityStatus),
+                          ),
                       ],
                     ),
                   ),

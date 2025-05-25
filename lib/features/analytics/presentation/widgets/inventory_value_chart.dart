@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/firestore_service.dart';
 
 class InventoryValueChart extends ConsumerWidget {
-  const InventoryValueChart({Key? key}) : super(key: key);
+  const InventoryValueChart({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -119,7 +119,7 @@ class InventoryValueChart extends ConsumerWidget {
 }
 
 class StockLevelsByCategoryChart extends ConsumerWidget {
-  const StockLevelsByCategoryChart({Key? key}) : super(key: key);
+  const StockLevelsByCategoryChart({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

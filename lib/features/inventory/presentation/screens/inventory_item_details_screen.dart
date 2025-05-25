@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
+import '../../../warehouse/presentation/widgets/widgets.dart';
+import '../../data/models/quality_status.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/providers/inventory_provider.dart';
+import '../../domain/usecases/apply_dynamic_reorder_point_usecase.dart';
 import '../providers/inventory_provider.dart';
 
 class InventoryItemDetailsScreen extends ConsumerWidget {
@@ -33,7 +36,8 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
           return Scaffold(
             appBar: AppBar(title: const Text('Item Details')),
             body: Center(
-                child: Text(l10n.errorWithMessage(snapshot.error.toString()))),
+                child: Text(
+                    l10n?.errorWithMessage(snapshot.error.toString()) ?? '')),
           );
         }
 
@@ -45,8 +49,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
           );
         }
 
-        final isLowStock = item.quantity <= item.minimumQuantity;
-        final needsReorder = item.quantity <= item.reorderPoint;
+        final isLowStock = item.isLowStock;
 
         final daysUntilExpiry =
             item.expiryDate?.difference(DateTime.now()).inDays;
@@ -57,6 +60,72 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
           appBar: AppBar(
             title: Text(item.name),
             actions: [
+              // Recalculate dynamic ROP & Safety Stock
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                tooltip: 'Recalculate ROP & Safety Stock',
+                onPressed: () async {
+                  // Ask user for lead time via dialog
+                  final leadTimeStr = await showDialog<String>(
+                    context: context,
+                    builder: (ctx) {
+                      final controller = TextEditingController(text: '30');
+                      return AlertDialog(
+                        title: const Text('Enter Lead Time (days)'),
+                        content: TextField(
+                          controller: controller,
+                          keyboardType:
+                              TextInputType.numberWithOptions(decimal: true),
+                          decoration: const InputDecoration(
+                            labelText: 'Lead Time (days)',
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            child: Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(ctx).pop(controller.text),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  if (leadTimeStr == null) return;
+                  final leadTime = double.tryParse(leadTimeStr);
+                  if (leadTime == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Invalid lead time')),
+                    );
+                    return;
+                  }
+                  try {
+                    await ref
+                        .read(applyDynamicReorderPointUseCaseProvider)
+                        .execute(
+                          itemId: item.id,
+                          warehouseId: item.location.split('/').first,
+                          leadTime: leadTime,
+                          serviceLevel: 0.95,
+                          orderingCost: 100,
+                          holdingCostPercentage: 0.2,
+                          unitCost: item.cost ?? 0.0,
+                        );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Reorder point & safety stock updated'),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: $e')),
+                    );
+                  }
+                },
+              ),
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
@@ -69,16 +138,18 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                     final confirm = await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text(l10n.confirmDeletion),
-                        content: Text(l10n.confirmDeleteItem(item.name)),
+                        title:
+                            Text(l10n?.confirmDeletion ?? 'Confirm Deletion'),
+                        content: Text(l10n?.confirmDeleteItem(item.name) ??
+                            'Are you sure you want to delete this item?'),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context, false),
-                            child: Text(l10n.cancelButton),
+                            child: Text('Cancel'),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(context, true),
-                            child: Text(l10n.deleteButton),
+                            child: Text('Delete'),
                           ),
                         ],
                       ),
@@ -95,7 +166,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 'delete',
-                    child: Text(l10n.deleteItem),
+                    child: Text(l10n?.deleteItem ?? 'Delete Item'),
                   ),
                 ],
               ),
@@ -159,10 +230,18 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                         ),
                         const Divider(height: 24),
                         _infoRow('Location', item.location),
+                        const SizedBox(height: 12),
+                        LocationEfficiencyIndicator(item: item),
                         _infoRow('Minimum Quantity',
                             '${item.minimumQuantity} ${item.unit}'),
                         _infoRow('Reorder Point',
                             '${item.reorderPoint} ${item.unit}'),
+                        // Display dynamic safety stock if available
+                        if (item.additionalAttributes?['safetyStock'] != null)
+                          _infoRow(
+                            'Safety Stock',
+                            '${item.additionalAttributes!['safetyStock']} ${item.unit}',
+                          ),
                         if (item.batchNumber != null)
                           _infoRow('Batch Number', item.batchNumber!),
                         if (item.expiryDate != null)
@@ -179,7 +258,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                 ),
 
                 // Status flags
-                if (isLowStock || needsReorder || isExpiringSoon)
+                if (isLowStock || item.needsReorder || isExpiringSoon)
                   Card(
                     margin: const EdgeInsets.only(bottom: 16),
                     color: Colors.amber.shade50,
@@ -204,7 +283,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                               'Current quantity is below minimum level',
                               Colors.red,
                             ),
-                          if (needsReorder)
+                          if (item.needsReorder)
                             _alertItem(
                               'Reorder Needed',
                               'Current quantity is below reorder point',
@@ -220,6 +299,84 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
+
+                // Quality Status section
+                Card(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Quality Status',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            ElevatedButton.icon(
+                              icon: const Icon(Icons.edit),
+                              label: const Text('Change'),
+                              onPressed: () => _showChangeQualityStatusDialog(
+                                  context, ref, item),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Current: '
+                          '${item.additionalAttributes?['qualityStatus'] ?? 'Unknown'}',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        if (item.additionalAttributes?['batchQualityStatus'] !=
+                                null &&
+                            item.additionalAttributes?['batchQualityStatus']
+                                is Map)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 12),
+                              Text('Batch Quality Status:',
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium),
+                              ...((item.additionalAttributes![
+                                      'batchQualityStatus'] as Map)
+                                  .entries
+                                  .map(
+                                    (entry) => Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Batch: \'${entry.key}\''),
+                                          Row(
+                                            children: [
+                                              Text(entry.value.toString()),
+                                              const SizedBox(width: 8),
+                                              IconButton(
+                                                icon: const Icon(Icons.edit,
+                                                    size: 18),
+                                                tooltip: 'Override',
+                                                onPressed: () =>
+                                                    _showChangeQualityStatusDialog(
+                                                        context, ref, item,
+                                                        batchLotNumber:
+                                                            entry.key),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
 
                 // Additional attributes
                 if (item.additionalAttributes != null &&
@@ -484,14 +641,16 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('${isAddition ? 'Add to' : 'Remove from'} Inventory'),
+        title: Text(l10n?.adjustQuantityTitle(isAddition ? 'true' : 'false') ??
+            (isAddition ? 'Add to Inventory' : 'Remove from Inventory')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: quantityController,
               decoration: InputDecoration(
-                labelText: 'Quantity (${item.unit})',
+                labelText: l10n?.quantityWithUnit(item.unit) ??
+                    'Quantity (${item.unit})',
               ),
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
@@ -499,8 +658,8 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             TextField(
               controller: reasonController,
-              decoration: const InputDecoration(
-                labelText: 'Reason',
+              decoration: InputDecoration(
+                labelText: l10n?.reason as String? ?? 'Reason',
               ),
               maxLines: 2,
             ),
@@ -509,7 +668,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('CANCEL'),
+            child: Text(l10n?.cancel ?? 'Cancel'),
           ),
           TextButton(
             onPressed: () async {
@@ -532,12 +691,101 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(l10n.errorWithMessage(e.toString()))),
+                        content:
+                            Text(l10n?.errorWithMessage(e.toString()) ?? '')),
                   );
                 }
               }
             },
-            child: const Text('CONFIRM'),
+            child: Text(l10n?.confirm ?? 'Confirm'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showChangeQualityStatusDialog(
+    BuildContext context,
+    WidgetRef ref,
+    InventoryItem item, {
+    String? batchLotNumber,
+  }) async {
+    final l10n = AppLocalizations.of(context);
+    final statusOptions = [
+      l10n?.excellent ?? 'Excellent',
+      l10n?.good ?? 'Good',
+      l10n?.acceptable ?? 'Acceptable',
+      l10n?.warning ?? 'Warning',
+      l10n?.critical ?? 'Critical',
+      l10n?.rejected ?? 'Rejected',
+    ];
+    String? selectedStatus = batchLotNumber == null
+        ? (item.additionalAttributes?['qualityStatus'] ?? 'acceptable')
+        : (item.additionalAttributes?['batchQualityStatus']?[batchLotNumber] ??
+            'acceptable');
+    final reasonController = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n?.changeQualityStatus ?? 'Change Quality Status'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DropdownButtonFormField<String>(
+              value: selectedStatus,
+              items: statusOptions
+                  .map((status) => DropdownMenuItem<String>(
+                        value: status,
+                        child: Text(
+                            (status ?? '').replaceAll('_', ' ').toUpperCase()),
+                      ))
+                  .toList(),
+              onChanged: (value) => selectedStatus = value,
+              decoration: InputDecoration(
+                labelText: l10n?.newStatus as String? ?? 'New Status',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: reasonController,
+              decoration: InputDecoration(
+                labelText: l10n?.reason as String? ?? 'Reason',
+              ),
+              maxLines: 2,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n?.cancel ?? 'Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (selectedStatus != null && reasonController.text.isNotEmpty) {
+                final updateQualityStatus =
+                    ref.read(updateInventoryQualityStatusUseCaseProvider);
+                try {
+                  await updateQualityStatus.execute(
+                    inventoryItemId: item.id,
+                    batchLotNumber: batchLotNumber,
+                    newQualityStatus:
+                        _parseQualityStatusFromString(context, selectedStatus!),
+                    reason: reasonController.text,
+                    userId: 'SYSTEM', // Replace with actual user ID from auth
+                  );
+                  if (context.mounted) Navigator.pop(context);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content:
+                            Text(l10n?.errorWithMessage(e.toString()) ?? '')),
+                  );
+                }
+              }
+            },
+            child: Text(l10n?.confirm ?? 'Confirm'),
           ),
         ],
       ),
@@ -550,5 +798,19 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
 
   String _formatDateTime(DateTime dateTime) {
     return '${_formatDate(dateTime)} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
+
+  QualityStatus _parseQualityStatusFromString(
+      BuildContext context, String status) {
+    final l10n = AppLocalizations.of(context);
+    if (status == (l10n?.excellent ?? 'Excellent'))
+      return QualityStatus.excellent;
+    if (status == (l10n?.good ?? 'Good')) return QualityStatus.good;
+    if (status == (l10n?.acceptable ?? 'Acceptable'))
+      return QualityStatus.acceptable;
+    if (status == (l10n?.warning ?? 'Warning')) return QualityStatus.warning;
+    if (status == (l10n?.critical ?? 'Critical')) return QualityStatus.critical;
+    if (status == (l10n?.rejected ?? 'Rejected')) return QualityStatus.rejected;
+    return QualityStatus.acceptable;
   }
 }

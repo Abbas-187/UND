@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../../l10n/app_localizations.dart';
 import '../../../domain/entities/inventory_alert.dart';
 import '../../../domain/services/alerts/inventory_alerts_service.dart';
 
@@ -38,7 +38,7 @@ class InventoryAlertsWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            localizations.noAlertsAtThisTime,
+            localizations?.noAlertsAtThisTime ?? '',
             style: const TextStyle(fontStyle: FontStyle.italic),
           ),
         ),
@@ -121,7 +121,7 @@ class InventoryAlertsWidget extends StatelessWidget {
                         if (!alert.isAcknowledged && onAcknowledge != null)
                           TextButton(
                             onPressed: () => onAcknowledge?.call(alert.id),
-                            child: Text(localizations.acknowledge),
+                            child: Text(localizations?.acknowledge ?? ''),
                           ),
                       ],
                     ),
@@ -142,15 +142,15 @@ class InventoryAlertsWidget extends StatelessWidget {
 
     switch (severity) {
       case AlertSeverity.high:
-        label = localizations.high;
+        label = localizations?.high ?? '';
         color = Colors.red;
         break;
       case AlertSeverity.medium:
-        label = localizations.medium;
+        label = localizations?.medium ?? '';
         color = Colors.orange;
         break;
       case AlertSeverity.low:
-        label = localizations.low;
+        label = localizations?.low ?? '';
         color = Colors.blue;
         break;
     }

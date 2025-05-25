@@ -1,12 +1,19 @@
+import '../../../sales/data/repositories/product_catalog_repository.dart';
 import '../../data/models/inventory_movement_model.dart';
 
 /// Validator for inventory movements
 /// Ensures that required fields for auditability are present based on movement type
 class InventoryMovementValidator {
-  const InventoryMovementValidator();
+  InventoryMovementValidator(
+      {ProductCatalogRepository? productCatalogRepository})
+      : _productCatalogRepository =
+            productCatalogRepository ?? ProductCatalogRepository();
+
+  final ProductCatalogRepository _productCatalogRepository;
 
   /// Validate an inventory movement for audit compliance
-  ValidationResult validate(InventoryMovementModel movement) {
+  Future<ValidationResult> validateAsync(
+      InventoryMovementModel movement) async {
     final errors = <String>[];
 
     // Basic validation for all movements
@@ -61,6 +68,29 @@ class InventoryMovementValidator {
     // Validate items list is not empty
     if (movement.items.isEmpty) {
       errors.add('At least one item is required for the movement');
+    } else {
+      // Batch/expiry validation for each item
+      for (final item in movement.items) {
+        try {
+          final product =
+              await _productCatalogRepository.getProductById(item.itemId);
+          final isBatchTracked = product.isBatchTracked;
+          final isPerishable = product.isPerishable;
+          if (!item.hasRequiredBatchInfo(isPerishable, isBatchTracked)) {
+            if (isPerishable &&
+                (item.batchLotNumber == null || item.expirationDate == null)) {
+              errors.add(
+                  'Batch/expiry required for perishable item: \'${item.itemName}\'');
+            } else if (isBatchTracked && item.batchLotNumber == null) {
+              errors.add(
+                  'Batch number required for batch-tracked item: \'${item.itemName}\'');
+            }
+          }
+        } catch (e) {
+          errors.add(
+              'Failed to validate batch/expiry for item: ${item.itemName}');
+        }
+      }
     }
 
     // For completed movements, check if they have approval info

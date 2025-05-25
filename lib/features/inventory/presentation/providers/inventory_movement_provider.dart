@@ -31,7 +31,6 @@ final warehousesProvider = FutureProvider((ref) async {
 
 /// Simple warehouse model for the UI
 class Warehouse {
-
   Warehouse({required this.id, required this.name});
   final String id;
   final String name;
@@ -48,7 +47,6 @@ final inventoryMovementProvider =
 
 /// State class for inventory movement
 class InventoryMovementState {
-
   InventoryMovementState({
     this.isLoading = false,
     this.isSaving = false,
@@ -85,7 +83,6 @@ class InventoryMovementState {
 
 /// Notifier class for inventory movement
 class InventoryMovementNotifier extends StateNotifier<InventoryMovementState> {
-
   InventoryMovementNotifier(this._repository, this._processor)
       : super(InventoryMovementState());
   final InventoryRepository _repository;
@@ -150,6 +147,7 @@ class InventoryMovementNotifier extends StateNotifier<InventoryMovementState> {
     required String warehouseId,
     String? referenceNumber,
     String? reasonNotes,
+    required String initiatingEmployeeId,
   }) async {
     state = state.copyWith(isSaving: true, errorMessage: null);
 
@@ -167,6 +165,7 @@ class InventoryMovementNotifier extends StateNotifier<InventoryMovementState> {
         status: InventoryMovementStatus.completed,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
+        initiatingEmployeeId: initiatingEmployeeId,
       );
 
       // Process the movement using the use case

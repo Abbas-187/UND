@@ -13,28 +13,28 @@ class MovementListItem extends StatelessWidget {
 
   Color _getStatusColor(ApprovalStatus status) {
     switch (status) {
-      case ApprovalStatus.PENDING:
+      case ApprovalStatus.pending:
         return Colors.orange;
-      case ApprovalStatus.APPROVED:
+      case ApprovalStatus.approved:
         return Colors.green;
-      case ApprovalStatus.REJECTED:
+      case ApprovalStatus.rejected:
         return Colors.red;
-      case ApprovalStatus.CANCELLED:
+      case ApprovalStatus.cancelled:
         return Colors.grey;
     }
   }
 
   IconData _getMovementTypeIcon(InventoryMovementType type) {
     switch (type) {
-      case InventoryMovementType.PO_RECEIPT:
+      case InventoryMovementType.poReceipt:
         return Icons.input;
-      case InventoryMovementType.TRANSFER_IN:
+      case InventoryMovementType.transferIn:
         return Icons.swap_horiz;
-      case InventoryMovementType.PRODUCTION_ISSUE:
+      case InventoryMovementType.productionIssue:
         return Icons.remove;
-      case InventoryMovementType.SALES_RETURN:
+      case InventoryMovementType.salesReturn:
         return Icons.replay;
-      case InventoryMovementType.ADJUSTMENT_OTHER:
+      case InventoryMovementType.adjustmentOther:
         return Icons.tune;
       // Explicitly handle all other enum values
       case InventoryMovementType.receipt:
@@ -59,12 +59,12 @@ class MovementListItem extends StatelessWidget {
       case InventoryMovementType.qualityHold:
       case InventoryMovementType.initialBalanceAdjustment:
       case InventoryMovementType.reservationAdjustment:
-      case InventoryMovementType.TRANSFER_OUT:
-      case InventoryMovementType.SALE_SHIPMENT:
-      case InventoryMovementType.ADJUSTMENT_DAMAGE:
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
-      case InventoryMovementType.QUALITY_STATUS_UPDATE:
+      case InventoryMovementType.transferOut:
+      case InventoryMovementType.saleShipment:
+      case InventoryMovementType.adjustmentDamage:
+      case InventoryMovementType.adjustmentCycleCountGain:
+      case InventoryMovementType.adjustmentCycleCountLoss:
+      case InventoryMovementType.qualityStatusUpdate:
         return Icons.inventory_2;
     }
   }

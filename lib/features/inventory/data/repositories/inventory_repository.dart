@@ -68,6 +68,30 @@ class InventoryRepositoryImpl implements InventoryRepository {
     return WarehouseLocationModel.fromJson(
         snapshot.data()!..['id'] = snapshot.id);
   }
+
+  /// Allocates inventory based on a recipe
+  Future<bool> allocateInventoryForRecipe(String recipeId, double batchSize) async {
+    // Fetch the recipe ingredients
+    final ingredients = await getRecipeIngredients(recipeId);
+
+    // Check inventory availability for each ingredient
+    for (final ingredient in ingredients) {
+      final availableQuantity = await getCurrentStockQuantity(ingredient['itemId'], ingredient['warehouseId']);
+      final requiredQuantity = ingredient['quantity'] * batchSize;
+
+      if (availableQuantity < requiredQuantity) {
+        return false; // Insufficient inventory for this ingredient
+      }
+    }
+
+    // Reserve inventory for each ingredient
+    for (final ingredient in ingredients) {
+      final requiredQuantity = ingredient['quantity'] * batchSize;
+      await reserveInventory(ingredient['itemId'], requiredQuantity);
+    }
+
+    return true; // Inventory successfully allocated
+  }
 }
 
 // Manual provider implementation instead of code generation

@@ -32,17 +32,17 @@ enum InventoryMovementType {
   reservationAdjustment, // Reservation adjustments
 
   // Added missing enum constants referenced elsewhere
-  PO_RECEIPT, // Purchase order receipt alias
-  TRANSFER_IN, // Transfer in alias
-  PRODUCTION_ISSUE, // Production issue alias
-  SALES_RETURN, // Sales return alias
-  ADJUSTMENT_OTHER, // Other adjustment alias
-  TRANSFER_OUT, // Transfer out alias
-  SALE_SHIPMENT, // Sale shipment alias
-  ADJUSTMENT_DAMAGE, // Damage adjustment alias
-  ADJUSTMENT_CYCLE_COUNT_GAIN, // Cycle count gain alias
-  ADJUSTMENT_CYCLE_COUNT_LOSS, // Cycle count loss alias
-  QUALITY_STATUS_UPDATE, // Quality status update alias
+  poReceipt, // Purchase order receipt alias
+  transferIn, // Transfer in alias
+  productionIssue, // Production issue alias
+  salesReturn, // Sales return alias
+  adjustmentOther, // Other adjustment alias
+  transferOut, // Transfer out alias
+  saleShipment, // Sale shipment alias
+  adjustmentDamage, // Damage adjustment alias
+  adjustmentCycleCountGain, // Cycle count gain alias
+  adjustmentCycleCountLoss, // Cycle count loss alias
+  qualityStatusUpdate, // Quality status update alias
 }
 
 /// Enumeration of inventory movement statuses
@@ -55,10 +55,10 @@ enum InventoryMovementStatus {
 
 /// Enumeration of approval statuses for inventory movements
 enum ApprovalStatus {
-  PENDING,
-  APPROVED,
-  REJECTED,
-  CANCELLED,
+  pending,
+  approved,
+  rejected,
+  cancelled,
 }
 
 /// Model representing an inventory movement
@@ -126,13 +126,13 @@ abstract class InventoryMovementModel with _$InventoryMovementModel {
   ApprovalStatus get approvalStatus {
     switch (status) {
       case InventoryMovementStatus.pending:
-        return ApprovalStatus.PENDING;
+        return ApprovalStatus.pending;
       case InventoryMovementStatus.completed:
-        return ApprovalStatus.APPROVED;
+        return ApprovalStatus.approved;
       case InventoryMovementStatus.cancelled:
-        return ApprovalStatus.CANCELLED;
+        return ApprovalStatus.cancelled;
       default:
-        return ApprovalStatus.PENDING;
+        return ApprovalStatus.pending;
     }
   }
 

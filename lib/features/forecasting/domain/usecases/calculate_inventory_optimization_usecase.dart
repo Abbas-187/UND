@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../data/models/inventory_optimization_model.dart';
 import '../../data/repositories/inventory_optimization_repository.dart';
 import '../algorithms/safety_stock_calculator.dart';
@@ -52,17 +54,11 @@ class CalculateInventoryOptimizationUseCase {
       // Calculate economic order quantity (EOQ)
       final eoq = math.sqrt((2 * annualDemand * orderingCost) / holdingCost);
 
-      // Calculate days of supply
-      final daysOfSupply = eoq / avgDailyDemand;
-
       // Calculate annual ordering cost
-      final annualOrderingCost = (annualDemand / eoq) * orderingCost;
+      // final annualOrderingCost = (annualDemand / eoq) * orderingCost;
 
       // Calculate annual holding cost
-      final annualHoldingCost = (eoq / 2) * holdingCost;
-
-      // Calculate total annual cost
-      final totalAnnualCost = annualOrderingCost + annualHoldingCost;
+      // final annualHoldingCost = (eoq / 2) * holdingCost;
 
       // Prepare input parameters map
       final inputParameters = {
@@ -148,28 +144,20 @@ class CalculateInventoryOptimizationUseCase {
       // Calculate economic order quantity (EOQ)
       final eoq = math.sqrt((2 * annualDemand * orderingCost) / holdingCost);
 
-      // Calculate days of supply
-      final daysOfSupply = eoq / avgDailyDemand;
-
       // Calculate annual ordering cost
       final annualOrderingCost = (annualDemand / eoq) * orderingCost;
 
       // Calculate annual holding cost
       final annualHoldingCost = (eoq / 2) * holdingCost;
 
-      // Calculate total annual cost
-      final totalAnnualCost = annualOrderingCost + annualHoldingCost;
-
       return {
         'safetyStock': safetyStock,
         'reorderPoint': reorderPoint,
         'economicOrderQuantity': eoq,
-        'daysOfSupply': daysOfSupply,
         'averageDailyDemand': avgDailyDemand,
         'annualDemand': annualDemand,
         'annualOrderingCost': annualOrderingCost,
         'annualHoldingCost': annualHoldingCost,
-        'totalAnnualCost': totalAnnualCost,
       };
     } catch (e) {
       throw Exception('Failed to calculate inventory optimization: $e');
@@ -190,3 +178,9 @@ class CalculateInventoryOptimizationUseCase {
     return sumSquaredDiffs / (values.length - 1);
   }
 }
+
+// Provider for CalculateInventoryOptimizationUseCase
+final calculateInventoryOptimizationUseCaseProvider =
+    Provider<CalculateInventoryOptimizationUseCase>((ref) {
+  return CalculateInventoryOptimizationUseCase();
+});

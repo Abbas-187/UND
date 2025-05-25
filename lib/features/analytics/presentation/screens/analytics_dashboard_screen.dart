@@ -6,6 +6,15 @@ import '../widgets/inventory_distribution_chart.dart';
 import '../widgets/inventory_value_chart.dart';
 import '../widgets/sales_trend_chart.dart';
 import '../widgets/top_products_chart.dart';
+import '../widgets/kpi_card.dart';
+import '../widgets/traceability_report_widget.dart';
+import '../analytics_providers.dart';
+import '../../domain/turnover_rate_usecase.dart';
+import '../../domain/stockout_rate_usecase.dart';
+import '../../domain/eo_stock_usecase.dart';
+import '../../domain/inventory_aging_usecase.dart';
+import '../../domain/supplier_performance_usecase.dart';
+import '../../domain/traceability_report_usecase.dart';
 
 class AnalyticsDashboardScreen extends ConsumerStatefulWidget {
   const AnalyticsDashboardScreen({super.key});
@@ -20,10 +29,19 @@ class _AnalyticsDashboardScreenState
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  // Filter state
+  DateTimeRange? _dateRange;
+  String? _selectedSupplier;
+  String? _selectedCategory;
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _dateRange = DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 30)),
+      end: DateTime.now(),
+    );
   }
 
   @override
@@ -46,12 +64,83 @@ class _AnalyticsDashboardScreenState
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
+      body: Column(
         children: [
-          _buildOverviewTab(),
-          _buildSalesTab(),
-          _buildInventoryTab(),
+          _buildFilters(context),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildOverviewTab(),
+                _buildSalesTab(),
+                _buildInventoryTab(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilters(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          // Date range filter
+          TextButton.icon(
+            icon: const Icon(Icons.date_range),
+            label: Text(_dateRange == null
+                ? 'Select Date Range'
+                : '${_dateRange!.start.month}/${_dateRange!.start.day} - ${_dateRange!.end.month}/${_dateRange!.end.day}'),
+            onPressed: () async {
+              final picked = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(2020),
+                lastDate: DateTime.now(),
+                initialDateRange: _dateRange,
+              );
+              if (picked != null) {
+                setState(() {
+                  _dateRange = picked;
+                });
+              }
+            },
+          ),
+          const SizedBox(width: 12),
+          // Supplier filter (stub dropdown)
+          DropdownButton<String>(
+            value: _selectedSupplier,
+            hint: const Text('Supplier'),
+            items: [null, 'SUPPLIER_001', 'SUPPLIER_002']
+                .map((s) => DropdownMenuItem(
+                      value: s,
+                      child: Text(s ?? 'All'),
+                    ))
+                .toList(),
+            onChanged: (val) {
+              setState(() {
+                _selectedSupplier = val;
+              });
+            },
+          ),
+          const SizedBox(width: 12),
+          // Category filter (stub dropdown)
+          DropdownButton<String>(
+            value: _selectedCategory,
+            hint: const Text('Category'),
+            items: [null, 'Electronics', 'Clothing', 'Groceries']
+                .map((c) => DropdownMenuItem(
+                      value: c,
+                      child: Text(c ?? 'All'),
+                    ))
+                .toList(),
+            onChanged: (val) {
+              setState(() {
+                _selectedCategory = val;
+              });
+            },
+          ),
         ],
       ),
     );
@@ -64,6 +153,10 @@ class _AnalyticsDashboardScreenState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildSummaryCards(),
+          const SizedBox(height: 20),
+          _buildSupplierPerformanceKpi(),
+          const SizedBox(height: 20),
+          _buildTraceabilityReportButton(context),
           const SizedBox(height: 20),
           const Text(
             'Key Metrics',
@@ -105,6 +198,59 @@ class _AnalyticsDashboardScreenState
                 child: TopProductsChart(),
               ),
             ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'Supplier Performance',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          _buildSupplierPerformanceKpi(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTraceabilityReportButton(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              decoration: const InputDecoration(
+                labelText: 'Batch/Lot Number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.search),
+            label: const Text('Traceability Report'),
+            onPressed: () {
+              if (controller.text.isNotEmpty) {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Traceability Report'),
+                    content: SizedBox(
+                      width: 600,
+                      child: _TraceabilityReportDialog(
+                          batchOrLotNumber: controller.text),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),
@@ -196,104 +342,252 @@ class _AnalyticsDashboardScreenState
   }
 
   Widget _buildSummaryCards() {
-    return GridView.count(
-      crossAxisCount: 4,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    final start =
+        _dateRange?.start ?? DateTime.now().subtract(const Duration(days: 30));
+    final end = _dateRange?.end ?? DateTime.now();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildSummaryCard(
-          title: 'Total Revenue',
-          value: '\$48,590',
-          icon: Icons.attach_money,
-          trendValue: '+12%',
-          trendUp: true,
+        Expanded(
+          child: Consumer(
+            builder: (context, ref, _) {
+              final turnover = ref.watch(turnoverRateProvider(
+                  TurnoverRateParams(
+                      startDate: start,
+                      endDate: end,
+                      categoryId: _selectedCategory)));
+              return turnover.when(
+                data: (value) => KpiCard(
+                  title: 'Turnover Rate',
+                  value: value.toStringAsFixed(2),
+                  icon: Icons.loop,
+                  trendValue: '',
+                  trendUp: value > 1,
+                  onTap: () => _showDrilldown(context, 'Turnover Rate'),
+                ),
+                loading: () => const KpiCard(
+                    title: 'Turnover Rate',
+                    value: '...',
+                    icon: Icons.loop,
+                    trendValue: '',
+                    trendUp: true),
+                error: (e, _) => KpiCard(
+                    title: 'Turnover Rate',
+                    value: 'Err',
+                    icon: Icons.loop,
+                    trendValue: '',
+                    trendUp: false),
+              );
+            },
+          ),
         ),
-        _buildSummaryCard(
-          title: 'Total Orders',
-          value: '342',
-          icon: Icons.shopping_cart,
-          trendValue: '+8%',
-          trendUp: true,
+        Expanded(
+          child: Consumer(
+            builder: (context, ref, _) {
+              final stockout = ref.watch(stockoutRateProvider(
+                  StockoutRateParams(
+                      startDate: start,
+                      endDate: end,
+                      categoryId: _selectedCategory)));
+              return stockout.when(
+                data: (value) => KpiCard(
+                  title: 'Stockout Rate',
+                  value: '${(value * 100).toStringAsFixed(1)}%',
+                  icon: Icons.warning,
+                  trendValue: '',
+                  trendUp: value < 0.05,
+                  onTap: () => _showDrilldown(context, 'Stockout Rate'),
+                ),
+                loading: () => const KpiCard(
+                    title: 'Stockout Rate',
+                    value: '...',
+                    icon: Icons.warning,
+                    trendValue: '',
+                    trendUp: true),
+                error: (e, _) => KpiCard(
+                    title: 'Stockout Rate',
+                    value: 'Err',
+                    icon: Icons.warning,
+                    trendValue: '',
+                    trendUp: false),
+              );
+            },
+          ),
         ),
-        _buildSummaryCard(
-          title: 'Inventory Value',
-          value: '\$125,430',
-          icon: Icons.inventory_2,
-          trendValue: '+3%',
-          trendUp: true,
+        Expanded(
+          child: Consumer(
+            builder: (context, ref, _) {
+              final eo = ref.watch(eoStockProvider(EOStockParams(
+                  agingThresholdDays: 90, categoryId: _selectedCategory)));
+              return eo.when(
+                data: (value) => KpiCard(
+                  title: 'E&O Stock',
+                  value: '\$${value.toStringAsFixed(0)}',
+                  icon: Icons.delete,
+                  trendValue: '',
+                  trendUp: value < 1000,
+                  onTap: () => _showDrilldown(context, 'E&O Stock'),
+                ),
+                loading: () => const KpiCard(
+                    title: 'E&O Stock',
+                    value: '...',
+                    icon: Icons.delete,
+                    trendValue: '',
+                    trendUp: true),
+                error: (e, _) => KpiCard(
+                    title: 'E&O Stock',
+                    value: 'Err',
+                    icon: Icons.delete,
+                    trendValue: '',
+                    trendUp: false),
+              );
+            },
+          ),
         ),
-        _buildSummaryCard(
-          title: 'Low Stock Items',
-          value: '24',
-          icon: Icons.warning_amber,
-          trendValue: '-5%',
-          trendUp: false,
+        Expanded(
+          child: Consumer(
+            builder: (context, ref, _) {
+              final aging = ref.watch(inventoryAgingProvider(
+                  InventoryAgingParams(
+                      agingBuckets: [30, 60, 90],
+                      categoryId: _selectedCategory)));
+              return aging.when(
+                data: (value) => KpiCard(
+                  title: 'Aged >30d',
+                  value: value[30]?.toStringAsFixed(0) ?? '0',
+                  icon: Icons.timelapse,
+                  trendValue: '',
+                  trendUp: (value[30] ?? 0) < 100,
+                  onTap: () => _showDrilldown(context, 'Inventory Aging'),
+                ),
+                loading: () => const KpiCard(
+                    title: 'Aged >30d',
+                    value: '...',
+                    icon: Icons.timelapse,
+                    trendValue: '',
+                    trendUp: true),
+                error: (e, _) => KpiCard(
+                    title: 'Aged >30d',
+                    value: 'Err',
+                    icon: Icons.timelapse,
+                    trendValue: '',
+                    trendUp: false),
+              );
+            },
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildSummaryCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    required String trendValue,
-    required bool trendUp,
-  }) {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
-                ),
-                Icon(
-                  icon,
-                  color: Colors.blue,
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Icon(
-                  trendUp ? Icons.arrow_upward : Icons.arrow_downward,
-                  color: trendUp ? Colors.green : Colors.red,
-                  size: 16,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  trendValue,
-                  style: TextStyle(
-                    color: trendUp ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+  void _showDrilldown(BuildContext context, String kpi) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Drilldown: $kpi'),
+        content: Text('Detailed analytics for $kpi will be shown here.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildSupplierPerformanceKpi() {
+    final start =
+        _dateRange?.start ?? DateTime.now().subtract(const Duration(days: 30));
+    final end = _dateRange?.end ?? DateTime.now();
+    final supplierId = _selectedSupplier ?? 'SUPPLIER_001';
+    return Consumer(
+      builder: (context, ref, _) {
+        final perf =
+            ref.watch(supplierPerformanceProvider(SupplierPerformanceParams(
+          supplierId: supplierId,
+          startDate: start,
+          endDate: end,
+        )));
+        return perf.when(
+          data: (result) => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              KpiCard(
+                title: 'OTIF',
+                value: '${(result.otif * 100).toStringAsFixed(1)}%',
+                icon: Icons.check_circle,
+                trendValue: '',
+                trendUp: result.otif > 0.9,
+                onTap: () => _showDrilldown(context, 'Supplier OTIF'),
+              ),
+              KpiCard(
+                title: 'Lead Time Var.',
+                value: '${result.leadTimeVariance.toStringAsFixed(1)}d',
+                icon: Icons.timer,
+                trendValue: '',
+                trendUp: result.leadTimeVariance < 3,
+                onTap: () => _showDrilldown(context, 'Supplier Lead Time'),
+              ),
+              KpiCard(
+                title: 'Rejection Rate',
+                value:
+                    '${(result.qualityRejectionRate * 100).toStringAsFixed(1)}%',
+                icon: Icons.cancel,
+                trendValue: '',
+                trendUp: result.qualityRejectionRate < 0.05,
+                onTap: () => _showDrilldown(context, 'Supplier Rejection Rate'),
+              ),
+            ],
+          ),
+          loading: () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              KpiCard(
+                  title: 'OTIF',
+                  value: '...',
+                  icon: Icons.check_circle,
+                  trendValue: '',
+                  trendUp: true),
+              KpiCard(
+                  title: 'Lead Time Var.',
+                  value: '...',
+                  icon: Icons.timer,
+                  trendValue: '',
+                  trendUp: true),
+              KpiCard(
+                  title: 'Rejection Rate',
+                  value: '...',
+                  icon: Icons.cancel,
+                  trendValue: '',
+                  trendUp: true),
+            ],
+          ),
+          error: (e, _) => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              KpiCard(
+                  title: 'OTIF',
+                  value: 'Err',
+                  icon: Icons.check_circle,
+                  trendValue: '',
+                  trendUp: false),
+              KpiCard(
+                  title: 'Lead Time Var.',
+                  value: 'Err',
+                  icon: Icons.timer,
+                  trendValue: '',
+                  trendUp: false),
+              KpiCard(
+                  title: 'Rejection Rate',
+                  value: 'Err',
+                  icon: Icons.cancel,
+                  trendValue: '',
+                  trendUp: false),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -466,12 +760,38 @@ class StockLevelsByCategoryChart extends StatelessWidget {
           horizontalInterval: 20,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey.withValues(alpha: 0.3 * 255),
+              color: Colors.grey.withAlpha((0.3 * 255).toInt()),
               strokeWidth: 1,
             );
           },
         ),
         borderData: FlBorderData(show: false),
+      ),
+    );
+  }
+}
+
+class _TraceabilityReportDialog extends ConsumerWidget {
+  const _TraceabilityReportDialog({required this.batchOrLotNumber});
+  final String batchOrLotNumber;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reportAsync = ref.watch(traceabilityReportProvider(
+      TraceabilityReportParams(batchOrLotNumber: batchOrLotNumber),
+    ));
+    return reportAsync.when(
+      data: (report) => SizedBox(
+        height: 400,
+        child: TraceabilityReportWidget(report: report),
+      ),
+      loading: () => const SizedBox(
+        height: 200,
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (e, _) => SizedBox(
+        height: 200,
+        child: Center(child: Text('Error: $e')),
       ),
     );
   }

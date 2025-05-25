@@ -92,19 +92,17 @@ const _$InventoryMovementTypeEnumMap = {
   InventoryMovementType.qualityHold: 'qualityHold',
   InventoryMovementType.initialBalanceAdjustment: 'initialBalanceAdjustment',
   InventoryMovementType.reservationAdjustment: 'reservationAdjustment',
-  InventoryMovementType.PO_RECEIPT: 'PO_RECEIPT',
-  InventoryMovementType.TRANSFER_IN: 'TRANSFER_IN',
-  InventoryMovementType.PRODUCTION_ISSUE: 'PRODUCTION_ISSUE',
-  InventoryMovementType.SALES_RETURN: 'SALES_RETURN',
-  InventoryMovementType.ADJUSTMENT_OTHER: 'ADJUSTMENT_OTHER',
-  InventoryMovementType.TRANSFER_OUT: 'TRANSFER_OUT',
-  InventoryMovementType.SALE_SHIPMENT: 'SALE_SHIPMENT',
-  InventoryMovementType.ADJUSTMENT_DAMAGE: 'ADJUSTMENT_DAMAGE',
-  InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
-      'ADJUSTMENT_CYCLE_COUNT_GAIN',
-  InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
-      'ADJUSTMENT_CYCLE_COUNT_LOSS',
-  InventoryMovementType.QUALITY_STATUS_UPDATE: 'QUALITY_STATUS_UPDATE',
+  InventoryMovementType.poReceipt: 'poReceipt',
+  InventoryMovementType.transferIn: 'transferIn',
+  InventoryMovementType.productionIssue: 'productionIssue',
+  InventoryMovementType.salesReturn: 'salesReturn',
+  InventoryMovementType.adjustmentOther: 'adjustmentOther',
+  InventoryMovementType.transferOut: 'transferOut',
+  InventoryMovementType.saleShipment: 'saleShipment',
+  InventoryMovementType.adjustmentDamage: 'adjustmentDamage',
+  InventoryMovementType.adjustmentCycleCountGain: 'adjustmentCycleCountGain',
+  InventoryMovementType.adjustmentCycleCountLoss: 'adjustmentCycleCountLoss',
+  InventoryMovementType.qualityStatusUpdate: 'qualityStatusUpdate',
 };
 
 const _$InventoryMovementStatusEnumMap = {

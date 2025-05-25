@@ -5,14 +5,15 @@ import '../../domain/entities/cost_layer.dart';
 
 /// A card widget displaying details for a single cost layer
 class CostLayerDetailCard extends StatelessWidget {
-
   const CostLayerDetailCard({
     super.key,
     required this.layer,
     required this.index,
+    required this.uom,
   });
   final CostLayer layer;
   final int index;
+  final String uom;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +22,8 @@ class CostLayerDetailCard extends StatelessWidget {
     final quantityFormat = NumberFormat('#,##0.###');
     final dateFormat = DateFormat('MMM dd, yyyy');
 
-    // Determine the age of the layer in days
-    final age = DateTime.now().difference(layer.receivedDate).inDays;
+    // Determine the age of the layer in days using movementDate
+    final age = DateTime.now().difference(layer.movementDate).inDays;
 
     // Get appropriate color for the age indicator
     final ageColor = _getAgeIndicatorColor(age, theme);
@@ -64,7 +65,7 @@ class CostLayerDetailCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Received: ${dateFormat.format(layer.receivedDate)}',
+                          'Received: ${dateFormat.format(layer.movementDate)}',
                           style: theme.textTheme.bodyMedium,
                         ),
                         const SizedBox(width: 8),
@@ -89,10 +90,10 @@ class CostLayerDetailCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (layer.sourceDocumentRef != null) ...[
+                    if (layer.movementId != null) ...[
                       const SizedBox(height: 4),
                       Text(
-                        'Source: ${layer.sourceDocumentRef}',
+                        'Source: ${layer.movementId}',
                         style: theme.textTheme.bodySmall,
                       ),
                     ],
@@ -108,21 +109,21 @@ class CostLayerDetailCard extends StatelessWidget {
                 child: _buildDetailColumn(
                   theme,
                   'Quantity',
-                  '${quantityFormat.format(layer.remainingQuantity)} ${layer.uom}',
+                  '${quantityFormat.format(layer.remainingQuantity)} $uom',
                 ),
               ),
               Expanded(
                 child: _buildDetailColumn(
                   theme,
                   'Unit Cost',
-                  '\$${numberFormat.format(layer.unitCost)}',
+                  '\$${numberFormat.format(layer.costAtTransaction)}',
                 ),
               ),
               Expanded(
                 child: _buildDetailColumn(
                   theme,
                   'Value',
-                  '\$${numberFormat.format(layer.value)}',
+                  '\$${numberFormat.format(layer.remainingQuantity * layer.costAtTransaction)}',
                   crossAxisAlignment: CrossAxisAlignment.end,
                 ),
               ),

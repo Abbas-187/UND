@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Constants for SharedPreferences keys
 const String _inventorySettingsKey = 'inventory_settings';
@@ -124,7 +123,6 @@ enum ScanType { barcode, qrCode, both }
 
 // Model for inventory settings - immutable class
 class InventorySettings {
-
   // Create from JSON from storage
   factory InventorySettings.fromJson(Map<String, dynamic> json) {
     return InventorySettings(
@@ -257,7 +255,7 @@ class _InventorySettingsScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.inventorySettings),
+        title: Text(l10n?.inventorySettings ?? ''),
         actions: [
           _isSaving
               ? const Padding(
@@ -270,7 +268,7 @@ class _InventorySettingsScreenState
                 )
               : IconButton(
                   icon: const Icon(Icons.save),
-                  tooltip: l10n.saveSettings,
+                  tooltip: l10n?.saveSettings ?? '',
                   onPressed: _saveSettings,
                 ),
         ],
@@ -281,7 +279,7 @@ class _InventorySettingsScreenState
           padding: const EdgeInsets.all(16.0),
           children: [
             // General Settings
-            _buildSectionHeader(l10n.generalSettings),
+            _buildSectionHeader(l10n?.generalSettings ?? ''),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -291,7 +289,7 @@ class _InventorySettingsScreenState
                     TextFormField(
                       controller: _defaultUnitController,
                       decoration: InputDecoration(
-                        labelText: l10n.defaultUnit,
+                        labelText: l10n?.defaultUnit ?? '',
                         helperText: 'kg, l, pc, etc.',
                       ),
                       validator: (value) {
@@ -305,7 +303,7 @@ class _InventorySettingsScreenState
                     TextFormField(
                       controller: _defaultLocationController,
                       decoration: InputDecoration(
-                        labelText: l10n.defaultLocation,
+                        labelText: l10n?.defaultLocation ?? '',
                         helperText: 'Default location for new items',
                       ),
                       validator: (value) {
@@ -319,7 +317,7 @@ class _InventorySettingsScreenState
                     TextFormField(
                       controller: _lowStockThresholdController,
                       decoration: InputDecoration(
-                        labelText: l10n.lowStockThreshold,
+                        labelText: l10n?.lowStockThreshold ?? '',
                         helperText: 'Minimum quantity before alert',
                       ),
                       keyboardType: TextInputType.number,
@@ -340,7 +338,7 @@ class _InventorySettingsScreenState
             const SizedBox(height: 16),
 
             // Reorder Settings
-            _buildSectionHeader(l10n.reorderSettings),
+            _buildSectionHeader(l10n?.reorderSettings ?? ''),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -348,7 +346,7 @@ class _InventorySettingsScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SwitchListTile(
-                      title: Text(l10n.automaticReorder),
+                      title: Text(l10n?.automaticReorder ?? ''),
                       subtitle: const Text(
                           'Automatically create purchase orders when stock is low'),
                       value: settings.automaticReorder,
@@ -361,12 +359,12 @@ class _InventorySettingsScreenState
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0, top: 8.0),
                         child: Text(
-                          l10n.reorderMethod,
+                          l10n?.reorderMethod ?? '',
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ),
                       RadioListTile<ReorderMethod>(
-                        title: Text(l10n.fixedReorderPoint),
+                        title: Text(l10n?.fixedReorderPoint ?? ''),
                         subtitle:
                             const Text('Use fixed thresholds for reordering'),
                         value: ReorderMethod.fixed,
@@ -378,7 +376,7 @@ class _InventorySettingsScreenState
                         },
                       ),
                       RadioListTile<ReorderMethod>(
-                        title: Text(l10n.dynamicReorderPoint),
+                        title: Text(l10n?.dynamicReorderPoint ?? ''),
                         subtitle: const Text(
                             'Calculate reorder points based on usage history'),
                         value: ReorderMethod.dynamic,
@@ -397,7 +395,7 @@ class _InventorySettingsScreenState
             const SizedBox(height: 16),
 
             // Notification Settings
-            _buildSectionHeader(l10n.notificationSettings),
+            _buildSectionHeader(l10n?.notificationSettings ?? ''),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -405,7 +403,7 @@ class _InventorySettingsScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SwitchListTile(
-                      title: Text(l10n.lowStockNotifications),
+                      title: Text(l10n?.lowStockNotifications ?? ''),
                       subtitle: const Text(
                           'Get notified when items reach low stock threshold'),
                       value: settings.lowStockNotifications,
@@ -415,7 +413,7 @@ class _InventorySettingsScreenState
                     ),
                     const Divider(),
                     SwitchListTile(
-                      title: Text(l10n.expiryNotifications),
+                      title: Text(l10n?.expiryNotifications ?? ''),
                       subtitle: const Text('Get notified before items expire'),
                       value: settings.expiryNotifications,
                       onChanged: (value) {
@@ -428,7 +426,7 @@ class _InventorySettingsScreenState
                         child: TextFormField(
                           controller: _expiryDaysController,
                           decoration: InputDecoration(
-                            labelText: l10n.expiryNotificationDays,
+                            labelText: l10n?.expiryNotificationDays ?? '',
                             helperText:
                                 'Days before expiry to show notification',
                             suffixText: 'days',
@@ -453,7 +451,7 @@ class _InventorySettingsScreenState
             const SizedBox(height: 16),
 
             // Scanning Settings
-            _buildSectionHeader(l10n.scanningSettings),
+            _buildSectionHeader(l10n?.scanningSettings ?? ''),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -463,7 +461,7 @@ class _InventorySettingsScreenState
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
                       child: Text(
-                        l10n.defaultScanType,
+                        l10n?.defaultScanType ?? '',
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
@@ -499,7 +497,7 @@ class _InventorySettingsScreenState
                     ),
                     const Divider(),
                     SwitchListTile(
-                      title: Text(l10n.autoGenerateBarcodes),
+                      title: Text(l10n?.autoGenerateBarcodes ?? ''),
                       value: settings.autoGenerateBarcodes,
                       onChanged: (value) {
                         notifier.updateAutoGenerateBarcodes(value);
@@ -514,7 +512,7 @@ class _InventorySettingsScreenState
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
-                      child: Text(l10n.saveSettings),
+                      child: Text(l10n?.saveSettings ?? ''),
                     ),
                   ],
                 ),
@@ -566,7 +564,7 @@ class _InventorySettingsScreenState
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(AppLocalizations.of(context).settingsSaved),
+              content: Text(AppLocalizations.of(context)?.settingsSaved ?? ''),
               backgroundColor: Colors.green,
             ),
           );

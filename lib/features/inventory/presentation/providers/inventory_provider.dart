@@ -7,6 +7,7 @@ import '../../domain/providers/inventory_provider.dart';
 import '../../domain/usecases/adjust_quantity_usecase.dart';
 import '../../domain/usecases/get_inventory_analytics_usecase.dart';
 import '../../domain/usecases/get_low_stock_alerts_usecase.dart';
+import '../../domain/usecases/update_inventory_quality_status_usecase.dart';
 
 // Use case providers
 final adjustQuantityUseCaseProvider = Provider<AdjustQuantityUseCase>((ref) {
@@ -17,13 +18,19 @@ final adjustQuantityUseCaseProvider = Provider<AdjustQuantityUseCase>((ref) {
 final getLowStockAlertsUseCaseProvider =
     Provider<GetLowStockAlertsUseCase>((ref) {
   final repository = ref.watch(inventoryRepositoryProvider);
-  return GetLowStockAlertsUseCase(repository);
+  return GetLowStockAlertsUseCase(repository, ref);
 });
 
 final getInventoryAnalyticsUseCaseProvider =
     Provider<GetInventoryAnalyticsUseCase>((ref) {
   final repository = ref.watch(inventoryRepositoryProvider);
   return GetInventoryAnalyticsUseCase(repository);
+});
+
+final updateInventoryQualityStatusUseCaseProvider =
+    Provider<UpdateInventoryQualityStatusUseCase>((ref) {
+  final repository = ref.watch(inventoryRepositoryProvider);
+  return UpdateInventoryQualityStatusUseCase(repository);
 });
 
 // Provider for InventoryAnalyticsService
@@ -200,51 +207,6 @@ final filteredInventoryItemsProvider =
   final filter = ref.watch(inventoryFilterProvider);
 
   return repository.watchAllItems().map((items) {
-    // Populate available filter options dynamically
-    final categories = items.map((item) => item.category).toSet().toList()
-      ..sort();
-    final subCategories = items
-        .where((item) => item.subCategory.isNotEmpty) // Removed null check
-        .map((item) => item.subCategory) // Removed null assertion
-        .toSet()
-        .toList()
-      ..sort();
-    final locations = items.map((item) => item.location).toSet().toList()
-      ..sort();
-    final suppliers = items
-        .where((item) => item.supplier != null && item.supplier!.isNotEmpty)
-        .map((item) => item.supplier!)
-        .toSet()
-        .toList()
-      ..sort();
-
-    // Update the filter object with the latest available options
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (ref.read(inventoryFilterProvider).availableCategories.isEmpty &&
-          categories.isNotEmpty) {
-        ref
-            .read(inventoryFilterProvider.notifier)
-            .update((state) => state.copyWith(availableCategories: categories));
-      }
-      if (ref.read(inventoryFilterProvider).availableSubCategories.isEmpty &&
-          subCategories.isNotEmpty) {
-        ref.read(inventoryFilterProvider.notifier).update(
-            (state) => state.copyWith(availableSubCategories: subCategories));
-      }
-      if (ref.read(inventoryFilterProvider).availableLocations.isEmpty &&
-          locations.isNotEmpty) {
-        ref
-            .read(inventoryFilterProvider.notifier)
-            .update((state) => state.copyWith(availableLocations: locations));
-      }
-      if (ref.read(inventoryFilterProvider).availableSuppliers.isEmpty &&
-          suppliers.isNotEmpty) {
-        ref
-            .read(inventoryFilterProvider.notifier)
-            .update((state) => state.copyWith(availableSuppliers: suppliers));
-      }
-    });
-
     return items.where((item) {
       // Apply search filter
       if (filter.searchQuery.isNotEmpty) {

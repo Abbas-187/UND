@@ -9,6 +9,7 @@ import '../usecases/get_order_by_id_usecase.dart';
 import '../usecases/get_orders_usecase.dart';
 import '../usecases/handle_procurement_complete_usecase.dart';
 import '../usecases/update_order_usecase.dart';
+import '../usecases/fulfill_order_usecase.dart';
 
 final createOrderUseCaseProvider = Provider<CreateOrderUseCase>((ref) {
   final orderRepo = ref.watch(orderRepositoryProvider);
@@ -41,4 +42,10 @@ final handleProcurementCompleteUseCaseProvider =
     Provider<HandleProcurementCompleteUseCase>((ref) {
   final repo = ref.watch(orderRepositoryProvider);
   return HandleProcurementCompleteUseCase(repo);
+});
+
+final fulfillOrderUseCaseProvider = Provider<FulfillOrderUseCase>((ref) {
+  final orderRepo = ref.watch(orderRepositoryProvider);
+  final inventoryRepo = ref.watch(inventoryRepositoryProvider);
+  return FulfillOrderUseCase(orderRepo, inventoryRepo);
 });

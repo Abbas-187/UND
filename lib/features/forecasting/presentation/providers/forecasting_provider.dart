@@ -1,12 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../inventory/domain/entities/inventory_item.dart';
-import '../../../inventory/domain/providers/inventory_provider.dart';
-import '../../../inventory/domain/repositories/inventory_repository.dart';
+import '../../../inventory/domain/providers/inventory_provider.dart'
+    as inv_providers;
+import '../../../inventory/domain/repositories/inventory_repository.dart'
+    hide inventoryRepositoryProvider;
 import '../../../sales/data/repositories/sales_repository.dart';
 import '../../data/models/sales_forecast_model.dart';
 import '../../domain/entities/time_series_point.dart';
 import '../../domain/services/forecasting_service.dart';
+import '../../domain/usecases/get_crm_demand_signals_usecase.dart';
+import '../../domain/entities/demand_signal_model.dart';
 
 /// States for the forecasting feature
 abstract class ForecastingState {}
@@ -44,7 +48,7 @@ final forecastingProvider =
   (ref) => ForecastingNotifier(
     forecastingService: ForecastingService(),
     salesRepository: SalesRepository(),
-    inventoryRepository: ref.watch(inventoryRepositoryProvider),
+    inventoryRepository: ref.watch(inv_providers.inventoryRepositoryProvider),
   ),
 );
 
@@ -54,14 +58,42 @@ class ForecastingNotifier extends StateNotifier<ForecastingState> {
     required ForecastingService forecastingService,
     required SalesRepository salesRepository,
     required InventoryRepository inventoryRepository,
+    GetCrmDemandSignalsUseCase? crmDemandSignalsUseCase,
   })  : _forecastingService = forecastingService,
         _salesRepository = salesRepository,
         _inventoryRepository = inventoryRepository,
-        super(ForecastingInitialState());
+        _crmDemandSignalsUseCase = crmDemandSignalsUseCase,
+        super(ForecastingInitialState()) {
+    // Start CRM signal automation if available
+    _startCrmSignalAutomation();
+  }
 
   final ForecastingService _forecastingService;
   final SalesRepository _salesRepository;
   final InventoryRepository _inventoryRepository;
+  final GetCrmDemandSignalsUseCase? _crmDemandSignalsUseCase;
+  List<DemandSignalModel> _latestCrmSignals = [];
+
+  void _startCrmSignalAutomation() {
+    if (_crmDemandSignalsUseCase != null) {
+      final now = DateTime.now();
+      final start = DateTime(now.year - 1, now.month, now.day);
+      _crmDemandSignalsUseCase.startAutoExtraction(
+        startDate: start,
+        endDate: now,
+        onUpdate: (signals) {
+          _latestCrmSignals = signals;
+          // Optionally, trigger forecast regeneration here
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _crmDemandSignalsUseCase?.stopAutoExtraction();
+    super.dispose();
+  }
 
   /// Generate a forecast for a product
   Future<void> generateForecast({
@@ -88,9 +120,19 @@ class ForecastingNotifier extends StateNotifier<ForecastingState> {
         return;
       }
 
+      // Use latest CRM demand signals if available
+      final crmSignals = _latestCrmSignals;
+
       // For now, just use the mock data since we don't have the actual forecasting implementation
       final SalesForecastModel? forecast =
           await _forecastingService.getForecastById('forecast-001');
+
+      // In a real implementation, you would call your domain use case here and pass crmSignals
+      // Example:
+      // final forecastData = await createForecastUseCase.execute(
+      //   ...,
+      //   demandSignals: crmSignals,
+      // );
 
       if (forecast == null) {
         state = ForecastingErrorState(message: 'Failed to generate forecast');
@@ -194,7 +236,10 @@ class ForecastingNotifier extends StateNotifier<ForecastingState> {
   Future<InventoryItem?> _getInventoryItem(String id) async {
     try {
       final items = await _inventoryRepository.getItems();
-      return items.firstWhere((item) => item.id == id);
+      for (final item in items) {
+        if (item.id == id) return item;
+      }
+      return null;
     } catch (_) {
       return null;
     }

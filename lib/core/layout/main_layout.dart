@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../l10n/app_localizations.dart';
 import '../routes/app_go_router.dart';
 
 class MainLayout extends StatefulWidget {
@@ -165,7 +164,6 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   Widget _buildNavigationRail(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
     // Create a list of all destinations with their IconData
@@ -177,53 +175,52 @@ class _MainLayoutState extends State<MainLayout> {
       },
       {
         'icon': Icons.person,
-        'label': Text(l10n.getModuleName('suppliers') ?? 'Suppliers'),
+        'label': Text('Suppliers'),
         'route': AppRoutes.suppliers,
       },
       {
         'icon': Icons.inventory_2,
-        'label': Text(l10n.getModuleName('inventory') ?? 'Inventory'),
+        'label': Text('Inventory'),
         'route': AppRoutes.inventoryDashboard,
       },
       {
         'icon': Icons.factory,
-        'label': Text(l10n.getModuleName('factory') ?? 'Factory'),
+        'label': Text('Factory'),
         'route': AppRoutes.productionExecutions,
       },
       {
         'icon': Icons.build,
-        'label':
-            Text(l10n.getModuleName('equipmentMaintenance') ?? 'Equipment'),
+        'label': Text('Equipment'),
         'route': AppRoutes.equipmentMaintenance,
       },
       {
         'icon': Icons.water_drop,
-        'label': Text(l10n.getModuleName('milkReception') ?? 'Milk Reception'),
+        'label': Text('Milk Reception'),
         'route': '/milk-reception',
       },
       {
         'icon': Icons.shopping_cart,
-        'label': Text(l10n.getModuleName('procurement') ?? 'Procurement'),
+        'label': Text('Procurement'),
         'route': AppRoutes.procurementMain,
       },
       {
         'icon': Icons.notifications,
-        'label': Text(l10n.notifications),
+        'label': Text('Notifications'),
         'route': '/notifications',
       },
       {
         'icon': Icons.analytics,
-        'label': Text(l10n.getModuleName('analytics') ?? 'Analytics'),
+        'label': Text('Analytics'),
         'route': '/analytics',
       },
       {
         'icon': Icons.trending_up,
-        'label': Text(l10n.getModuleName('forecasting') ?? 'Forecasting'),
+        'label': Text('Forecasting'),
         'route': '/forecasting',
       },
       {
         'icon': Icons.settings,
-        'label': Text(l10n.settings),
+        'label': Text('Settings'),
         'route': AppRoutes.settings,
       },
     ];

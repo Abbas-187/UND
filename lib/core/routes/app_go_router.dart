@@ -39,25 +39,25 @@ import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/inventory/presentation/screens/batch_barcode_scan_screen.dart';
 import '../../features/inventory/presentation/screens/batch_inventory_screen.dart';
 import '../../features/inventory/presentation/screens/batch_scanner_screen.dart';
+import '../../features/inventory/presentation/screens/create_movement_page.dart';
 import '../../features/inventory/presentation/screens/dairy_inventory_demo_screen.dart';
 import '../../features/inventory/presentation/screens/dairy_inventory_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_adjustment_history_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_alerts_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_analytics_dashboard_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_category_management_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_dashboard_page.dart';
 import '../../features/inventory/presentation/screens/inventory_database_management_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_edit_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_item_details_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_list_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_movement_history_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_movement_list_page.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_settings_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_transfer_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_trends_screen.dart';
-import '../../features/inventory/presentation/screens/create_movement_page.dart';
 import '../../features/inventory/presentation/screens/movement_details_page.dart';
-import '../../features/inventory/presentation/screens/inventory_dashboard_page.dart';
-import '../../features/inventory/presentation/screens/inventory_movement_list_page.dart';
-import '../../features/inventory/presentation/screens/inventory_list_screen.dart';
 import '../../features/milk_reception/presentation/screens/milk_reception_details_screen.dart';
 import '../../features/milk_reception/presentation/screens/milk_reception_screen.dart';
 import '../../features/milk_reception/presentation/screens/milk_reception_wizard_screen.dart';
@@ -84,6 +84,13 @@ import '../../features/suppliers/presentation/screens/suppliers_screen.dart';
 import '../auth/services/auth_service.dart';
 import '../config.dart';
 import '../layout/main_layout.dart';
+import '../../features/sales/presentation/screens/customers/customer_list_screen.dart';
+import '../../features/sales/presentation/screens/dashboard/sales_dashboard_screen.dart';
+import '../../features/sales/presentation/screens/analytics/sales_analytics_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_audit_log_screen.dart';
+import '../../features/procurement/presentation/screens/purchase_request_create_screen.dart';
+import '../../features/procurement/presentation/screens/requested_purchase_orders_screen.dart';
+import '../../features/procurement/presentation/screens/po_approvals_list_screen.dart';
 
 /// Centralized string constants for named routes
 class AppRoutes {
@@ -570,6 +577,97 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               child: SettingsScreen(),
             ),
           ),
+          GoRoute(
+            path: '/sales/orders',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/sales/orders'),
+              child: const OrderListScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/sales/orders/create',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/sales/orders/create'),
+              child: OrderCreationEditScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/sales/customers',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/sales/customers'),
+              child: CustomerListScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/sales/dashboard',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/sales/dashboard'),
+              child: SalesDashboardScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/sales/analytics',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/sales/analytics'),
+              child: SalesAnalyticsScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/order-management/discussion',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/order-management/discussion'),
+              child: DiscussionRoomScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/order-management/create',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/order-management/create'),
+              child: OrderCreationEditScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/order-management/detail',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/order-management/detail'),
+              child: OrderDetailScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/inventory/audit-logs',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/inventory/audit-logs'),
+              child: InventoryAuditLogScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/order-management/audit-trail',
+            builder: (context, state) {
+              final orderId = state.uri.queryParameters['id'] ?? '';
+              return KeyedSubtree(
+                key: const ValueKey('/order-management/audit-trail'),
+                child: AuditTrailScreen(orderId: orderId),
+              );
+            },
+          ),
+          GoRoute(
+            path: '/procurement/purchase-request',
+            builder: (context, state) {
+              final item = state.extra;
+              return PurchaseRequestCreateScreen(item: item);
+            },
+          ),
+          GoRoute(
+            path: '/procurement/requested-purchase-orders',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/procurement/requested-purchase-orders'),
+              child: RequestedPurchaseOrdersScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/procurement/po-approvals',
+            builder: (context, state) => const POApprovalsListScreen(),
+          ),
         ],
       ),
     ],
@@ -583,5 +681,37 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     refreshListenable: GoRouterRefreshStream(authService.authStateChanges),
+    errorBuilder: (context, state) => _GlobalNavigationErrorScreen(),
   );
 });
+
+class _GlobalNavigationErrorScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Navigation Error')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red, size: 64),
+            const SizedBox(height: 16),
+            const Text(
+              'Something went wrong with navigation.\nYou may have reached an unknown or empty page.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.home),
+              label: const Text('Go to Dashboard'),
+              onPressed: () {
+                context.go(AppRoutes.procurementDashboard);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

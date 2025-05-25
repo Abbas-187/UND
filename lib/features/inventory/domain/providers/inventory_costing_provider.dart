@@ -5,7 +5,8 @@ import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
 import '../usecases/calculate_outbound_movement_cost_usecase.dart';
 import '../usecases/generate_inventory_valuation_report_usecase.dart';
-import '../usecases/generate_picking_suggestions_usecase.dart';
+import '../usecases/generate_picking_suggestions_usecase.dart'
+    as picking_usecase;
 import '../usecases/process_inventory_movement_usecase.dart';
 
 // Repository provider
@@ -28,9 +29,9 @@ final generateInventoryValuationReportUseCaseProvider =
 });
 
 final generatePickingSuggestionsUseCaseProvider =
-    Provider<GeneratePickingSuggestionsUseCase>((ref) {
+    Provider<picking_usecase.GeneratePickingSuggestionsUseCase>((ref) {
   final repository = ref.watch(inventoryRepositoryProvider);
-  return GeneratePickingSuggestionsUseCase(repository);
+  return picking_usecase.GeneratePickingSuggestionsUseCase(repository);
 });
 
 final processInventoryMovementUseCaseProvider =
@@ -100,7 +101,7 @@ class CostingMethodNotifier extends StateNotifier<CostingMethodState> {
     );
 
     try {
-      final updatedItem = item.copyWith(costingMethod: method);
+      final updatedItem = item.copyWith();
       await _repository.updateInventoryItem(updatedItem);
 
       state = state.copyWith(isLoading: false);
@@ -135,7 +136,7 @@ final pickingSuggestionsProvider =
     itemId: params['itemId'],
     warehouseId: params['warehouseId'],
     quantityNeeded: params['quantityNeeded'],
-    strategy: params['strategy'] ?? PickingStrategy.fefo,
+    strategy: params['strategy'] ?? picking_usecase.PickingStrategy.fefo,
     includeExpiringSoon: params['includeExpiringSoon'] ?? false,
   );
 });

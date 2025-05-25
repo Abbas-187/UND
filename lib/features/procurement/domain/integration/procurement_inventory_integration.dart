@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../inventory/data/models/inventory_transaction_model.dart';
 import '../../../inventory/domain/entities/inventory_item.dart';
 import '../../../inventory/domain/entities/stock_level.dart';
 import '../../../inventory/domain/providers/forecasting_provider.dart';
@@ -8,15 +7,201 @@ import '../../../inventory/domain/providers/inventory_provider.dart';
 import '../../../inventory/domain/providers/inventory_repository_provider.dart'
     as domain_repo;
 import '../../../inventory/domain/providers/stock_level_provider.dart';
+import '../../../inventory/domain/usecases/process_goods_receipt_usecase.dart';
+import '../../../inventory/domain/usecases/process_return_to_supplier_usecase.dart';
+import '../../../inventory/domain/services/supplier_integration_service.dart';
 import '../../data/models/purchase_order_model.dart';
 import '../providers/purchase_order_provider.dart';
+import '../utils/procurement_cost_utils.dart';
 
 /// Integration service to connect procurement with inventory
 class ProcurementInventoryIntegration {
   ProcurementInventoryIntegration(this._ref);
   final Ref _ref;
 
-  /// Converts a received purchase order to inventory items
+  /// Process goods receipt from purchase order using the new use case
+  Future<GoodsReceiptResult> processGoodsReceipt({
+    required String purchaseOrderId,
+    required String receivedBy,
+    required Map<String, double> receivedQuantities, // itemId -> quantity
+    Map<String, String>? batchNumbers, // itemId -> batchNumber
+    Map<String, DateTime>? expirationDates, // itemId -> expirationDate
+    String? deliveryNoteReference,
+    String? notes,
+  }) async {
+    final purchaseOrder =
+        await _ref.read(purchaseOrderByIdProvider(purchaseOrderId).future);
+
+    if (purchaseOrder == null) {
+      return const GoodsReceiptResult(
+        success: false,
+        errors: ['Purchase order not found'],
+      );
+    }
+
+    // Ensure PO is in appropriate status for receiving
+    if (!['approved', 'inProgress', 'delivered']
+        .contains(purchaseOrder.status.toString().toLowerCase())) {
+      return GoodsReceiptResult(
+        success: false,
+        errors: [
+          'Purchase order status ${purchaseOrder.status} does not allow goods receipt'
+        ],
+      );
+    }
+
+    // Create goods receipt data for each item
+    final receipts = <GoodsReceiptData>[];
+
+    for (final item in purchaseOrder.items) {
+      final receivedQty = receivedQuantities[item.itemId];
+      if (receivedQty == null || receivedQty <= 0) continue;
+
+      final receipt = GoodsReceiptData(
+        poNumber: purchaseOrder.poNumber,
+        poLineItemId: item.id ?? '',
+        itemId: item.itemId,
+        supplierId: purchaseOrder.supplierId,
+        supplierName: purchaseOrder.supplierName,
+        receivedQuantity: receivedQty,
+        costAtTransaction: item.unitPrice,
+        batchLotNumber: batchNumbers?[item.itemId],
+        expirationDate: expirationDates?[item.itemId],
+        deliveryNoteReference: deliveryNoteReference,
+        qualityStatus: 'PENDING_INSPECTION',
+      );
+
+      receipts.add(receipt);
+    }
+
+    if (receipts.isEmpty) {
+      return const GoodsReceiptResult(
+        success: false,
+        errors: ['No items to receive'],
+      );
+    }
+
+    // Process using the new use case
+    final goodsReceiptUseCase = _ref.read(processGoodsReceiptUseCaseProvider);
+    final result = await goodsReceiptUseCase.execute(
+      receipts: receipts,
+      receivedBy: receivedBy,
+      notes: notes,
+    );
+
+    // Update PO status if successful
+    if (result.success) {
+      await _updatePurchaseOrderStatus(purchaseOrder, receivedQuantities);
+    }
+
+    return result;
+  }
+
+  /// Process return to supplier using the new use case
+  Future<ReturnToSupplierResult> processReturnToSupplier({
+    required String returnId,
+    required String supplierId,
+    required String supplierName,
+    required String returnedBy,
+    required Map<String, double> returnedQuantities, // itemId -> quantity
+    required Map<String, String> returnReasons, // itemId -> reason
+    Map<String, String>? batchNumbers, // itemId -> batchNumber
+    String? originalPoNumber,
+    String? notes,
+  }) async {
+    // Create return data for each item
+    final returns = <ReturnToSupplierData>[];
+
+    for (final entry in returnedQuantities.entries) {
+      final itemId = entry.key;
+      final quantity = entry.value;
+
+      if (quantity <= 0) continue;
+
+      final returnData = ReturnToSupplierData(
+        returnToSupplierId: returnId,
+        itemId: itemId,
+        supplierId: supplierId,
+        supplierName: supplierName,
+        returnedQuantity: quantity,
+        reasonForReturn: returnReasons[itemId] ?? 'Quality issue',
+        poNumber: originalPoNumber,
+        batchLotNumber: batchNumbers?[itemId],
+      );
+
+      returns.add(returnData);
+    }
+
+    if (returns.isEmpty) {
+      return const ReturnToSupplierResult(
+        success: false,
+        errors: ['No items to return'],
+      );
+    }
+
+    // Process using the new use case
+    final returnUseCase = _ref.read(processReturnToSupplierUseCaseProvider);
+    return await returnUseCase.execute(
+      returns: returns,
+      returnedBy: returnedBy,
+      notes: notes,
+    );
+  }
+
+  /// Get reorder recommendations using supplier integration
+  Future<List<ReorderRecommendation>> getReorderRecommendations({
+    String? warehouseId,
+    List<String>? itemIds,
+  }) async {
+    final supplierService = _ref.read(supplierIntegrationServiceProvider);
+    return await supplierService.generateReorderRecommendations(
+      warehouseId: warehouseId,
+      itemIds: itemIds,
+    );
+  }
+
+  /// Update purchase order status based on received quantities
+  Future<void> _updatePurchaseOrderStatus(
+    PurchaseOrderModel purchaseOrder,
+    Map<String, double> receivedQuantities,
+  ) async {
+    // Check if all items are fully received
+    bool fullyReceived = true;
+    bool partiallyReceived = false;
+
+    for (final item in purchaseOrder.items) {
+      final receivedQty = receivedQuantities[item.itemId] ?? 0;
+      final orderedQty = item.quantity;
+
+      if (receivedQty < orderedQty) {
+        fullyReceived = false;
+      }
+      if (receivedQty > 0) {
+        partiallyReceived = true;
+      }
+    }
+
+    // Update status accordingly
+    String newStatus;
+    if (fullyReceived) {
+      newStatus = 'completed';
+    } else if (partiallyReceived) {
+      newStatus = 'delivered'; // Partially delivered
+    } else {
+      return; // No change needed
+    }
+
+    // Update the purchase order status
+    final purchaseOrderRepository = _ref.read(purchaseOrderRepositoryProvider);
+    await purchaseOrderRepository.updatePurchaseOrderStatus(
+      purchaseOrder.id!,
+      newStatus,
+    );
+  }
+
+  /// Legacy method - converts a received purchase order to inventory items
+  /// @deprecated Use processGoodsReceipt instead
+  @Deprecated('Use processGoodsReceipt instead')
   Future<List<String>> convertPOToInventory(String purchaseOrderId) async {
     final purchaseOrder =
         await _ref.read(purchaseOrderByIdProvider(purchaseOrderId).future);
@@ -49,7 +234,9 @@ class ProcurementInventoryIntegration {
     return createdItemIds;
   }
 
-  /// Adds specific PO item to inventory
+  /// Legacy method - adds specific PO item to inventory
+  /// @deprecated Use processGoodsReceipt instead
+  @Deprecated('Use processGoodsReceipt instead')
   Future<String> _addToInventory({
     required PurchaseOrderItemModel item,
     required String poId,
@@ -60,6 +247,18 @@ class ProcurementInventoryIntegration {
   }) async {
     final inventoryRepository =
         _ref.read(domain_repo.inventoryRepositoryProvider);
+    final purchaseOrderRepository = _ref.read(purchaseOrderRepositoryProvider);
+
+    // Fetch cost from procurement utility
+    final cost = await getLatestProcurementCost(
+          purchaseOrderRepository: purchaseOrderRepository,
+          itemId: item.itemId,
+        ) ??
+        0;
+    if (cost <= 0) {
+      throw Exception(
+          'Unable to determine inbound cost for item: ${item.itemName}');
+    }
 
     // Create the inventory item
     final inventoryItem = InventoryItem(
@@ -73,6 +272,7 @@ class ProcurementInventoryIntegration {
       location: 'receiving/zone-a', // Default receiving location
       lastUpdated: DateTime.now(),
       batchNumber: 'LOT-${DateTime.now().millisecondsSinceEpoch}',
+      cost: cost,
       additionalAttributes: {
         'supplierInfo': '$supplierId - $supplierName',
         'purchaseOrderId': poId,
@@ -83,21 +283,7 @@ class ProcurementInventoryIntegration {
       appItemId: '',
     );
 
-    // Create inventory transaction record
-    final transaction = InventoryTransactionModel(
-      materialId: item.itemId,
-      materialName: item.itemName,
-      warehouseId: 'receiving',
-      transactionType: TransactionType.receipt,
-      quantity: item.quantity,
-      uom: item.unit,
-      referenceNumber: poNumber,
-      referenceType: 'purchase_order',
-      reason: 'PO Receipt: $poNumber',
-      transactionDate: DateTime.now(),
-    );
-
-    // Add item to inventory with transaction
+    // Add item to inventory
     final addedItem = await inventoryRepository.addItem(inventoryItem);
     return addedItem.id;
   }

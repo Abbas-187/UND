@@ -19,11 +19,11 @@ class GetInventoryMovementHistoryUseCase {
     // Fetch all movements (for demo; optimize with Firestore queries in production)
     final all = await repository.getAllMovements();
     return all.where((m) {
-      if (itemId != null && !m.items.any((i) => i.itemId == itemId)) {
+      if (itemId != null && !(m.items.any((i) => i.itemId == itemId))) {
         return false;
       }
       if (batchLotNumber != null &&
-          !m.items.any((i) => i.batchLotNumber == batchLotNumber)) {
+          !(m.items.any((i) => i.batchLotNumber == batchLotNumber))) {
         return false;
       }
       if (startDate != null && m.timestamp.isBefore(startDate)) return false;
@@ -34,7 +34,9 @@ class GetInventoryMovementHistoryUseCase {
         return false;
       }
       if (referenceDocument != null &&
-          !m.referenceDocuments.any((ref) => ref.contains(referenceDocument))) {
+          !(m.referenceDocuments
+                  ?.any((ref) => ref.contains(referenceDocument)) ??
+              false)) {
         return false;
       }
       if (locationId != null &&

@@ -1,8 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_adjustment.dart';
 import '../providers/inventory_adjustment_provider.dart';
 
@@ -42,7 +42,7 @@ class AdjustmentStatisticsChart extends ConsumerWidget {
           const Icon(Icons.bar_chart, size: 48, color: Colors.grey),
           const SizedBox(height: 16),
           Text(
-            l10n.noAdjustmentsFound,
+            l10n?.noAdjustmentsFound ?? 'No adjustments found',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ],
@@ -59,7 +59,8 @@ class AdjustmentStatisticsChart extends ConsumerWidget {
           const Icon(Icons.error_outline, size: 48, color: Colors.red),
           const SizedBox(height: 16),
           Text(
-            l10n.errorLoadingData(error?.toString() ?? 'Unknown error'),
+            l10n?.errorLoadingData(error?.toString() ?? 'Unknown error') ??
+                'Unknown error',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ],
@@ -80,7 +81,7 @@ class AdjustmentStatisticsChart extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, top: 8.0),
                 child: Text(
-                  l10n.adjustmentsByType,
+                  l10n?.adjustmentsByType ?? 'Adjustments by type',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
@@ -106,7 +107,7 @@ class AdjustmentStatisticsChart extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, top: 8.0),
                 child: Text(
-                  l10n.quantityByType,
+                  l10n?.quantityByType ?? 'Quantity by type',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),

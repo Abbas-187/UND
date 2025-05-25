@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/providers/order_usecase_providers.dart';
+import '../widgets/backorder_management_widget.dart';
+import '../../data/models/order_model.dart';
 
 class OrderDetailScreen extends ConsumerStatefulWidget {
   const OrderDetailScreen({super.key});
@@ -36,6 +38,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
             return Center(child: Text('Error: \\${snapshot.error}'));
           }
           final order = snapshot.data!;
+          final orderModel = OrderModel.fromEntity(order);
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -43,13 +46,15 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
               children: [
                 Text('Order ID: \\${order.id}'),
                 Text('Customer: \\${order.customerName}'),
-                Text('Date: \\${order.date.toLocal()}'),
+                Text('Date: \\${order.orderDate.toLocal()}'),
                 const SizedBox(height: 16),
                 Expanded(
                   child: ListView(
-                    children: order.items
-                        .map((item) => Text(item.toString()))
-                        .toList(),
+                    children: [
+                      ...order.items.map((item) => Text(item.toString())),
+                      const SizedBox(height: 16),
+                      BackorderManagementWidget(order: orderModel),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -84,6 +89,17 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                         );
                       },
                       child: const Text('Discussion'),
+                    ),
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey),
+                      onPressed: () {
+                        context.push(
+                          '/order-management/audit-trail?id=${order.id}',
+                        );
+                      },
+                      child: const Text('Audit Trail'),
                     ),
                   ],
                 )

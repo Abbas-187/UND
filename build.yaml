@@ -6,6 +6,8 @@ targets:
           include:
             - lib/features/crm/models/*.dart
             - lib/features/inventory/**/*.dart
+            - lib/features/production/**/*.dart
+            - lib/features/bom/**/*.dart
           exclude:
             - lib/features/crm/models/customer.freezed.dart
             - lib/features/crm/models/order.freezed.dart

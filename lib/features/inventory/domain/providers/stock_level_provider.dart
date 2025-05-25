@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/inventory_repository_provider.dart' as repo_provider;
 import '../repositories/inventory_repository.dart';
-import 'inventory_repository_provider.dart';
 
 /// State notifier for stock level management
 class StockLevelNotifier extends StateNotifier<AsyncValue<void>> {
@@ -51,6 +52,6 @@ class StockLevelNotifier extends StateNotifier<AsyncValue<void>> {
 /// Provider for stock level state
 final stockLevelProvider =
     StateNotifierProvider<StockLevelNotifier, AsyncValue<void>>((ref) {
-  final repository = ref.watch(inventoryRepositoryProvider);
+  final repository = ref.watch(repo_provider.inventoryRepositoryProvider);
   return StockLevelNotifier(repository);
 });

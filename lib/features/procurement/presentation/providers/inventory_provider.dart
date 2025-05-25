@@ -1,6 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../domain/entities/inventory_item.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../inventory/domain/entities/inventory_item.dart';
 
 /// Provider for all inventory items
 final inventoryItemsProvider = FutureProvider<List<InventoryItem>>((ref) async {

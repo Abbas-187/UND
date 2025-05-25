@@ -5,8 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 /// A service that encapsulates the navigation logic for the app
+// DEPRECATED: This service is no longer used. Navigation is now handled by GoRouter.
+// All methods below are obsolete and should not be used.
 class NavigationService {
-
   NavigationService(this.navigatorKey);
   final GlobalKey<NavigatorState> navigatorKey;
 

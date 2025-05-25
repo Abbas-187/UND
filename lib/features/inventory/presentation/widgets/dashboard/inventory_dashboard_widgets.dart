@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../../l10n/app_localizations.dart';
 import '../../../data/models/inventory_movement_model.dart';
+import '../../providers/inventory_movement_providers.dart';
 import '../../screens/inventory_movement_list_page.dart';
 import '../../screens/movement_details_page.dart';
 
@@ -33,7 +34,7 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  l10n.recentMovements,
+                  l10n?.recentMovements ?? 'Recent Movements',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -47,7 +48,7 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
                       ),
                     );
                   },
-                  child: Text(l10n.viewAll),
+                  child: Text(l10n?.viewAll ?? 'View All'),
                 ),
               ],
             ),
@@ -58,7 +59,8 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
                 data: (movements) {
                   if (movements.isEmpty) {
                     return Center(
-                      child: Text(l10n.noRecentMovements),
+                      child: Text(
+                          l10n?.noRecentMovements ?? 'No recent movements'),
                     );
                   }
 
@@ -104,7 +106,8 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
                   child: CircularProgressIndicator(),
                 ),
                 error: (error, stack) => Center(
-                  child: Text(l10n.errorWithMessage(error.toString())),
+                  child: Text(l10n?.errorWithMessage(error.toString()) ??
+                      'Error: ${error.toString()}'),
                 ),
               ),
             ),
@@ -119,56 +122,58 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
     Color iconColor;
 
     switch (type) {
-      case InventoryMovementType.PO_RECEIPT:
+      case InventoryMovementType.poReceipt:
         iconData = Icons.input;
         iconColor = Colors.blue;
         break;
-      case InventoryMovementType.TRANSFER_IN:
+      case InventoryMovementType.transferIn:
         iconData = Icons.swap_horiz;
         iconColor = Colors.green;
         break;
-      case InventoryMovementType.PRODUCTION_ISSUE:
+      case InventoryMovementType.productionIssue:
         iconData = Icons.remove;
         iconColor = Colors.orange;
         break;
-      case InventoryMovementType.SALES_RETURN:
+      case InventoryMovementType.salesReturn:
         iconData = Icons.replay;
         iconColor = Colors.teal;
         break;
-      case InventoryMovementType.ADJUSTMENT_OTHER:
+      case InventoryMovementType.adjustmentOther:
         iconData = Icons.tune;
         iconColor = Colors.purple;
         break;
-      case InventoryMovementType.PRODUCTION_OUTPUT:
+      case InventoryMovementType.productionOutput:
         iconData = Icons.add;
         iconColor = Colors.indigo;
         break;
-      case InventoryMovementType.TRANSFER_OUT:
+      case InventoryMovementType.transferOut:
         iconData = Icons.logout;
         iconColor = Colors.redAccent;
         break;
-      case InventoryMovementType.SALE_SHIPMENT:
+      case InventoryMovementType.saleShipment:
         iconData = Icons.local_shipping;
         iconColor = Colors.deepOrange;
         break;
-      case InventoryMovementType.ADJUSTMENT_DAMAGE:
+      case InventoryMovementType.adjustmentDamage:
         iconData = Icons.report_problem;
         iconColor = Colors.brown;
         break;
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
+      case InventoryMovementType.adjustmentCycleCountGain:
         iconData = Icons.add_circle_outline;
         iconColor = Colors.lightGreen;
         break;
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
+      case InventoryMovementType.adjustmentCycleCountLoss:
         iconData = Icons.remove_circle_outline;
         iconColor = Colors.red;
         break;
-      case InventoryMovementType.QUALITY_STATUS_UPDATE:
+      case InventoryMovementType.qualityStatusUpdate:
         iconData = Icons.verified;
         iconColor = Colors.blueGrey;
         break;
+      default:
+        iconData = Icons.inventory_2_outlined;
+        iconColor = Colors.grey;
     }
-
     return CircleAvatar(
       backgroundColor: iconColor.withOpacity(0.2),
       child: Icon(iconData, color: iconColor, size: 20),
@@ -181,21 +186,21 @@ class RecentMovementsSummaryWidget extends ConsumerWidget {
     String text;
 
     switch (status) {
-      case ApprovalStatus.PENDING:
+      case ApprovalStatus.pending:
         color = Colors.orange;
-        text = l10n.pending;
+        text = l10n?.pending ?? 'Pending';
         break;
-      case ApprovalStatus.APPROVED:
+      case ApprovalStatus.approved:
         color = Colors.green;
-        text = l10n.approved;
+        text = l10n?.approved ?? 'Approved';
         break;
-      case ApprovalStatus.REJECTED:
+      case ApprovalStatus.rejected:
         color = Colors.red;
-        text = l10n.rejected;
+        text = l10n?.rejected ?? 'Rejected';
         break;
       default:
         color = Colors.grey;
-        text = l10n.unknown;
+        text = l10n?.unknown ?? 'Unknown';
     }
 
     return Container(
@@ -224,7 +229,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
 
     // Use the movementsByTypeProvider for transfers since they often need approval
     final pendingMovementsAsync =
-        ref.watch(movementsByTypeProvider(InventoryMovementType.TRANSFER_IN));
+        ref.watch(movementsByTypeProvider(InventoryMovementType.transferIn));
 
     return Card(
       margin: const EdgeInsets.all(8.0),
@@ -238,7 +243,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  l10n.pendingApprovals,
+                  l10n?.pendingApprovals ?? 'Pending Approvals',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -253,7 +258,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
                       ),
                     );
                   },
-                  child: Text(l10n.viewAll),
+                  child: Text(l10n?.viewAll ?? 'View All'),
                 ),
               ],
             ),
@@ -264,12 +269,13 @@ class PendingApprovalsWidget extends ConsumerWidget {
                 data: (movements) {
                   // Filter for pending approvals
                   final pendingMovements = movements
-                      .where((m) => m.approvalStatus == ApprovalStatus.PENDING)
+                      .where((m) => m.approvalStatus == ApprovalStatus.pending)
                       .toList();
 
                   if (pendingMovements.isEmpty) {
                     return Center(
-                      child: Text(l10n.noRecentMovements),
+                      child: Text(
+                          l10n?.noRecentMovements ?? 'No recent movements'),
                     );
                   }
 
@@ -296,7 +302,7 @@ class PendingApprovalsWidget extends ConsumerWidget {
                               ),
                             );
                           },
-                          child: Text(l10n.reviewItems),
+                          child: Text(l10n?.reviewItems ?? 'Review Items'),
                         ),
                       );
                     },
@@ -306,7 +312,8 @@ class PendingApprovalsWidget extends ConsumerWidget {
                   child: CircularProgressIndicator(),
                 ),
                 error: (error, _) => Center(
-                  child: Text(l10n.errorWithMessage(error.toString())),
+                  child: Text(l10n?.errorWithMessage(error.toString()) ??
+                      'Error: ${error.toString()}'),
                 ),
               ),
             ),
@@ -328,7 +335,7 @@ class CriticalMovementsAlertWidget extends ConsumerWidget {
 
     // Get movements with critical status (using SALES_RETURN as proxy for critical movements)
     final pendingMovementsAsync =
-        ref.watch(movementsByTypeProvider(InventoryMovementType.SALES_RETURN));
+        ref.watch(movementsByTypeProvider(InventoryMovementType.salesReturn));
 
     return Card(
       margin: const EdgeInsets.all(8.0),
@@ -339,7 +346,7 @@ class CriticalMovementsAlertWidget extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l10n.criticalMovements,
+              l10n?.criticalMovements ?? 'Critical Movements',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -351,7 +358,7 @@ class CriticalMovementsAlertWidget extends ConsumerWidget {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Center(
-                      child: Text(l10n.noMovementsMatchingFilters),
+                      child: Text('No movements match the filters'),
                     ),
                   );
                 }
@@ -382,7 +389,7 @@ class CriticalMovementsAlertWidget extends ConsumerWidget {
                             ),
                           );
                         },
-                        child: Text(l10n.review),
+                        child: Text(l10n?.review ?? 'Review'),
                       ),
                     );
                   },
@@ -392,7 +399,8 @@ class CriticalMovementsAlertWidget extends ConsumerWidget {
                 child: CircularProgressIndicator(),
               ),
               error: (error, _) => Center(
-                child: Text(l10n.errorWithMessage(error.toString())),
+                child: Text(l10n?.errorWithMessage(error.toString()) ??
+                    'Error: ${error.toString()}'),
               ),
             ),
           ],
@@ -421,7 +429,7 @@ class MovementTrendsChartWidget extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              l10n.movementTrends,
+              l10n?.movementTrends ?? 'Movement Trends',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -430,7 +438,7 @@ class MovementTrendsChartWidget extends ConsumerWidget {
             SizedBox(
               height: 200,
               child: Center(
-                child: Text(l10n.notAvailable),
+                child: Text(l10n?.notAvailable ?? 'Not available'),
               ),
             ),
           ],

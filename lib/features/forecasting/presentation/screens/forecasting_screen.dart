@@ -42,6 +42,26 @@ class _ForecastingScreenState extends ConsumerState<ForecastingScreen> {
             .loadForecastById(widget.forecastId!);
       });
     }
+
+    // Listen for CRM signal updates and show notification
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.listen<ForecastingState>(forecastingProvider, (previous, next) {
+        if (next is ForecastingLoadedState &&
+            previous is! ForecastingLoadedState) {
+          _showCrmSignalNotification();
+        }
+      });
+    });
+  }
+
+  void _showCrmSignalNotification() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+            'CRM demand signals have been updated and applied to the forecast.'),
+        duration: Duration(seconds: 3),
+      ),
+    );
   }
 
   @override

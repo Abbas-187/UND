@@ -19,8 +19,8 @@ class QualityParametersRepository {
           .map((item) => DairyQualityParametersModel.fromJson(item))
           .toList();
     } catch (e) {
-      // Return empty list on error and log the exception
-      print('Failed to load quality parameters for item: $e');
+      // Return empty list on error
+      // Future improvement: add proper logging
       yield [];
     }
   }
@@ -35,8 +35,8 @@ class QualityParametersRepository {
           .map((item) => DairyQualityParametersModel.fromJson(item))
           .toList();
     } catch (e) {
-      // Return empty list on error and log the exception
-      print('Failed to load quality parameters for batch: $e');
+      // Return empty list on error
+      // Future improvement: add proper logging
       yield [];
     }
   }
@@ -50,8 +50,8 @@ class QualityParametersRepository {
           .map((item) => DairyQualityParametersModel.fromJson(item))
           .toList();
     } catch (e) {
-      // Return empty list on error and log the exception
-      print('Failed to load pending quality tests: $e');
+      // Return empty list on error
+      // Future improvement: add proper logging
       yield [];
     }
   }

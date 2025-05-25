@@ -10,6 +10,9 @@ import '../../../../suppliers/presentation/providers/supplier_provider.dart';
 import '../../../domain/entities/purchase_order.dart';
 import '../../../domain/services/purchase_order_print_service.dart';
 import '../../providers/purchase_order_providers.dart';
+import '../../providers/inventory_provider.dart';
+import '../../../../inventory/domain/entities/inventory_item.dart';
+import '../../data/in_memory_purchase_requests.dart';
 
 /// Provider for PurchaseOrderPrintService to resolve the missing reference
 final purchaseOrderPrintServiceProvider =
@@ -229,6 +232,99 @@ class PurchaseOrderDetailScreen extends ConsumerWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      tooltip: 'Add Item',
+                      onPressed: () async {
+                        // Get the subCategory from the first item's InventoryItem
+                        final itemsAsync = ref.read(inventoryItemsProvider);
+                        String? firstSubCat;
+                        if (purchaseOrder.items.isNotEmpty) {
+                          final firstItemId = purchaseOrder.items.first.itemId;
+                          firstSubCat = itemsAsync.when(
+                            data: (items) {
+                              final InventoryItem? firstItem = items.firstWhere(
+                                (item) => item.id == firstItemId,
+                                orElse: () => null as dynamic,
+                              );
+                              return firstItem?.subCategory;
+                            },
+                            loading: () => null,
+                            error: (e, s) => null,
+                          );
+                        }
+                        if (firstSubCat == null || firstSubCat.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'No subcategory found for this order. Please add items manually.')),
+                          );
+                          return;
+                        }
+                        // Only show items from requested purchase orders, filtered by subcategory
+                        final requestedItems = InMemoryPurchaseRequests.requests
+                            .where((req) {
+                              final item = req['item'];
+                              return item.subCategory == firstSubCat;
+                            })
+                            .map((req) => req['item'])
+                            .toList();
+                        if (requestedItems.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    'No requested items with subcategory "$firstSubCat" found. Please add items manually.')),
+                          );
+                          return;
+                        }
+                        final selected = await showDialog(
+                          context: context,
+                          builder: (context) => SimpleDialog(
+                            title: Text('Add Item (Subcategory: $firstSubCat)'),
+                            children: requestedItems
+                                .map<Widget>((item) => SimpleDialogOption(
+                                      child: Text(item.name),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(item),
+                                    ))
+                                .toList(),
+                          ),
+                        );
+                        if (selected != null) {
+                          // Actually add the item to the PO
+                          final newItem = PurchaseOrderItem(
+                            id: UniqueKey().toString(),
+                            itemId: selected.id,
+                            itemName: selected.name,
+                            quantity: selected.quantity ?? 1,
+                            unit: selected.unit,
+                            unitPrice: selected.cost ?? 0,
+                            totalPrice:
+                                (selected.quantity ?? 1) * (selected.cost ?? 0),
+                            requiredByDate:
+                                DateTime.now().add(const Duration(days: 14)),
+                            notes: null,
+                          );
+                          // Update the PO in memory (for demo, you may need to update via notifier in real app)
+                          final notifier = ref.read(
+                              purchaseOrderDetailNotifierProvider(orderId)
+                                  .notifier);
+                          notifier.addItem(newItem);
+                          // Remove from requested purchase orders
+                          InMemoryPurchaseRequests.requests.removeWhere(
+                              (req) => req['item'].id == selected.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Added item: ${selected.name}')),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
                 // Table headers
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),

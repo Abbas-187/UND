@@ -21,7 +21,7 @@ final filteredInventoryItemsProvider =
 
   final lowercaseQuery = query.toLowerCase();
   return items.where((item) {
-    return item.itemCode.toLowerCase().contains(lowercaseQuery) ||
+    return item.sapCode.toLowerCase().contains(lowercaseQuery) ||
         item.name.toLowerCase().contains(lowercaseQuery);
   }).toList();
 });
@@ -48,7 +48,7 @@ final perishableInventoryItemsProvider =
   final items = await repository.getItems();
   return items
       .where((item) =>
-          item.customAttributes != null &&
-          item.customAttributes!['isPerishable'] == true)
+          item.additionalAttributes != null &&
+          item.additionalAttributes!['isPerishable'] == true)
       .toList();
 });

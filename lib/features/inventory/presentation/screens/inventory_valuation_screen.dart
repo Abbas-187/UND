@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 
 import '../../domain/entities/cost_layer.dart';
 import '../../domain/usecases/generate_inventory_valuation_report_usecase.dart';
+import '../providers/inventory_movement_provider.dart';
 import '../providers/inventory_valuation_provider.dart';
 import '../widgets/inventory_item_valuation_card.dart';
-import '../providers/inventory_movement_provider.dart';
 
 /// Screen for displaying inventory valuation with FIFO/LIFO costing
 class InventoryValuationScreen extends ConsumerStatefulWidget {

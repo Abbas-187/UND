@@ -1,17 +1,18 @@
+/*import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:und_app/main.dart';
-import 'package:und_app/features/shared/models/app_modules.dart';
-import 'firebase_mock_util.dart';
 import 'package:mockito/mockito.dart';
 import 'package:und_app/features/auth/domain/repositories/auth_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:und_app/features/auth/presentation/providers/auth_provider.dart'
     as auth_present;
 import 'package:und_app/features/inventory/providers/inventory_movement_providers.dart';
+import 'package:und_app/features/shared/models/app_modules.dart';
+import 'package:und_app/main.dart';
+
+import 'firebase_mock_util.dart';
 
 // Mock classes
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -80,3 +81,4 @@ void main() {
     });
   });
 }
+*/

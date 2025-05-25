@@ -3,7 +3,6 @@ import '../repositories/inventory_repository.dart';
 
 /// Model for the inventory valuation report
 class InventoryValuationReport {
-
   const InventoryValuationReport({
     required this.reportDate,
     required this.entries,
@@ -22,7 +21,6 @@ class InventoryValuationReport {
 
 /// Model for an entry in the inventory valuation report
 class InventoryValuationEntry {
-
   const InventoryValuationEntry({
     required this.itemId,
     required this.itemCode,
@@ -47,7 +45,6 @@ class InventoryValuationEntry {
 
 /// Model for a cost layer entry in the inventory valuation report
 class CostLayerValuationEntry {
-
   const CostLayerValuationEntry({
     required this.id,
     required this.itemId,
@@ -70,9 +67,61 @@ class CostLayerValuationEntry {
   final DateTime? expirationDate;
 }
 
+/// Model for comparative inventory valuation report
+class ComparativeInventoryValuationReport {
+  const ComparativeInventoryValuationReport({
+    required this.reportDate,
+    required this.entries,
+    required this.fifoTotalValue,
+    required this.lifoTotalValue,
+    required this.wacTotalValue,
+    this.warehouseId,
+    this.warehouseName,
+  });
+  final DateTime reportDate;
+  final List<ComparativeValuationEntry> entries;
+  final double fifoTotalValue;
+  final double lifoTotalValue;
+  final double wacTotalValue;
+  final String? warehouseId;
+  final String? warehouseName;
+}
+
+/// Model for an entry in the comparative inventory valuation report
+class ComparativeValuationEntry {
+  const ComparativeValuationEntry({
+    required this.itemId,
+    required this.itemCode,
+    required this.itemName,
+    this.category,
+    required this.quantity,
+    required this.fifoValue,
+    required this.lifoValue,
+    required this.wacValue,
+    this.costLayers,
+  });
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final String? category;
+  final double quantity;
+  final double fifoValue;
+  final double lifoValue;
+  final double wacValue;
+  final List<CostLayerValuationEntry>? costLayers;
+
+  /// Get the value difference between FIFO and LIFO
+  double get fifoLifoDifference => fifoValue - lifoValue;
+
+  /// Get the value difference between FIFO and WAC
+  double get fifoWacDifference => fifoValue - wacValue;
+
+  /// Get the value difference between LIFO and WAC
+  double get lifoWacDifference => lifoValue - wacValue;
+}
+
 /// UseCase for generating inventory valuation reports using different costing methods
 class GenerateInventoryValuationReportUseCase {
-
   const GenerateInventoryValuationReportUseCase(this._repository);
   final InventoryRepository _repository;
 
@@ -125,7 +174,7 @@ class GenerateInventoryValuationReportUseCase {
       // Get cost layers for the item based on the costing method
       final costLayers = await _repository.getAvailableCostLayers(
         item.id,
-        warehouseId,
+        warehouseId ?? '',
         costingMethod,
       );
 
@@ -167,7 +216,7 @@ class GenerateInventoryValuationReportUseCase {
       // Create the entry
       final entry = InventoryValuationEntry(
         itemId: item.id,
-        itemCode: item.itemCode,
+        itemCode: item.sapCode,
         itemName: item.name,
         category: item.category,
         totalQuantity: totalQuantity,
@@ -192,6 +241,131 @@ class GenerateInventoryValuationReportUseCase {
       costingMethod: costingMethod,
       warehouseId: warehouseId,
       warehouseName: warehouseName,
+    );
+  }
+}
+
+// Extension to the GenerateInventoryValuationReportUseCase class
+extension ComparativeValuationExtension
+    on GenerateInventoryValuationReportUseCase {
+  /// Generate a comparative inventory valuation report showing FIFO, LIFO, and WAC values
+  ///
+  /// Parameters:
+  /// - warehouseId: Optional ID of warehouse to filter by
+  /// - includeLayerBreakdown: Whether to include cost layer details
+  /// - asOfDate: Date to generate the report for (defaults to now)
+  ///
+  /// Returns a comparative report with values using all costing methods
+  Future<ComparativeInventoryValuationReport> generateComparativeReport({
+    String? warehouseId,
+    bool includeLayerBreakdown = true,
+    DateTime? asOfDate,
+  }) async {
+    // Generate separate reports for each costing method
+    final fifoReport = await execute(
+      warehouseId: warehouseId,
+      costingMethod: CostingMethod.fifo,
+      includeLayerBreakdown: includeLayerBreakdown,
+      asOfDate: asOfDate,
+    );
+
+    final lifoReport = await execute(
+      warehouseId: warehouseId,
+      costingMethod: CostingMethod.lifo,
+      includeLayerBreakdown: false,
+      asOfDate: asOfDate,
+    );
+
+    final wacReport = await execute(
+      warehouseId: warehouseId,
+      costingMethod: CostingMethod.wac,
+      includeLayerBreakdown: false,
+      asOfDate: asOfDate,
+    );
+
+    // Combine the reports into a comparative report
+    final comparativeEntries = <ComparativeValuationEntry>[];
+    final allItemIds = <String>{};
+
+    // Collect all item IDs from the three reports
+    for (final entry in fifoReport.entries) {
+      allItemIds.add(entry.itemId);
+    }
+    for (final entry in lifoReport.entries) {
+      allItemIds.add(entry.itemId);
+    }
+    for (final entry in wacReport.entries) {
+      allItemIds.add(entry.itemId);
+    }
+
+    // Create comparative entries
+    for (final itemId in allItemIds) {
+      final fifoEntry = fifoReport.entries.firstWhere(
+        (e) => e.itemId == itemId,
+        orElse: () => InventoryValuationEntry(
+          itemId: itemId,
+          itemCode: '',
+          itemName: '',
+          totalQuantity: 0,
+          totalValue: 0,
+          averageCost: 0,
+        ),
+      );
+
+      final lifoEntry = lifoReport.entries.firstWhere(
+        (e) => e.itemId == itemId,
+        orElse: () => InventoryValuationEntry(
+          itemId: itemId,
+          itemCode: fifoEntry.itemCode,
+          itemName: fifoEntry.itemName,
+          category: fifoEntry.category,
+          totalQuantity: fifoEntry.totalQuantity,
+          totalValue: 0,
+          averageCost: 0,
+        ),
+      );
+
+      final wacEntry = wacReport.entries.firstWhere(
+        (e) => e.itemId == itemId,
+        orElse: () => InventoryValuationEntry(
+          itemId: itemId,
+          itemCode: fifoEntry.itemCode,
+          itemName: fifoEntry.itemName,
+          category: fifoEntry.category,
+          totalQuantity: fifoEntry.totalQuantity,
+          totalValue: 0,
+          averageCost: 0,
+        ),
+      );
+
+      comparativeEntries.add(ComparativeValuationEntry(
+        itemId: itemId,
+        itemCode: fifoEntry.itemCode.isEmpty
+            ? lifoEntry.itemCode
+            : fifoEntry.itemCode,
+        itemName: fifoEntry.itemName.isEmpty
+            ? lifoEntry.itemName
+            : fifoEntry.itemName,
+        category: fifoEntry.category,
+        quantity: fifoEntry.totalQuantity,
+        fifoValue: fifoEntry.totalValue,
+        lifoValue: lifoEntry.totalValue,
+        wacValue: wacEntry.totalValue,
+        costLayers: fifoEntry.costLayerBreakdown,
+      ));
+    }
+
+    // Sort entries by item code
+    comparativeEntries.sort((a, b) => a.itemCode.compareTo(b.itemCode));
+
+    return ComparativeInventoryValuationReport(
+      reportDate: fifoReport.reportDate,
+      entries: comparativeEntries,
+      fifoTotalValue: fifoReport.totalValue,
+      lifoTotalValue: lifoReport.totalValue,
+      wacTotalValue: wacReport.totalValue,
+      warehouseId: warehouseId,
+      warehouseName: fifoReport.warehouseName,
     );
   }
 }

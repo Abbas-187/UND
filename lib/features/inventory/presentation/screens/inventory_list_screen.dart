@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
-import '../../../../l10n/app_localizations_extension.dart';
+import '../../../warehouse/presentation/screens/location_optimization_screen.dart';
 import '../providers/inventory_provider.dart';
 import '../widgets/inventory_filter_bar.dart';
 import '../widgets/inventory_item_card.dart';
@@ -61,11 +61,20 @@ class InventoryListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.getText('inventoryList')),
+        title: Text('Inventory List'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.apartment),
+            tooltip: 'Optimize Location',
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => LocationOptimizationScreen(),
+              ));
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.add),
-            tooltip: l10n.getText('addNewItem'),
+            tooltip: 'Add New Item',
             onPressed: () {
               context.go('/inventory/edit');
             },
@@ -88,7 +97,7 @@ class InventoryListScreen extends ConsumerWidget {
             child: filteredItemsAsyncValue.when(
               data: (items) {
                 if (items.isEmpty) {
-                  return Center(child: Text(l10n.getText('noItemsFound')));
+                  return Center(child: Text('No items found'));
                 }
                 return ListView.builder(
                   padding: const EdgeInsets.all(8.0),
@@ -107,8 +116,7 @@ class InventoryListScreen extends ConsumerWidget {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stackTrace) => Center(
                 child: Text(
-                  l10n.getText(
-                      'errorLoadingItems', {'error': error.toString()}),
+                  'Error loading items: ${error.toString()}',
                   textAlign: TextAlign.center,
                 ),
               ),

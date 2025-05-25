@@ -74,30 +74,31 @@ class _InventoryAuditTrailScreenState
     final sheet = excel['AuditTrail'];
     // Write header row
     sheet.appendRow([
-      ex.CellValue.fromString('Timestamp'),
-      ex.CellValue.fromString('Type'),
-      ex.CellValue.fromString('Item(s)'),
-      ex.CellValue.fromString('Batch'),
-      ex.CellValue.fromString('Qty'),
-      ex.CellValue.fromString('From'),
-      ex.CellValue.fromString('To'),
-      ex.CellValue.fromString('Employee'),
-      ex.CellValue.fromString('Reason'),
-      ex.CellValue.fromString('References'),
+      ex.TextCellValue('Timestamp'),
+      ex.TextCellValue('Type'),
+      ex.TextCellValue('Item(s)'),
+      ex.TextCellValue('Batch'),
+      ex.TextCellValue('Qty'),
+      ex.TextCellValue('From'),
+      ex.TextCellValue('To'),
+      ex.TextCellValue('Employee'),
+      ex.TextCellValue('Reason'),
+      ex.TextCellValue('References'),
     ]);
     // Write data rows
     for (final m in movements) {
       sheet.appendRow([
-        ex.CellValue.fromString(m.timestamp.toIso8601String()),
-        ex.CellValue.fromString(m.movementType.toString().split('.').last),
-        ex.CellValue.fromString(m.items.map((i) => i.productName).join(', ')),
-        ex.CellValue.fromString(m.items.map((i) => i.batchLotNumber).join(', ')),
-        ex.CellValue.fromString(m.items.map((i) => i.quantity).join(', ')),
-        ex.CellValue.fromString(m.sourceLocationName ?? ''),
-        ex.CellValue.fromString(m.destinationLocationName ?? ''),
-        ex.CellValue.fromString('${m.initiatingEmployeeName} (${m.initiatingEmployeeId})'),
-        ex.CellValue.fromString(m.reasonNotes ?? ''),
-        ex.CellValue.fromString(m.referenceDocuments?.join(', ') ?? ''),
+        ex.TextCellValue(m.timestamp.toIso8601String()),
+        ex.TextCellValue(m.movementType.toString().split('.').last),
+        ex.TextCellValue(m.items.map((i) => i.productName).join(', ')),
+        ex.TextCellValue(m.items.map((i) => i.batchLotNumber).join(', ')),
+        ex.TextCellValue(m.items.map((i) => i.quantity).join(', ')),
+        ex.TextCellValue(m.sourceLocationName ?? ''),
+        ex.TextCellValue(m.destinationLocationName ?? ''),
+        ex.TextCellValue(
+            '${m.initiatingEmployeeName} (${m.initiatingEmployeeId})'),
+        ex.TextCellValue(m.reasonNotes ?? ''),
+        ex.TextCellValue(m.referenceDocuments?.join(', ') ?? ''),
       ]);
     }
     final fileBytes = excel.encode();

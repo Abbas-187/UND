@@ -77,13 +77,36 @@ class GeneratePickingSuggestionsUseCase {
       return [];
     }
 
-    // Determine if the item is perishable
-    final isPerishable = item.customAttributes?['isPerishable'] == true;
+    // Fetch batch quality statuses from item attributes (if batch-tracked)
+    final batchQualityStatus = (item.additionalAttributes != null &&
+            item.additionalAttributes!.containsKey('batchQualityStatus'))
+        ? item.additionalAttributes!['batchQualityStatus']
+            as Map<String, dynamic>
+        : null;
+
+    // Filter cost layers by quality status == 'AVAILABLE'
+    final filteredCostLayers = costLayers.where((layer) {
+      if (batchQualityStatus != null) {
+        final status = batchQualityStatus[layer.batchLotNumber];
+        return status == 'AVAILABLE';
+      }
+      // If not batch-tracked, fallback to item-level qualityStatus
+      final itemStatus = item.additionalAttributes != null
+          ? item.additionalAttributes!['qualityStatus']
+          : null;
+      return itemStatus == 'AVAILABLE';
+    }).toList();
+
+    if (filteredCostLayers.isEmpty) {
+      return [];
+    }
+
+    // Use filteredCostLayers for picking logic
+    final isPerishable = item.additionalAttributes?['isPerishable'] == true;
 
     // Sort the layers based on strategy
     if (strategy == PickingStrategy.fefo && isPerishable) {
-      // Sort by expiration date (ascending - soonest first)
-      costLayers.sort((a, b) {
+      filteredCostLayers.sort((a, b) {
         if (a.expirationDate == null && b.expirationDate == null) return 0;
         if (a.expirationDate == null) return 1; // Nulls last
         if (b.expirationDate == null) return -1;
@@ -91,11 +114,11 @@ class GeneratePickingSuggestionsUseCase {
       });
     } else if (strategy == PickingStrategy.fifo ||
         (strategy == PickingStrategy.fefo && !isPerishable)) {
-      // Sort by movement date (ascending - oldest first)
-      costLayers.sort((a, b) => a.movementDate.compareTo(b.movementDate));
+      filteredCostLayers
+          .sort((a, b) => a.movementDate.compareTo(b.movementDate));
     } else if (strategy == PickingStrategy.lifo) {
-      // Sort by movement date (descending - newest first)
-      costLayers.sort((a, b) => b.movementDate.compareTo(a.movementDate));
+      filteredCostLayers
+          .sort((a, b) => b.movementDate.compareTo(a.movementDate));
     }
 
     final now = DateTime.now();
@@ -103,7 +126,7 @@ class GeneratePickingSuggestionsUseCase {
     double remainingNeeded = quantityNeeded;
 
     // Process layers to generate picking suggestions
-    for (final layer in costLayers) {
+    for (final layer in filteredCostLayers) {
       if (remainingNeeded <= 0 && !includeExpiringSoon) break;
 
       // Skip layers with no remaining quantity
@@ -134,7 +157,7 @@ class GeneratePickingSuggestionsUseCase {
           itemId: layer.itemId,
           itemName: item.name,
           batchLotNumber: layer.batchLotNumber,
-          locationId: item.locationId ?? 'unknown',
+          locationId: item.location,
           availableQuantity: layer.remainingQuantity,
           suggestedQuantity: suggestedQty,
           expirationDate: layer.expirationDate,

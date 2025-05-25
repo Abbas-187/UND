@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_adjustment.dart';
 import '../providers/inventory_adjustment_provider.dart';
 
 class AdjustmentFilterDialog extends StatefulWidget {
-
   const AdjustmentFilterDialog({
     super.key,
     required this.initialFilter,
@@ -59,7 +58,7 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                   const Icon(Icons.filter_list),
                   const SizedBox(width: 8),
                   Text(
-                    l10n.filterAdjustments,
+                    l10n?.filterAdjustments ?? 'Filter Adjustments',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const Spacer(),
@@ -80,16 +79,17 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Date Range
-                    _buildSectionTitle(context, l10n.dateRange),
+                    _buildSectionTitle(
+                        context, l10n?.dateRange ?? 'Date Range'),
                     const SizedBox(height: 8),
                     Row(
                       children: [
                         Expanded(
                           child: _buildDateSelector(
-                            label: l10n.startDate,
+                            label: l10n?.startDate ?? 'Start Date',
                             value: _filter.startDate != null
                                 ? _dateFormat.format(_filter.startDate!)
-                                : l10n.any,
+                                : l10n?.any ?? 'Any',
                             onTap: () =>
                                 _selectDate(context, isStartDate: true),
                             onClear: _filter.startDate != null
@@ -105,10 +105,10 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                         const SizedBox(width: 16),
                         Expanded(
                           child: _buildDateSelector(
-                            label: l10n.endDate,
+                            label: l10n?.endDate ?? 'End Date',
                             value: _filter.endDate != null
                                 ? _dateFormat.format(_filter.endDate!)
-                                : l10n.any,
+                                : l10n?.any ?? 'Any',
                             onTap: () =>
                                 _selectDate(context, isStartDate: false),
                             onClear: _filter.endDate != null
@@ -126,7 +126,8 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                     const SizedBox(height: 16),
 
                     // Adjustment Type
-                    _buildSectionTitle(context, l10n.adjustmentTypeLabel),
+                    _buildSectionTitle(context,
+                        l10n?.adjustmentTypeLabel ?? 'Adjustment Type'),
                     const SizedBox(height: 8),
                     _buildDropdown<AdjustmentType>(
                       value: _filter.type,
@@ -141,12 +142,12 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                           }
                         });
                       },
-                      hint: l10n.allTypes,
+                      hint: l10n?.allTypes ?? 'All Types',
                     ),
                     const SizedBox(height: 16),
 
                     // Status
-                    _buildSectionTitle(context, l10n.statusLabel),
+                    _buildSectionTitle(context, l10n?.statusLabel ?? 'Status'),
                     const SizedBox(height: 8),
                     _buildDropdown<AdjustmentApprovalStatus>(
                       value: _filter.status,
@@ -161,17 +162,18 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                           }
                         });
                       },
-                      hint: l10n.allStatuses,
+                      hint: l10n?.allStatuses ?? 'All Statuses',
                     ),
                     const SizedBox(height: 16),
 
                     // Item & Category IDs
-                    _buildSectionTitle(context, l10n.itemAndCategory),
+                    _buildSectionTitle(
+                        context, l10n?.itemAndCategory ?? 'Item & Category'),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _itemIdController,
                       decoration: InputDecoration(
-                        labelText: l10n.itemId,
+                        labelText: l10n?.itemId ?? 'Item ID',
                         border: const OutlineInputBorder(),
                         suffixIcon: _itemIdController.text.isNotEmpty
                             ? IconButton(
@@ -198,7 +200,7 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                     TextField(
                       controller: _categoryIdController,
                       decoration: InputDecoration(
-                        labelText: l10n.categoryId,
+                        labelText: l10n?.categoryId ?? 'Category ID',
                         border: const OutlineInputBorder(),
                         suffixIcon: _categoryIdController.text.isNotEmpty
                             ? IconButton(
@@ -240,7 +242,7 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                         _categoryIdController.clear();
                       });
                     },
-                    child: Text(l10n.clearAll),
+                    child: Text(l10n?.clearAll ?? 'Clear All'),
                   ),
                   const SizedBox(width: 16),
                   FilledButton(
@@ -248,7 +250,7 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
                       widget.onFilterChanged(_filter);
                       Navigator.of(context).pop();
                     },
-                    child: Text(l10n.applyFilters),
+                    child: Text(l10n?.applyFilters ?? 'Apply Filters'),
                   ),
                 ],
               ),
@@ -379,11 +381,11 @@ class _AdjustmentFilterDialogState extends State<AdjustmentFilterDialog> {
     final l10n = AppLocalizations.of(context);
     switch (status) {
       case AdjustmentApprovalStatus.pending:
-        return l10n.pendingApproval;
+        return l10n?.pendingApproval ?? 'Pending Approval';
       case AdjustmentApprovalStatus.approved:
-        return l10n.approved;
+        return l10n?.approved ?? 'Approved';
       case AdjustmentApprovalStatus.rejected:
-        return l10n.rejected;
+        return l10n?.rejected ?? 'Rejected';
     }
   }
 }

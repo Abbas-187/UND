@@ -53,7 +53,7 @@ class POValidator {
     );
 
     if ((calculatedTotal - po.totalAmount).abs() > 0.01) {
-      errors.add('Total amount does not match sum of item prices');
+      errors.add('Total amount does not match sum of item costs');
     }
 
     // Check for any items with zero or negative quantities
@@ -89,7 +89,7 @@ class POValidator {
     }
 
     if (item.unitPrice <= 0) {
-      errors.add('Item unit price must be positive: ${item.itemName}');
+      errors.add('Item unit cost must be positive: \\${item.itemName}');
     }
 
     // Validate required date is in the future
@@ -102,7 +102,7 @@ class POValidator {
     final calculatedTotal = item.quantity * item.unitPrice;
     if ((calculatedTotal - item.totalPrice).abs() > 0.01) {
       errors.add(
-          'Total price for item ${item.itemName} does not match quantity * unit price');
+          'Total cost for item \\${item.itemName} does not match quantity * unit cost');
     }
 
     // Warning for large quantities
@@ -112,7 +112,7 @@ class POValidator {
 
     // Warning for high unit price
     if (item.unitPrice > 5000) {
-      warnings.add('High unit price for item: ${item.itemName}');
+      warnings.add('High unit cost for item: \\${item.itemName}');
     }
   }
 }

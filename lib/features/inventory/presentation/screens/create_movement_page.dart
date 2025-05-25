@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../data/models/inventory_movement_item_model.dart';
 import '../../data/models/inventory_movement_model.dart';
 import '../../presentation/providers/inventory_movement_provider.dart';
@@ -22,7 +22,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
   bool _isProcessing = false;
 
   // Form data
-  InventoryMovementType _movementType = InventoryMovementType.TRANSFER_IN;
+  InventoryMovementType _movementType = InventoryMovementType.transferIn;
   String _sourceLocationId = '';
   String _sourceLocationName = '';
   String _destinationLocationId = '';
@@ -110,7 +110,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
 
             // Step 3: Add Items
             Step(
-              title: Text(l10n.addItems),
+              title: Text(l10n?.addItems ?? ''),
               content: _buildAddItemsStep(),
               isActive: _currentStep >= 2,
               state: _currentStep > 2 ? StepState.complete : StepState.indexed,
@@ -118,7 +118,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
 
             // Step 4: Review and Submit
             Step(
-              title: Text(l10n.reviewAndSubmit),
+              title: Text(l10n?.reviewAndSubmit ?? ''),
               content: _buildReviewStep(),
               isActive: _currentStep >= 3,
               state: _isProcessing ? StepState.complete : StepState.indexed,
@@ -183,9 +183,9 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
 
   // Step 2: Source and Destination
   Widget _buildLocationsStep() {
-    final showSourceField = _movementType != InventoryMovementType.PO_RECEIPT;
+    final showSourceField = _movementType != InventoryMovementType.poReceipt;
     final showDestinationField =
-        _movementType != InventoryMovementType.ADJUSTMENT_OTHER;
+        _movementType != InventoryMovementType.adjustmentOther;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,10 +427,13 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                   labelText: 'Unit',
                 ),
                 items: [
-                  DropdownMenuItem(value: 'kg', child: Text(l10n.kilogram)),
+                  DropdownMenuItem(
+                      value: 'kg', child: Text(l10n?.kilogram ?? 'kg')),
                   DropdownMenuItem(value: 'l', child: Text('l')),
-                  DropdownMenuItem(value: 'pc', child: Text(l10n.piece)),
-                  DropdownMenuItem(value: 'box', child: Text(l10n.box)),
+                  DropdownMenuItem(
+                      value: 'pc', child: Text(l10n?.piece ?? 'pc')),
+                  DropdownMenuItem(
+                      value: 'box', child: Text(l10n?.box ?? 'box')),
                 ],
                 onChanged: (value) {
                   if (value != null) {
@@ -610,7 +613,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                if (_movementType != InventoryMovementType.PO_RECEIPT) ...[
+                if (_movementType != InventoryMovementType.poReceipt) ...[
                   Row(
                     children: [
                       const Text('From: ',
@@ -619,8 +622,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
                     ],
                   ),
                 ],
-                if (_movementType !=
-                    InventoryMovementType.ADJUSTMENT_OTHER) ...[
+                if (_movementType != InventoryMovementType.adjustmentOther) ...[
                   Row(
                     children: [
                       const Text('To: ',
@@ -788,7 +790,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
       }
     } else if (_currentStep == 1) {
       // Validate source and destination based on movement type
-      if (_movementType == InventoryMovementType.PO_RECEIPT &&
+      if (_movementType == InventoryMovementType.poReceipt &&
           _destinationLocationId.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -798,7 +800,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
           ),
         );
         return;
-      } else if (_movementType == InventoryMovementType.ADJUSTMENT_OTHER &&
+      } else if (_movementType == InventoryMovementType.adjustmentOther &&
           _sourceLocationId.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -917,6 +919,7 @@ class _CreateMovementPageState extends ConsumerState<CreateMovementPage> {
         movementType: newMovement.movementType,
         warehouseId: newMovement.warehouseId,
         reasonNotes: newMovement.reasonNotes,
+        initiatingEmployeeId: newMovement.initiatingEmployeeId,
       );
 
       if (mounted) {

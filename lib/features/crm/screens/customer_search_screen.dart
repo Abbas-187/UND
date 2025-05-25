@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/customer.dart';
+import 'customer_profile_screen.dart';
 
 class CustomerSearchScreen extends StatefulWidget {
-
   const CustomerSearchScreen({super.key, required this.customers});
   final List<Customer> customers;
 
@@ -55,6 +55,16 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                 return ListTile(
                   title: Text(customer.name),
                   subtitle: Text('${customer.email} | ${customer.phone}'),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => CustomerProfileScreen(
+                          customer: customer,
+                          orders: const [], // Replace with actual orders if available
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),

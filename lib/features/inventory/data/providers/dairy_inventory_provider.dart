@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../factory/data/models/recipe_ingredient_model.dart';
 import '../models/inventory_item_model.dart';
 
 // Provider for DairyInventoryProvider
@@ -17,7 +18,6 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 
 /// Provider for dairy inventory data
 class DairyInventoryProvider {
-
   // Constructor (placed before other class members)
   DairyInventoryProvider({required this.sharedPreferences});
   final SharedPreferences sharedPreferences;
@@ -144,5 +144,16 @@ class DairyInventoryProvider {
   // Reset to original inventory data - disabled for Firebase usage
   void resetToOriginal() {
     // Functionality removed for Firebase integration
+  }
+
+  /// Get recipe ingredients by recipe ID
+  List<RecipeIngredientModel>? getRecipeIngredients(String recipeId) {
+    // Mock implementation: Replace with actual logic to fetch recipe ingredients
+    return [
+      RecipeIngredientModel(
+          id: 'item1', name: 'Milk', quantity: 2.0, unit: 'liters'),
+      RecipeIngredientModel(
+          id: 'item2', name: 'Sugar', quantity: 1.5, unit: 'kg'),
+    ];
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_category.dart';
 import '../providers/inventory_category_provider.dart';
 import '../widgets/attribute_definition_form.dart';

@@ -5,6 +5,7 @@ import '../algorithms/exponential_smoothing.dart';
 import '../algorithms/linear_regression.dart';
 import '../algorithms/moving_average.dart';
 import '../algorithms/seasonal_decomposition.dart';
+import '../entities/demand_signal_model.dart';
 import '../entities/forecast_granularity.dart';
 import '../entities/forecast_method.dart';
 import '../entities/time_series_point.dart';
@@ -25,12 +26,13 @@ class CreateForecastUseCase {
     required DateTime endDate,
     required List<String> productIds,
     required List<TimeSeriesPoint> historicalData,
+    List<DemandSignalModel>? demandSignals, // CRM demand signals
     String? categoryId,
     String? warehouseId,
     Map<String, dynamic>? parameters,
   }) async {
     try {
-      // Generate forecast data
+      // Integrate CRM demand signals into the forecast logic
       final forecastData = await _generateForecast(
         historicalData: historicalData,
         method: method,
@@ -38,6 +40,7 @@ class CreateForecastUseCase {
         endDate: endDate,
         granularity: granularity,
         parameters: parameters,
+        demandSignals: demandSignals,
       );
 
       // Convert method enum to string for storage
@@ -86,7 +89,22 @@ class CreateForecastUseCase {
     required DateTime endDate,
     required ForecastGranularity granularity,
     Map<String, dynamic>? parameters,
+    List<DemandSignalModel>? demandSignals, // CRM demand signals
   }) async {
+    // Integrate demandSignals into the forecast logic
+    List<TimeSeriesPoint> adjustedHistorical = List.from(historicalData);
+    if (demandSignals != null && demandSignals.isNotEmpty) {
+      // Overlay demand signals as additional points (simple additive approach)
+      for (final signal in demandSignals) {
+        adjustedHistorical.add(TimeSeriesPoint(
+          timestamp: signal.signalDate,
+          value: signal.signalQuantity * signal.confidenceScore,
+        ));
+      }
+      // Optionally, sort by timestamp
+      adjustedHistorical.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    }
+
     // Calculate number of periods to forecast
     final int periods = _calculatePeriods(startDate, endDate, granularity);
 
@@ -110,7 +128,7 @@ class CreateForecastUseCase {
       case ForecastMethod.movingAverage:
         final movingAverage = MovingAverage();
         return movingAverage.forecast(
-          timeSeries: historicalData,
+          timeSeries: adjustedHistorical,
           windowSize: params['windowSize'],
           periods: periods,
         );
@@ -118,7 +136,7 @@ class CreateForecastUseCase {
       case ForecastMethod.exponentialSmoothing:
         final expSmoothing = ExponentialSmoothing();
         return expSmoothing.forecast(
-          timeSeries: historicalData,
+          timeSeries: adjustedHistorical,
           alpha: params['alpha'],
           periods: periods,
         );
@@ -126,14 +144,14 @@ class CreateForecastUseCase {
       case ForecastMethod.linearRegression:
         final linearRegression = LinearRegression();
         return linearRegression.forecast(
-          timeSeries: historicalData,
+          timeSeries: adjustedHistorical,
           periods: periods,
         );
 
       case ForecastMethod.seasonalDecomposition:
         final seasonalDecomposition = SeasonalDecomposition();
         return seasonalDecomposition.forecast(
-          timeSeries: historicalData,
+          timeSeries: adjustedHistorical,
           periods: periods,
           seasonalPeriod: params['seasonalPeriod'],
         );
@@ -149,12 +167,12 @@ class CreateForecastUseCase {
           seasonalPeriod: params['seasonalPeriod'],
         );
         return arimaModel.forecast(
-          timeSeries: historicalData,
+          timeSeries: adjustedHistorical,
           periods: periods,
         );
-
-      default:
-        throw Exception('Unsupported forecast method: ${method.toString()}');
+      case ForecastMethod.machineLearningSales:
+        throw Exception(
+            'Machine Learning Sales forecast method not implemented yet.');
     }
   }
 
@@ -173,8 +191,6 @@ class CreateForecastUseCase {
         return (months / 3).ceil();
       case ForecastGranularity.yearly:
         return end.year - start.year + 1;
-      default:
-        throw Exception('Unsupported granularity: ${granularity.toString()}');
     }
   }
 }

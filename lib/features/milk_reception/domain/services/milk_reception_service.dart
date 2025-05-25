@@ -8,10 +8,14 @@ import '../../../quality/data/models/quality_test_result_model.dart';
 import '../../../suppliers/domain/repositories/supplier_repository.dart';
 import '../models/milk_reception_model.dart';
 import '../repositories/milk_reception_repository.dart';
+import '../../../inventory/data/models/inventory_movement_model.dart';
+import '../../../inventory/data/models/inventory_movement_item_model.dart';
+import '../../../inventory/domain/validators/inventory_movement_validator.dart';
+import '../../../procurement/domain/repositories/purchase_order_repository.dart';
+import '../../../procurement/data/models/purchase_order_model.dart';
 
 /// Custom exception for business logic errors
 class BusinessLogicException implements Exception {
-
   BusinessLogicException(this.message);
   final String message;
 
@@ -41,15 +45,18 @@ class MilkReceptionService {
     required InventoryRepository inventoryRepository,
     required SupplierRepository supplierRepository,
     required ReceptionNotificationService notificationService,
+    required PurchaseOrderRepository purchaseOrderRepository,
   })  : _receptionRepository = receptionRepository,
         _inventoryRepository = inventoryRepository,
         _supplierRepository = supplierRepository,
-        _notificationService = notificationService;
+        _notificationService = notificationService,
+        _purchaseOrderRepository = purchaseOrderRepository;
 
   final MilkReceptionRepository _receptionRepository;
   final InventoryRepository _inventoryRepository;
   final SupplierRepository _supplierRepository;
   final ReceptionNotificationService _notificationService;
+  final PurchaseOrderRepository _purchaseOrderRepository;
 
   /// Initiates a new milk reception from supplier
   ///
@@ -907,6 +914,83 @@ ${notes ?? ''}''';
         targetRoleId: 'factory',
       );
     }
+  }
+
+  /// Creates an inventory movement for milk reception with batch/expiry validation and robust costing
+  Future<void> createReceptionInventoryMovement(
+      InventoryMovementModel movement) async {
+    // Validate movement using async validator (enforces batch/expiry rules)
+    final validator = InventoryMovementValidator();
+    final validationResult = await validator.validateAsync(movement);
+    if (!validationResult.isValid) {
+      throw BusinessLogicException(
+          'Inventory movement validation failed: ${validationResult.errors.join('; ')}');
+    }
+    // Robust inbound costing enforcement with auto-calculation
+    final patchedItems = <InventoryMovementItemModel>[];
+    for (var item in movement.items) {
+      if (item.quantity > 0) {
+        double? cost = item.costAtTransaction;
+        if (cost == null || cost <= 0) {
+          cost = await _getProcurementCost(item.itemId) ?? 0;
+          if (cost <= 0) {
+            cost = await _getSupplierContractCost(
+                    item.itemId, movement.warehouseId) ??
+                0;
+          }
+          if (cost <= 0) {
+            cost =
+                await _getLastKnownCost(item.itemId, movement.warehouseId) ?? 0;
+          }
+        }
+        if (cost <= 0) {
+          throw BusinessLogicException(
+              'Inbound item "${item.itemName}" is missing a valid cost. Unable to auto-calculate from procurement, supplier, or inventory history.');
+        }
+        patchedItems.add(item.copyWith(costAtTransaction: cost));
+      } else {
+        patchedItems.add(item);
+      }
+    }
+    final patchedMovement = movement.copyWith(items: patchedItems);
+    await _inventoryRepository.addMovement(patchedMovement);
+  }
+
+  // Integrate with procurement/PO system to get cost
+  Future<double?> _getProcurementCost(String itemId) async {
+    final allOrders = await _purchaseOrderRepository.getAllPurchaseOrders();
+    final relevantOrders = allOrders
+        .where((po) =>
+            (po.status == 'delivered' || po.status == 'completed') &&
+            po.items.any((i) => i.itemId == itemId))
+        .toList();
+    relevantOrders.sort((a, b) => (b.deliveryDate ?? DateTime(1970))
+        .compareTo(a.deliveryDate ?? DateTime(1970)));
+    for (final po in relevantOrders) {
+      PurchaseOrderItemModel? item;
+      try {
+        item = po.items.firstWhere((i) => i.itemId == itemId);
+      } catch (_) {
+        item = null;
+      }
+      if (item != null && item.unitPrice > 0) {
+        return item.unitPrice;
+      }
+    }
+    return null;
+  }
+
+  // Stub: Integrate with supplier contract/pricing
+  Future<double?> _getSupplierContractCost(
+      String itemId, String warehouseId) async {
+    // TODO: Implement actual integration with supplier contract/pricing
+    return null;
+  }
+
+  // Stub: Fallback to last known cost or weighted average
+  Future<double?> _getLastKnownCost(String itemId, String warehouseId) async {
+    // TODO: Implement actual lookup for last known cost or weighted average
+    return null;
   }
 }
 

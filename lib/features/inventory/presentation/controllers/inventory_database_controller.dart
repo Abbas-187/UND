@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/logging/logging_service.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/providers/inventory_repository_provider.dart';
-import '../../domain/repositories/inventory_repository.dart';
+import '../../domain/repositories/inventory_repository.dart'
+    hide inventoryRepositoryProvider;
 
 // Provider for the inventory database controller
 final inventoryDatabaseControllerProvider =

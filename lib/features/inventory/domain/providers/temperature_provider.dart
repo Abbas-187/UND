@@ -10,9 +10,9 @@ part 'temperature_provider.g.dart';
 class TemperatureLogs extends _$TemperatureLogs {
   @override
   Stream<List<TemperatureLogModel>> build(String locationId) {
-    final repository = ref.watch(temperatureMonitoringRepositoryProvider);
-    return Stream.fromFuture(
-        repository.getTemperatureLogsByLocation(locationId));
+    return Stream.fromFuture(ref
+        .watch(temperatureMonitoringRepositoryProvider)
+        .getTemperatureLogsByLocation(locationId));
   }
 
   Future<String> recordTemperature({
@@ -21,8 +21,6 @@ class TemperatureLogs extends _$TemperatureLogs {
     required double temperature,
     String? notes,
   }) async {
-    final repository = ref.read(temperatureMonitoringRepositoryProvider);
-
     final log = TemperatureLogModel(
       locationId: locationId,
       locationName: 'Location Name', // Should be fetched from a repository
@@ -34,7 +32,9 @@ class TemperatureLogs extends _$TemperatureLogs {
       createdBy: 'system',
       createdAt: DateTime.now(),
     );
-    return repository.createTemperatureLog(log);
+    return ref
+        .read(temperatureMonitoringRepositoryProvider)
+        .createTemperatureLog(log);
   }
 }
 
@@ -42,9 +42,9 @@ class TemperatureLogs extends _$TemperatureLogs {
 class TemperatureSettings extends _$TemperatureSettings {
   @override
   Future<TemperatureSettingsModel> build(String locationId) async {
-    final repository = ref.watch(temperatureMonitoringRepositoryProvider);
-    final settings =
-        await repository.getTemperatureSettingsForLocation(locationId);
+    final settings = await ref
+        .watch(temperatureMonitoringRepositoryProvider)
+        .getTemperatureSettingsForLocation(locationId);
     if (settings == null) {
       throw Exception(
           'Temperature settings not found for location: $locationId');
@@ -57,9 +57,11 @@ class TemperatureSettings extends _$TemperatureSettings {
 class TemperatureAlerts extends _$TemperatureAlerts {
   @override
   Stream<List<Map<String, dynamic>>> build({bool onlyUnresolved = true}) {
-    final repository = ref.watch(temperatureMonitoringRepositoryProvider);
     // Repository doesn't have stream-based alerts, so we'll convert
-    return Stream.fromFuture(repository.getTemperatureAlerts().then((alerts) {
+    return Stream.fromFuture(ref
+        .watch(temperatureMonitoringRepositoryProvider)
+        .getTemperatureAlerts()
+        .then((alerts) {
       // Convert to Map<String, dynamic> format
       return alerts
           .map((alert) => {
@@ -79,7 +81,6 @@ class TemperatureAlerts extends _$TemperatureAlerts {
   Future<void> resolveAlert(String alertId, String resolution) async {
     // Implementation depends on repository capabilities
     // For now, update the alert with notes about resolution
-    final repository = ref.read(temperatureMonitoringRepositoryProvider);
     // Repository doesn't have direct resolveAlert method
     // This would need to be implemented in the repository
     // For now, we'll just print a message

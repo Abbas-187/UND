@@ -5,15 +5,16 @@ import 'package:intl/intl.dart';
 
 import '../../../../common/widgets/app_loading_indicator.dart';
 import '../../../../core/widgets/error_view.dart';
-import '../../../inventory/data/models/inventory_item_model.dart';
-import '../../../inventory/domain/providers/inventory_provider.dart';
+import '../../../inventory/domain/entities/inventory_item.dart';
+import '../../../inventory/presentation/providers/inventory_provider.dart'
+    show filteredInventoryItemsProvider;
 
 class ForecastingDashboardScreen extends ConsumerWidget {
   const ForecastingDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final inventoryItems = ref.watch(inventoryProvider);
+    final inventoryItems = ref.watch(filteredInventoryItemsProvider);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -30,7 +31,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          ref.refresh(inventoryProvider);
+          ref.refresh(filteredInventoryItemsProvider);
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -263,7 +264,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
   Widget _buildInventoryForecastSection(
     BuildContext context,
     WidgetRef ref,
-    AsyncValue<List<InventoryItemModel>> inventoryItems,
+    AsyncValue<List<InventoryItem>> inventoryItems,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,7 +329,7 @@ class ForecastingDashboardScreen extends ConsumerWidget {
 
   Widget _buildInventoryForecastItem(
     BuildContext context,
-    InventoryItemModel item,
+    InventoryItem item,
   ) {
     // Simulate forecast data
     final currentStock = item.quantity;

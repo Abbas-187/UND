@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/sales_order_model.dart';
+import '../../../order_management/data/models/order_model.dart';
 
 /// Repository for managing sales data
 class SalesRepository {
@@ -11,7 +11,7 @@ class SalesRepository {
   final String _collection = 'sales_orders';
 
   /// Get all sales orders with optional filters
-  Future<List<SalesOrderModel>> getSalesOrders({
+  Future<List<OrderModel>> getSalesOrders({
     DateTime? startDate,
     DateTime? endDate,
     String? customerId,
@@ -40,7 +40,7 @@ class SalesRepository {
       final snapshot = await query.get();
       final orders = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
-        return SalesOrderModel.fromJson({...data, 'id': doc.id});
+        return OrderModel.fromJson({...data, 'id': doc.id});
       }).toList();
 
       // If productId filter is provided, filter orders that contain the product
@@ -57,7 +57,7 @@ class SalesRepository {
   }
 
   /// Get a specific sales order by ID
-  Future<SalesOrderModel> getSalesOrderById(String id) async {
+  Future<OrderModel> getSalesOrderById(String id) async {
     try {
       final docSnapshot =
           await _firestore.collection(_collection).doc(id).get();
@@ -67,36 +67,9 @@ class SalesRepository {
       }
 
       final data = docSnapshot.data() as Map<String, dynamic>;
-      return SalesOrderModel.fromJson({...data, 'id': docSnapshot.id});
+      return OrderModel.fromJson({...data, 'id': docSnapshot.id});
     } catch (e) {
       throw Exception('Failed to get sales order: $e');
-    }
-  }
-
-  /// Create a new sales order
-  Future<String> createSalesOrder(SalesOrderModel order) async {
-    try {
-      final docRef =
-          await _firestore.collection(_collection).add(order.toJson());
-      return docRef.id;
-    } catch (e) {
-      throw Exception('Failed to create sales order: $e');
-    }
-  }
-
-  /// Update an existing sales order
-  Future<void> updateSalesOrder(SalesOrderModel order) async {
-    try {
-      if (order.id == null) {
-        throw Exception('Cannot update order without ID');
-      }
-
-      await _firestore
-          .collection(_collection)
-          .doc(order.id)
-          .update(order.toJson());
-    } catch (e) {
-      throw Exception('Failed to update sales order: $e');
     }
   }
 

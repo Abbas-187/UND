@@ -1,7 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/datasources/firebase_auth_datasource.dart';
-import '../../data/datasources/mock_auth_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../entities/user.dart';
 
@@ -20,6 +19,9 @@ abstract class AuthRepository {
 
   /// Gets the current authenticated user
   Future<User?> getCurrentUser();
+
+  /// Gets the current authenticated user's ID
+  Future<String?> getCurrentUserId();
 
   /// Sends a password reset email
   Future<void> resetPassword(String email);

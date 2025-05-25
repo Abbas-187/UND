@@ -9,16 +9,24 @@ class PurchaseOrderListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: DetailAppBar(
-        title: 'Purchase Orders',
-      ),
-      body: const PurchaseOrderList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.go('/procurement/purchase-orders/create');
-        },
-        child: const Icon(Icons.add),
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) {
+        if (!didPop && !Navigator.of(context).canPop()) {
+          context.go('/procurement/dashboard');
+        }
+      },
+      child: Scaffold(
+        appBar: DetailAppBar(
+          title: 'Purchase Orders',
+        ),
+        body: const PurchaseOrderList(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context.go('/procurement/purchase-orders/create');
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

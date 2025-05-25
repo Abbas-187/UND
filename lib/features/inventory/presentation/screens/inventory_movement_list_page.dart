@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../data/models/inventory_movement_model.dart';
 import '../../presentation/providers/inventory_movement_providers.dart';
 import '../widgets/movements/movement_filter_bottom_sheet.dart';
@@ -142,12 +143,12 @@ class _InventoryMovementListPageState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.inventoryMovements),
+        title: Text(l10n?.inventoryMovements ?? ''),
         actions: [
           IconButton(
             icon: Icon(
                 _sortAscending ? Icons.arrow_upward : Icons.arrow_downward),
-            tooltip: _sortAscending ? l10n.oldestFirst : l10n.newestFirst,
+            tooltip: _sortAscending ? 'Oldest First' : 'Newest First',
             onPressed: _toggleSortOrder,
           ),
           IconButton(
@@ -155,7 +156,7 @@ class _InventoryMovementListPageState
               isLabelVisible: hasFilterApplied,
               child: const Icon(Icons.filter_list),
             ),
-            tooltip: l10n.filter,
+            tooltip: 'Filter',
             onPressed: _showFilterSheet,
           ),
         ],
@@ -168,7 +169,7 @@ class _InventoryMovementListPageState
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: l10n.searchMovements,
+                hintText: 'Search movements',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -239,7 +240,7 @@ class _InventoryMovementListPageState
                           right: isRightToLeft ? 0 : 8,
                           left: isRightToLeft ? 8 : 0),
                       child: Chip(
-                        label: Text(l10n.location),
+                        label: Text('Location'),
                         onDeleted: () {
                           setState(() {
                             _locationId = null;
@@ -253,7 +254,7 @@ class _InventoryMovementListPageState
                           right: isRightToLeft ? 0 : 8,
                           left: isRightToLeft ? 8 : 0),
                       child: Chip(
-                        label: Text(l10n.product),
+                        label: Text('Product'),
                         onDeleted: () {
                           setState(() {
                             _productId = null;
@@ -263,7 +264,7 @@ class _InventoryMovementListPageState
                     ),
                   TextButton.icon(
                     icon: const Icon(Icons.clear_all),
-                    label: Text(l10n.clearFilters),
+                    label: Text('Clear Filters'),
                     onPressed: () {
                       setState(() {
                         _selectedType = null;
@@ -298,8 +299,8 @@ class _InventoryMovementListPageState
                         const SizedBox(height: 16),
                         Text(
                           hasFilterApplied || _searchQuery.isNotEmpty
-                              ? l10n.noMovementsMatchingFilters
-                              : l10n.noMovementsRecorded,
+                              ? 'No movements match the filters'
+                              : 'No movements recorded',
                           style: Theme.of(context).textTheme.titleMedium,
                           textAlign: TextAlign.center,
                         ),
@@ -345,7 +346,7 @@ class _InventoryMovementListPageState
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      l10n.errorLoadingMovements,
+                      'Error loading movements',
                       style: Theme.of(context).textTheme.titleMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -358,7 +359,7 @@ class _InventoryMovementListPageState
                     const SizedBox(height: 16),
                     FilledButton.icon(
                       icon: const Icon(Icons.refresh),
-                      label: Text(l10n.retry),
+                      label: Text('Retry'),
                       onPressed: () {
                         ref.invalidate(movementsByDateRangeProvider);
                         ref.invalidate(movementsByTypeProvider);
@@ -378,7 +379,7 @@ class _InventoryMovementListPageState
           context.go('/inventory/movement-create');
         },
         icon: const Icon(Icons.add),
-        label: Text(l10n.newMovement),
+        label: Text('New Movement'),
       ),
     );
   }

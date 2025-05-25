@@ -22,7 +22,6 @@ enum OrderPermission {
 }
 
 class UserRolePermission {
-
   const UserRolePermission({
     required this.role,
     required this.permissions,

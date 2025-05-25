@@ -7,7 +7,7 @@ import 'inventory_repository_provider.dart';
 /// Provider for the GetLowStockAlertsUseCase
 final getAlertsUseCaseProvider = Provider<GetLowStockAlertsUseCase>((ref) {
   final repo = ref.watch(inventoryRepositoryProvider);
-  return GetLowStockAlertsUseCase(repo);
+  return GetLowStockAlertsUseCase(repo, ref);
 });
 
 /// Stream provider for all inventory alerts (low stock, reorder, expiring, expired)

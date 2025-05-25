@@ -880,3 +880,14 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${substring(1)}";
   }
 }
+
+// Add a route for the quality control screen
+// Example for GoRouter or Navigator usage:
+// routes: [
+//   ...existing routes...
+//   GoRoute(
+//     path: '/inventory/quality-control',
+//     builder: (context, state) => const QualityControlScreen(),
+//   ),
+// ]
+// Or add a button in your inventory dashboard to navigate to this screen.

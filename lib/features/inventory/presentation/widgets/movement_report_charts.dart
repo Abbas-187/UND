@@ -197,13 +197,12 @@ Widget movementGroupedBarChartByLocationType(
     List<InventoryMovementModel> movements) {
   if (movements.isEmpty) {
     return const Center(child: Text('No data for grouped bar chart'));
-  }
-  // Group by location and type
+  } // Group by location and type
   final Map<String, Map<InventoryMovementType, int>> data = {};
   for (final m in movements) {
-    final loc = m.sourceLocationName.isNotEmpty
-        ? m.sourceLocationName
-        : m.destinationLocationName;
+    final loc = (m.sourceLocationName?.isNotEmpty ?? false)
+        ? m.sourceLocationName ?? 'Unknown'
+        : m.destinationLocationName ?? 'Unknown';
     data[loc] ??= {};
     data[loc]![m.movementType] = (data[loc]![m.movementType] ?? 0) + 1;
   }

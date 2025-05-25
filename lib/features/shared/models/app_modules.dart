@@ -355,6 +355,12 @@ final Map<String, AppModule> appModules = {
         icon: Icons.people,
         descriptionKey: 'suppliersDesc',
       ),
+      ModuleScreen(
+        nameKey: 'poApprovalsList',
+        route: '/procurement/po-approvals',
+        icon: Icons.check_circle_outline,
+        descriptionKey: 'poApprovalsListDesc',
+      ),
     ],
   ),
   'analytics': const AppModule(
@@ -442,6 +448,37 @@ final Map<String, AppModule> appModules = {
         route: '/crm/interactions',
         icon: Icons.chat,
         descriptionKey: 'interactionsDesc',
+      ),
+    ],
+  ),
+  'sales': AppModule(
+    nameKey: 'sales',
+    icon: Icons.point_of_sale,
+    color: Colors.redAccent,
+    screens: [
+      ModuleScreen(
+        nameKey: 'salesOrders',
+        route: '/sales/orders',
+        icon: Icons.history,
+        descriptionKey: 'salesOrdersDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'salesCustomers',
+        route: '/sales/customers',
+        icon: Icons.people,
+        descriptionKey: 'salesCustomersDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'salesDashboard',
+        route: '/sales/dashboard',
+        icon: Icons.dashboard,
+        descriptionKey: 'salesDashboardDesc',
+      ),
+      ModuleScreen(
+        nameKey: 'salesAnalytics',
+        route: '/sales/analytics',
+        icon: Icons.analytics,
+        descriptionKey: 'salesAnalyticsDesc',
       ),
     ],
   ),

@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../data/models/inventory_item_model.dart';
 import '../../data/models/inventory_transaction_model.dart';
 import '../../data/repositories/inventory_repository_impl.dart';
 import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
-
-part 'inventory_provider.freezed.dart';
-part 'inventory_provider.g.dart';
+import 'inventory_filter.dart';
 
 // Repository provider
 final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
@@ -20,18 +17,16 @@ final inventoryRepositoryProvider = Provider<InventoryRepository>((ref) {
 // Inventory items provider
 final inventoryProvider = StateNotifierProvider<InventoryStateNotifier,
     AsyncValue<List<InventoryItemModel>>>((ref) {
-  final repository = ref.watch(inventoryRepositoryProvider);
-  return InventoryStateNotifier(repository);
+  return InventoryStateNotifier();
 });
 
 // State notifier for inventory management
 class InventoryStateNotifier
     extends StateNotifier<AsyncValue<List<InventoryItemModel>>> {
-  InventoryStateNotifier(this._repository) : super(const AsyncValue.loading()) {
+  InventoryStateNotifier() : super(const AsyncValue.loading()) {
     loadInventory();
   }
 
-  final InventoryRepository _repository;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> loadInventory() async {
@@ -123,7 +118,7 @@ class InventoryStateNotifier
         final transactionRef =
             _firestore.collection('inventory_transactions').doc();
         final inventoryTransaction = InventoryTransactionModel(
-          materialId: item.id,
+          materialId: item.id ?? '',
           materialName: item.name,
           warehouseId: item.location
               .split('/')
@@ -282,7 +277,7 @@ class InventoryStateNotifier
         final transactionRef =
             _firestore.collection('inventory_transactions').doc();
         final inventoryTransaction = InventoryTransactionModel(
-          materialId: item.id,
+          materialId: item.id ?? '',
           materialName: item.name,
           warehouseId: item.location.split('/').first,
           transactionType: TransactionType.issue,
@@ -360,7 +355,7 @@ class InventoryStateNotifier
         final transactionRef =
             _firestore.collection('inventory_transactions').doc();
         final inventoryTransaction = InventoryTransactionModel(
-          materialId: item.id,
+          materialId: item.id ?? '',
           materialName: item.name,
           warehouseId: item.location.split('/').first,
           transactionType: TransactionType.receipt,
@@ -471,7 +466,7 @@ class InventoryStateNotifier
         final transactionRef =
             _firestore.collection('inventory_transactions').doc();
         final inventoryTransaction = InventoryTransactionModel(
-          materialId: item.id,
+          materialId: item.id ?? '',
           materialName: item.name,
           warehouseId: item.location.split('/').first,
           transactionType: TransactionType.other,
@@ -550,7 +545,7 @@ class InventoryStateNotifier
         final transactionRef =
             _firestore.collection('inventory_transactions').doc();
         final inventoryTransaction = InventoryTransactionModel(
-          materialId: item.id,
+          materialId: item.id ?? '',
           materialName: item.name,
           warehouseId: item.location.split('/').first,
           transactionType: TransactionType.other,
@@ -589,22 +584,6 @@ final inventoryItemProvider =
   final repository = ref.watch(inventoryRepositoryProvider);
   return await repository.getItem(itemId);
 });
-
-/// Immutable filter class for inventory items
-@freezed
-class InventoryFilter with _$InventoryFilter {
-  const factory InventoryFilter({
-    @Default('') String searchQuery,
-    @Default(false) bool showLowStock,
-    @Default(false) bool showNeedsReorder,
-    @Default(false) bool showExpiringSoon,
-    String? selectedCategory,
-    String? selectedLocation,
-  }) = _InventoryFilter;
-
-  factory InventoryFilter.fromJson(Map<String, dynamic> json) =>
-      _$InventoryFilterFromJson(json);
-}
 
 // Filter provider
 final inventoryFilterProvider =

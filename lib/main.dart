@@ -17,9 +17,12 @@ import 'features/factory/production/presentation/providers/production_execution_
     as production;
 import 'features/inventory/data/repositories/inventory_movement_repository.dart';
 import 'features/inventory/data/repositories/inventory_movement_repository_impl.dart';
+import 'features/inventory/domain/providers/inventory_repository_provider.dart';
+import 'features/inventory/domain/services/inventory_rop_safety_stock_scheduler.dart';
+import 'features/inventory/domain/usecases/apply_dynamic_reorder_point_usecase.dart';
 import 'features/shared/presentation/screens/app_settings_screen.dart';
-import 'l10n/app_localizations.dart';
 import 'firebase_options.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
 
 // Use real Firebase implementation
@@ -33,6 +36,46 @@ final inventoryMovementRepositoryProvider =
     logger: Logger(),
   );
 });
+
+class RopSafetyStockSchedulerProvider extends ConsumerStatefulWidget {
+  const RopSafetyStockSchedulerProvider({required this.child, super.key});
+  final Widget child;
+
+  @override
+  ConsumerState<RopSafetyStockSchedulerProvider> createState() =>
+      _RopSafetyStockSchedulerProviderState();
+}
+
+class _RopSafetyStockSchedulerProviderState
+    extends ConsumerState<RopSafetyStockSchedulerProvider> {
+  InventoryRopSafetyStockScheduler? _scheduler;
+
+  @override
+  void initState() {
+    super.initState();
+    // Use ProviderContainer for non-widget Riverpod context
+    final container = ProviderContainer();
+    // Use the container directly to get the required providers
+    final inventoryRepo = container.read(inventoryRepositoryProvider);
+    final applyDynamicRop =
+        container.read(applyDynamicReorderPointUseCaseProvider);
+    _scheduler = InventoryRopSafetyStockScheduler(
+      ref: container,
+      inventoryRepository: inventoryRepo,
+      applyDynamicRopUseCase: applyDynamicRop,
+    );
+    _scheduler!.start();
+  }
+
+  @override
+  void dispose() {
+    _scheduler?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}
 
 Future<void> main() async {
   // Ensure Flutter is initialized
@@ -65,7 +108,7 @@ Future<void> main() async {
               AuthRepositoryImpl(ref.watch(firebaseAuthDataSourceProvider)),
         ),
       ],
-      child: const MyApp(),
+      child: RopSafetyStockSchedulerProvider(child: const MyApp()),
     ),
   );
 }
@@ -79,40 +122,42 @@ class MyApp extends ConsumerWidget {
     final appSettings = ref.watch(appSettingsProvider);
     final currentLocale = Locale(appSettings.language);
 
-    return MaterialApp.router(
-      title: 'UND Dairy Management',
-      theme: AppTheme.lightTheme(currentLocale),
-      darkTheme: AppTheme.darkTheme(currentLocale),
-      themeMode: appSettings.themeMode,
-      locale: currentLocale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en'), // English
-        Locale('ar'), // Arabic
-        Locale('ur'), // Urdu
-        Locale('hi'), // Hindi
-      ],
-      routerConfig: ref.watch(goRouterProvider),
-      debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        // Disable semantic nodes that cause accessibility bridge errors on Windows
-        return MediaQuery(
-          // Prevent some accessibility issues by limiting the update frequency
-          data: MediaQuery.of(context).copyWith(
-            accessibleNavigation: false,
-          ),
-          child: ExcludeSemantics(
-            // Selectively disable problematic semantic nodes while maintaining core accessibility
-            excluding: false,
-            child: child ?? const SizedBox.shrink(),
-          ),
-        );
-      },
+    return RopSafetyStockSchedulerProvider(
+      child: MaterialApp.router(
+        title: 'UND Dairy Management',
+        theme: AppTheme.lightTheme(currentLocale),
+        darkTheme: AppTheme.darkTheme(currentLocale),
+        themeMode: appSettings.themeMode,
+        locale: currentLocale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'), // English
+          Locale('ar'), // Arabic
+          Locale('ur'), // Urdu
+          Locale('hi'), // Hindi
+        ],
+        routerConfig: ref.watch(goRouterProvider),
+        debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          // Disable semantic nodes that cause accessibility bridge errors on Windows
+          return MediaQuery(
+            // Prevent some accessibility issues by limiting the update frequency
+            data: MediaQuery.of(context).copyWith(
+              accessibleNavigation: false,
+            ),
+            child: ExcludeSemantics(
+              // Selectively disable problematic semantic nodes while maintaining core accessibility
+              excluding: false,
+              child: child ?? const SizedBox.shrink(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

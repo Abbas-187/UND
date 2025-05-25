@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 /// Defines the different user roles in the application
 @immutable
 class UserRole {
-
   const UserRole({
     required this.id,
     required this.name,
@@ -46,7 +45,8 @@ class UserRoles {
       'analytics',
       'forecasting',
       'crm',
-      'order_management'
+      'order_management',
+      'sales',
     ],
     canAccessSettings: true,
     canAccessNotifications: true,
@@ -66,7 +66,8 @@ class UserRoles {
       'analytics',
       'forecasting',
       'crm',
-      'order_management'
+      'order_management',
+      'sales',
     ],
   );
 

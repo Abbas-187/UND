@@ -16,6 +16,7 @@ import '../screens/dairy_inventory_screen.dart';
 import '../screens/inventory_adjustment_history_screen.dart';
 import '../screens/inventory_alerts_screen.dart';
 import '../screens/inventory_analytics_dashboard_screen.dart';
+import '../screens/inventory_audit_log_screen.dart';
 import '../screens/inventory_category_management_screen.dart';
 import '../screens/inventory_dashboard_page.dart';
 import '../screens/inventory_edit_screen.dart';
@@ -51,6 +52,7 @@ class InventoryRoutes {
   static const String transfer = 'inventory-transfer';
   static const String dairyInventory = 'inventory-dairy';
   static const String dairyInventoryDemo = 'inventory-dairy-demo';
+  static const String auditLog = 'inventory-audit-log';
 
   /// Base path for all inventory routes
   static const String basePath = '/inventory';
@@ -79,6 +81,7 @@ class InventoryRoutes {
   static const String transferPath = '$basePath/transfer';
   static const String dairyInventoryPath = '$basePath/dairy';
   static const String dairyInventoryDemoPath = '$basePath/dairy-demo';
+  static const String auditLogPath = '$basePath/audit-logs';
 }
 
 /// Adds inventory routes to the Go Router configuration
@@ -236,6 +239,13 @@ List<RouteBase> getInventoryRoutes() {
       name: InventoryRoutes.dairyInventoryDemo,
       builder: (BuildContext context, GoRouterState state) {
         return const DairyInventoryDemoScreen();
+      },
+    ),
+    GoRoute(
+      path: InventoryRoutes.auditLogPath,
+      name: InventoryRoutes.auditLog,
+      builder: (BuildContext context, GoRouterState state) {
+        return const InventoryAuditLogScreen();
       },
     ),
   ];

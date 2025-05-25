@@ -26,7 +26,18 @@ final recordQualityControlResultProvider =
     FutureProvider.family<QualityControlResultModel, QualityControlResultModel>(
         (ref, result) async {
   final useCase = ref.watch(recordQualityControlUseCaseProvider);
-  final recordResult = await useCase.recordQualityControlResult(result);
+  final userId = await ref.watch(authRepositoryProvider).getCurrentUserId();
+  if (userId == null) {
+    throw Exception('User ID is required to record quality control results.');
+  }
+
+  final recordResult = await useCase.recordQualityControlResult(
+    result,
+    ref: ref as WidgetRef, // Cast ref to WidgetRef
+    inventoryItemId:
+        result.productId, // Assuming productId maps to inventoryItemId
+    userId: userId,
+  );
 
   return recordResult.fold(
     (resultModel) => resultModel,

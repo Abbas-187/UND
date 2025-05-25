@@ -30,6 +30,8 @@ abstract class InventoryItemModel with _$InventoryItemModel {
     double? cost,
     @Default(5) int lowStockThreshold,
     String? supplier,
+    double? safetyStock,
+    double? currentConsumption,
   }) = _InventoryItemModel;
 
   /// Create from JSON
@@ -75,6 +77,12 @@ abstract class InventoryItemModel with _$InventoryItemModel {
       cost: data['cost']?.toDouble(),
       lowStockThreshold: data['lowStockThreshold'] ?? 5,
       supplier: data['supplier'],
+      safetyStock: data['safetyStock'] != null
+          ? (data['safetyStock'] as num).toDouble()
+          : null,
+      currentConsumption: data['currentConsumption'] != null
+          ? (data['currentConsumption'] as num).toDouble()
+          : null,
     );
   }
 
@@ -99,6 +107,8 @@ abstract class InventoryItemModel with _$InventoryItemModel {
         cost: item.cost,
         lowStockThreshold: item.lowStockThreshold,
         supplier: item.supplier,
+        safetyStock: item.safetyStock,
+        currentConsumption: item.currentConsumption,
       );
 
   /// Convert to domain entity
@@ -121,6 +131,8 @@ abstract class InventoryItemModel with _$InventoryItemModel {
         cost: cost,
         lowStockThreshold: lowStockThreshold,
         supplier: supplier,
+        safetyStock: safetyStock,
+        currentConsumption: currentConsumption,
       );
 
   /// Convert to Firestore document
@@ -132,6 +144,11 @@ abstract class InventoryItemModel with _$InventoryItemModel {
       json['expiryDate'] = Timestamp.fromDate(expiryDate!);
     }
 
+    // safetyStock and currentConsumption are already in json if present
     return json;
   }
+
+  // Add these computed properties for linter fixes
+  bool get isLowStock => quantity < minimumQuantity;
+  bool get needsReorder => quantity < reorderPoint;
 }

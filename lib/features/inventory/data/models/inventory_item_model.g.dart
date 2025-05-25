@@ -29,6 +29,8 @@ _InventoryItemModel _$InventoryItemModelFromJson(Map<String, dynamic> json) =>
       cost: (json['cost'] as num?)?.toDouble(),
       lowStockThreshold: (json['low_stock_threshold'] as num?)?.toInt() ?? 5,
       supplier: json['supplier'] as String?,
+      safetyStock: (json['safety_stock'] as num?)?.toDouble(),
+      currentConsumption: (json['current_consumption'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$InventoryItemModelToJson(_InventoryItemModel instance) =>
@@ -51,4 +53,6 @@ Map<String, dynamic> _$InventoryItemModelToJson(_InventoryItemModel instance) =>
       'cost': instance.cost,
       'low_stock_threshold': instance.lowStockThreshold,
       'supplier': instance.supplier,
+      'safety_stock': instance.safetyStock,
+      'current_consumption': instance.currentConsumption,
     };

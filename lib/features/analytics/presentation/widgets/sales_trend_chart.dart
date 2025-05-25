@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/services/firestore_service.dart';
 
 class SalesTrendChart extends ConsumerWidget {
-  const SalesTrendChart({Key? key, this.isDetailed = false}) : super(key: key);
+  const SalesTrendChart({super.key, this.isDetailed = false});
 
   final bool isDetailed;
 
@@ -123,7 +123,7 @@ class SalesTrendChart extends ConsumerWidget {
 }
 
 class SalesByCategoryChart extends ConsumerWidget {
-  const SalesByCategoryChart({Key? key}) : super(key: key);
+  const SalesByCategoryChart({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

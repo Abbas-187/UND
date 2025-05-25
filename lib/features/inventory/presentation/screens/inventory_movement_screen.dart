@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/widgets/app_bar_with_back.dart';
 import '../../../../core/widgets/loading_indicator.dart';
 import '../../../../core/widgets/primary_button.dart';
-import '../../../../core/widgets/app_bar_with_back.dart';
-import '../../data/models/inventory_movement_model.dart';
+import '../../../../providers/auth_provider.dart';
 import '../../data/models/inventory_movement_item_model.dart';
+import '../../data/models/inventory_movement_model.dart';
 import '../providers/inventory_movement_provider.dart';
 import '../widgets/inventory_movement_item_form.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Screen for creating and managing inventory movements
 /// with batch tracking and FIFO/LIFO costing
@@ -380,7 +382,7 @@ class _InventoryMovementScreenState
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withAlpha((0.1 * 255).round()),
             blurRadius: 4,
             offset: const Offset(0, -2),
           ),
@@ -481,6 +483,15 @@ class _InventoryMovementScreenState
 
   void _saveMovement(
       BuildContext context, InventoryMovementNotifier movementNotifier) async {
+    final user = ref.read(currentUserProvider).value;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content:
+                Text('Unable to determine current user. Please log in again.')),
+      );
+      return;
+    }
     if (_formKey.currentState!.validate()) {
       if (ref.read(inventoryMovementProvider).items.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -501,6 +512,7 @@ class _InventoryMovementScreenState
         reasonNotes: _reasonNotesController.text.isEmpty
             ? null
             : _reasonNotesController.text,
+        initiatingEmployeeId: user.id,
       );
 
       if (result.success) {
@@ -540,19 +552,21 @@ class _InventoryMovementScreenState
           ),
           TextButton(
             onPressed: () async {
-              Navigator.of(context).pop();
+              // Store context reference before async gap
+              final currentContext = context;
+              Navigator.of(currentContext).pop();
               final result = await ref
                   .read(inventoryMovementProvider.notifier)
                   .deleteMovement(widget.movementId!);
 
-              if (result) {
-                ScaffoldMessenger.of(context).showSnackBar(
+              if (result && mounted) {
+                ScaffoldMessenger.of(currentContext).showSnackBar(
                   const SnackBar(
                     content: Text('Inventory movement deleted successfully'),
                     backgroundColor: Colors.green,
                   ),
                 );
-                Navigator.of(context).pop(true); // Return success
+                Navigator.of(currentContext).pop(true); // Return success
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -580,144 +594,162 @@ class _InventoryMovementScreenState
   }
 
   String _getMovementTypeName(InventoryMovementType type) {
+    final l10n = AppLocalizations.of(context);
     switch (type) {
       case InventoryMovementType.receipt:
-        return 'Receipt';
+        return l10n?.receipt as String? ?? 'Receipt';
       case InventoryMovementType.issue:
-        return 'Issue';
+        return l10n?.issue as String? ?? 'Issue';
       case InventoryMovementType.transfer:
-        return 'Transfer';
+        return l10n?.transfer as String? ?? 'Transfer';
       case InventoryMovementType.return_:
-        return 'Return';
+        return l10n?.returnMovement as String? ?? 'Return';
       case InventoryMovementType.adjustment:
-        return 'Adjustment';
+        return l10n?.adjustment as String? ?? 'Adjustment';
       case InventoryMovementType.production:
-        return 'Production';
+        return l10n?.production as String? ?? 'Production';
       case InventoryMovementType.consumption:
-        return 'Consumption';
+        return l10n?.consumption as String? ?? 'Consumption';
       case InventoryMovementType.waste:
-        return 'Waste';
+        return l10n?.waste as String? ?? 'Waste';
       case InventoryMovementType.expiry:
-        return 'Expiry';
+        return l10n?.expiry as String? ?? 'Expiry';
       case InventoryMovementType.qualityStatusChange:
-        return 'Quality Status Change';
+        return l10n?.qualityStatusChange as String? ?? 'Quality Status Change';
       case InventoryMovementType.repack:
-        return 'Repack';
+        return l10n?.repack as String? ?? 'Repack';
       case InventoryMovementType.sample:
-        return 'Sample';
+        return l10n?.sample as String? ?? 'Sample';
       case InventoryMovementType.salesIssue:
-        return 'Sales Issue';
+        return l10n?.salesIssue as String? ?? 'Sales Issue';
       case InventoryMovementType.purchaseReceipt:
-        return 'Purchase Receipt';
+        return l10n?.purchaseReceipt as String? ?? 'Purchase Receipt';
       case InventoryMovementType.productionConsumption:
-        return 'Production Consumption';
+        return l10n?.productionConsumption as String? ??
+            'Production Consumption';
       case InventoryMovementType.productionOutput:
-        return 'Production Output';
+        return l10n?.productionOutput as String? ?? 'Production Output';
       case InventoryMovementType.interWarehouseTransfer:
-        return 'Inter-Warehouse Transfer';
+        return l10n?.interWarehouseTransfer as String? ??
+            'Inter-Warehouse Transfer';
       case InventoryMovementType.intraWarehouseTransfer:
-        return 'Intra-Warehouse Transfer';
+        return l10n?.intraWarehouseTransfer as String? ??
+            'Intra-Warehouse Transfer';
       case InventoryMovementType.scrapDisposal:
-        return 'Scrap Disposal';
+        return l10n?.scrapDisposal as String? ?? 'Scrap Disposal';
       case InventoryMovementType.qualityHold:
-        return 'Quality Hold';
+        return l10n?.qualityHold as String? ?? 'Quality Hold';
       case InventoryMovementType.initialBalanceAdjustment:
-        return 'Initial Balance Adjustment';
+        return l10n?.initialBalanceAdjustment as String? ??
+            'Initial Balance Adjustment';
       case InventoryMovementType.reservationAdjustment:
-        return 'Reservation Adjustment';
-      case InventoryMovementType.PO_RECEIPT:
-        return 'PO Receipt';
-      case InventoryMovementType.TRANSFER_IN:
-        return 'Transfer In';
-      case InventoryMovementType.PRODUCTION_ISSUE:
-        return 'Production Issue';
-      case InventoryMovementType.SALES_RETURN:
-        return 'Sales Return';
-      case InventoryMovementType.ADJUSTMENT_OTHER:
-        return 'Other Adjustment';
-      case InventoryMovementType.TRANSFER_OUT:
-        return 'Transfer Out';
-      case InventoryMovementType.SALE_SHIPMENT:
-        return 'Sale Shipment';
-      case InventoryMovementType.ADJUSTMENT_DAMAGE:
-        return 'Damage Adjustment';
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
-        return 'Cycle Count Gain';
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
-        return 'Cycle Count Loss';
-      case InventoryMovementType.QUALITY_STATUS_UPDATE:
-        return 'Quality Status Update';
+        return l10n?.reservationAdjustment as String? ??
+            'Reservation Adjustment';
+      case InventoryMovementType.poReceipt:
+        return l10n?.poReceipt as String? ?? 'PO Receipt';
+      case InventoryMovementType.transferIn:
+        return l10n?.transferIn as String? ?? 'Transfer In';
+      case InventoryMovementType.productionIssue:
+        return l10n?.productionIssue as String? ?? 'Production Issue';
+      case InventoryMovementType.salesReturn:
+        return l10n?.salesReturn as String? ?? 'Sales Return';
+      case InventoryMovementType.adjustmentOther:
+        return l10n?.adjustmentOther as String? ?? 'Other Adjustment';
+      case InventoryMovementType.transferOut:
+        return l10n?.transferOut as String? ?? 'Transfer Out';
+      case InventoryMovementType.saleShipment:
+        return l10n?.saleShipment as String? ?? 'Sale Shipment';
+      case InventoryMovementType.adjustmentDamage:
+        return l10n?.adjustmentDamage as String? ?? 'Damage Adjustment';
+      case InventoryMovementType.adjustmentCycleCountGain:
+        return l10n?.adjustmentCycleCountGain as String? ?? 'Cycle Count Gain';
+      case InventoryMovementType.adjustmentCycleCountLoss:
+        return l10n?.adjustmentCycleCountLoss as String? ?? 'Cycle Count Loss';
+      case InventoryMovementType.qualityStatusUpdate:
+        return l10n?.qualityStatusUpdate as String? ?? 'Quality Status Update';
     }
   }
 
   String _getMovementTypeDescription(InventoryMovementType type) {
+    final l10n = AppLocalizations.of(context);
     switch (type) {
       case InventoryMovementType.receipt:
-        return 'Record goods received from suppliers or other sources';
+        return l10n?.receiptDesc ??
+            'Record goods received from suppliers or other sources';
       case InventoryMovementType.issue:
-        return 'Issue goods to customers or for internal use';
+        return l10n?.issueDesc ??
+            'Issue goods to customers or for internal use';
       case InventoryMovementType.transfer:
-        return 'Move goods between warehouses or locations';
+        return l10n?.transferDesc ??
+            'Move goods between warehouses or locations';
       case InventoryMovementType.return_:
-        return 'Record goods returned from customers';
+        return l10n?.returnDesc ?? 'Record goods returned from customers';
       case InventoryMovementType.adjustment:
-        return 'Adjust inventory quantities (positive or negative)';
+        return l10n?.adjustmentDesc ??
+            'Adjust inventory quantities (positive or negative)';
       case InventoryMovementType.production:
-        return 'Record goods produced in manufacturing';
+        return l10n?.productionDesc ?? 'Record goods produced in manufacturing';
       case InventoryMovementType.consumption:
-        return 'Record materials consumed in production';
+        return l10n?.consumptionDesc ??
+            'Record materials consumed in production';
       case InventoryMovementType.waste:
-        return 'Record waste or scrap';
+        return l10n?.wasteDesc ?? 'Record waste or scrap';
       case InventoryMovementType.expiry:
-        return 'Record expired inventory write-off';
+        return l10n?.expiryDesc ?? 'Record expired inventory write-off';
       case InventoryMovementType.qualityStatusChange:
-        return 'Record quality status changes of inventory';
+        return l10n?.qualityStatusChangeDesc ??
+            'Record quality status changes of inventory';
       case InventoryMovementType.repack:
-        return 'Repacking operations';
+        return l10n?.repackDesc ?? 'Repacking operations';
       case InventoryMovementType.sample:
-        return 'Sample for quality testing';
+        return l10n?.sampleDesc ?? 'Sample for quality testing';
       case InventoryMovementType.salesIssue:
-        return 'Specific issue for sales order';
+        return l10n?.salesIssueDesc ?? 'Specific issue for sales order';
       case InventoryMovementType.purchaseReceipt:
-        return 'Specific receipt against purchase order';
+        return l10n?.purchaseReceiptDesc ??
+            'Specific receipt against purchase order';
       case InventoryMovementType.productionConsumption:
-        return 'Consumption in production process';
+        return l10n?.productionConsumptionDesc ??
+            'Consumption in production process';
       case InventoryMovementType.productionOutput:
-        return 'Output from production process';
+        return l10n?.productionOutputDesc ?? 'Output from production process';
       case InventoryMovementType.interWarehouseTransfer:
-        return 'Transfer between warehouses';
+        return l10n?.interWarehouseTransferDesc ??
+            'Transfer between warehouses';
       case InventoryMovementType.intraWarehouseTransfer:
-        return 'Transfer within warehouse locations';
+        return l10n?.intraWarehouseTransferDesc ??
+            'Transfer within warehouse locations';
       case InventoryMovementType.scrapDisposal:
-        return 'Scrapping of damaged goods';
+        return l10n?.scrapDisposalDesc ?? 'Scrapping of damaged goods';
       case InventoryMovementType.qualityHold:
-        return 'Quality hold/release operations';
+        return l10n?.qualityHoldDesc ?? 'Quality hold/release operations';
       case InventoryMovementType.initialBalanceAdjustment:
-        return 'Initial balance adjustment';
+        return l10n?.initialBalanceAdjustmentDesc ??
+            'Initial balance adjustment';
       case InventoryMovementType.reservationAdjustment:
-        return 'Reservation adjustments';
-      case InventoryMovementType.PO_RECEIPT:
-        return 'Purchase order receipt';
-      case InventoryMovementType.TRANSFER_IN:
-        return 'Transfer in';
-      case InventoryMovementType.PRODUCTION_ISSUE:
-        return 'Production issue';
-      case InventoryMovementType.SALES_RETURN:
-        return 'Sales return';
-      case InventoryMovementType.ADJUSTMENT_OTHER:
-        return 'Other adjustment';
-      case InventoryMovementType.TRANSFER_OUT:
-        return 'Transfer out';
-      case InventoryMovementType.SALE_SHIPMENT:
-        return 'Sale shipment';
-      case InventoryMovementType.ADJUSTMENT_DAMAGE:
-        return 'Damage adjustment';
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
-        return 'Cycle count gain';
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
-        return 'Cycle count loss';
-      case InventoryMovementType.QUALITY_STATUS_UPDATE:
-        return 'Quality status update';
+        return l10n?.reservationAdjustmentDesc ?? 'Reservation adjustments';
+      case InventoryMovementType.poReceipt:
+        return l10n?.poReceiptDesc ?? 'Purchase order receipt';
+      case InventoryMovementType.transferIn:
+        return l10n?.transferInDesc ?? 'Transfer in';
+      case InventoryMovementType.productionIssue:
+        return l10n?.productionIssueDesc ?? 'Production issue';
+      case InventoryMovementType.salesReturn:
+        return l10n?.salesReturnDesc ?? 'Sales return';
+      case InventoryMovementType.adjustmentOther:
+        return l10n?.adjustmentOtherDesc ?? 'Other adjustment';
+      case InventoryMovementType.transferOut:
+        return l10n?.transferOutDesc ?? 'Transfer out';
+      case InventoryMovementType.saleShipment:
+        return l10n?.saleShipmentDesc ?? 'Sale shipment';
+      case InventoryMovementType.adjustmentDamage:
+        return l10n?.adjustmentDamageDesc ?? 'Damage adjustment';
+      case InventoryMovementType.adjustmentCycleCountGain:
+        return l10n?.adjustmentCycleCountGainDesc ?? 'Cycle count gain';
+      case InventoryMovementType.adjustmentCycleCountLoss:
+        return l10n?.adjustmentCycleCountLossDesc ?? 'Cycle count loss';
+      case InventoryMovementType.qualityStatusUpdate:
+        return l10n?.qualityStatusUpdateDesc ?? 'Quality status update';
     }
   }
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/routes/app_go_router.dart';
 import '../../../../features/shared/models/user_role.dart';
 import '../../../../features/shared/providers/user_role_provider.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../../shared/presentation/screens/app_settings_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -22,7 +22,7 @@ class SettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.settings),
+        title: Text(l10n?.settings ?? 'Settings'),
       ),
       body: ListView(
         children: [
@@ -108,10 +108,11 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 32),
 
           // Language Settings
-          _buildSectionHeader(context, l10n.languageSettings),
+          _buildSectionHeader(
+              context, l10n?.languageSettings ?? 'Language Settings'),
           Card(
             child: ListTile(
-              title: Text(l10n.language),
+              title: Text(l10n?.language ?? 'English'),
               trailing: DropdownButton<String>(
                 value: appSettings.language,
                 onChanged: (value) => value != null
@@ -129,17 +130,17 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Theme Settings
-          _buildSectionHeader(context, l10n.themeSettings),
+          _buildSectionHeader(context, l10n?.themeSettings ?? 'Theme Settings'),
           Card(
             child: Column(
               children: ThemeMode.values.map((mode) {
                 final label = mode == ThemeMode.light
-                    ? l10n.lightTheme
+                    ? l10n?.lightTheme
                     : mode == ThemeMode.dark
-                        ? l10n.darkTheme
-                        : l10n.systemTheme;
+                        ? l10n?.darkTheme
+                        : l10n?.systemTheme;
                 return RadioListTile<ThemeMode>(
-                  title: Text(label),
+                  title: Text(label ?? 'System Theme'),
                   value: mode,
                   groupValue: appSettings.themeMode,
                   onChanged: (value) => value != null
@@ -152,23 +153,25 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Notification Settings
-          _buildSectionHeader(context, l10n.notificationSettings),
+          _buildSectionHeader(
+              context, l10n?.notificationSettings ?? 'Notification Settings'),
           Card(
             child: Column(
               children: [
                 SwitchListTile(
-                  title: Text(l10n.enableNotifications),
+                  title:
+                      Text(l10n?.enableNotifications ?? 'Enable Notifications'),
                   value: appSettings.notificationsEnabled,
                   onChanged: settingsNotifier.updateNotificationsEnabled,
                 ),
                 if (appSettings.notificationsEnabled) ...[
                   SwitchListTile(
-                    title: Text(l10n.enableSounds),
+                    title: Text(l10n?.enableSounds ?? 'Enable Sounds'),
                     value: appSettings.soundEnabled,
                     onChanged: settingsNotifier.updateSoundEnabled,
                   ),
                   SwitchListTile(
-                    title: Text(l10n.enableVibration),
+                    title: Text(l10n?.enableVibration ?? 'Enable Vibration'),
                     value: appSettings.vibrationEnabled,
                     onChanged: settingsNotifier.updateVibrationEnabled,
                   ),
@@ -179,11 +182,12 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Module-specific Settings
-          _buildSectionHeader(context, l10n.moduleSettings),
+          _buildSectionHeader(
+              context, l10n?.moduleSettings ?? 'Module Settings'),
           Card(
             child: ListTile(
               leading: const Icon(Icons.inventory_2),
-              title: Text(l10n.inventorySettings),
+              title: Text(l10n?.inventorySettings ?? 'Inventory Settings'),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () => context.go(AppRoutes.inventorySettings),
             ),
@@ -197,12 +201,12 @@ class SettingsScreen extends ConsumerWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                      content: Text(l10n.settingsSaved),
+                      content: Text(l10n?.settingsSaved ?? 'Settings saved'),
                       backgroundColor: Colors.green),
                 );
               }
             },
-            child: Text(l10n.saveSettings),
+            child: Text(l10n?.saveSettings ?? 'Save Settings'),
           ),
           const SizedBox(height: 16),
         ],

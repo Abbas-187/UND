@@ -5,16 +5,17 @@ import '../../domain/entities/purchase_order.dart';
 
 /// Widget for displaying and editing a purchase order item.
 class PurchaseOrderItemForm extends StatefulWidget {
-
   const PurchaseOrderItemForm({
     super.key,
     required this.item,
     required this.onUpdate,
     required this.onRemove,
+    this.currencySymbol = '﷼',
   });
   final PurchaseOrderItem item;
   final Function(PurchaseOrderItem) onUpdate;
   final VoidCallback onRemove;
+  final String currencySymbol;
 
   @override
   State<PurchaseOrderItemForm> createState() => _PurchaseOrderItemFormState();
@@ -22,6 +23,7 @@ class PurchaseOrderItemForm extends StatefulWidget {
 
 class _PurchaseOrderItemFormState extends State<PurchaseOrderItemForm> {
   late TextEditingController _quantityController;
+  late TextEditingController _unitPriceController;
   late DateTime _requiredByDate;
   late TextEditingController _notesController;
 
@@ -30,6 +32,8 @@ class _PurchaseOrderItemFormState extends State<PurchaseOrderItemForm> {
     super.initState();
     _quantityController =
         TextEditingController(text: widget.item.quantity.toString());
+    _unitPriceController =
+        TextEditingController(text: widget.item.unitPrice.toStringAsFixed(2));
     _requiredByDate = widget.item.requiredByDate;
     _notesController = TextEditingController(text: widget.item.notes ?? '');
   }
@@ -37,6 +41,7 @@ class _PurchaseOrderItemFormState extends State<PurchaseOrderItemForm> {
   @override
   void dispose() {
     _quantityController.dispose();
+    _unitPriceController.dispose();
     _notesController.dispose();
     super.dispose();
   }
@@ -86,23 +91,36 @@ class _PurchaseOrderItemFormState extends State<PurchaseOrderItemForm> {
                     onChanged: (value) {
                       final quantity =
                           double.tryParse(value) ?? widget.item.quantity;
-                      _updateItem(quantity: quantity);
+                      _updateItem(
+                          quantity: quantity,
+                          unitPrice:
+                              double.tryParse(_unitPriceController.text) ??
+                                  widget.item.unitPrice);
                     },
                   ),
                 ),
                 const SizedBox(width: 16),
-                // Unit price (read only)
+                // Unit price (editable)
                 Expanded(
                   flex: 3,
                   child: TextFormField(
-                    initialValue:
-                        CurrencyFormatter.format(widget.item.unitPrice),
-                    decoration: const InputDecoration(
+                    controller: _unitPriceController,
+                    decoration: InputDecoration(
                       labelText: 'Unit Price',
-                      border: OutlineInputBorder(),
+                      suffixText: widget.currencySymbol,
+                      border: const OutlineInputBorder(),
                     ),
-                    readOnly: true,
-                    enabled: false,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    onChanged: (value) {
+                      final unitPrice =
+                          double.tryParse(value) ?? widget.item.unitPrice;
+                      _updateItem(
+                        quantity: double.tryParse(_quantityController.text) ??
+                            widget.item.quantity,
+                        unitPrice: unitPrice,
+                      );
+                    },
                   ),
                 ),
               ],
@@ -136,11 +154,18 @@ class _PurchaseOrderItemFormState extends State<PurchaseOrderItemForm> {
                 // Total price (read only)
                 Expanded(
                   child: TextFormField(
-                    initialValue:
-                        CurrencyFormatter.format(widget.item.totalPrice),
-                    decoration: const InputDecoration(
+                    controller: TextEditingController(
+                      text: CurrencyFormatter.format(
+                        (double.tryParse(_quantityController.text) ??
+                                widget.item.quantity) *
+                            (double.tryParse(_unitPriceController.text) ??
+                                widget.item.unitPrice),
+                      ),
+                    ),
+                    decoration: InputDecoration(
                       labelText: 'Total Price',
-                      border: OutlineInputBorder(),
+                      suffixText: widget.currencySymbol,
+                      border: const OutlineInputBorder(),
                     ),
                     readOnly: true,
                     enabled: false,
@@ -185,14 +210,17 @@ class _PurchaseOrderItemFormState extends State<PurchaseOrderItemForm> {
 
   void _updateItem({
     double? quantity,
+    double? unitPrice,
     DateTime? requiredByDate,
     String? notes,
   }) {
     final updatedQuantity = quantity ?? widget.item.quantity;
-    final updatedTotalPrice = updatedQuantity * widget.item.unitPrice;
+    final updatedUnitPrice = unitPrice ?? widget.item.unitPrice;
+    final updatedTotalPrice = updatedQuantity * updatedUnitPrice;
 
     final updatedItem = widget.item.copyWith(
       quantity: updatedQuantity,
+      unitPrice: updatedUnitPrice,
       totalPrice: updatedTotalPrice,
       requiredByDate: requiredByDate ?? _requiredByDate,
       notes: notes ?? widget.item.notes,

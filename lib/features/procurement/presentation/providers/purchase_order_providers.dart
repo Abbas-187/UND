@@ -1,13 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/exceptions/app_exception.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/exceptions/result.dart';
 import '../../../suppliers/presentation/providers/supplier_provider.dart';
-import '../../data/providers/mock_procurement_provider.dart';
 import '../../data/repositories/purchase_order_repository_impl.dart';
 import '../../domain/entities/purchase_order.dart';
 import '../../domain/repositories/purchase_order_repository.dart';
@@ -572,5 +570,16 @@ class PurchaseOrderDetailNotifier extends _$PurchaseOrderDetailNotifier {
       return Result.failure(ServerFailure(
           e is AppException ? e.message : 'Failed to delete purchase order'));
     }
+  }
+
+  void addItem(PurchaseOrderItem item) {
+    final currentPO = state.purchaseOrder;
+    if (currentPO == null) return;
+    final updatedItems = List<PurchaseOrderItem>.from(currentPO.items)
+      ..add(item);
+    final updatedTotal = updatedItems.fold(0.0, (sum, i) => sum + i.totalPrice);
+    final updatedPO =
+        currentPO.copyWith(items: updatedItems, totalAmount: updatedTotal);
+    state = state.copyWith(purchaseOrder: updatedPO);
   }
 }

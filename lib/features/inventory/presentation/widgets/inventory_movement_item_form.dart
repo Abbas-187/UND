@@ -75,8 +75,6 @@ class _InventoryMovementItemFormState
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(_isEditing ? 'Edit Item' : 'Add Item'),
@@ -166,12 +164,12 @@ class _InventoryMovementItemFormState
                   items: items.map((item) {
                     return DropdownMenuItem<String>(
                       value: item.id,
-                      child: Text('${item.itemCode} - ${item.name}'),
+                      child: Text('${item.sapCode} - ${item.name}'),
                       onTap: () {
                         setState(() {
-                          _itemCode = item.itemCode;
+                          _itemCode = item.sapCode;
                           _itemName = item.name;
-                          _uom = item.uom;
+                          _uom = item.unit;
                         });
                       },
                     );
@@ -224,8 +222,6 @@ class _InventoryMovementItemFormState
   }
 
   Widget _buildQuantityField() {
-    final quantitySign = widget.isInbound ? 1.0 : -1.0;
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -346,7 +342,7 @@ class _InventoryMovementItemFormState
         batchLotNumber: _batchLotNumber,
         productionDate: _productionDate,
         expirationDate: _expirationDate,
-        locationId: _locationId,
+        warehouseId: _locationId,
         notes: _notesController.text.isEmpty ? null : _notesController.text,
       );
 

@@ -1,10 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:und_app/features/shared/models/app_modules.dart';
-import 'package:und_app/main.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:und_app/firebase_options.dart';
+import 'package:und_app/main.dart';
 
 void main() {
   setUpAll(() async {

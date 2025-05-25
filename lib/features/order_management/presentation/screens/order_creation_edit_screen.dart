@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/order_form_provider.dart';
+import '../widgets/customer_dropdown.dart';
+import '../widgets/branch_dropdown.dart';
+import '../widgets/product_list_dropdown.dart';
+import '../widgets/product_quantity_list.dart';
+import '../widgets/date_picker.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../data/models/order_model.dart';
-import '../../domain/entities/order_entity.dart';
-import '../providers/order_provider.dart';
+import '../../data/models/customer_model.dart';
+import '../../data/models/order_item_model.dart';
 
 class OrderCreationEditScreen extends ConsumerStatefulWidget {
   const OrderCreationEditScreen({super.key});
@@ -16,68 +21,240 @@ class OrderCreationEditScreen extends ConsumerStatefulWidget {
 
 class _OrderCreationEditScreenState
     extends ConsumerState<OrderCreationEditScreen> {
-  bool _isSubmitting = false;
   final _formKey = GlobalKey<FormState>();
-  late bool _isEdit;
-  late String _id;
-  String _customerName = '';
-  DateTime _date = DateTime.now();
-  String _itemsText = '';
+  bool _isSubmitting = false;
+  bool _isEdit = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = GoRouterState.of(context).extra;
-    if (args is OrderEntity) {
+    if (args != null && !_isEdit) {
+      // Pre-fill form state if editing
+      final order = args as OrderModel;
+      final notifier = ref.read(orderFormProvider.notifier);
+      // Create a CustomerModel from order data (branches will be empty)
+      final customer = CustomerModel(
+          id: order.customerId, name: order.customerName, branches: []);
+      notifier.setCustomer(customer);
+      // Set branch if shippingAddress is not null and is a Map
+      if (order.shippingAddress != null &&
+          order.shippingAddress is Map<String, dynamic>) {
+        final branchMap = order.shippingAddress as Map<String, dynamic>;
+        final branch = CustomerBranch.fromJson(branchMap);
+        notifier.setBranch(branch);
+      }
+      // Set productQuantityItems
+      final items = order.items
+          .map((e) => e is OrderItemModel
+              ? e
+              : OrderItemModel.fromJson(Map<String, dynamic>.from(e)))
+          .toList();
+      notifier.state = notifier.state.copyWith(productQuantityItems: items);
+      notifier.setDueDate(order.requiredDeliveryDate!);
+      notifier.setNotes(order.notes ?? '');
       _isEdit = true;
-      _id = args.id;
-      _customerName = args.customerName;
-      _date = args.date;
-      _itemsText = args.items.join(', ');
-    } else {
-      _isEdit = false;
-      _id = UniqueKey().toString();
     }
   }
 
-  Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-    _formKey.currentState!.save();
+  @override
+  Widget build(BuildContext context) {
+    final orderFormState = ref.watch(orderFormProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_isEdit ? 'Edit Order' : 'Create Order'),
+      ),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Customer section
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Customer Information',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Customer selection dropdown
+                      const CustomerDropdown(),
+                      const SizedBox(height: 16),
+                      // Branch selection dropdown (only shown when customer has branches)
+                      if (orderFormState.selectedCustomer != null &&
+                          (orderFormState.customerBranches?.isNotEmpty ??
+                              false))
+                        const BranchDropdown(),
+                      // Customer details when selected
+                      if (orderFormState.selectedCustomer != null)
+                        Container(
+                          margin: const EdgeInsets.only(top: 16.0),
+                          padding: const EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  'Customer ID: \\${orderFormState.selectedCustomer?.id ?? ""}'),
+                              Text(
+                                  'Name: \\${orderFormState.selectedCustomer?.name ?? ""}'),
+                              if (orderFormState.selectedBranch != null)
+                                Text(
+                                    'Branch: \\${orderFormState.selectedBranch?.name ?? ""}'),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Product List Selection
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Products',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          // Save list button
+                          if (orderFormState.selectedCustomer != null &&
+                              orderFormState.productQuantityItems.isNotEmpty)
+                            TextButton.icon(
+                              onPressed: () => _showSaveListDialog(context),
+                              icon: const Icon(Icons.save),
+                              label: const Text('Save as List'),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      // Saved lists dropdown
+                      if (orderFormState.selectedCustomer != null)
+                        const ProductListDropdown(),
+                      const SizedBox(height: 16),
+                      // Product selection and quantity list
+                      if (orderFormState.selectedCustomer != null)
+                        const ProductQuantityList(),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // Due Date
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Order Details',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Due date picker
+                      const DueDatePicker(),
+                      // Notes field
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Notes',
+                          hintText: 'Any special instructions or notes',
+                        ),
+                        maxLines: 3,
+                        onChanged: (value) {
+                          ref.read(orderFormProvider.notifier).setNotes(value);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Submit button
+              Center(
+                child: ElevatedButton(
+                  onPressed: _isSubmitting || !_isFormValid(orderFormState)
+                      ? null
+                      : _submitOrder,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 12),
+                    textStyle: const TextStyle(fontSize: 16),
+                  ),
+                  child: _isSubmitting
+                      ? const CircularProgressIndicator()
+                      : Text(_isEdit ? 'Save Changes' : 'Submit Order'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool _isFormValid(dynamic state) {
+    // TODO: Update type after provider migration
+    return state.selectedCustomer != null &&
+        state.productQuantityItems.isNotEmpty &&
+        state.dueDate != null;
+  }
+
+  Future<void> _submitOrder() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
     setState(() {
       _isSubmitting = true;
     });
-    final items = _itemsText.split(',').map((e) => e.trim()).toList();
-    final order = OrderEntity(
-      id: _id,
-      customerName: _customerName,
-      date: _date,
-      items: items,
-    );
     try {
-      if (_isEdit) {
-        await ref
-            .read(orderProvider.notifier)
-            .updateOrder(OrderModel.fromEntity(order));
-      } else {
-        await ref
-            .read(orderProvider.notifier)
-            .createOrder(OrderModel.fromEntity(order));
+      await ref.read(orderFormProvider.notifier).submitOrder();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_isEdit
+                ? 'Order updated successfully'
+                : 'Order created successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        await Future.delayed(const Duration(milliseconds: 300));
+        if (mounted) Navigator.of(context).pop();
       }
-      if (mounted) context.go('/order-management');
     } catch (e) {
-      await showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Error'),
-          content: Text(e.toString()),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            )
-          ],
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error submitting order: \\${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -87,60 +264,32 @@ class _OrderCreationEditScreenState
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(_isEdit ? 'Edit Order' : 'Create Order')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                initialValue: _customerName,
-                decoration: const InputDecoration(labelText: 'Customer Name'),
-                validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-                onSaved: (v) => _customerName = v!,
-              ),
-              const SizedBox(height: 12),
-              ListTile(
-                title: const Text('Date'),
-                subtitle: Text(_date.toLocal().toString().split(' ')[0]),
-                onTap: () async {
-                  final picked = await showDatePicker(
-                    context: context,
-                    initialDate: _date,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) setState(() => _date = picked);
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                initialValue: _itemsText,
-                decoration: const InputDecoration(
-                  labelText: 'Items (comma separated)',
-                ),
-                validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-                onSaved: (v) => _itemsText = v!,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _isSubmitting ? null : _submit,
-                child: _isSubmitting
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(_isEdit ? 'Save Changes' : 'Create Order'),
-              ),
-            ],
+  Future<void> _showSaveListDialog(BuildContext context) async {
+    final nameController = TextEditingController();
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Save Product List'),
+          content: TextField(
+            controller: nameController,
+            decoration: const InputDecoration(hintText: 'List Name'),
           ),
-        ),
-      ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // TODO: Save product list logic
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

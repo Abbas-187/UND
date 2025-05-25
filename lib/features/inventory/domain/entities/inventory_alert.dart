@@ -1,4 +1,3 @@
-
 /// Types of inventory alerts
 enum AlertType {
   /// Alert for items with low stock level
@@ -25,7 +24,6 @@ enum AlertSeverity {
 
 /// Represents an inventory alert
 class InventoryAlert {
-
   const InventoryAlert({
     required this.id,
     required this.itemId,
@@ -35,6 +33,12 @@ class InventoryAlert {
     required this.severity,
     required this.timestamp,
     this.isAcknowledged = false,
+    // Enhanced fields from BOM Phase 2
+    this.expectedResolutionDate,
+    this.suggestedActions,
+    this.alternativeItems,
+    this.warehouseStock,
+    this.confidenceScore,
   });
 
   factory InventoryAlert.fromJson(Map<String, dynamic> json) => InventoryAlert(
@@ -46,7 +50,21 @@ class InventoryAlert {
         severity: AlertSeverity.values[json['severity'] as int],
         timestamp: DateTime.parse(json['timestamp'] as String),
         isAcknowledged: json['isAcknowledged'] as bool? ?? false,
+        // Enhanced fields
+        expectedResolutionDate: json['expectedResolutionDate'] != null
+            ? DateTime.parse(json['expectedResolutionDate'] as String)
+            : null,
+        suggestedActions: (json['suggestedActions'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList(),
+        alternativeItems: (json['alternativeItems'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList(),
+        warehouseStock: (json['warehouseStock'] as Map<String, dynamic>?)
+            ?.map((key, value) => MapEntry(key, (value as num).toDouble())),
+        confidenceScore: (json['confidenceScore'] as num?)?.toDouble(),
       );
+
   /// Unique identifier for this alert
   final String id;
 
@@ -71,6 +89,22 @@ class InventoryAlert {
   /// Whether the alert has been acknowledged
   final bool isAcknowledged;
 
+  // Enhanced fields from BOM Phase 2
+  /// Predicted date when the issue will be resolved
+  final DateTime? expectedResolutionDate;
+
+  /// List of suggested actions to resolve the alert
+  final List<String>? suggestedActions;
+
+  /// List of alternative items that can be used
+  final List<String>? alternativeItems;
+
+  /// Stock levels across different warehouses
+  final Map<String, double>? warehouseStock;
+
+  /// Confidence score for predictions (0.0 to 1.0)
+  final double? confidenceScore;
+
   InventoryAlert copyWith({
     String? id,
     String? itemId,
@@ -80,6 +114,11 @@ class InventoryAlert {
     AlertSeverity? severity,
     DateTime? timestamp,
     bool? isAcknowledged,
+    DateTime? expectedResolutionDate,
+    List<String>? suggestedActions,
+    List<String>? alternativeItems,
+    Map<String, double>? warehouseStock,
+    double? confidenceScore,
   }) {
     return InventoryAlert(
       id: id ?? this.id,
@@ -90,6 +129,12 @@ class InventoryAlert {
       severity: severity ?? this.severity,
       timestamp: timestamp ?? this.timestamp,
       isAcknowledged: isAcknowledged ?? this.isAcknowledged,
+      expectedResolutionDate:
+          expectedResolutionDate ?? this.expectedResolutionDate,
+      suggestedActions: suggestedActions ?? this.suggestedActions,
+      alternativeItems: alternativeItems ?? this.alternativeItems,
+      warehouseStock: warehouseStock ?? this.warehouseStock,
+      confidenceScore: confidenceScore ?? this.confidenceScore,
     );
   }
 
@@ -102,6 +147,11 @@ class InventoryAlert {
         'severity': severity.index,
         'timestamp': timestamp.toIso8601String(),
         'isAcknowledged': isAcknowledged,
+        'expectedResolutionDate': expectedResolutionDate?.toIso8601String(),
+        'suggestedActions': suggestedActions,
+        'alternativeItems': alternativeItems,
+        'warehouseStock': warehouseStock,
+        'confidenceScore': confidenceScore,
       };
 
   @override

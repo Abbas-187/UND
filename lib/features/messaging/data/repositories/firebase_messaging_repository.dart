@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../../../utils/audit_middleware.dart';
+import '../../../inventory/data/models/inventory_audit_log_model.dart';
 import '../../domain/models/conversation.dart';
 import '../../domain/models/message.dart';
 import '../../domain/repositories/messaging_repository.dart';
@@ -10,14 +10,11 @@ class FirebaseMessagingRepository implements MessagingRepository {
   FirebaseMessagingRepository({
     FirebaseFirestore? firestore,
     AuditMiddleware? auditMiddleware,
-    FirebaseMessaging? messaging,
   })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        _auditMiddleware = auditMiddleware ?? AuditMiddleware(),
-        _messaging = messaging ?? FirebaseMessaging.instance;
+        _auditMiddleware = auditMiddleware ?? AuditMiddleware();
 
   final FirebaseFirestore _firestore;
   final AuditMiddleware _auditMiddleware;
-  final FirebaseMessaging _messaging;
 
   // Collection references
   CollectionReference get _messagesCollection =>
@@ -69,7 +66,8 @@ class FirebaseMessagingRepository implements MessagingRepository {
         await _auditMiddleware.logAction(
           action: 'send_message',
           module: 'messaging',
-          targetId: msgWithStatus.id,
+          entityId: msgWithStatus.id,
+          entityType: AuditEntityType.other,
           metadata: {'conversationId': conversationId},
         );
         // Push notification
@@ -84,7 +82,8 @@ class FirebaseMessagingRepository implements MessagingRepository {
           await _auditMiddleware.logAction(
             action: 'send_message_failed',
             module: 'messaging',
-            targetId: msgWithStatus.id,
+            entityId: msgWithStatus.id,
+            entityType: AuditEntityType.other,
             metadata: {'error': e.toString()},
           );
           rethrow;
@@ -105,7 +104,8 @@ class FirebaseMessagingRepository implements MessagingRepository {
       await _auditMiddleware.logAction(
         action: 'push_notification_attempt',
         module: 'messaging',
-        targetId: message.id,
+        entityId: message.id,
+        entityType: AuditEntityType.other,
         metadata: {
           'conversationId': conversationId,
           'receiverId': message.receiverId,
@@ -123,7 +123,8 @@ class FirebaseMessagingRepository implements MessagingRepository {
       await _auditMiddleware.logAction(
         action: 'push_notification_failed',
         module: 'messaging',
-        targetId: message.id,
+        entityId: message.id,
+        entityType: AuditEntityType.other,
         metadata: {'error': e.toString()},
       );
     }
@@ -139,13 +140,15 @@ class FirebaseMessagingRepository implements MessagingRepository {
       await _auditMiddleware.logAction(
         action: 'mark_message_read',
         module: 'messaging',
-        targetId: messageId,
+        entityId: messageId,
+        entityType: AuditEntityType.other,
       );
     } catch (e) {
       await _auditMiddleware.logAction(
         action: 'mark_message_read_failed',
         module: 'messaging',
-        targetId: messageId,
+        entityId: messageId,
+        entityType: AuditEntityType.other,
         metadata: {'error': e.toString()},
       );
       rethrow;
@@ -159,13 +162,15 @@ class FirebaseMessagingRepository implements MessagingRepository {
       await _auditMiddleware.logAction(
         action: 'delete_message',
         module: 'messaging',
-        targetId: messageId,
+        entityId: messageId,
+        entityType: AuditEntityType.other,
       );
     } catch (e) {
       await _auditMiddleware.logAction(
         action: 'delete_message_failed',
         module: 'messaging',
-        targetId: messageId,
+        entityId: messageId,
+        entityType: AuditEntityType.other,
         metadata: {'error': e.toString()},
       );
       rethrow;

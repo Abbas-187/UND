@@ -8,8 +8,8 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../data/models/inventory_movement_item_model.dart';
 import '../../data/models/inventory_movement_model.dart';
 import '../../data/models/quality_status.dart';
@@ -40,16 +40,16 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.movementDetails),
+        title: Text(l10n?.movementDetails ?? ''),
         actions: [
           IconButton(
             icon: const Icon(Icons.print),
-            tooltip: l10n.generatePdf,
+            tooltip: l10n?.generatePdf ?? '',
             onPressed: movement != null ? () => _generatePdf(movement) : null,
           ),
           IconButton(
             icon: const Icon(Icons.share),
-            tooltip: l10n.share,
+            tooltip: l10n?.share ?? '',
             onPressed:
                 movement != null ? () => _shareMovementDetails(movement) : null,
           ),
@@ -92,12 +92,11 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    l10n.idWithValue(movement.movementId),
+                    '${l10n?.id ?? 'ID'}: ${movement.movementId}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(
-                    l10n.dateWithTimestamp(DateFormat('MMM d, yyyy h:mm a')
-                        .format(movement.timestamp)),
+                    '${l10n?.date ?? 'Date'}: ${DateFormat('MMM d, yyyy h:mm a').format(movement.timestamp)}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -108,7 +107,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           const SizedBox(height: 16),
 
           // Locations section
-          _buildSectionTitle(context, l10n.locations),
+          _buildSectionTitle(context, l10n?.locations ?? ''),
           Card(
             margin: EdgeInsets.zero,
             child: Padding(
@@ -118,19 +117,19 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                 children: [
                   // Source location
                   Text(
-                    l10n.source,
+                    l10n?.source ?? '',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     movement.sourceLocationName?.isNotEmpty == true
                         ? movement.sourceLocationName!
-                        : l10n.notAvailable,
+                        : l10n?.notAvailable ?? '',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   if ((movement.sourceLocationId ?? '').isNotEmpty)
                     Text(
-                      l10n.idWithValue(movement.sourceLocationId ?? ''),
+                      '${l10n?.id ?? 'ID'}: ${movement.sourceLocationId ?? ''}',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
 
@@ -140,19 +139,19 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
                   // Destination location
                   Text(
-                    l10n.destination,
+                    l10n?.destination ?? '',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     movement.destinationLocationName?.isNotEmpty == true
                         ? movement.destinationLocationName!
-                        : l10n.notAvailable,
+                        : l10n?.notAvailable ?? '',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   if ((movement.destinationLocationId ?? '').isNotEmpty)
                     Text(
-                      l10n.idWithValue(movement.destinationLocationId ?? ''),
+                      '${l10n?.id ?? 'ID'}: ${movement.destinationLocationId ?? ''}',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                 ],
@@ -163,7 +162,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           const SizedBox(height: 16),
 
           // Personnel section
-          _buildSectionTitle(context, l10n.personnel),
+          _buildSectionTitle(context, l10n?.personnel ?? ''),
           Card(
             margin: EdgeInsets.zero,
             child: Padding(
@@ -173,37 +172,37 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                 children: [
                   // Initiator
                   Text(
-                    l10n.initiatedBy,
+                    l10n?.initiatedBy ?? '',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    movement.initiatingEmployeeName ?? l10n.notAvailable,
+                    movement.initiatingEmployeeName ?? l10n?.notAvailable ?? '',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   Text(
-                    l10n.idWithValue(movement.initiatingEmployeeId),
+                    '${l10n?.id ?? 'ID'}: ${movement.initiatingEmployeeId}',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
 
-                  if (movement.approvalStatus != ApprovalStatus.PENDING) ...[
+                  if (movement.approvalStatus != ApprovalStatus.pending) ...[
                     const SizedBox(height: 16),
                     const Divider(),
                     const SizedBox(height: 16),
 
                     // Approver (if applicable)
                     Text(
-                      l10n.reviewedBy,
+                      l10n?.reviewedBy ?? '',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      movement.approverEmployeeName ?? l10n.notAvailable,
+                      movement.approverEmployeeName ?? l10n?.notAvailable ?? '',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     if ((movement.approverEmployeeId ?? '').isNotEmpty)
                       Text(
-                        l10n.idWithValue(movement.approverEmployeeId ?? ''),
+                        '${l10n?.id ?? 'ID'}: ${movement.approverEmployeeId ?? ''}',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                   ],
@@ -216,7 +215,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
           // Notes section
           if ((movement.reasonNotes ?? '').isNotEmpty) ...[
-            _buildSectionTitle(context, l10n.notes),
+            _buildSectionTitle(context, l10n?.notes ?? ''),
             Card(
               margin: EdgeInsets.zero,
               child: Padding(
@@ -229,7 +228,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
 
           // Reference documents
           if ((movement.referenceDocuments ?? []).isNotEmpty) ...[
-            _buildSectionTitle(context, l10n.referenceDocuments),
+            _buildSectionTitle(context, l10n?.referenceDocuments ?? ''),
             Card(
               margin: EdgeInsets.zero,
               child: Padding(
@@ -257,7 +256,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           // Items section
           _buildSectionTitle(
             context,
-            l10n.itemsCount(movement.items.length),
+            'Items (${movement.items.length})',
           ),
           Card(
             margin: EdgeInsets.zero,
@@ -275,7 +274,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           const SizedBox(height: 32),
 
           // Approval actions
-          if (movement.approvalStatus == ApprovalStatus.PENDING)
+          if (movement.approvalStatus == ApprovalStatus.pending)
             _buildApprovalButtons(context, movement),
         ],
       ),
@@ -299,19 +298,19 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
     IconData iconData;
 
     switch (status) {
-      case ApprovalStatus.PENDING:
+      case ApprovalStatus.pending:
         chipColor = Colors.orange;
         iconData = Icons.pending;
         break;
-      case ApprovalStatus.APPROVED:
+      case ApprovalStatus.approved:
         chipColor = Colors.green;
         iconData = Icons.check_circle;
         break;
-      case ApprovalStatus.REJECTED:
+      case ApprovalStatus.rejected:
         chipColor = Colors.red;
         iconData = Icons.cancel;
         break;
-      case ApprovalStatus.CANCELLED:
+      case ApprovalStatus.cancelled:
         chipColor = Colors.grey;
         iconData = Icons.block;
         break;
@@ -355,7 +354,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(
-                      l10n.batchWithValue(item.batchLotNumber ?? ''),
+                      '${l10n?.batch ?? 'Batch'}: ${item.batchLotNumber ?? ''}',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -407,13 +406,11 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
           ),
           const SizedBox(height: 8),
           Text(
-            l10n.productionWithDate(
-                DateFormat.yMd().format(item.productionDate ?? DateTime.now())),
+            '${l10n?.production ?? 'Production'}: ${DateFormat.yMd().format(item.productionDate ?? DateTime.now())}',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           Text(
-            l10n.expirationWithDate(
-                DateFormat.yMd().format(item.expirationDate ?? DateTime.now())),
+            '${l10n?.expiration ?? 'Expiration'}: ${DateFormat.yMd().format(item.expirationDate ?? DateTime.now())}',
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
@@ -435,6 +432,14 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
         return Colors.deepOrange;
       case QualityStatus.rejected:
         return Colors.red;
+      case QualityStatus.available:
+        return Colors.lightBlue;
+      case QualityStatus.pendingInspection:
+        return Colors.grey;
+      case QualityStatus.rework:
+        return Colors.deepOrange;
+      case QualityStatus.blocked:
+        return Colors.brown;
     }
   }
 
@@ -466,7 +471,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
         Expanded(
           child: FilledButton.icon(
             icon: const Icon(Icons.check_circle),
-            label: Text(l10n.approve),
+            label: Text(l10n?.approve ?? ''),
             onPressed: _isApproving
                 ? null
                 : () => _showApprovalDialog(context, movement, true),
@@ -476,7 +481,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
         Expanded(
           child: OutlinedButton.icon(
             icon: const Icon(Icons.cancel),
-            label: Text(l10n.reject),
+            label: Text(l10n?.reject ?? ''),
             onPressed: _isApproving
                 ? null
                 : () => _showApprovalDialog(context, movement, false),
@@ -499,7 +504,7 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
         onApprove: (approverId, approverName, notes) =>
             _approveOrRejectMovement(
           movement.movementId,
-          isApproval ? ApprovalStatus.APPROVED : ApprovalStatus.REJECTED,
+          isApproval ? ApprovalStatus.approved : ApprovalStatus.rejected,
           approverId,
           approverName,
           notes,
@@ -531,11 +536,11 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
         final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(status == ApprovalStatus.APPROVED
-                ? l10n.movementSuccessfullyApproved
-                : l10n.movementSuccessfullyRejected),
+            content: Text(status == ApprovalStatus.approved
+                ? (l10n?.movementSuccessfullyApproved ?? '')
+                : (l10n?.movementSuccessfullyRejected ?? '')),
             backgroundColor:
-                status == ApprovalStatus.APPROVED ? Colors.green : Colors.red,
+                status == ApprovalStatus.approved ? Colors.green : Colors.red,
           ),
         );
       }
@@ -544,7 +549,8 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
         final l10n = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorWithText(e.toString())),
+            content:
+                Text(l10n?.error != null ? '${l10n!.error}: $e' : 'Error: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -749,8 +755,11 @@ class _MovementDetailsPageState extends ConsumerState<MovementDetailsPage> {
       final file = File('${output.path}/movement_${movement.movementId}.pdf');
       await file.writeAsBytes(await pdf.save());
 
-      // Open the PDF
-      // await OpenFile.open(file.path);
+      // Share the PDF instead of just opening it
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        text: 'Inventory Movement ${movement.movementId}',
+      );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

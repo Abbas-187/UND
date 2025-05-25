@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../domain/entities/cost_layer.dart';
-import '../providers/inventory_valuation_provider.dart';
+import '../../domain/entities/cost_layer.dart' as inventory;
+import '../../domain/usecases/generate_inventory_valuation_report_usecase.dart';
 import 'cost_layer_detail_card.dart';
 
 /// A card widget displaying valuation information for a single inventory item
 class InventoryItemValuationCard extends StatelessWidget {
-
   const InventoryItemValuationCard({
     super.key,
     required this.entry,
     this.showCostLayers = true,
   });
-  final InventoryItemValuationEntry entry;
+  final InventoryValuationEntry entry;
   final bool showCostLayers;
 
   @override
@@ -32,7 +31,8 @@ class InventoryItemValuationCard extends StatelessWidget {
           _buildItemHeader(theme, numberFormat),
           const Divider(height: 1),
           _buildItemDetails(theme, numberFormat, quantityFormat),
-          if (showCostLayers && entry.costLayers.isNotEmpty) ...[
+          if (showCostLayers &&
+              (entry.costLayerBreakdown?.isNotEmpty ?? false)) ...[
             const Divider(height: 1),
             _buildCostLayerSection(theme),
           ],
@@ -52,14 +52,14 @@ class InventoryItemValuationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  entry.item.name,
+                  entry.itemName,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Item Code: ${entry.item.code}',
+                  'Item Code: ${entry.itemCode}',
                   style: theme.textTheme.bodySmall,
                 ),
               ],
@@ -96,7 +96,7 @@ class InventoryItemValuationCard extends StatelessWidget {
           Row(
             children: [
               _buildDetailColumn(theme, 'Quantity',
-                  '${quantityFormat.format(entry.totalQuantity)} ${entry.item.uom}'),
+                  quantityFormat.format(entry.totalQuantity)),
               _buildDetailColumn(
                 theme,
                 'Average Cost',
@@ -110,19 +110,6 @@ class InventoryItemValuationCard extends StatelessWidget {
               ),
             ],
           ),
-          if (entry.location != null) ...[
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                _buildDetailColumn(
-                  theme,
-                  'Location',
-                  entry.location!,
-                ),
-                const Spacer(),
-              ],
-            ),
-          ],
         ],
       ),
     );
@@ -168,13 +155,28 @@ class InventoryItemValuationCard extends StatelessWidget {
         ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: entry.costLayers.length,
+          itemCount: entry.costLayerBreakdown?.length ?? 0,
           separatorBuilder: (context, index) =>
               const Divider(height: 1, indent: 16, endIndent: 16),
           itemBuilder: (context, index) {
+            final layer = entry.costLayerBreakdown![index];
             return CostLayerDetailCard(
-              layer: entry.costLayers[index],
+              layer: inventory.CostLayer(
+                id: layer.id,
+                itemId: layer.itemId,
+                warehouseId: '', // Not available
+                batchLotNumber: layer.batchLotNumber,
+                initialQuantity: layer.quantity,
+                remainingQuantity: layer.quantity,
+                costAtTransaction: layer.costPerUnit,
+                movementId: null,
+                movementDate: layer.movementDate,
+                expirationDate: layer.expirationDate,
+                productionDate: layer.productionDate,
+                createdAt: layer.movementDate,
+              ),
               index: index,
+              uom: '', // UOM not available
             );
           },
         ),
@@ -183,13 +185,13 @@ class InventoryItemValuationCard extends StatelessWidget {
     );
   }
 
-  String _getMethodName(CostingMethod method) {
+  String _getMethodName(inventory.CostingMethod? method) {
     switch (method) {
-      case CostingMethod.fifo:
+      case inventory.CostingMethod.fifo:
         return 'FIFO';
-      case CostingMethod.lifo:
+      case inventory.CostingMethod.lifo:
         return 'LIFO';
-      case CostingMethod.wac:
+      case inventory.CostingMethod.wac:
         return 'WAC';
       default:
         return 'Unknown';

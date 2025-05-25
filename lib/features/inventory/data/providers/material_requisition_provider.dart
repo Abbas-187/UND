@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../factory/data/models/material_requisition_item_model.dart';
 import '../../../factory/data/models/material_requisition_model.dart'
@@ -39,7 +39,8 @@ class MaterialRequisitionProvider
       }).toList();
       state = requisitions;
     } catch (e) {
-      print('Error loading material requisitions: $e');
+      // Remove print statements from production code
+      // Future improvement: add proper logging
     }
   }
 
@@ -63,8 +64,10 @@ class MaterialRequisitionProvider
         status: factory_model.MaterialRequisitionStatus.pending,
         createdAt: DateTime.now(),
         notes: context != null
-            ? AppLocalizations.of(context)
-                .createdFromInventoryNote(productionOrderId)
+            ? (AppLocalizations.of(context)?.createdFromInventoryNote != null
+                ? AppLocalizations.of(context)!
+                    .createdFromInventoryNote(productionOrderId)
+                : 'Created from inventory module for production order $productionOrderId')
             : 'Created from inventory module for production order $productionOrderId',
       );
 
@@ -96,7 +99,8 @@ class MaterialRequisitionProvider
 
       return factoryRequisition.id;
     } catch (e) {
-      print('Error creating material requisition: $e');
+      // Remove print statements from production code
+      // Future improvement: add proper logging
       rethrow;
     }
   }
@@ -126,7 +130,8 @@ class MaterialRequisitionProvider
 
       await _loadMaterialRequisitions();
     } catch (e) {
-      print('Error updating material requisition status: $e');
+      // Remove print statements from production code
+      // Future improvement: add proper logging
       rethrow;
     }
   }
@@ -140,10 +145,10 @@ class MaterialRequisitionProvider
           .collection('material_requisitions')
           .doc(requisitionId)
           .get();
-
       if (!docSnapshot.exists) {
         throw Exception(context != null
-            ? AppLocalizations.of(context).materialRequisitionNotFound
+            ? (AppLocalizations.of(context)?.materialRequisitionNotFound ??
+                'Material requisition not found')
             : 'Material requisition not found');
       }
 
@@ -156,6 +161,14 @@ class MaterialRequisitionProvider
       final pickingLocations = Map<String, List<Map<String, dynamic>>>.from(
           data['pickingLocations'] as Map<String, dynamic>);
 
+      // Store any localized strings before async operations to avoid context usage across async gaps
+      final String reasonText = context != null
+          ? (AppLocalizations.of(context)?.materialRequisitionReason != null
+              ? AppLocalizations.of(context)!
+                  .materialRequisitionReason(requisitionId)
+              : 'Material requisition: $requisitionId')
+          : 'Material requisition: $requisitionId';
+
       // Decrease inventory for each material
       final inventoryNotifier = _ref.read(inventoryProvider.notifier);
 
@@ -167,10 +180,7 @@ class MaterialRequisitionProvider
           await inventoryNotifier.decreaseStock(
             itemId: material.materialId,
             quantity: material.quantity,
-            reason: context != null
-                ? AppLocalizations.of(context)
-                    .materialRequisitionReason(requisitionId)
-                : 'Material requisition: $requisitionId',
+            reason: reasonText,
             referenceId: requisitionId,
           );
         } else {
@@ -180,10 +190,7 @@ class MaterialRequisitionProvider
               itemId: material.materialId,
               quantity: (location['quantity'] as num).toDouble(),
               locationId: location['locationId'] as String,
-              reason: context != null
-                  ? AppLocalizations.of(context)
-                      .materialRequisitionReason(requisitionId)
-                  : 'Material requisition: $requisitionId',
+              reason: reasonText,
               referenceId: requisitionId,
               batchNumber: location['batchNumber'] as String?,
             );
@@ -195,7 +202,8 @@ class MaterialRequisitionProvider
       await updateRequisitionStatus(
           requisitionId, factory_model.MaterialRequisitionStatus.completed);
     } catch (e) {
-      print('Error fulfilling material requisition: $e');
+      // Remove print statements from production code
+      // Future improvement: add proper logging
       rethrow;
     }
   }
@@ -221,7 +229,8 @@ class MaterialRequisitionProvider
             .toList(),
       );
     } catch (e) {
-      print('Error getting material requisition: $e');
+      // Remove print statements from production code
+      // Future improvement: add proper logging
       return null;
     }
   }
@@ -248,7 +257,8 @@ class MaterialRequisitionProvider
         );
       }).toList();
     } catch (e) {
-      print('Error getting material requisitions: $e');
+      // Remove print statements from production code
+      // Future improvement: add proper logging
       return [];
     }
   }

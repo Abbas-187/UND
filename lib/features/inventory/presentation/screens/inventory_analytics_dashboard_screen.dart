@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/providers/inventory_provider.dart';
 import '../providers/inventory_provider.dart';
@@ -23,11 +23,11 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.inventoryAnalyticsDashboard),
+        title: Text(l10n?.inventoryAnalyticsDashboard ?? ''),
         actions: [
           IconButton(
             icon: const Icon(Icons.description),
-            tooltip: l10n.inventoryReports,
+            tooltip: l10n?.inventoryReports ?? '',
             onPressed: () {
               // TODO: Remove old reports screen reference
               // Navigator.push(
@@ -40,7 +40,7 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.show_chart),
-            tooltip: l10n.inventoryTrends,
+            tooltip: l10n?.inventoryTrends ?? '',
             onPressed: () {
               Navigator.push(
                 context,
@@ -52,7 +52,7 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: l10n.refreshData,
+            tooltip: l10n?.refreshData ?? '',
             onPressed: () {
               // Refresh data
               ref.invalidate(inventoryValueProvider);
@@ -76,7 +76,7 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.inventoryHealth,
+                      l10n?.inventoryHealth ?? '',
                       style: theme.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -86,7 +86,7 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                           context,
                           icon: Icons.warning_amber_outlined,
                           color: Colors.orange,
-                          title: l10n.lowStockItems,
+                          title: l10n?.lowStockItems ?? '',
                           value: '${items.length}',
                           onTap: () {
                             // Navigate to filtered inventory screen
@@ -96,7 +96,8 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                       error: (error, _) => Center(
-                        child: Text(l10n.errorWithMessage(error.toString())),
+                        child: Text(l10n?.errorWithMessage(error.toString()) ??
+                            error.toString()),
                       ),
                     ),
                   ],
@@ -114,7 +115,7 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.valueByCategory,
+                      l10n?.valueByCategory ?? '',
                       style: theme.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -139,7 +140,7 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                                 children: [
                                   Text(entry.key),
                                   Text(
-                                    '${l10n.currencySymbol}${entry.value.toStringAsFixed(2)}',
+                                    '${l10n?.currencySymbol ?? ''}${entry.value.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -152,7 +153,8 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                       error: (error, _) => Center(
-                        child: Text(l10n.errorWithMessage(error.toString())),
+                        child: Text(l10n?.errorWithMessage(error.toString()) ??
+                            error.toString()),
                       ),
                     ),
                   ],
@@ -173,14 +175,14 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          l10n.topMovingItems,
+                          l10n?.topMovingItems ?? '',
                           style: theme.textTheme.titleLarge,
                         ),
                         TextButton(
                           onPressed: () {
                             // Navigate to dedicated screen if needed
                           },
-                          child: Text(l10n.seeDetails),
+                          child: Text(l10n?.seeDetails ?? ''),
                         ),
                       ],
                     ),
@@ -201,7 +203,8 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                       error: (error, _) => Center(
-                        child: Text(l10n.errorWithMessage(error.toString())),
+                        child: Text(l10n?.errorWithMessage(error.toString()) ??
+                            error.toString()),
                       ),
                     ),
                   ],
@@ -222,14 +225,14 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          l10n.slowMovingItems,
+                          l10n?.slowMovingItems ?? '',
                           style: theme.textTheme.titleLarge,
                         ),
                         TextButton(
                           onPressed: () {
                             // Navigate to dedicated screen if needed
                           },
-                          child: Text(l10n.seeDetails),
+                          child: Text(l10n?.seeDetails ?? ''),
                         ),
                       ],
                     ),
@@ -250,7 +253,8 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
                       error: (error, _) => Center(
-                        child: Text(l10n.errorWithMessage(error.toString())),
+                        child: Text(l10n?.errorWithMessage(error.toString()) ??
+                            error.toString()),
                       ),
                     ),
                   ],
@@ -309,7 +313,7 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
     BuildContext context,
     List<InventoryItem> items,
     WidgetRef ref,
-    AppLocalizations l10n,
+    AppLocalizations? l10n,
   ) {
     // Show only top 5 items in the summary
     final displayItems = items.take(5).toList();
@@ -331,8 +335,8 @@ class InventoryAnalyticsDashboardScreen extends ConsumerWidget {
               // Use movement frequency instead of monthlyUsage
               Text(
                 index < 3
-                    ? '${5 - index} ${l10n.unitsPerMonth}'
-                    : '< 1 ${l10n.unitsPerMonth}',
+                    ? '${5 - index} ${l10n?.unitsPerMonth ?? ''}'
+                    : '< 1 ${l10n?.unitsPerMonth ?? ''}',
                 style: const TextStyle(color: Colors.grey),
               ),
               const SizedBox(width: 8),

@@ -3,9 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/order_mapper.dart';
 import '../../data/models/order_model.dart';
 import '../../domain/providers/order_usecase_providers.dart';
+import '../../domain/entities/order_audit_trail_entity.dart';
+import '../../data/providers/order_data_layer_providers.dart';
+import '../../data/providers/order_audit_trail_data_layer_providers.dart';
+import '../../data/services/notification_service.dart';
+import '../../data/services/order_status_automation_service.dart';
+import '../../domain/providers/order_audit_trail_usecase_providers.dart';
 
 class OrderNotifier extends StateNotifier<AsyncValue<List<OrderModel>>> {
-
   OrderNotifier(this.ref) : super(const AsyncValue.loading()) {
     fetchOrders();
   }
@@ -64,6 +69,120 @@ class OrderNotifier extends StateNotifier<AsyncValue<List<OrderModel>>> {
       state = AsyncValue.error(e, st);
       rethrow;
     }
+  }
+
+  Future<OrderModel> fulfillOrder(OrderModel order) async {
+    final usecase = ref.read(fulfillOrderUseCaseProvider);
+    final entity = OrderMapper.toEntity(order);
+    final fulfilled = await usecase.execute(entity);
+    final fulfilledOrder = OrderMapper.fromEntity(fulfilled);
+    final current = state.value ?? [];
+    final idx = current.indexWhere((o) => o.id == fulfilledOrder.id);
+    if (idx >= 0) {
+      final newList = [...current];
+      newList[idx] = fulfilledOrder;
+      state = AsyncValue.data(newList);
+    }
+    // Integrate status automation
+    final statusAutomationService = OrderStatusAutomationService(
+      orderRepository: ref.read(orderRepositoryProvider),
+      auditTrailService: ref.read(orderAuditTrailServiceProvider),
+      notificationService: ref.read(notificationServiceProvider),
+    );
+    await statusAutomationService.automateStatusTransition(fulfilled);
+    return fulfilledOrder;
+  }
+
+  Future<OrderModel> fulfillOrderItem(
+      OrderModel order, Map<String, dynamic> item, double quantity) async {
+    final usecase = ref.read(updateOrderUseCaseProvider);
+    final entity = OrderMapper.toEntity(order);
+    final fulfillmentUpdates = [
+      {
+        'productId': item['productId'],
+        'fulfilledQuantity': (item['fulfilledQuantity'] ?? 0) + quantity,
+        'backorderedQuantity':
+            (item['backorderedQuantity'] ?? item['quantity']) - quantity,
+        'fulfillmentStatus':
+            ((item['backorderedQuantity'] ?? item['quantity']) - quantity) > 0
+                ? 'backordered'
+                : 'fulfilled',
+      }
+    ];
+    final updated =
+        await usecase.partialFulfillment(entity, fulfillmentUpdates);
+    final updatedOrder = OrderMapper.fromEntity(updated);
+    final current = state.value ?? [];
+    final idx = current.indexWhere((o) => o.id == updatedOrder.id);
+    if (idx >= 0) {
+      final newList = [...current];
+      newList[idx] = updatedOrder;
+      state = AsyncValue.data(newList);
+    }
+    // Integrate status automation
+    final statusAutomationService = OrderStatusAutomationService(
+      orderRepository: ref.read(orderRepositoryProvider),
+      auditTrailService: ref.read(orderAuditTrailServiceProvider),
+      notificationService: ref.read(notificationServiceProvider),
+    );
+    await statusAutomationService.automateStatusTransition(updated);
+    return updatedOrder;
+  }
+
+  Future<void> requestProcurement(OrderModel order, Map<String, dynamic> item,
+      double quantity, String? notes) async {
+    await Future.delayed(const Duration(seconds: 1));
+    // Log audit trail
+    final logUsecase = ref.read(logOrderItemsChangeUseCaseProvider);
+    final entry = OrderAuditTrailEntity(
+      id: '',
+      orderId: order.id,
+      action: 'Procurement Requested',
+      userId: 'system',
+      timestamp: DateTime.now(),
+      before: null,
+      after: {
+        'productId': item['productId'],
+        'quantity': quantity,
+        'notes': notes,
+      },
+      justification: notes,
+    );
+    await logUsecase.execute(entry);
+    // Notify procurement team
+    try {
+      final notificationService = ref.read(notificationServiceProvider);
+      await notificationService.notifyProcurement(
+        orderId: order.id,
+        productId: item['productId'],
+        quantity: quantity,
+        notes: notes,
+        location: order.shippingAddress?.toString() ?? '',
+      );
+    } catch (e) {
+      // Optionally log or handle notification error
+    }
+  }
+
+  Future<void> resolveBackorder(
+      OrderModel order, Map<String, dynamic> item, String note) async {
+    await Future.delayed(const Duration(seconds: 1));
+    // Log audit trail
+    final logUsecase = ref.read(logOrderItemsChangeUseCaseProvider);
+    final entry = OrderAuditTrailEntity(
+      id: '',
+      orderId: order.id,
+      action: 'Backorder Resolved',
+      userId: 'system',
+      timestamp: DateTime.now(),
+      before: null,
+      after: {
+        'productId': item['productId'],
+        'note': note,
+      },
+      justification: note,
+    );
+    await logUsecase.execute(entry);
   }
 }
 

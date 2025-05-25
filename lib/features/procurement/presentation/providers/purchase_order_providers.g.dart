@@ -180,7 +180,7 @@ final purchaseOrdersNotifierProvider = AutoDisposeNotifierProvider<
 
 typedef _$PurchaseOrdersNotifier = AutoDisposeNotifier<PurchaseOrdersState>;
 String _$purchaseOrderDetailNotifierHash() =>
-    r'3d5da8411c66209d9515a0fc6731f54b3e6d52b2';
+    r'b1b39ec66a0af242b977fe5d3a0ca13fe25327b0';
 
 /// Copied from Dart SDK
 class _SystemHash {

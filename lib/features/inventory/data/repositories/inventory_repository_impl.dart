@@ -502,7 +502,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
           final costLayer = CostLayer(
             id: '', // Firestore will generate the ID, or you can use docRef.id if available
             itemId: item.itemId,
-            warehouseId: movement.warehouseId ?? '',
+            warehouseId: movement.warehouseId,
             batchLotNumber: item.batchLotNumber ?? 'unknown-batch',
             initialQuantity: item.quantity,
             remainingQuantity: item.quantity,
@@ -731,8 +731,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
           .where('remainingQuantity', isGreaterThan: 0);
 
       final snapshot = await query.get();
-
-      return snapshot.docs.map((doc) {
+      final costLayers = snapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return CostLayer(
           id: doc.id,
@@ -755,6 +754,28 @@ class InventoryRepositoryImpl implements InventoryRepository {
               : DateTime.now(),
         );
       }).toList();
+
+      // Fetch inventory item for quality status
+      final itemDoc = await _inventoryCollection.doc(itemId).get();
+      if (!itemDoc.exists) return [];
+      final item = InventoryItemModel.fromFirestore(itemDoc).toDomain();
+      final attrs = item.additionalAttributes ?? {};
+      final batchStatuses =
+          attrs['batchQualityStatus'] as Map<String, dynamic>?;
+      final itemStatus = attrs['qualityStatus'];
+
+      // Filter cost layers by quality status == 'AVAILABLE'
+      final filtered = costLayers.where((layer) {
+        if (batchStatuses != null) {
+          final status = batchStatuses[layer.batchLotNumber];
+          return status == 'AVAILABLE';
+        }
+        return itemStatus == 'AVAILABLE';
+      }).toList();
+
+      // Sort by movementDate (FIFO by default)
+      filtered.sort((a, b) => a.movementDate.compareTo(b.movementDate));
+      return filtered;
     } catch (e, stackTrace) {
       _loggingService.error(
           'Failed to get available cost layers', e, stackTrace);
@@ -862,5 +883,14 @@ class InventoryRepositoryImpl implements InventoryRepository {
   Future<List<ItemCostHistoryEntry>> getItemCostHistory(
       String itemId, DateTime startDate, DateTime endDate) {
     throw UnimplementedError('getItemCostHistory is not implemented');
+  }
+
+  @override
+  Future<bool> allocateInventoryForRecipe(
+      String recipeId, double quantity) async {
+    // Implement logic to allocate inventory for a recipe
+    // This is a placeholder implementation
+    throw UnimplementedError(
+        'allocateInventoryForRecipe is not implemented yet.');
   }
 }

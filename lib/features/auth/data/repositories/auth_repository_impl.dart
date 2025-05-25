@@ -4,7 +4,6 @@ import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_remote_datasource.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-
   AuthRepositoryImpl(this.remoteDataSource);
   final AuthRemoteDataSource remoteDataSource;
 
@@ -41,6 +40,16 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<User?> getCurrentUser() async {
     try {
       return await remoteDataSource.getCurrentUser();
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  @override
+  Future<String?> getCurrentUserId() async {
+    try {
+      final user = await remoteDataSource.getCurrentUser();
+      return user?.id;
     } catch (e) {
       throw _handleError(e);
     }

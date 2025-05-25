@@ -4,7 +4,6 @@ import '../../data/models/inventory_movement_model.dart';
 import '../entities/cost_layer.dart';
 import '../entities/cost_method_setting.dart';
 import '../entities/inventory_item.dart';
-import '../entities/inventory_movement.dart';
 
 /// Repository interface for inventory management
 abstract class InventoryRepository {
@@ -192,11 +191,13 @@ abstract class InventoryRepository {
     DateTime startDate,
     DateTime endDate,
   );
+
+  /// Allocates inventory based on a recipe
+  Future<bool> allocateInventoryForRecipe(String recipeId, double batchSize);
 }
 
 /// Inventory valuation for a single item
 class InventoryValuation {
-
   InventoryValuation({
     required this.itemId,
     required this.itemCode,
@@ -225,7 +226,6 @@ enum PickingStrategy {
 
 /// A suggestion for picking inventory
 class PickingSuggestion {
-
   PickingSuggestion({
     required this.itemId,
     this.batchLotNumber,
@@ -254,7 +254,6 @@ class PickingSuggestion {
 
 /// Simple warehouse model for the repository
 class Warehouse {
-
   const Warehouse({
     required this.id,
     required this.name,
@@ -269,7 +268,6 @@ class Warehouse {
 
 /// Model for item cost history entries
 class ItemCostHistoryEntry {
-
   const ItemCostHistoryEntry({
     required this.itemId,
     required this.date,

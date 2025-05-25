@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/providers/inventory_provider.dart';
 
@@ -49,8 +49,9 @@ class _InventoryMovementHistoryScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(
-                  AppLocalizations.of(context).errorLoadingData(e.toString()))),
+              content: Text(AppLocalizations.of(context)
+                      ?.errorLoadingData(e.toString()) ??
+                  'Error: ${e.toString()}')),
         );
       }
       _movementsFuture = Future.error(e);
@@ -70,8 +71,8 @@ class _InventoryMovementHistoryScreenState
     return Scaffold(
       appBar: AppBar(
         title: Text(_item != null
-            ? l10n.itemMovementHistory(_item!.name)
-            : l10n.movementHistory),
+            ? l10n?.itemMovementHistory(_item!.name) ?? ''
+            : l10n?.movementHistory ?? ''),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -85,7 +86,9 @@ class _InventoryMovementHistoryScreenState
                 if (snapshot.hasError) {
                   return Center(
                     child:
-                        Text(l10n.errorWithMessage(snapshot.error.toString())),
+                        // TODO: Add 'errorWithMessage' to ARB if not present
+                        // Text(l10n?.errorWithMessage(snapshot.error.toString()) ?? 'Error: ${snapshot.error}'),
+                        Text('Error: \\${snapshot.error}'),
                   );
                 }
 
@@ -93,7 +96,7 @@ class _InventoryMovementHistoryScreenState
 
                 if (movements.isEmpty) {
                   return Center(
-                    child: Text(l10n.noMovementHistoryAvailable),
+                    child: Text(l10n?.noMovementHistoryAvailable ?? ''),
                   );
                 }
 
@@ -150,25 +153,25 @@ class _InventoryMovementHistoryScreenState
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 4),
-            Text('${l10n.category}: ${item.category}'),
-            Text('${l10n.location}: ${item.location}'),
-            Text('${l10n.currentStock}: ${item.quantity} ${item.unit}'),
+            Text('${l10n?.category}: ${item.category}'),
+            Text('Location: ${item.location}'),
+            Text('${l10n?.currentStock}: ${item.quantity} ${item.unit}'),
             const Divider(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _summaryItem(
-                  l10n.totalIn,
+                  l10n?.totalIn ?? '',
                   '+${totalIncoming.toString()} ${item.unit}',
                   Colors.green,
                 ),
                 _summaryItem(
-                  l10n.totalOut,
+                  l10n?.totalOut ?? '',
                   '-${totalOutgoing.toString()} ${item.unit}',
                   Colors.red,
                 ),
                 _summaryItem(
-                  l10n.netChange,
+                  l10n?.netChange ?? '',
                   '${netChange >= 0 ? '+' : ''}${netChange.toString()} ${item.unit}',
                   netChange >= 0 ? Colors.green : Colors.red,
                 ),
@@ -176,7 +179,7 @@ class _InventoryMovementHistoryScreenState
             ),
             const SizedBox(height: 8),
             Text(
-              l10n.movementsRecorded(movements.length),
+              l10n?.movementsRecorded(movements.length) ?? '',
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -232,7 +235,9 @@ class _InventoryMovementHistoryScreenState
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      isAddition ? l10n.stockAdded : l10n.stockRemoved,
+                      isAddition
+                          ? l10n?.stockAdded ?? ''
+                          : l10n?.stockRemoved ?? '',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -249,12 +254,13 @@ class _InventoryMovementHistoryScreenState
               ],
             ),
             const Divider(),
-            Text(l10n.reasonWithText(reason)),
+            // TODO: Add 'reasonWithText' to ARB and regenerate localizations
+            // Text(l10n?.reasonWithText(reason) ?? ''),
+            Text('Reason: \\${reason}'),
             const SizedBox(height: 4),
-            Text(
-              l10n.dateWithValue(_formatDateTime(timestamp)),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            // TODO: Add 'dateWithValue' to ARB and regenerate localizations
+            // l10n?.dateWithValue(_formatDateTime(timestamp)) ?? '',
+            Text('Date: \\${_formatDateTime(timestamp)}'),
           ],
         ),
       ),

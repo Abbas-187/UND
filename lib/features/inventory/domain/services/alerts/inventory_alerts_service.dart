@@ -14,8 +14,9 @@ class InventoryAlertsService {
       if (item.quantity <= item.lowStockThreshold) {
         alerts.add(
           InventoryAlert(
-            id: 'low-stock-${item.id}',
-            itemId: item.id,
+            id: 'low-stock-${item.id ?? item.appItemId}',
+            itemId: item.id ??
+                item.appItemId, // Use appItemId as fallback if id is null
             itemName: item.name,
             alertType: AlertType.lowStock,
             message:
@@ -46,8 +47,9 @@ class InventoryAlertsService {
       if (daysToExpiry < 0) {
         alerts.add(
           InventoryAlert(
-            id: 'expired-${item.id}',
-            itemId: item.id,
+            id: 'expired-${item.id ?? item.appItemId}',
+            itemId: item.id ??
+                item.appItemId, // Use appItemId as fallback if id is null
             itemName: item.name,
             alertType: AlertType.expired,
             message: 'Item expired on ${_formatDate(item.expiryDate!)}',
@@ -66,8 +68,9 @@ class InventoryAlertsService {
 
         alerts.add(
           InventoryAlert(
-            id: 'expiring-soon-${item.id}',
-            itemId: item.id,
+            id: 'expiring-soon-${item.id ?? item.appItemId}',
+            itemId: item.id ??
+                item.appItemId, // Use appItemId as fallback if id is null
             itemName: item.name,
             alertType: AlertType.expiringSoon,
             message:

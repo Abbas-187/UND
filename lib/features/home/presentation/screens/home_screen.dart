@@ -1,22 +1,169 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../core/routes/app_go_router.dart';
-import '../../../../core/utils/app_reset_utility.dart';
 import '../../../../features/shared/models/app_modules.dart';
 import '../../../../features/shared/models/user_role.dart';
 import '../../../../features/shared/providers/selected_route_provider.dart';
 import '../../../../features/shared/providers/selected_screen_title_provider.dart';
 import '../../../../features/shared/providers/user_role_provider.dart';
-import '../../../../l10n/app_localizations.dart';
+
+final Map<String, String Function(AppLocalizations)> l10nModuleGetters = {
+  // Module names
+  'inventory': (l10n) => l10n.inventory,
+  'factory': (l10n) => l10n.factory,
+  'milkReception': (l10n) => l10n.milkReception,
+  'procurement': (l10n) => l10n.procurement,
+  'analytics': (l10n) => l10n.analytics,
+  'forecasting': (l10n) => l10n.forecasting,
+  'orderManagement': (l10n) => l10n.orderManagement,
+  'crm': (l10n) => l10n.crm,
+  'sales': (l10n) => l10n.sales,
+
+  // Inventory module screens
+  'inventoryDashboard': (l10n) => l10n.inventoryDashboard,
+  'inventoryDashboardDesc': (l10n) => l10n.inventoryDashboardDesc,
+  'inventoryMain': (l10n) => l10n.inventoryMain,
+  'inventoryListDesc': (l10n) => l10n.inventoryListDesc,
+  'inventoryAlerts': (l10n) => l10n.inventoryAlerts,
+  'inventoryAlertsDesc': (l10n) => l10n.inventoryAlertsDesc,
+  'inventoryMovements': (l10n) => l10n.inventoryMovements,
+  'inventoryMovementsDesc': (l10n) => l10n.inventoryMovementsDesc,
+  'createMovement': (l10n) => l10n.createMovement,
+  'createMovementDesc': (l10n) => l10n.createMovementDesc,
+  'inventoryBatchScanner': (l10n) => l10n.inventoryBatchScanner,
+  'inventoryBatchScannerDesc': (l10n) => l10n.inventoryBatchScannerDesc,
+  'inventoryEdit': (l10n) => l10n.inventoryEdit,
+  'inventoryEditDesc': (l10n) => l10n.inventoryEditDesc,
+  'inventoryAnalytics': (l10n) => l10n.inventoryAnalytics,
+  'inventoryAnalyticsDesc': (l10n) => l10n.inventoryAnalyticsDesc,
+  'inventoryTrends': (l10n) => l10n.inventoryTrends,
+  'inventoryTrendsDesc': (l10n) => l10n.inventoryTrendsDesc,
+  'inventoryBarcodeScan': (l10n) => l10n.inventoryBarcodeScan,
+  'inventoryBarcodeScanDesc': (l10n) => l10n.inventoryBarcodeScanDesc,
+  'inventoryBatchInventory': (l10n) => l10n.inventoryBatchInventory,
+  'inventoryBatchInventoryDesc': (l10n) => l10n.inventoryBatchInventoryDesc,
+  'dairyInventory': (l10n) => l10n.dairyInventory,
+  'dairyInventoryDesc': (l10n) => l10n.dairyInventoryDesc,
+  'dairyInventoryDemo': (l10n) => l10n.dairyInventoryDemo,
+  'dairyInventoryDemoDesc': (l10n) => l10n.dairyInventoryDemoDesc,
+  'inventoryCategoryManagement': (l10n) => l10n.inventoryCategoryManagement,
+  'inventoryCategoryManagementDesc': (l10n) =>
+      l10n.inventoryCategoryManagementDesc,
+  'inventoryAdjustmentHistory': (l10n) => l10n.inventoryAdjustmentHistory,
+  'inventoryAdjustmentHistoryDesc': (l10n) =>
+      l10n.inventoryAdjustmentHistoryDesc,
+  'inventoryReports': (l10n) => l10n.inventoryReports,
+  'inventoryReportsDesc': (l10n) => l10n.inventoryReportsDesc,
+  'inventoryReportDedicated': (l10n) => l10n.inventoryReportDedicated,
+  'inventoryReportDedicatedDesc': (l10n) => l10n.inventoryReportDedicatedDesc,
+  'inventorySettings': (l10n) => l10n.inventorySettings,
+  'inventorySettingsDesc': (l10n) => l10n.inventorySettingsDesc,
+  'inventoryDatabaseManagement': (l10n) => l10n.inventoryDatabaseManagement,
+  'inventoryDatabaseManagementDesc': (l10n) =>
+      l10n.inventoryDatabaseManagementDesc,
+
+  // Factory module screens
+  'productionExecutions': (l10n) => l10n.productionExecutions,
+  'productionExecutionsDesc': (l10n) => l10n.productionExecutionsDesc,
+  'createProductionExecution': (l10n) => l10n.createProductionExecution,
+  'createProductionExecutionDesc': (l10n) => l10n.createProductionExecutionDesc,
+  'productionExecutionList': (l10n) => l10n.productionExecutionList,
+  'productionExecutionListDesc': (l10n) => l10n.productionExecutionListDesc,
+  'batchTracking': (l10n) => l10n.batchTracking,
+  'batchTrackingDesc': (l10n) => l10n.batchTrackingDesc,
+  'productionPlanDetail': (l10n) => l10n.productionPlanDetail,
+  'productionPlanDetailDesc': (l10n) => l10n.productionPlanDetailDesc,
+  'productionScheduling': (l10n) => l10n.productionScheduling,
+  'productionSchedulingDesc': (l10n) => l10n.productionSchedulingDesc,
+  'equipmentMaintenance': (l10n) => l10n.equipmentMaintenance,
+  'equipmentMaintenanceDesc': (l10n) => l10n.equipmentMaintenanceDesc,
+  'createMaintenanceRecord': (l10n) => l10n.createMaintenanceRecord,
+  'createMaintenanceRecordDesc': (l10n) => l10n.createMaintenanceRecordDesc,
+  'addEditEquipment': (l10n) => l10n.addEditEquipment,
+  'addEditEquipmentDesc': (l10n) => l10n.addEditEquipmentDesc,
+  'productionList': (l10n) => l10n.productionList,
+  'productionListDesc': (l10n) => l10n.productionListDesc,
+  'productionExecutionDetail': (l10n) => l10n.productionExecutionDetail,
+  'productionExecutionDetailDesc': (l10n) => l10n.productionExecutionDetailDesc,
+  'recipeList': (l10n) => l10n.recipeList,
+  'recipeListDesc': (l10n) => l10n.recipeListDesc,
+  'recipeCreate': (l10n) => l10n.recipeCreate,
+  'recipeCreateDesc': (l10n) => l10n.recipeCreateDesc,
+  'recipeDetail': (l10n) => l10n.recipeDetail,
+  'recipeDetailDesc': (l10n) => l10n.recipeDetailDesc,
+  'equipmentDetail': (l10n) => l10n.equipmentDetail,
+  'equipmentDetailDesc': (l10n) => l10n.equipmentDetailDesc,
+  'maintenanceRecordDetail': (l10n) => l10n.maintenanceRecordDetail,
+  'maintenanceRecordDetailDesc': (l10n) => l10n.maintenanceRecordDetailDesc,
+
+  // Milk Reception module screens
+  'milkReceptionScreen': (l10n) => l10n.milkReceptionScreen,
+  'milkReceptionDesc': (l10n) => l10n.milkReceptionDesc,
+  'milkQualityTests': (l10n) => l10n.milkQualityTests,
+  'milkQualityTestsDesc': (l10n) => l10n.milkQualityTestsDesc,
+
+  // Procurement module screens
+  'purchaseOrders': (l10n) => l10n.purchaseOrders,
+  'purchaseOrdersDesc': (l10n) => l10n.purchaseOrdersDesc,
+  'createPurchaseOrder': (l10n) => l10n.createPurchaseOrder,
+  'createPurchaseOrderDesc': (l10n) => l10n.createPurchaseOrderDesc,
+  'suppliers': (l10n) => l10n.suppliers,
+  'suppliersDesc': (l10n) => l10n.suppliersDesc,
+  'poApprovalsList': (l10n) => l10n.poApprovalsList,
+  'poApprovalsListDesc': (l10n) => l10n.poApprovalsListDesc,
+
+  // Analytics module screens
+  'analyticsDashboard': (l10n) => l10n.analyticsDashboard,
+  'analyticsDashboardDesc': (l10n) => l10n.analyticsDashboardDesc,
+
+  // Forecasting module screens
+  'forecastingList': (l10n) => l10n.forecastingList,
+  'forecastingDesc': (l10n) => l10n.forecastingDesc,
+  'forecastingCreate': (l10n) => l10n.forecastingCreate,
+  'forecastingCreateDesc': (l10n) => l10n.forecastingCreateDesc,
+  'forecastingDashboard': (l10n) => l10n.forecastingDashboard,
+  'forecastingDashboardDesc': (l10n) => l10n.forecastingDashboardDesc,
+
+  // Order Management module screens
+  'orderList': (l10n) => l10n.orderList,
+  'orderListDesc': (l10n) => l10n.orderListDesc,
+  'createOrder': (l10n) => l10n.createOrder,
+  'createOrderDesc': (l10n) => l10n.createOrderDesc,
+
+  // CRM module screens
+  'customerList': (l10n) => l10n.customerList,
+  'customerListDesc': (l10n) => l10n.customerListDesc,
+  'customerDetails': (l10n) => l10n.customerDetails,
+  'customerDetailsDesc': (l10n) => l10n.customerDetailsDesc,
+  'leadManagement': (l10n) => l10n.leadManagement,
+  'leadManagementDesc': (l10n) => l10n.leadManagementDesc,
+  'interactions': (l10n) => l10n.interactions,
+  'interactionsDesc': (l10n) => l10n.interactionsDesc,
+
+  // Sales module screens
+  'salesOrders': (l10n) => l10n.salesOrders,
+  'salesOrdersDesc': (l10n) => l10n.salesOrdersDesc,
+  'salesCustomers': (l10n) => l10n.salesCustomers,
+  'salesCustomersDesc': (l10n) => l10n.salesCustomersDesc,
+  'salesDashboard': (l10n) => l10n.salesDashboard,
+  'salesDashboardDesc': (l10n) => l10n.salesDashboardDesc,
+  'salesAnalytics': (l10n) => l10n.salesAnalytics,
+  'salesAnalyticsDesc': (l10n) => l10n.salesAnalyticsDesc,
+};
+
+String getL10nString(AppLocalizations l10n, String key) {
+  return l10nModuleGetters[key]?.call(l10n) ?? key;
+}
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
     final bool isLargeScreen = size.width > 600;
     final theme = Theme.of(context);
@@ -55,7 +202,7 @@ class HomeScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.welcomeToUndManager,
+                      l10n.welcomeToUndManager ?? '',
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: theme.colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
@@ -101,7 +248,7 @@ class HomeScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  selectedScreenTitle,
+                                  selectedScreenTitle ?? '',
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: theme.colorScheme.onPrimary
                                         .withOpacity(0.95),
@@ -149,7 +296,7 @@ class HomeScreen extends ConsumerWidget {
             actions: [
               if (userRole.canAccessNotifications)
                 Tooltip(
-                  message: l10n.notifications,
+                  message: l10n.notifications ?? '',
                   child: IconButton(
                     icon: const Icon(Icons.notifications_outlined),
                     onPressed: () {
@@ -167,7 +314,7 @@ class HomeScreen extends ConsumerWidget {
                 ),
               if (userRole.canAccessSettings)
                 Tooltip(
-                  message: l10n.settings,
+                  message: l10n.settings ?? '',
                   child: IconButton(
                     icon: const Icon(Icons.settings),
                     onPressed: () {
@@ -224,7 +371,7 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      l10n.modules,
+                      l10n.modules ?? '',
                       style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.primary,
@@ -490,7 +637,7 @@ class HomeScreen extends ConsumerWidget {
 
               return _buildModuleSection(
                 context,
-                l10n.getModuleName(module.nameKey) ?? module.nameKey,
+                getL10nString(l10n, module.nameKey),
                 module,
                 selectedRoute,
               );
@@ -528,7 +675,7 @@ class HomeScreen extends ConsumerWidget {
 
                 return _buildModuleCard(
                   context,
-                  l10n.getModuleName(module.nameKey) ?? module.nameKey,
+                  getL10nString(l10n, module.nameKey),
                   module,
                   selectedRoute,
                 );
@@ -567,10 +714,9 @@ class HomeScreen extends ConsumerWidget {
           } else if (module.screens.isNotEmpty) {
             // If module has only one screen, navigate directly
             // Show feedback snackbar
-            final l10n = AppLocalizations.of(context);
+            final l10n = AppLocalizations.of(context)!;
             final screenName =
-                l10n.getScreenName(module.screens.first.nameKey) ??
-                    module.screens.first.nameKey;
+                getL10nString(l10n, module.screens.first.nameKey);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Navigating to: $screenName'),
@@ -643,7 +789,7 @@ class HomeScreen extends ConsumerWidget {
     // Capture GoRouter context for navigation
     final goRouterContext = context;
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     showModalBottomSheet(
       context: context,
@@ -747,11 +893,9 @@ class HomeScreen extends ConsumerWidget {
                     itemCount: module.screens.length,
                     itemBuilder: (context, index) {
                       final screen = module.screens[index];
-                      final screenName =
-                          l10n.getScreenName(screen.nameKey) ?? screen.nameKey;
+                      final screenName = getL10nString(l10n, screen.nameKey);
                       final description =
-                          l10n.getScreenDescription(screen.descriptionKey) ??
-                              '';
+                          getL10nString(l10n, screen.descriptionKey);
 
                       return ListTile(
                         leading: Container(
@@ -809,7 +953,7 @@ class HomeScreen extends ConsumerWidget {
 
   Widget _buildModuleSection(BuildContext context, String title,
       AppModule module, String selectedRoute) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Card(
@@ -897,7 +1041,7 @@ class HomeScreen extends ConsumerWidget {
           if (module.screens.isEmpty)
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Text(l10n.noScreensAvailable),
+              child: Text(l10n.noScreensAvailable ?? ''),
             )
           else
             Padding(
@@ -930,11 +1074,9 @@ class HomeScreen extends ConsumerWidget {
                       itemCount: itemCount,
                       itemBuilder: (context, index) {
                         final screen = module.screens[index];
-                        final screenName = l10n.getScreenName(screen.nameKey) ??
-                            screen.nameKey;
+                        final screenName = getL10nString(l10n, screen.nameKey);
                         final description =
-                            l10n.getScreenDescription(screen.descriptionKey) ??
-                                '';
+                            getL10nString(l10n, screen.descriptionKey);
 
                         // If this is the last item and there are more than 6 screens,
                         // show a "More" button instead

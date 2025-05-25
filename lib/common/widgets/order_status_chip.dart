@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../features/sales/data/models/order_model.dart'; // Import OrderStatus enum
+import '../../features/order_management/data/models/order_model.dart'; // Correct import for OrderStatus enum
 
 class OrderStatusChip extends StatelessWidget {
   const OrderStatusChip({super.key, required this.status});
@@ -9,23 +9,24 @@ class OrderStatusChip extends StatelessWidget {
     switch (status) {
       case OrderStatus.draft:
         return Colors.grey;
-      case OrderStatus.pendingApproval:
+      case OrderStatus.submitted:
         return Colors.orange.shade300;
-      case OrderStatus.confirmed:
+      case OrderStatus.approved:
         return Colors.blue;
-      case OrderStatus.processing:
-        return Colors.purple;
+      case OrderStatus.fulfilled:
+        return Colors.green;
       case OrderStatus.shipped:
-      case OrderStatus.partiallyShipped:
         return Colors.teal;
       case OrderStatus.delivered:
         return Colors.cyan;
-      case OrderStatus.completed:
-        return Colors.green;
       case OrderStatus.cancelled:
         return Colors.red;
-      case OrderStatus.onHold:
-        return Colors.yellow.shade700;
+      case OrderStatus.backordered:
+        return Colors.deepOrange;
+      case OrderStatus.expired:
+        return Colors.brown;
+      case OrderStatus.rejected:
+        return Colors.black45;
     }
   }
 

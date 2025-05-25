@@ -9,10 +9,11 @@ import '../../domain/entities/order_entity.dart';
 
 /// Service to integrate order management with CRM for discussions and customer data
 class CrmIntegrationService {
-
   CrmIntegrationService({http.Client? client})
       : _client = client ?? http.Client();
   final http.Client _client;
+
+  http.Client get client => _client;
 
   Future<Map<String, dynamic>> getCustomerProfile(String customerId) async {
     final uri = Uri.parse('${ApiEndpoints.customers}/$customerId');

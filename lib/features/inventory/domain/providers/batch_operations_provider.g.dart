@@ -7,7 +7,7 @@ part of 'batch_operations_provider.dart';
 // **************************************************************************
 
 String _$batchOperationsStateHash() =>
-    r'803c13069502fa63ee91ea7518df79f160e7cb6b';
+    r'ec34079083dac17570d82188b46c9ab953f77e59';
 
 /// See also [BatchOperationsState].
 @ProviderFor(BatchOperationsState)

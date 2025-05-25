@@ -8,13 +8,11 @@ part 'inventory_aging_provider.g.dart';
 
 @riverpod
 class InventoryAging extends _$InventoryAging {
-  late final CalculateInventoryAgingUsecase _usecase;
-
   @override
   Future<Map<AgeBracket, List<InventoryItem>>> build(String warehouseId) {
     final repository = ref.watch(inventoryRepositoryProvider);
-    _usecase = CalculateInventoryAgingUsecase(repository: repository);
-    return _usecase.execute(warehouseId);
+    final usecase = CalculateInventoryAgingUsecase(repository: repository);
+    return usecase.execute();
   }
 
   /// Gets count of items expiring soon (critical and warning brackets)

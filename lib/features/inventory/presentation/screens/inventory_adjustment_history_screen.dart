@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_adjustment.dart';
 import '../providers/inventory_adjustment_provider.dart';
 import '../widgets/adjustment_details_dialog.dart';
@@ -151,7 +151,8 @@ class _InventoryAdjustmentHistoryScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.inventoryAdjustmentHistory),
+        title: Text(
+            l10n?.inventoryAdjustmentHistory ?? 'Inventory Adjustment History'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -184,7 +185,7 @@ class _InventoryAdjustmentHistoryScreenState
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: l10n.searchAdjustments,
+                      hintText: l10n?.searchAdjustments ?? 'Search adjustments',
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -198,7 +199,7 @@ class _InventoryAdjustmentHistoryScreenState
                 if (hasActiveFilters)
                   TextButton.icon(
                     icon: const Icon(Icons.clear),
-                    label: Text(l10n.clearFilters),
+                    label: Text('Clear Filters'),
                     onPressed: _clearFilters,
                   ),
               ],
@@ -293,7 +294,8 @@ class _InventoryAdjustmentHistoryScreenState
               data: (adjustments) {
                 if (adjustments.isEmpty) {
                   return Center(
-                    child: Text(l10n.noAdjustmentsFound),
+                    child: Text(
+                        l10n?.noAdjustmentsFound ?? 'No adjustments found'),
                   );
                 }
 
@@ -322,7 +324,7 @@ class _InventoryAdjustmentHistoryScreenState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '${l10n.reasonLabel}: ${adjustment.reason}',
+                              'Reason: ${adjustment.reason}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -432,14 +434,14 @@ class _InventoryAdjustmentHistoryScreenState
                             children: [
                               Expanded(
                                 child: Text(
-                                  '${l10n.pendingApprovals} (${pendingAdjustments.length})',
+                                  '${l10n?.pendingApprovals ?? 'Pending Approvals'} (${pendingAdjustments.length})',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                               TextButton(
-                                child: Text(l10n.viewAll),
+                                child: Text(l10n?.viewAll ?? 'View All'),
                                 onPressed: () {
                                   // Set filter to show only pending
                                   ref
@@ -480,7 +482,7 @@ class _InventoryAdjustmentHistoryScreenState
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          '${adjustment.quantity >= 0 ? '+' : ''}${adjustment.quantity.toStringAsFixed(1)} ${l10n.units}',
+                                          '${adjustment.quantity >= 0 ? '+' : ''}${adjustment.quantity.toStringAsFixed(1)} ${l10n?.units ?? 'units'}',
                                           style: TextStyle(
                                             color: adjustment.quantity >= 0
                                                 ? Colors.green[700]
@@ -493,14 +495,15 @@ class _InventoryAdjustmentHistoryScreenState
                                               MainAxisAlignment.end,
                                           children: [
                                             TextButton(
-                                              child: Text(l10n.approve),
+                                              child: Text(
+                                                  l10n?.approve ?? 'Approve'),
                                               onPressed: () =>
                                                   _approveAdjustment(
                                                       adjustment),
                                             ),
                                             TextButton(
                                               child: Text(
-                                                l10n.reject,
+                                                l10n?.reject ?? 'Reject',
                                                 style: TextStyle(
                                                     color: Colors.red[700]),
                                               ),
@@ -532,7 +535,7 @@ class _InventoryAdjustmentHistoryScreenState
         onPressed: () {
           // context.go('/inventory/adjustments/create');
         },
-        tooltip: l10n.createAdjustment,
+        tooltip: l10n?.createAdjustment ?? 'Create Adjustment',
         child: const Icon(Icons.add),
       ),
     );

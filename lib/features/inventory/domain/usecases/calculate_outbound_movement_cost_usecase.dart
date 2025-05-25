@@ -6,7 +6,6 @@ import '../repositories/inventory_repository.dart';
 
 /// Result of a cost calculation operation
 class CostCalculationResult {
-
   CostCalculationResult({
     required this.totalCost,
     required this.averageCostPerUnit,
@@ -27,7 +26,6 @@ class CostCalculationResult {
 
 /// Represents a usage of a cost layer in a calculation
 class CostUsage {
-
   CostUsage({
     required this.layerId,
     required this.originalMovementId,
@@ -50,7 +48,6 @@ class CostUsage {
 
 /// Calculates the cost of an outbound inventory movement using FIFO or LIFO method
 class CalculateOutboundMovementCostUseCase {
-
   CalculateOutboundMovementCostUseCase(this._repository);
   final InventoryRepository _repository;
 
@@ -63,7 +60,7 @@ class CalculateOutboundMovementCostUseCase {
     if (![
       InventoryMovementType.issue,
       InventoryMovementType.consumption,
-      InventoryMovementType.transfer_out,
+      InventoryMovementType.transferOut,
     ].contains(movement.movementType)) {
       throw ArgumentError('This use case is only for outbound movements');
     }
@@ -121,8 +118,8 @@ class CalculateOutboundMovementCostUseCase {
 
         // Track usage
         itemCostUsages.add(CostUsage(
-          layerId: layer.movementItemId,
-          originalMovementId: layer.originalMovementId,
+          layerId: layer.id,
+          originalMovementId: layer.movementId ?? '',
           batchLotNumber: layer.batchLotNumber,
           quantity: quantityFromLayer,
           costPerUnit: layer.costAtTransaction,
@@ -149,7 +146,7 @@ class CalculateOutboundMovementCostUseCase {
 
     // Calculate average cost per unit
     final averageCostPerUnit =
-        totalQuantity > 0 ? totalCost / totalQuantity : 0;
+        totalQuantity > 0 ? (totalCost / totalQuantity).toDouble() : 0.0;
 
     return CostCalculationResult(
       totalCost: totalCost,

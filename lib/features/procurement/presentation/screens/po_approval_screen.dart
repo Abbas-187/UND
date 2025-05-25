@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:flutter/services.dart';
 
 import '../../../suppliers/presentation/providers/supplier_provider.dart';
 import '../../domain/entities/purchase_order.dart';
@@ -8,7 +10,6 @@ import '../providers/po_approval_provider.dart';
 
 /// Screen for approving or declining purchase orders.
 class POApprovalScreen extends ConsumerStatefulWidget {
-
   const POApprovalScreen({
     super.key,
     required this.purchaseOrderId,
@@ -381,8 +382,16 @@ class _POApprovalScreenState extends ConsumerState<POApprovalScreen> {
     });
 
     try {
+      // Windows Hello authentication before approval
+      final didAuth = await WindowsHelloAuth().authenticate(context);
+      if (!didAuth) {
+        setState(() {
+          _showBiometricError = true;
+          _isLoading = false;
+        });
+        return;
+      }
       final userRole = ref.read(userRoleProvider);
-
       await ref.read(poApprovalWorkflowProvider).processApprovalAction(
             approvalHistory,
             userId,
@@ -391,7 +400,6 @@ class _POApprovalScreenState extends ConsumerState<POApprovalScreen> {
             null,
             userRole,
           );
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -405,7 +413,7 @@ class _POApprovalScreenState extends ConsumerState<POApprovalScreen> {
         if (e.toString().contains('Biometric validation failed')) {
           _showBiometricError = true;
         } else {
-          _errorMessage = 'Error: ${e.toString()}';
+          _errorMessage = 'Error: \\n${e.toString()}';
         }
       });
     } finally {
@@ -534,5 +542,56 @@ class _POApprovalScreenState extends ConsumerState<POApprovalScreen> {
 
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year}';
+  }
+}
+
+class WindowsHelloAuth {
+  final LocalAuthentication _auth = LocalAuthentication();
+
+  Future<bool> authenticate(BuildContext context) async {
+    try {
+      final bool canCheckBiometrics = await _auth.canCheckBiometrics;
+      final bool isDeviceSupported = await _auth.isDeviceSupported();
+      if (!canCheckBiometrics || !isDeviceSupported) {
+        await _showErrorDialog(
+            context, 'Windows Hello is not available on this device.');
+        return false;
+      }
+      final List<BiometricType> availableBiometrics =
+          await _auth.getAvailableBiometrics();
+      if (!availableBiometrics.contains(BiometricType.fingerprint)) {
+        await _showErrorDialog(context,
+            'Fingerprint is not enrolled. Windows Hello will prompt for any available method (face, PIN, etc).');
+      }
+      final bool didAuthenticate = await _auth.authenticate(
+        localizedReason: 'Please authenticate to approve this Purchase Order',
+        options: const AuthenticationOptions(
+          biometricOnly: false, // Windows does not support biometricOnly
+          stickyAuth: true,
+          useErrorDialogs: true,
+        ),
+      );
+      return didAuthenticate;
+    } on PlatformException catch (e) {
+      await _showErrorDialog(
+          context, 'Authentication failed: \\n${e.message ?? e.code}');
+      return false;
+    }
+  }
+
+  Future<void> _showErrorDialog(BuildContext context, String message) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Authentication Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 }

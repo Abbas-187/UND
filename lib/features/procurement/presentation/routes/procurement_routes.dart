@@ -12,6 +12,7 @@ import '../screens/procurement_dashboard_screen.dart';
 import '../screens/purchase_order/purchase_order_create_screen.dart';
 import '../screens/purchase_order/purchase_order_detail_screen.dart';
 import '../screens/purchase_order/purchase_order_list_screen.dart';
+import '../screens/po_approvals_list_screen.dart';
 import '../screens/reports/procurement_dashboard_screen.dart' as reports;
 
 /// Route names for the procurement feature
@@ -22,6 +23,7 @@ class ProcurementRoutes {
   static const String purchaseOrderDetail = 'purchase-order-detail';
   static const String createPurchaseOrder = 'create-purchase-order';
   static const String reportsDashboard = 'reports-dashboard';
+  static const String poApprovalsList = 'po-approvals';
 
   /// Base path for all procurement routes
   static const String basePath = '/procurement';
@@ -45,6 +47,9 @@ class ProcurementRoutes {
 
   /// Full path for the reports dashboard
   static const String reportsDashboardPath = '$basePath/reports/dashboard';
+
+  /// Full path for the PO approvals list
+  static const String poApprovalsListPath = '$basePath/po-approvals';
 }
 
 /// Adds procurement routes to the Go Router configuration
@@ -63,6 +68,13 @@ List<RouteBase> getProcurementRoutes() {
       builder: (BuildContext context, GoRouterState state) {
         final poId = state.pathParameters['poId'] ?? '';
         return POApprovalScreen(purchaseOrderId: poId);
+      },
+    ),
+    GoRoute(
+      path: ProcurementRoutes.poApprovalsListPath,
+      name: ProcurementRoutes.poApprovalsList,
+      builder: (BuildContext context, GoRouterState state) {
+        return const POApprovalsListScreen();
       },
     ),
     GoRoute(

@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../core/routes/app_go_router.dart';
-import '../../../../l10n/app_localizations.dart';
 
 // Constants for SharedPreferences keys
 const String _appSettingsKey = 'app_settings';
@@ -166,20 +166,20 @@ class AppSettingsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.settings),
+        title: Text(l10n?.settings ?? ''),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
           // Language Settings
-          _buildSectionHeader(context, l10n.languageSettings),
+          _buildSectionHeader(context, l10n?.languageSettings ?? ''),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   ListTile(
-                    title: Text(l10n.language),
+                    title: Text(l10n?.language ?? ''),
                     trailing: DropdownButton<String>(
                       value: settings.language,
                       onChanged: (String? newValue) {
@@ -214,14 +214,14 @@ class AppSettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Theme Settings
-          _buildSectionHeader(context, l10n.themeSettings),
+          _buildSectionHeader(context, l10n?.themeSettings ?? ''),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   RadioListTile<ThemeMode>(
-                    title: Text(l10n.lightTheme),
+                    title: Text(l10n?.lightTheme ?? ''),
                     value: ThemeMode.light,
                     groupValue: settings.themeMode,
                     onChanged: (value) {
@@ -231,7 +231,7 @@ class AppSettingsScreen extends ConsumerWidget {
                     },
                   ),
                   RadioListTile<ThemeMode>(
-                    title: Text(l10n.darkTheme),
+                    title: Text(l10n?.darkTheme ?? ''),
                     value: ThemeMode.dark,
                     groupValue: settings.themeMode,
                     onChanged: (value) {
@@ -241,7 +241,7 @@ class AppSettingsScreen extends ConsumerWidget {
                     },
                   ),
                   RadioListTile<ThemeMode>(
-                    title: Text(l10n.systemTheme),
+                    title: Text(l10n?.systemTheme ?? ''),
                     value: ThemeMode.system,
                     groupValue: settings.themeMode,
                     onChanged: (value) {
@@ -257,14 +257,14 @@ class AppSettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Notification Settings
-          _buildSectionHeader(context, l10n.notificationSettings),
+          _buildSectionHeader(context, l10n?.notificationSettings ?? ''),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
                   SwitchListTile(
-                    title: Text(l10n.enableNotifications),
+                    title: Text(l10n?.enableNotifications ?? ''),
                     value: settings.notificationsEnabled,
                     onChanged: (value) {
                       notifier.updateNotificationsEnabled(value);
@@ -272,14 +272,14 @@ class AppSettingsScreen extends ConsumerWidget {
                   ),
                   if (settings.notificationsEnabled) ...[
                     SwitchListTile(
-                      title: Text(l10n.enableSounds),
+                      title: Text(l10n?.enableSounds ?? ''),
                       value: settings.soundEnabled,
                       onChanged: (value) {
                         notifier.updateSoundEnabled(value);
                       },
                     ),
                     SwitchListTile(
-                      title: Text(l10n.enableVibration),
+                      title: Text(l10n?.enableVibration ?? ''),
                       value: settings.vibrationEnabled,
                       onChanged: (value) {
                         notifier.updateVibrationEnabled(value);
@@ -293,7 +293,7 @@ class AppSettingsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
 
           // Module-specific Settings
-          _buildSectionHeader(context, l10n.moduleSettings),
+          _buildSectionHeader(context, l10n?.moduleSettings ?? ''),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -301,7 +301,7 @@ class AppSettingsScreen extends ConsumerWidget {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.inventory_2),
-                    title: Text(l10n.inventorySettings),
+                    title: Text(l10n?.inventorySettings ?? ''),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.inventorySettings);
@@ -348,7 +348,7 @@ class AppSettingsScreen extends ConsumerWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(l10n.settingsSaved),
+                    content: Text(l10n?.settingsSaved ?? ''),
                     backgroundColor: Colors.green,
                   ),
                 );
@@ -357,7 +357,7 @@ class AppSettingsScreen extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
-            child: Text(l10n.saveSettings),
+            child: Text(l10n?.saveSettings ?? ''),
           ),
         ],
       ),

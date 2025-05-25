@@ -83,8 +83,9 @@ class StockBarChartWidget extends StatelessWidget {
                     showTitles: true,
                     getTitlesWidget: (value, meta) {
                       final idx = value.toInt();
-                      if (idx < 0 || idx >= data.length)
+                      if (idx < 0 || idx >= data.length) {
                         return const SizedBox();
+                      }
                       return RotatedBox(
                         quarterTurns: 1,
                         child: Text(data[idx]['category'].toString()),
@@ -262,8 +263,9 @@ class ValuationBarChartWidget extends StatelessWidget {
                     showTitles: true,
                     getTitlesWidget: (value, meta) {
                       final idx = value.toInt();
-                      if (idx < 0 || idx >= data.length)
+                      if (idx < 0 || idx >= data.length) {
                         return const SizedBox();
+                      }
                       return RotatedBox(
                         quarterTurns: 1,
                         child: Text(data[idx]['category'].toString()),
@@ -394,8 +396,9 @@ class MovementBarChartWidget extends StatelessWidget {
                     showTitles: true,
                     getTitlesWidget: (value, meta) {
                       final idx = value.toInt();
-                      if (idx < 0 || idx >= keys.length)
+                      if (idx < 0 || idx >= keys.length) {
                         return const SizedBox();
+                      }
                       return RotatedBox(
                         quarterTurns: 1,
                         child: Text(keys[idx]),

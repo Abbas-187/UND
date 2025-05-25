@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../order_management/data/models/customer_model.dart';
 import '../datasources/sales_data_source.dart';
-import '../models/customer_model.dart';
 
 part 'customer_repository.g.dart';
 

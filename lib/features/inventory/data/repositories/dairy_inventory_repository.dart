@@ -332,6 +332,43 @@ class DairyInventoryRepository implements InventoryRepository {
     return 0;
   }
 
+  @override
+  Future<bool> allocateInventoryForRecipe(
+      String recipeId, double quantity) async {
+    // Validate inputs
+    if (recipeId.isEmpty || quantity <= 0) {
+      return false;
+    }
+
+    // Check inventory availability
+    final requiredItems = dairyProvider.getRecipeIngredients(recipeId);
+    if (requiredItems == null || requiredItems.isEmpty) {
+      return false;
+    }
+
+    for (final ingredient in requiredItems) {
+      final inventoryItem = dairyProvider.getItemById(ingredient.id);
+      if (inventoryItem == null ||
+          inventoryItem.quantity < ingredient.quantity * quantity) {
+        return false; // Not enough inventory
+      }
+    }
+
+    // Deduct inventory
+    for (final ingredient in requiredItems) {
+      final inventoryItem = dairyProvider.getItemById(ingredient.id);
+      if (inventoryItem != null) {
+        dairyProvider.adjustQuantity(
+          ingredient.id,
+          -(ingredient.quantity * quantity),
+          'Allocated for recipe $recipeId',
+        );
+      }
+    }
+
+    return true; // Allocation successful
+  }
+
   // --- BEGIN: InventoryRepository required stubs ---
   @override
   Future<String> addMovement(InventoryMovementModel movement) {

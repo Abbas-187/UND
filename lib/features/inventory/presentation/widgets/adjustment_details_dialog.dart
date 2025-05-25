@@ -2,8 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/inventory_adjustment.dart';
 
 class AdjustmentDetailsDialog extends StatelessWidget {
@@ -78,56 +78,74 @@ class AdjustmentDetailsDialog extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Quantity Information
-                      _buildSectionTitle(context, l10n.currentStock),
+                      _buildSectionTitle(
+                          context, l10n?.currentStock ?? 'Current Stock'),
                       const SizedBox(height: 8),
-                      _buildDetailRow(context, l10n.previousStock,
+                      _buildDetailRow(
+                          context,
+                          l10n?.previousStock ?? 'Previous Stock',
                           adjustment.previousQuantity.toString()),
-                      _buildDetailRow(context, l10n.adjustedStock,
+                      _buildDetailRow(
+                          context,
+                          l10n?.adjustedStock ?? 'Adjusted Stock',
                           adjustment.adjustedQuantity.toString()),
-                      _buildDetailRow(context, l10n.netChange,
+                      _buildDetailRow(context, l10n?.netChange ?? 'Net Change',
                           '${adjustment.quantity >= 0 ? '+' : ''}${adjustment.quantity}'),
                       const Divider(height: 32),
 
                       // Reason and Notes
-                      _buildSectionTitle(context, l10n.reasonNotes),
+                      _buildSectionTitle(
+                          context, l10n?.reasonNotes ?? 'Reason/Notes'),
                       const SizedBox(height: 8),
-                      _buildDetailRow(context, l10n.adjustmentTypeLabel,
-                          _formatAdjustmentType(adjustment.adjustmentType)),
                       _buildDetailRow(
-                          context, l10n.reasonLabel, adjustment.reason),
+                          context,
+                          l10n?.adjustmentTypeLabel ?? 'Adjustment Type',
+                          _formatAdjustmentType(adjustment.adjustmentType)),
+                      _buildDetailRow(context, 'Reason', adjustment.reason),
                       if (adjustment.notes?.isNotEmpty ?? false)
-                        _buildDetailRow(context, l10n.notes, adjustment.notes!),
+                        _buildDetailRow(
+                            context, l10n?.notes ?? 'Notes', adjustment.notes!),
                       const Divider(height: 32),
 
                       // Personnel
-                      _buildSectionTitle(context, l10n.personnel),
+                      _buildSectionTitle(
+                          context, l10n?.personnel ?? 'Personnel'),
                       const SizedBox(height: 8),
                       _buildDetailRow(
-                          context, l10n.performedBy, adjustment.performedBy),
+                          context,
+                          l10n?.performedBy ?? 'Performed By',
+                          adjustment.performedBy),
                       _buildDetailRow(
                           context,
-                          l10n.statusLabel,
+                          l10n?.statusLabel ?? 'Status',
                           _formatStatus(
                               context,
                               adjustment.approvalStatus ??
                                   AdjustmentApprovalStatus.pending)),
                       if (adjustment.approvedBy != null)
                         _buildDetailRow(
-                            context, l10n.reviewedBy, adjustment.approvedBy!),
+                            context,
+                            l10n?.reviewedBy ?? 'Reviewed By',
+                            adjustment.approvedBy!),
                       if (adjustment.approvedAt != null)
-                        _buildDetailRow(context, l10n.approvedDate,
+                        _buildDetailRow(
+                            context,
+                            l10n?.approvedDate ?? 'Approved Date',
                             dateFormat.format(adjustment.approvedAt!)),
                       const Divider(height: 32),
 
                       // Category and Reference
                       if (adjustment.categoryName != null ||
                           adjustment.documentReference != null) ...[
-                        _buildSectionTitle(context, l10n.additionalInfo),
+                        _buildSectionTitle(
+                            context, l10n?.additionalInfo ?? 'Additional Info'),
                         const SizedBox(height: 8),
-                        _buildDetailRow(
-                            context, l10n.category, adjustment.categoryName),
+                        _buildDetailRow(context, l10n?.category ?? 'Category',
+                            adjustment.categoryName),
                         if (adjustment.documentReference != null)
-                          _buildDetailRow(context, l10n.referenceDocuments,
+                          _buildDetailRow(
+                              context,
+                              l10n?.referenceDocuments ?? 'Reference Documents',
                               adjustment.documentReference!),
                       ],
                     ],
@@ -144,7 +162,7 @@ class AdjustmentDetailsDialog extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text(l10n.close),
+                    child: Text(l10n?.close ?? 'Close'),
                   ),
                 ],
               ),
@@ -202,11 +220,11 @@ class AdjustmentDetailsDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     switch (status) {
       case AdjustmentApprovalStatus.pending:
-        return l10n.pendingApproval;
+        return l10n?.pendingApproval ?? 'Pending Approval';
       case AdjustmentApprovalStatus.approved:
-        return l10n.approved;
+        return l10n?.approved ?? 'Approved';
       case AdjustmentApprovalStatus.rejected:
-        return l10n.rejected;
+        return l10n?.rejected ?? 'Rejected';
     }
   }
 

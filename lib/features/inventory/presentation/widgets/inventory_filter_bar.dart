@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../l10n/app_localizations.dart';
-import '../../../../l10n/app_localizations_extension.dart'; // Import extension
 import '../providers/inventory_provider.dart';
 
 class InventoryFilterBar extends ConsumerWidget {
@@ -35,7 +34,7 @@ class InventoryFilterBar extends ConsumerWidget {
         children: [
           TextField(
             decoration: InputDecoration(
-              hintText: l10n.getText('searchInventory'), // Using placeholder
+              hintText: l10n?.searchInventory ?? 'Search inventory',
               prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
@@ -53,8 +52,7 @@ class InventoryFilterBar extends ConsumerWidget {
             children: [
               _buildDropdown(
                   context: context,
-                  hintText:
-                      l10n.getText('filterByCategory'), // Using placeholder
+                  hintText: l10n?.filterByCategory ?? 'Filter by category',
                   value: filter.selectedCategory,
                   items: availableCategories,
                   onChanged: (value) {
@@ -72,8 +70,8 @@ class InventoryFilterBar extends ConsumerWidget {
                   availableSubCategories.isNotEmpty)
                 _buildDropdown(
                     context: context,
-                    hintText: l10n
-                        .getText('filterBySubCategory'), // Using placeholder
+                    hintText:
+                        l10n?.filterBySubCategory ?? 'Filter by sub-category',
                     value: filter.selectedSubCategory,
                     items: availableSubCategories,
                     onChanged: (value) {
@@ -86,8 +84,7 @@ class InventoryFilterBar extends ConsumerWidget {
                     }),
               _buildDropdown(
                   context: context,
-                  hintText:
-                      l10n.getText('filterByLocation'), // Using placeholder
+                  hintText: l10n?.filterByLocation ?? 'Filter by location',
                   value: filter.selectedLocation,
                   items: availableLocations,
                   onChanged: (value) {
@@ -98,8 +95,7 @@ class InventoryFilterBar extends ConsumerWidget {
                   }),
               _buildDropdown(
                   context: context,
-                  hintText:
-                      l10n.getText('filterBySupplier'), // Using placeholder
+                  hintText: l10n?.filterBySupplier ?? 'Filter by supplier',
                   value: filter.selectedSupplier,
                   items: availableSuppliers,
                   onChanged: (value) {
@@ -114,8 +110,8 @@ class InventoryFilterBar extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.getText('filterOptions'),
-                  style: theme.textTheme.titleSmall), // Using placeholder
+              Text(l10n?.filterOptions ?? 'Filter options',
+                  style: theme.textTheme.titleSmall),
               TextButton(
                 onPressed: () {
                   // Reset all filters, but keep available options
@@ -126,8 +122,7 @@ class InventoryFilterBar extends ConsumerWidget {
                     availableSuppliers: filter.availableSuppliers,
                   ));
                 },
-                child:
-                    Text(l10n.getText('clearAllFilters')), // Using placeholder
+                child: Text(l10n?.clearAllFilters ?? 'Clear all filters'),
               )
             ],
           ),
@@ -136,22 +131,21 @@ class InventoryFilterBar extends ConsumerWidget {
             runSpacing: 0,
             children: [
               FilterChip(
-                label: Text(l10n.getText('lowStock')), // Using placeholder
+                label: Text(l10n?.lowStock ?? 'Low stock'),
                 selected: filter.showLowStock,
                 onSelected: (selected) {
                   onFilterChanged(filter.copyWith(showLowStock: selected));
                 },
               ),
               FilterChip(
-                label: Text(l10n.getText('needsReorder')), // Using placeholder
+                label: Text(l10n?.needsReorder ?? 'Needs reorder'),
                 selected: filter.showNeedsReorder,
                 onSelected: (selected) {
                   onFilterChanged(filter.copyWith(showNeedsReorder: selected));
                 },
               ),
               FilterChip(
-                label: Text(
-                    l10n.getText('expiringSoonShort')), // Using placeholder
+                label: Text(l10n?.expiringSoonShort ?? 'Expiring soon'),
                 selected: filter.showExpiringSoon,
                 onSelected: (selected) {
                   onFilterChanged(filter.copyWith(showExpiringSoon: selected));
@@ -188,7 +182,7 @@ class InventoryFilterBar extends ConsumerWidget {
               ? IconButton(
                   icon: const Icon(Icons.clear, size: 18),
                   onPressed: onClear,
-                  tooltip: l10n.getText('clearSelection'), // Using placeholder
+                  tooltip: l10n?.clearSelection ?? 'Clear selection',
                 )
               : null,
         ),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../data/models/product_catalog_model.dart';
 import 'package:intl/intl.dart'; // For date formatting
 
-class ProductEditScreen extends StatefulWidget {
-  final ProductCatalogModel? product; // Nullable for creating a new product
+import '../../data/models/product_catalog_model.dart';
 
-  const ProductEditScreen({Key? key, this.product}) : super(key: key);
+class ProductEditScreen extends StatefulWidget {
+  // Nullable for creating a new product
+
+  const ProductEditScreen({super.key, this.product});
+  final ProductCatalogModel? product;
 
   @override
   _ProductEditScreenState createState() => _ProductEditScreenState();
@@ -582,9 +584,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
               SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _saveProduct,
-                child: Text('Save Product'),
                 style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16)),
+                child: Text('Save Product'),
               ),
             ],
           ),

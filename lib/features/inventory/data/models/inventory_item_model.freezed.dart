@@ -33,6 +33,8 @@ mixin _$InventoryItemModel {
   double? get cost;
   int get lowStockThreshold;
   String? get supplier;
+  double? get safetyStock;
+  double? get currentConsumption;
 
   /// Create a copy of InventoryItemModel
   /// with the given fields replaced by the non-null parameter values.
@@ -80,35 +82,42 @@ mixin _$InventoryItemModel {
             (identical(other.lowStockThreshold, lowStockThreshold) ||
                 other.lowStockThreshold == lowStockThreshold) &&
             (identical(other.supplier, supplier) ||
-                other.supplier == supplier));
+                other.supplier == supplier) &&
+            (identical(other.safetyStock, safetyStock) ||
+                other.safetyStock == safetyStock) &&
+            (identical(other.currentConsumption, currentConsumption) ||
+                other.currentConsumption == currentConsumption));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      appItemId,
-      sapCode,
-      name,
-      category,
-      subCategory,
-      unit,
-      quantity,
-      minimumQuantity,
-      reorderPoint,
-      location,
-      lastUpdated,
-      batchNumber,
-      expiryDate,
-      const DeepCollectionEquality().hash(additionalAttributes),
-      cost,
-      lowStockThreshold,
-      supplier);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        appItemId,
+        sapCode,
+        name,
+        category,
+        subCategory,
+        unit,
+        quantity,
+        minimumQuantity,
+        reorderPoint,
+        location,
+        lastUpdated,
+        batchNumber,
+        expiryDate,
+        const DeepCollectionEquality().hash(additionalAttributes),
+        cost,
+        lowStockThreshold,
+        supplier,
+        safetyStock,
+        currentConsumption
+      ]);
 
   @override
   String toString() {
-    return 'InventoryItemModel(id: $id, appItemId: $appItemId, sapCode: $sapCode, name: $name, category: $category, subCategory: $subCategory, unit: $unit, quantity: $quantity, minimumQuantity: $minimumQuantity, reorderPoint: $reorderPoint, location: $location, lastUpdated: $lastUpdated, batchNumber: $batchNumber, expiryDate: $expiryDate, additionalAttributes: $additionalAttributes, cost: $cost, lowStockThreshold: $lowStockThreshold, supplier: $supplier)';
+    return 'InventoryItemModel(id: $id, appItemId: $appItemId, sapCode: $sapCode, name: $name, category: $category, subCategory: $subCategory, unit: $unit, quantity: $quantity, minimumQuantity: $minimumQuantity, reorderPoint: $reorderPoint, location: $location, lastUpdated: $lastUpdated, batchNumber: $batchNumber, expiryDate: $expiryDate, additionalAttributes: $additionalAttributes, cost: $cost, lowStockThreshold: $lowStockThreshold, supplier: $supplier, safetyStock: $safetyStock, currentConsumption: $currentConsumption)';
   }
 }
 
@@ -136,7 +145,9 @@ abstract mixin class $InventoryItemModelCopyWith<$Res> {
       Map<String, dynamic>? additionalAttributes,
       double? cost,
       int lowStockThreshold,
-      String? supplier});
+      String? supplier,
+      double? safetyStock,
+      double? currentConsumption});
 }
 
 /// @nodoc
@@ -170,6 +181,8 @@ class _$InventoryItemModelCopyWithImpl<$Res>
     Object? cost = freezed,
     Object? lowStockThreshold = null,
     Object? supplier = freezed,
+    Object? safetyStock = freezed,
+    Object? currentConsumption = freezed,
   }) {
     return _then(_self.copyWith(
       id: freezed == id
@@ -244,6 +257,14 @@ class _$InventoryItemModelCopyWithImpl<$Res>
           ? _self.supplier
           : supplier // ignore: cast_nullable_to_non_nullable
               as String?,
+      safetyStock: freezed == safetyStock
+          ? _self.safetyStock
+          : safetyStock // ignore: cast_nullable_to_non_nullable
+              as double?,
+      currentConsumption: freezed == currentConsumption
+          ? _self.currentConsumption
+          : currentConsumption // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -269,7 +290,9 @@ class _InventoryItemModel extends InventoryItemModel {
       final Map<String, dynamic>? additionalAttributes,
       this.cost,
       this.lowStockThreshold = 5,
-      this.supplier})
+      this.supplier,
+      this.safetyStock,
+      this.currentConsumption})
       : _additionalAttributes = additionalAttributes,
         super._();
   factory _InventoryItemModel.fromJson(Map<String, dynamic> json) =>
@@ -323,6 +346,10 @@ class _InventoryItemModel extends InventoryItemModel {
   final int lowStockThreshold;
   @override
   final String? supplier;
+  @override
+  final double? safetyStock;
+  @override
+  final double? currentConsumption;
 
   /// Create a copy of InventoryItemModel
   /// with the given fields replaced by the non-null parameter values.
@@ -374,35 +401,42 @@ class _InventoryItemModel extends InventoryItemModel {
             (identical(other.lowStockThreshold, lowStockThreshold) ||
                 other.lowStockThreshold == lowStockThreshold) &&
             (identical(other.supplier, supplier) ||
-                other.supplier == supplier));
+                other.supplier == supplier) &&
+            (identical(other.safetyStock, safetyStock) ||
+                other.safetyStock == safetyStock) &&
+            (identical(other.currentConsumption, currentConsumption) ||
+                other.currentConsumption == currentConsumption));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      appItemId,
-      sapCode,
-      name,
-      category,
-      subCategory,
-      unit,
-      quantity,
-      minimumQuantity,
-      reorderPoint,
-      location,
-      lastUpdated,
-      batchNumber,
-      expiryDate,
-      const DeepCollectionEquality().hash(_additionalAttributes),
-      cost,
-      lowStockThreshold,
-      supplier);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        appItemId,
+        sapCode,
+        name,
+        category,
+        subCategory,
+        unit,
+        quantity,
+        minimumQuantity,
+        reorderPoint,
+        location,
+        lastUpdated,
+        batchNumber,
+        expiryDate,
+        const DeepCollectionEquality().hash(_additionalAttributes),
+        cost,
+        lowStockThreshold,
+        supplier,
+        safetyStock,
+        currentConsumption
+      ]);
 
   @override
   String toString() {
-    return 'InventoryItemModel(id: $id, appItemId: $appItemId, sapCode: $sapCode, name: $name, category: $category, subCategory: $subCategory, unit: $unit, quantity: $quantity, minimumQuantity: $minimumQuantity, reorderPoint: $reorderPoint, location: $location, lastUpdated: $lastUpdated, batchNumber: $batchNumber, expiryDate: $expiryDate, additionalAttributes: $additionalAttributes, cost: $cost, lowStockThreshold: $lowStockThreshold, supplier: $supplier)';
+    return 'InventoryItemModel(id: $id, appItemId: $appItemId, sapCode: $sapCode, name: $name, category: $category, subCategory: $subCategory, unit: $unit, quantity: $quantity, minimumQuantity: $minimumQuantity, reorderPoint: $reorderPoint, location: $location, lastUpdated: $lastUpdated, batchNumber: $batchNumber, expiryDate: $expiryDate, additionalAttributes: $additionalAttributes, cost: $cost, lowStockThreshold: $lowStockThreshold, supplier: $supplier, safetyStock: $safetyStock, currentConsumption: $currentConsumption)';
   }
 }
 
@@ -432,7 +466,9 @@ abstract mixin class _$InventoryItemModelCopyWith<$Res>
       Map<String, dynamic>? additionalAttributes,
       double? cost,
       int lowStockThreshold,
-      String? supplier});
+      String? supplier,
+      double? safetyStock,
+      double? currentConsumption});
 }
 
 /// @nodoc
@@ -466,6 +502,8 @@ class __$InventoryItemModelCopyWithImpl<$Res>
     Object? cost = freezed,
     Object? lowStockThreshold = null,
     Object? supplier = freezed,
+    Object? safetyStock = freezed,
+    Object? currentConsumption = freezed,
   }) {
     return _then(_InventoryItemModel(
       id: freezed == id
@@ -540,6 +578,14 @@ class __$InventoryItemModelCopyWithImpl<$Res>
           ? _self.supplier
           : supplier // ignore: cast_nullable_to_non_nullable
               as String?,
+      safetyStock: freezed == safetyStock
+          ? _self.safetyStock
+          : safetyStock // ignore: cast_nullable_to_non_nullable
+              as double?,
+      currentConsumption: freezed == currentConsumption
+          ? _self.currentConsumption
+          : currentConsumption // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }

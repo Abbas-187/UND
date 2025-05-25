@@ -16,13 +16,12 @@ class _CustomerListScreenState extends ConsumerState<CustomerListScreen> {
   String _searchQuery = '';
   String? _selectedCustomerType;
   String? _selectedStatus;
-
   @override
   Widget build(BuildContext context) {
-    final customersProvider = ref.watch(filteredCustomersProvider(
-      status: _selectedStatus,
-      customerType: _selectedCustomerType,
-    ));
+    final customersProvider = ref.watch(filteredCustomersProvider({
+      'status': _selectedStatus,
+      'customerType': _selectedCustomerType,
+    }));
 
     return Scaffold(
       appBar: AppBar(
@@ -31,10 +30,10 @@ class _CustomerListScreenState extends ConsumerState<CustomerListScreen> {
           IconButton(
             icon: const Icon(Icons.refresh),
             tooltip: 'Refresh',
-            onPressed: () => ref.refresh(filteredCustomersProvider(
-              status: _selectedStatus,
-              customerType: _selectedCustomerType,
-            )),
+            onPressed: () => ref.refresh(filteredCustomersProvider({
+              'status': _selectedStatus,
+              'customerType': _selectedCustomerType,
+            })),
           ),
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -63,13 +62,9 @@ class _CustomerListScreenState extends ConsumerState<CustomerListScreen> {
                 final filteredCustomers = _searchQuery.isEmpty
                     ? customers
                     : customers
-                        .where((customer) =>
-                            customer.name
-                                .toLowerCase()
-                                .contains(_searchQuery.toLowerCase()) ||
-                            customer.code
-                                .toLowerCase()
-                                .contains(_searchQuery.toLowerCase()))
+                        .where((customer) => customer.name
+                            .toLowerCase()
+                            .contains(_searchQuery.toLowerCase()))
                         .toList();
 
                 if (filteredCustomers.isEmpty) {
@@ -104,35 +99,10 @@ class _CustomerListScreenState extends ConsumerState<CustomerListScreen> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Code: ${customer.code}'),
-                            if (customer.contactPerson != null)
-                              Text('Contact: ${customer.contactPerson}'),
+                            Text('Branches: ${customer.branches.length}'),
                           ],
                         ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _getStatusColor(customer.status),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Text(
-                                customer.status.toUpperCase(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            const Icon(Icons.chevron_right),
-                          ],
-                        ),
+                        trailing: const Icon(Icons.chevron_right),
                         onTap: () => context.go('/sales/customers/details',
                             extra: customer.id),
                       ),

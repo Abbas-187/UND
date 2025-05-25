@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/inventory_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InventoryDataTable extends StatefulWidget {
-
   const InventoryDataTable({
     super.key,
     required this.items,
@@ -139,12 +139,13 @@ class _InventoryDataTableState extends State<InventoryDataTable> {
   }
 
   Widget _buildDataTable() {
+    final l10n = AppLocalizations.of(context);
     return DataTable(
       sortColumnIndex: _sortColumnIndex,
       sortAscending: _sortAscending,
       columns: [
         DataColumn(
-          label: const Text('Name'),
+          label: Text(l10n?.name ?? 'Name'),
           onSort: (columnIndex, ascending) {
             setState(() {
               _sortColumnIndex = columnIndex;
@@ -154,7 +155,7 @@ class _InventoryDataTableState extends State<InventoryDataTable> {
           },
         ),
         DataColumn(
-          label: const Text('Category'),
+          label: Text(l10n?.category ?? 'Category'),
           onSort: (columnIndex, ascending) {
             setState(() {
               _sortColumnIndex = columnIndex;
@@ -164,7 +165,7 @@ class _InventoryDataTableState extends State<InventoryDataTable> {
           },
         ),
         DataColumn(
-          label: const Text('Quantity'),
+          label: Text(l10n?.quantity ?? 'Quantity'),
           numeric: true,
           onSort: (columnIndex, ascending) {
             setState(() {
@@ -175,7 +176,7 @@ class _InventoryDataTableState extends State<InventoryDataTable> {
           },
         ),
         DataColumn(
-          label: const Text('Location'),
+          label: Text(l10n?.location ?? 'Location'),
           onSort: (columnIndex, ascending) {
             setState(() {
               _sortColumnIndex = columnIndex;
@@ -185,7 +186,7 @@ class _InventoryDataTableState extends State<InventoryDataTable> {
           },
         ),
         DataColumn(
-          label: const Text('Last Updated'),
+          label: Text(l10n?.lastUpdated ?? 'Last Updated'),
           onSort: (columnIndex, ascending) {
             setState(() {
               _sortColumnIndex = columnIndex;
@@ -194,8 +195,8 @@ class _InventoryDataTableState extends State<InventoryDataTable> {
             });
           },
         ),
-        const DataColumn(
-          label: Text('Actions'),
+        DataColumn(
+          label: Text(l10n?.actions ?? 'Actions'),
         ),
       ],
       rows: _filteredItems.map((item) {

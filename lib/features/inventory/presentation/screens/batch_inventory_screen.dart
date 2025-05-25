@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/providers/batch_operations_provider.dart';
-import '../../domain/providers/inventory_provider.dart';
+import '../providers/inventory_provider.dart'
+    show filteredInventoryItemsProvider;
 
 class BatchInventoryScreen extends ConsumerStatefulWidget {
   const BatchInventoryScreen({super.key});
@@ -17,7 +18,7 @@ class _BatchInventoryScreenState extends ConsumerState<BatchInventoryScreen> {
   @override
   Widget build(BuildContext context) {
     final batchSelectionState = ref.watch(batchOperationsStateProvider);
-    final inventoryAsync = ref.watch(inventoryProvider);
+    final inventoryAsync = ref.watch(filteredInventoryItemsProvider);
 
     return Scaffold(
       appBar: AppBar(

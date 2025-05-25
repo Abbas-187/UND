@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/cost_method_setting.dart';
+
 import '../../domain/entities/cost_layer.dart';
+import '../../domain/entities/cost_method_setting.dart';
 
 // Removed json_serializable support; use manual Firestore mapping
 part 'cost_method_setting_model.freezed.dart';

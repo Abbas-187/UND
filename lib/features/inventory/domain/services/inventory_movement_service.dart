@@ -1,10 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
+import '../../../../core/di/app_providers.dart';
 import '../../data/models/inventory_movement_model.dart';
-import '../../data/models/inventory_movement_type.dart';
-import '../../data/providers/inventory_movement_providers.dart' as providers;
 import '../../data/repositories/inventory_movement_repository.dart';
+import '../validators/inventory_movement_validator.dart';
+import '../../../sales/data/repositories/product_catalog_repository.dart';
 
 /// Service class to handle inventory movement business logic
 class InventoryMovementService {
@@ -22,7 +23,16 @@ class InventoryMovementService {
     try {
       _logger.i('Creating new movement of type ${movement.movementType}');
 
-      // Validate movement data
+      // Async batch/expiry validation
+      final validator = InventoryMovementValidator(
+          productCatalogRepository: ProductCatalogRepository());
+      final validationResult = await validator.validateAsync(movement);
+      if (!validationResult.isValid) {
+        throw Exception(
+            'Movement validation failed: ${validationResult.errors.join('; ')}');
+      }
+
+      // Validate movement data (legacy sync checks)
       _validateMovement(movement);
 
       // Create the movement
@@ -52,10 +62,10 @@ class InventoryMovementService {
     try {
       _logger.i('Updating movement $id to status: $status');
 
-      if (status != ApprovalStatus.APPROVED &&
-          status != ApprovalStatus.REJECTED) {
+      if (status != ApprovalStatus.approved &&
+          status != ApprovalStatus.rejected) {
         throw Exception(
-            'Invalid approval status: must be APPROVED or REJECTED');
+            'Invalid approval status: must be approved or rejected');
       }
 
       // Update movement status
@@ -130,20 +140,24 @@ class InventoryMovementService {
   void _validateMovement(InventoryMovementModel movement) {
     // Validate source and destination based on movement type
     switch (movement.movementType) {
-      case InventoryMovementType.PO_RECEIPT:
-      case InventoryMovementType.PRODUCTION_OUTPUT:
-      case InventoryMovementType.SALES_RETURN:
-      case InventoryMovementType.TRANSFER_IN:
-      case InventoryMovementType.PRODUCTION_ISSUE:
-      case InventoryMovementType.TRANSFER_OUT:
-      case InventoryMovementType.SALE_SHIPMENT:
-      case InventoryMovementType.ADJUSTMENT_DAMAGE:
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_GAIN:
-      case InventoryMovementType.ADJUSTMENT_CYCLE_COUNT_LOSS:
-      case InventoryMovementType.ADJUSTMENT_OTHER:
-      case InventoryMovementType.QUALITY_STATUS_UPDATE:
-        if (movement.sourceLocationId.isEmpty ||
-            movement.destinationLocationId.isEmpty) {
+      case InventoryMovementType.poReceipt:
+      case InventoryMovementType.productionOutput:
+      case InventoryMovementType.salesReturn:
+      case InventoryMovementType.transferIn:
+      case InventoryMovementType.productionIssue:
+      case InventoryMovementType.transferOut:
+      case InventoryMovementType.saleShipment:
+      case InventoryMovementType.adjustmentDamage:
+      case InventoryMovementType.adjustmentCycleCountGain:
+      case InventoryMovementType.adjustmentCycleCountLoss:
+      case InventoryMovementType.adjustmentOther:
+      case InventoryMovementType.qualityStatusUpdate:
+      // Handle all cases by adding a default case
+      default:
+        if (movement.sourceLocationId == null ||
+            movement.sourceLocationId!.isEmpty ||
+            movement.destinationLocationId == null ||
+            movement.destinationLocationId!.isEmpty) {
           throw Exception(
               'Both source and destination locations are required for this movement type');
         }
@@ -167,8 +181,8 @@ class InventoryMovementService {
 /// Provider for the inventory movement service
 final inventoryMovementServiceProvider =
     Provider<InventoryMovementService>((ref) {
-  final repository = ref.watch(providers.inventoryMovementRepositoryProvider);
-  final logger = ref.watch(providers.loggerProvider);
+  final repository = ref.watch(inventoryMovementRepositoryProvider);
+  final logger = ref.watch(loggerProvider);
 
   return InventoryMovementService(
     movementRepository: repository,

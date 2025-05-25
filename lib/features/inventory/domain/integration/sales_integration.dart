@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../forecasting/domain/providers/production_planning_provider.dart';
-import '../../../sales/domain/providers/order_provider.dart';
+import '../../../order_management/domain/providers/order_usecase_providers.dart';
 import '../providers/inventory_provider.dart';
 
 /// Handles the specific integration between Inventory and Sales modules
@@ -17,7 +17,8 @@ class SalesIntegrationNotifier extends StateNotifier<void> {
 
   /// Checks product availability for a sales order
   Future<Map<String, dynamic>> checkOrderAvailability(String orderId) async {
-    final orderAsync = await ref.read(orderDetailsProvider(orderId).future);
+    final getOrderById = ref.read(getOrderByIdUseCaseProvider);
+    final orderAsync = await getOrderById.execute(orderId);
     final inventoryState = ref.read(inventoryProvider.notifier);
 
     final results = <String, dynamic>{};
@@ -25,17 +26,19 @@ class SalesIntegrationNotifier extends StateNotifier<void> {
     var partiallyAvailable = false;
 
     // Check each order item
-    for (final item in orderAsync.items) {
-      final available = await inventoryState.getAvailableStock(item.productId);
-      final isFullyAvailable = available >= item.quantity;
-      final isPartiallyAvailable = available > 0 && available < item.quantity;
+    for (final item in orderAsync.items ?? []) {
+      final available =
+          await inventoryState.getAvailableStock(item['productId']);
+      final isFullyAvailable = available >= item['quantity'];
+      final isPartiallyAvailable =
+          available > 0 && available < item['quantity'];
 
-      results[item.productId] = {
-        'ordered': item.quantity,
+      results[item['productId']] = {
+        'ordered': item['quantity'],
         'available': available,
         'isFullyAvailable': isFullyAvailable,
         'isPartiallyAvailable': isPartiallyAvailable,
-        'shortage': isFullyAvailable ? 0 : item.quantity - available
+        'shortage': isFullyAvailable ? 0 : item['quantity'] - available
       };
 
       if (!isFullyAvailable) {
@@ -55,43 +58,31 @@ class SalesIntegrationNotifier extends StateNotifier<void> {
     };
   }
 
-  /// Reserves inventory for a confirmed sales order
-  Future<void> reserveInventoryForOrder(String orderId) async {
-    final orderAsync = await ref.read(orderDetailsProvider(orderId).future);
-    final inventoryState = ref.read(inventoryProvider.notifier);
-
-    for (final item in orderAsync.items) {
-      await inventoryState.reserveStock(
-          itemId: item.productId,
-          quantity: item.quantity,
-          reason: 'Sales Order: $orderId',
-          referenceId: orderId);
-    }
-  }
-
   /// Calculates estimated shipment dates based on inventory availability
   Future<Map<String, DateTime>> calculateEstimatedShipmentDates(
       String orderId) async {
-    final orderAsync = await ref.read(orderDetailsProvider(orderId).future);
+    final getOrderById = ref.read(getOrderByIdUseCaseProvider);
+    final orderAsync = await getOrderById.execute(orderId);
     final inventoryState = ref.read(inventoryProvider.notifier);
     final productionProvider = ref.read(productionPlanningProvider.notifier);
 
     final shipmentDates = <String, DateTime>{};
 
-    for (final item in orderAsync.items) {
-      final available = await inventoryState.getAvailableStock(item.productId);
+    for (final item in orderAsync.items ?? []) {
+      final available =
+          await inventoryState.getAvailableStock(item['productId']);
 
-      if (available >= item.quantity) {
+      if (available >= item['quantity']) {
         // Can ship immediately (or based on standard processing time)
-        shipmentDates[item.productId] =
+        shipmentDates[item['productId']] =
             DateTime.now().add(const Duration(days: 1));
       } else {
         // Need production - estimate based on production schedule
         final productionTime =
             await productionProvider.generateProductionSchedule([
           {
-            'productId': item.productId,
-            'quantity': item.quantity - available,
+            'productId': item['productId'],
+            'quantity': item['quantity'] - available,
             'date': DateTime.now()
           }
         ], {
@@ -102,7 +93,7 @@ class SalesIntegrationNotifier extends StateNotifier<void> {
         // Use a default value for simplicity if no production time available
         final estimatedDays = productionTime.isNotEmpty ? 5 : 7;
 
-        shipmentDates[item.productId] =
+        shipmentDates[item['productId']] =
             DateTime.now().add(Duration(days: estimatedDays));
       }
     }

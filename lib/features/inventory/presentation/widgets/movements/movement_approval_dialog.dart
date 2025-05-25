@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MovementApprovalDialog extends StatefulWidget {
   const MovementApprovalDialog({
@@ -40,7 +40,9 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
 
     return AlertDialog(
       title: Text(
-        widget.isApproval ? l10n.approveMovement : l10n.rejectMovement,
+        widget.isApproval
+            ? (l10n?.approveMovement ?? 'Approve Movement')
+            : (l10n?.rejectMovement ?? 'Reject Movement'),
         style: TextStyle(
           color: widget.isApproval ? Colors.green : Colors.red,
         ),
@@ -54,20 +56,25 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
             children: [
               Text(
                 widget.isApproval
-                    ? l10n.aboutToApprove(widget.movementId)
-                    : l10n.aboutToReject(widget.movementId),
+                    ? (l10n != null && l10n.aboutToApprove != null
+                        ? l10n.aboutToApprove(widget.movementId)
+                        : 'About to approve ${widget.movementId}')
+                    : (l10n != null && l10n.aboutToReject != null
+                        ? l10n.aboutToReject(widget.movementId)
+                        : 'About to reject ${widget.movementId}'),
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _approverIdController,
                 decoration: InputDecoration(
-                  labelText: l10n.approverId,
+                  labelText: l10n?.approverId ?? 'Approver ID',
                   border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return l10n.approverIdRequired;
+                    return l10n?.approverIdRequired ??
+                        'Approver ID is required';
                   }
                   return null;
                 },
@@ -76,12 +83,13 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
               TextFormField(
                 controller: _approverNameController,
                 decoration: InputDecoration(
-                  labelText: l10n.approverName,
+                  labelText: l10n?.approverName ?? 'Approver Name',
                   border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return l10n.approverNameRequired;
+                    return l10n?.approverNameRequired ??
+                        'Approver Name is required';
                   }
                   return null;
                 },
@@ -91,14 +99,15 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
                 controller: _notesController,
                 decoration: InputDecoration(
                   labelText: widget.isApproval
-                      ? l10n.additionalNotes
-                      : l10n.rejectionReason,
+                      ? (l10n?.additionalNotes ?? 'Additional Notes')
+                      : (l10n?.rejectionReason ?? 'Rejection Reason'),
                   border: const OutlineInputBorder(),
                   alignLabelWithHint: true,
                 ),
                 validator: (value) {
                   if (!widget.isApproval && (value == null || value.isEmpty)) {
-                    return l10n.provideRejectionReason;
+                    return l10n?.provideRejectionReason ??
+                        'Please provide a rejection reason';
                   }
                   return null;
                 },
@@ -111,7 +120,7 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: Text(l10n.cancel),
+          child: Text(l10n?.cancel ?? 'Cancel'),
         ),
         FilledButton(
           onPressed: _isSubmitting ? null : _submitForm,
@@ -127,7 +136,9 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
                     color: Colors.white,
                   ),
                 )
-              : Text(widget.isApproval ? l10n.approve : l10n.reject),
+              : Text(widget.isApproval
+                  ? (l10n?.approve ?? 'Approve')
+                  : (l10n?.reject ?? 'Reject')),
         ),
       ],
     );

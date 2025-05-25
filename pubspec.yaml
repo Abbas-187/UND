@@ -39,7 +39,6 @@ dependencies:
   firebase_messaging: 15.2.5
   flutter_local_notifications: ^19.0.0
   logger: ^2.5.0
-  share_plus: ^11.0.0
   permission_handler: ^12.0.0+1
   percent_indicator: ^4.2.3
   state_notifier: ^1.0.0
@@ -47,6 +46,8 @@ dependencies:
   equatable: ^2.0.5
   csv: ^6.0.0
   excel: ^4.0.6
+  device_info_plus: 11.4.0
+  share_plus: ^11.0.0
 
   meta: any
   collection: any
@@ -56,7 +57,7 @@ dependencies:
   file_picker: ^10.1.2
   url_launcher: ^6.3.1
   photo_view: ^0.15.0
-  syncfusion_flutter_pdfviewer: ^29.1.39
+  syncfusion_flutter_pdfviewer: ^29.2.4
   flutter_cache_manager: ^3.4.1
   shelf_router: ^1.1.4
   json_annotation: ^4.9.0

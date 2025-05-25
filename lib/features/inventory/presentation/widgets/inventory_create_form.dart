@@ -123,447 +123,449 @@ class _InventoryCreateFormState extends ConsumerState<InventoryCreateForm> {
 
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.isEditing
-                ? 'Edit Inventory Item'
-                : 'Create New Inventory Item',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: 16),
-
-          // Basic Information Section
-          _buildSectionHeader('Basic Information'),
-          TextFormField(
-            controller: _sapCodeController,
-            decoration: const InputDecoration(
-              labelText: 'SAP Code',
-              hintText: 'Enter legacy SAP code',
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.isEditing
+                  ? 'Edit Inventory Item'
+                  : 'Create New Inventory Item',
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter SAP code';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Name',
-              hintText: 'Enter item name',
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a name';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 8),
+            const SizedBox(height: 16),
 
-          // Category dropdown or text field
-          categoriesAsync.when(
-            data: (categories) {
-              return DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Category',
-                  hintText: 'Select a category',
-                ),
-                value: _selectedCategory,
-                items: [
-                  ...categories.map(
-                    (category) => DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    ),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'other',
-                    child: Text('Other (Specify)'),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedCategory = value;
-                    if (value != 'other') {
-                      _categoryController.text = value!;
-                    } else {
-                      _categoryController.text = '';
-                    }
-                  });
-                },
-                validator: (value) {
-                  if (_categoryController.text.isEmpty) {
-                    return 'Please select or enter a category';
-                  }
-                  return null;
-                },
-              );
-            },
-            loading: () => TextFormField(
-              controller: _categoryController,
+            // Basic Information Section
+            _buildSectionHeader('Basic Information'),
+            TextFormField(
+              controller: _sapCodeController,
               decoration: const InputDecoration(
-                labelText: 'Category',
-                hintText: 'Enter category',
+                labelText: 'SAP Code',
+                hintText: 'Enter legacy SAP code',
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter a category';
+                  return 'Please enter SAP code';
                 }
                 return null;
               },
             ),
-            error: (_, __) => TextFormField(
-              controller: _categoryController,
-              decoration: const InputDecoration(
-                labelText: 'Category',
-                hintText: 'Enter category',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a category';
-                }
-                return null;
-              },
-            ),
-          ),
-
-          if (_selectedCategory == 'other') ...[
             const SizedBox(height: 8),
             TextFormField(
-              controller: _categoryController,
+              controller: _nameController,
               decoration: const InputDecoration(
-                labelText: 'Custom Category',
-                hintText: 'Enter custom category',
+                labelText: 'Name',
+                hintText: 'Enter item name',
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter a category';
+                  return 'Please enter a name';
                 }
                 return null;
               },
             ),
-          ],
-
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: _subCategoryController,
-            decoration: const InputDecoration(
-              labelText: 'Sub-Category',
-              hintText: 'Enter sub-category',
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter sub-category';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: _unitController,
-            decoration: const InputDecoration(
-              labelText: 'Unit',
-              hintText: 'e.g., liters, kg, pcs',
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a unit';
-              }
-              return null;
-            },
-          ),
-
-          // Quantities Section
-          const SizedBox(height: 16),
-          _buildSectionHeader('Quantities'),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _quantityController,
-                  decoration: const InputDecoration(
-                    labelText: 'Quantity',
-                    hintText: 'Current stock',
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Required';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Enter a number';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextFormField(
-                  controller: _minimumQuantityController,
-                  decoration: const InputDecoration(
-                    labelText: 'Minimum Quantity',
-                    hintText: 'Minimum stock',
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Required';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Enter a number';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _reorderPointController,
-                  decoration: const InputDecoration(
-                    labelText: 'Reorder Point',
-                    hintText: 'Reorder threshold',
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Required';
-                    }
-                    if (double.tryParse(value) == null) {
-                      return 'Enter a number';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextFormField(
-                  controller: _lowStockThresholdController,
-                  decoration: const InputDecoration(
-                    labelText: 'Low Stock Alert',
-                    hintText: 'Low stock threshold',
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Required';
-                    }
-                    if (int.tryParse(value) == null) {
-                      return 'Enter a number';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-            ],
-          ),
-
-          // Location Section
-          const SizedBox(height: 16),
-          _buildSectionHeader('Storage Information'),
-          locationsAsync.when(
-            data: (locations) {
-              return DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Storage Location',
-                  hintText: 'Select a location',
-                ),
-                value: _selectedLocation,
-                items: [
-                  ...locations.map(
-                    (location) => DropdownMenuItem(
-                      value: location,
-                      child: Text(location),
-                    ),
-                  ),
-                  const DropdownMenuItem(
-                    value: 'other',
-                    child: Text('Other (Specify)'),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedLocation = value;
-                    if (value != 'other') {
-                      _locationController.text = value!;
-                    } else {
-                      _locationController.text = '';
-                    }
-                  });
-                },
-                validator: (value) {
-                  if (_locationController.text.isEmpty) {
-                    return 'Please select or enter a location';
-                  }
-                  return null;
-                },
-              );
-            },
-            loading: () => TextFormField(
-              controller: _locationController,
-              decoration: const InputDecoration(
-                labelText: 'Storage Location',
-                hintText: 'Where this item is stored',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a location';
-                }
-                return null;
-              },
-            ),
-            error: (_, __) => TextFormField(
-              controller: _locationController,
-              decoration: const InputDecoration(
-                labelText: 'Storage Location',
-                hintText: 'Where this item is stored',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a location';
-                }
-                return null;
-              },
-            ),
-          ),
-
-          if (_selectedLocation == 'other') ...[
             const SizedBox(height: 8),
-            TextFormField(
-              controller: _locationController,
-              decoration: const InputDecoration(
-                labelText: 'Custom Location',
-                hintText: 'Enter custom location',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a location';
-                }
-                return null;
-              },
-            ),
-          ],
 
-          // Additional Information Section
-          const SizedBox(height: 16),
-          _buildSectionHeader('Additional Information (Optional)'),
-          TextFormField(
-            controller: _batchNumberController,
-            decoration: const InputDecoration(
-              labelText: 'Batch Number',
-              hintText: 'Enter batch/lot number',
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _costController,
+            // Category dropdown or text field
+            categoriesAsync.when(
+              data: (categories) {
+                return DropdownButtonFormField<String>(
                   decoration: const InputDecoration(
-                    labelText: 'Cost',
-                    hintText: 'Cost per unit',
+                    labelText: 'Category',
+                    hintText: 'Select a category',
                   ),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: _supplierController,
-            decoration: const InputDecoration(
-              labelText: 'Supplier (Optional)',
-              hintText: 'Enter supplier name',
-            ),
-          ),
-
-          const SizedBox(height: 16),
-          _buildDatePicker(
-            labelText: 'Expiry Date',
-            selectedDate: _expiryDate,
-            onDateSelected: (date) {
-              setState(() {
-                _expiryDate = date;
-              });
-            },
-          ),
-
-          // Dairy-Specific Information
-          const SizedBox(height: 16),
-          _buildSectionHeader('Dairy-Specific Information'),
-          Row(
-            children: [
-              Expanded(
-                child: _buildDatePicker(
-                  labelText: 'Processing Date',
-                  selectedDate: _processingDate,
-                  onDateSelected: (date) {
+                  value: _selectedCategory,
+                  items: [
+                    ...categories.map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(category),
+                      ),
+                    ),
+                    const DropdownMenuItem(
+                      value: 'other',
+                      child: Text('Other (Specify)'),
+                    ),
+                  ],
+                  onChanged: (value) {
                     setState(() {
-                      _processingDate = date;
+                      _selectedCategory = value;
+                      if (value != 'other') {
+                        _categoryController.text = value!;
+                      } else {
+                        _categoryController.text = '';
+                      }
                     });
                   },
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Fat Content (%)',
-                    hintText: 'e.g., 3.5',
-                  ),
-                  keyboardType: TextInputType.number,
-                  initialValue: _fatContent?.toString() ?? '',
-                  onChanged: (value) {
-                    if (value.isNotEmpty) {
-                      _fatContent = double.tryParse(value);
-                    } else {
-                      _fatContent = null;
+                  validator: (value) {
+                    if (_categoryController.text.isEmpty) {
+                      return 'Please select or enter a category';
                     }
+                    return null;
                   },
+                );
+              },
+              loading: () => TextFormField(
+                controller: _categoryController,
+                decoration: const InputDecoration(
+                  labelText: 'Category',
+                  hintText: 'Enter category',
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a category';
+                  }
+                  return null;
+                },
               ),
-            ],
-          ),
-
-          const SizedBox(height: 8),
-          SwitchListTile(
-            title: const Text('Pasteurized'),
-            value: _isPasteurized,
-            onChanged: (value) {
-              setState(() {
-                _isPasteurized = value;
-              });
-            },
-          ),
-
-          // Form Submission
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              onPressed: _submitForm,
-              child: Text(
-                widget.isEditing ? 'Update Item' : 'Create Item',
-                style: const TextStyle(fontSize: 16),
+              error: (_, __) => TextFormField(
+                controller: _categoryController,
+                decoration: const InputDecoration(
+                  labelText: 'Category',
+                  hintText: 'Enter category',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a category';
+                  }
+                  return null;
+                },
               ),
             ),
-          ),
-        ],
+
+            if (_selectedCategory == 'other') ...[
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _categoryController,
+                decoration: const InputDecoration(
+                  labelText: 'Custom Category',
+                  hintText: 'Enter custom category',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a category';
+                  }
+                  return null;
+                },
+              ),
+            ],
+
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: _subCategoryController,
+              decoration: const InputDecoration(
+                labelText: 'Sub-Category',
+                hintText: 'Enter sub-category',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter sub-category';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: _unitController,
+              decoration: const InputDecoration(
+                labelText: 'Unit',
+                hintText: 'e.g., liters, kg, pcs',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a unit';
+                }
+                return null;
+              },
+            ),
+
+            // Quantities Section
+            const SizedBox(height: 16),
+            _buildSectionHeader('Quantities'),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _quantityController,
+                    decoration: const InputDecoration(
+                      labelText: 'Quantity',
+                      hintText: 'Current stock',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Required';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Enter a number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextFormField(
+                    controller: _minimumQuantityController,
+                    decoration: const InputDecoration(
+                      labelText: 'Minimum Quantity',
+                      hintText: 'Minimum stock',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Required';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Enter a number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _reorderPointController,
+                    decoration: const InputDecoration(
+                      labelText: 'Reorder Point',
+                      hintText: 'Reorder threshold',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Required';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Enter a number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextFormField(
+                    controller: _lowStockThresholdController,
+                    decoration: const InputDecoration(
+                      labelText: 'Low Stock Alert',
+                      hintText: 'Low stock threshold',
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Required';
+                      }
+                      if (int.tryParse(value) == null) {
+                        return 'Enter a number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            // Location Section
+            const SizedBox(height: 16),
+            _buildSectionHeader('Storage Information'),
+            locationsAsync.when(
+              data: (locations) {
+                return DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    labelText: 'Storage Location',
+                    hintText: 'Select a location',
+                  ),
+                  value: _selectedLocation,
+                  items: [
+                    ...locations.map(
+                      (location) => DropdownMenuItem(
+                        value: location,
+                        child: Text(location),
+                      ),
+                    ),
+                    const DropdownMenuItem(
+                      value: 'other',
+                      child: Text('Other (Specify)'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedLocation = value;
+                      if (value != 'other') {
+                        _locationController.text = value!;
+                      } else {
+                        _locationController.text = '';
+                      }
+                    });
+                  },
+                  validator: (value) {
+                    if (_locationController.text.isEmpty) {
+                      return 'Please select or enter a location';
+                    }
+                    return null;
+                  },
+                );
+              },
+              loading: () => TextFormField(
+                controller: _locationController,
+                decoration: const InputDecoration(
+                  labelText: 'Storage Location',
+                  hintText: 'Where this item is stored',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a location';
+                  }
+                  return null;
+                },
+              ),
+              error: (_, __) => TextFormField(
+                controller: _locationController,
+                decoration: const InputDecoration(
+                  labelText: 'Storage Location',
+                  hintText: 'Where this item is stored',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a location';
+                  }
+                  return null;
+                },
+              ),
+            ),
+
+            if (_selectedLocation == 'other') ...[
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _locationController,
+                decoration: const InputDecoration(
+                  labelText: 'Custom Location',
+                  hintText: 'Enter custom location',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a location';
+                  }
+                  return null;
+                },
+              ),
+            ],
+
+            // Additional Information Section
+            const SizedBox(height: 16),
+            _buildSectionHeader('Additional Information (Optional)'),
+            TextFormField(
+              controller: _batchNumberController,
+              decoration: const InputDecoration(
+                labelText: 'Batch Number',
+                hintText: 'Enter batch/lot number',
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _costController,
+                    decoration: const InputDecoration(
+                      labelText: 'Cost',
+                      hintText: 'Cost per unit',
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: _supplierController,
+              decoration: const InputDecoration(
+                labelText: 'Supplier (Optional)',
+                hintText: 'Enter supplier name',
+              ),
+            ),
+
+            const SizedBox(height: 16),
+            _buildDatePicker(
+              labelText: 'Expiry Date',
+              selectedDate: _expiryDate,
+              onDateSelected: (date) {
+                setState(() {
+                  _expiryDate = date;
+                });
+              },
+            ),
+
+            // Dairy-Specific Information
+            const SizedBox(height: 16),
+            _buildSectionHeader('Dairy-Specific Information'),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildDatePicker(
+                    labelText: 'Processing Date',
+                    selectedDate: _processingDate,
+                    onDateSelected: (date) {
+                      setState(() {
+                        _processingDate = date;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Fat Content (%)',
+                      hintText: 'e.g., 3.5',
+                    ),
+                    keyboardType: TextInputType.number,
+                    initialValue: _fatContent?.toString() ?? '',
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        _fatContent = double.tryParse(value);
+                      } else {
+                        _fatContent = null;
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 8),
+            SwitchListTile(
+              title: const Text('Pasteurized'),
+              value: _isPasteurized,
+              onChanged: (value) {
+                setState(() {
+                  _isPasteurized = value;
+                });
+              },
+            ),
+
+            // Form Submission
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                onPressed: _submitForm,
+                child: Text(
+                  widget.isEditing ? 'Update Item' : 'Create Item',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

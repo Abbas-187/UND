@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InventoryTrendsScreen extends ConsumerWidget {
   const InventoryTrendsScreen({super.key});
@@ -12,7 +12,7 @@ class InventoryTrendsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.inventoryTrends),
+        title: Text(l10n?.inventoryTrends ?? 'Inventory Trends'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -27,7 +27,7 @@ class InventoryTrendsScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.stockLevels,
+                      l10n?.stockLevels ?? 'Stock Levels',
                       style: theme.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -51,7 +51,7 @@ class InventoryTrendsScreen extends ConsumerWidget {
                               color: theme.colorScheme.primary,
                             ),
                             const SizedBox(height: 8),
-                            Text(l10n.notAvailable)
+                            Text(l10n?.notAvailable ?? 'Not available')
                           ],
                         ),
                       ),
@@ -71,7 +71,7 @@ class InventoryTrendsScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.inventoryMovements,
+                      l10n?.inventoryMovements ?? 'Inventory Movements',
                       style: theme.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -95,7 +95,7 @@ class InventoryTrendsScreen extends ConsumerWidget {
                               color: theme.colorScheme.primary,
                             ),
                             const SizedBox(height: 8),
-                            Text(l10n.notAvailable)
+                            Text(l10n?.notAvailable ?? 'Not available')
                           ],
                         ),
                       ),
@@ -109,11 +109,14 @@ class InventoryTrendsScreen extends ConsumerWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildLegendItem(context, 'IN', Colors.green),
+                          _buildLegendItem(
+                              context, l10n?.inMovement ?? 'IN', Colors.green),
                           const SizedBox(width: 16),
-                          _buildLegendItem(context, 'OUT', Colors.red),
+                          _buildLegendItem(
+                              context, l10n?.out ?? 'OUT', Colors.red),
                           const SizedBox(width: 16),
-                          _buildLegendItem(context, 'TRANSFER', Colors.blue),
+                          _buildLegendItem(context,
+                              l10n?.transfer ?? 'TRANSFER', Colors.blue),
                         ],
                       ),
                     ),
@@ -132,7 +135,7 @@ class InventoryTrendsScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n.valueByCategory,
+                      l10n?.valueByCategory ?? 'Value by Category',
                       style: theme.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
@@ -156,7 +159,7 @@ class InventoryTrendsScreen extends ConsumerWidget {
                               color: theme.colorScheme.primary,
                             ),
                             const SizedBox(height: 8),
-                            Text(l10n.notAvailable)
+                            Text(l10n?.notAvailable ?? 'Not available')
                           ],
                         ),
                       ),
