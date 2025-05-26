@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -10,7 +11,6 @@ import '../../data/models/inventory_movement_item_model.dart';
 import '../../data/models/inventory_movement_model.dart';
 import '../providers/inventory_movement_provider.dart';
 import '../widgets/inventory_movement_item_form.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Screen for creating and managing inventory movements
 /// with batch tracking and FIFO/LIFO costing
@@ -597,76 +597,76 @@ class _InventoryMovementScreenState
     final l10n = AppLocalizations.of(context);
     switch (type) {
       case InventoryMovementType.receipt:
-        return l10n?.receipt as String? ?? 'Receipt';
+        return l10n?.receipt ?? 'Receipt';
       case InventoryMovementType.issue:
-        return l10n?.issue as String? ?? 'Issue';
+        return l10n?.issue ?? 'Issue';
       case InventoryMovementType.transfer:
-        return l10n?.transfer as String? ?? 'Transfer';
+        return l10n?.transfer ?? 'Transfer';
       case InventoryMovementType.return_:
-        return l10n?.returnMovement as String? ?? 'Return';
+        return l10n?.returnMovement ?? 'Return';
       case InventoryMovementType.adjustment:
-        return l10n?.adjustment as String? ?? 'Adjustment';
+        return l10n?.adjustment ?? 'Adjustment';
       case InventoryMovementType.production:
         return l10n?.production as String? ?? 'Production';
       case InventoryMovementType.consumption:
-        return l10n?.consumption as String? ?? 'Consumption';
+        return l10n?.consumption ?? 'Consumption';
       case InventoryMovementType.waste:
-        return l10n?.waste as String? ?? 'Waste';
+        return l10n?.waste ?? 'Waste';
       case InventoryMovementType.expiry:
-        return l10n?.expiry as String? ?? 'Expiry';
+        return l10n?.expiry ?? 'Expiry';
       case InventoryMovementType.qualityStatusChange:
-        return l10n?.qualityStatusChange as String? ?? 'Quality Status Change';
+        return l10n?.qualityStatusChange ?? 'Quality Status Change';
       case InventoryMovementType.repack:
-        return l10n?.repack as String? ?? 'Repack';
+        return l10n?.repack ?? 'Repack';
       case InventoryMovementType.sample:
-        return l10n?.sample as String? ?? 'Sample';
+        return l10n?.sample ?? 'Sample';
       case InventoryMovementType.salesIssue:
-        return l10n?.salesIssue as String? ?? 'Sales Issue';
+        return l10n?.salesIssue ?? 'Sales Issue';
       case InventoryMovementType.purchaseReceipt:
-        return l10n?.purchaseReceipt as String? ?? 'Purchase Receipt';
+        return l10n?.purchaseReceipt ?? 'Purchase Receipt';
       case InventoryMovementType.productionConsumption:
-        return l10n?.productionConsumption as String? ??
+        return l10n?.productionConsumption ??
             'Production Consumption';
       case InventoryMovementType.productionOutput:
-        return l10n?.productionOutput as String? ?? 'Production Output';
+        return l10n?.productionOutput ?? 'Production Output';
       case InventoryMovementType.interWarehouseTransfer:
-        return l10n?.interWarehouseTransfer as String? ??
+        return l10n?.interWarehouseTransfer ??
             'Inter-Warehouse Transfer';
       case InventoryMovementType.intraWarehouseTransfer:
-        return l10n?.intraWarehouseTransfer as String? ??
+        return l10n?.intraWarehouseTransfer ??
             'Intra-Warehouse Transfer';
       case InventoryMovementType.scrapDisposal:
-        return l10n?.scrapDisposal as String? ?? 'Scrap Disposal';
+        return l10n?.scrapDisposal ?? 'Scrap Disposal';
       case InventoryMovementType.qualityHold:
-        return l10n?.qualityHold as String? ?? 'Quality Hold';
+        return l10n?.qualityHold ?? 'Quality Hold';
       case InventoryMovementType.initialBalanceAdjustment:
-        return l10n?.initialBalanceAdjustment as String? ??
+        return l10n?.initialBalanceAdjustment ??
             'Initial Balance Adjustment';
       case InventoryMovementType.reservationAdjustment:
-        return l10n?.reservationAdjustment as String? ??
+        return l10n?.reservationAdjustment ??
             'Reservation Adjustment';
       case InventoryMovementType.poReceipt:
-        return l10n?.poReceipt as String? ?? 'PO Receipt';
+        return l10n?.poReceipt ?? 'PO Receipt';
       case InventoryMovementType.transferIn:
-        return l10n?.transferIn as String? ?? 'Transfer In';
+        return l10n?.transferIn ?? 'Transfer In';
       case InventoryMovementType.productionIssue:
-        return l10n?.productionIssue as String? ?? 'Production Issue';
+        return l10n?.productionIssue ?? 'Production Issue';
       case InventoryMovementType.salesReturn:
-        return l10n?.salesReturn as String? ?? 'Sales Return';
+        return l10n?.salesReturn ?? 'Sales Return';
       case InventoryMovementType.adjustmentOther:
-        return l10n?.adjustmentOther as String? ?? 'Other Adjustment';
+        return l10n?.adjustmentOther ?? 'Other Adjustment';
       case InventoryMovementType.transferOut:
-        return l10n?.transferOut as String? ?? 'Transfer Out';
+        return l10n?.transferOut ?? 'Transfer Out';
       case InventoryMovementType.saleShipment:
-        return l10n?.saleShipment as String? ?? 'Sale Shipment';
+        return l10n?.saleShipment ?? 'Sale Shipment';
       case InventoryMovementType.adjustmentDamage:
-        return l10n?.adjustmentDamage as String? ?? 'Damage Adjustment';
+        return l10n?.adjustmentDamage ?? 'Damage Adjustment';
       case InventoryMovementType.adjustmentCycleCountGain:
-        return l10n?.adjustmentCycleCountGain as String? ?? 'Cycle Count Gain';
+        return l10n?.adjustmentCycleCountGain ?? 'Cycle Count Gain';
       case InventoryMovementType.adjustmentCycleCountLoss:
-        return l10n?.adjustmentCycleCountLoss as String? ?? 'Cycle Count Loss';
+        return l10n?.adjustmentCycleCountLoss ?? 'Cycle Count Loss';
       case InventoryMovementType.qualityStatusUpdate:
-        return l10n?.qualityStatusUpdate as String? ?? 'Quality Status Update';
+        return l10n?.qualityStatusUpdate ?? 'Quality Status Update';
     }
   }
 

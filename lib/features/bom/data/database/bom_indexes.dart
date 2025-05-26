@@ -1,6 +1,6 @@
 /// Database indexing optimization for BOM module
 /// Provides index definitions and query optimization strategies
-library bom_indexes;
+library;
 
 /// Index definitions for BOM-related tables
 class BomIndexes {

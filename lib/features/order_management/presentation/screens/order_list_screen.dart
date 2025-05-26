@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../providers/order_provider.dart';
-import '../widgets/order_filter_bar.dart';
 import '../../../../core/auth/services/auth_service.dart';
 import '../../../sales/domain/providers/customer_provider.dart';
 import '../../data/models/order_model.dart';
+import '../providers/order_provider.dart';
+import '../widgets/order_filter_bar.dart';
 
 class OrderListScreen extends ConsumerStatefulWidget {
   const OrderListScreen({super.key});
@@ -76,7 +76,7 @@ class _OrderListScreenState extends ConsumerState<OrderListScreen> {
                     if (_statusFilter != null && _statusFilter != 'All') {
                       filtered = filtered
                           .where((o) => (o.status is OrderStatus
-                                  ? (o.status as OrderStatus).name
+                                  ? (o.status).name
                                   : o.status.toString().toLowerCase())
                               .contains(_statusFilter!.toLowerCase()))
                           .toList();

@@ -418,17 +418,6 @@ class SupplierQuoteService {
 
 // Supporting classes
 class SupplierQuote {
-  final String id;
-  final String supplierId;
-  final String supplierName;
-  final String itemId;
-  final double unitPrice;
-  final String currency;
-  final int leadTimeDays;
-  final double minimumOrderQuantity;
-  final DateTime validUntil;
-  final double? qualityRating;
-  final double? deliveryRating;
 
   SupplierQuote({
     required this.id,
@@ -443,13 +432,20 @@ class SupplierQuote {
     this.qualityRating,
     this.deliveryRating,
   });
+  final String id;
+  final String supplierId;
+  final String supplierName;
+  final String itemId;
+  final double unitPrice;
+  final String currency;
+  final int leadTimeDays;
+  final double minimumOrderQuantity;
+  final DateTime validUntil;
+  final double? qualityRating;
+  final double? deliveryRating;
 }
 
 class OptimizationCriteria {
-  final double priceWeight;
-  final double qualityWeight;
-  final double deliveryWeight;
-  final double leadTimeWeight;
 
   OptimizationCriteria({
     required this.priceWeight,
@@ -457,14 +453,13 @@ class OptimizationCriteria {
     required this.deliveryWeight,
     required this.leadTimeWeight,
   });
+  final double priceWeight;
+  final double qualityWeight;
+  final double deliveryWeight;
+  final double leadTimeWeight;
 }
 
 class ProcurementRecommendation {
-  final String bomId;
-  final List<RecommendedPurchase> recommendations;
-  final double totalEstimatedCost;
-  final int averageLeadTime;
-  final DateTime generatedAt;
 
   ProcurementRecommendation({
     required this.bomId,
@@ -473,22 +468,14 @@ class ProcurementRecommendation {
     required this.averageLeadTime,
     required this.generatedAt,
   });
+  final String bomId;
+  final List<RecommendedPurchase> recommendations;
+  final double totalEstimatedCost;
+  final int averageLeadTime;
+  final DateTime generatedAt;
 }
 
 class RecommendedPurchase {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final double requiredQuantity;
-  final double recommendedQuantity;
-  final String selectedSupplier;
-  final String supplierName;
-  final double unitPrice;
-  final double totalCost;
-  final int leadTimeDays;
-  final RecommendationReason reason;
-  final double confidenceScore;
-  final List<String> alternativeSuppliers;
 
   RecommendedPurchase({
     required this.itemId,
@@ -505,13 +492,26 @@ class RecommendedPurchase {
     required this.confidenceScore,
     required this.alternativeSuppliers,
   });
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final double requiredQuantity;
+  final double recommendedQuantity;
+  final String selectedSupplier;
+  final String supplierName;
+  final double unitPrice;
+  final double totalCost;
+  final int leadTimeDays;
+  final RecommendationReason reason;
+  final double confidenceScore;
+  final List<String> alternativeSuppliers;
 }
 
 class ScoredQuote {
-  final SupplierQuote quote;
-  final double score;
 
   ScoredQuote({required this.quote, required this.score});
+  final SupplierQuote quote;
+  final double score;
 }
 
 enum RecommendationReason {
@@ -526,18 +526,13 @@ enum RecommendationReason {
 
 // Helper classes
 class _Supplier {
-  final String id;
-  final String name;
 
   _Supplier({required this.id, required this.name});
+  final String id;
+  final String name;
 }
 
 class _BomItem {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final double quantity;
-  final String unit;
 
   _BomItem({
     required this.itemId,
@@ -546,4 +541,9 @@ class _BomItem {
     required this.quantity,
     required this.unit,
   });
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final double quantity;
+  final String unit;
 }

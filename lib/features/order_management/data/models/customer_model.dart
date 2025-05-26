@@ -1,7 +1,4 @@
 class CustomerBranch {
-  final String id;
-  final String name;
-  final String address;
 
   CustomerBranch({required this.id, required this.name, required this.address});
 
@@ -10,6 +7,9 @@ class CustomerBranch {
         name: json['name'] as String,
         address: json['address'] as String,
       );
+  final String id;
+  final String name;
+  final String address;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -27,10 +27,6 @@ class CustomerBranch {
 }
 
 class CustomerModel {
-  final String? id;
-  final String name;
-  final String? customerType;
-  final List<CustomerBranch> branches;
 
   CustomerModel(
       {this.id,
@@ -47,6 +43,10 @@ class CustomerModel {
                 .toList() ??
             [],
       );
+  final String? id;
+  final String name;
+  final String? customerType;
+  final List<CustomerBranch> branches;
 
   Map<String, dynamic> toJson() => {
         if (id != null) 'id': id,

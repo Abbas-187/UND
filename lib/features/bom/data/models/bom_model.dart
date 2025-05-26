@@ -6,6 +6,124 @@ import '../../domain/entities/bom_item.dart';
 /// Comprehensive and robust data model for BOM that handles Firebase serialization
 /// with enterprise-grade validation, business logic, and error handling
 class BomModel {
+
+  factory BomModel.fromJson(Map<String, dynamic> json) {
+    return BomModel(
+      id: json['id'] ?? '',
+      bomCode: json['bomCode'] ?? '',
+      bomName: json['bomName'] ?? '',
+      productId: json['productId'] ?? '',
+      productCode: json['productCode'] ?? '',
+      productName: json['productName'] ?? '',
+      bomType: json['bomType'] ?? '',
+      version: json['version'] ?? '',
+      baseQuantity: (json['baseQuantity'] ?? 0.0).toDouble(),
+      baseUnit: json['baseUnit'] ?? '',
+      status: json['status'] ?? 'draft',
+      items: List<Map<String, dynamic>>.from(json['items'] ?? []),
+      totalCost: (json['totalCost'] ?? 0.0).toDouble(),
+      laborCost: (json['laborCost'] ?? 0.0).toDouble(),
+      overheadCost: (json['overheadCost'] ?? 0.0).toDouble(),
+      setupCost: (json['setupCost'] ?? 0.0).toDouble(),
+      yieldPercentage: (json['yieldPercentage'] ?? 0.0).toDouble(),
+      description: json['description'],
+      notes: json['notes'],
+      approvedBy: json['approvedBy'],
+      approvedAt: _parseDateTime(json['approvedAt']),
+      effectiveFrom: _parseDateTime(json['effectiveFrom']),
+      effectiveTo: _parseDateTime(json['effectiveTo']),
+      productionInstructions: json['productionInstructions'],
+      qualityRequirements: json['qualityRequirements'],
+      packagingInstructions: json['packagingInstructions'],
+      alternativeBomIds: json['alternativeBomIds'] != null
+          ? List<String>.from(json['alternativeBomIds'])
+          : null,
+      parentBomId: json['parentBomId'],
+      childBomIds: List<String>.from(json['childBomIds'] ?? []),
+      createdAt: _parseDateTime(json['createdAt']) ?? DateTime.now(),
+      updatedAt: _parseDateTime(json['updatedAt']) ?? DateTime.now(),
+      createdBy: json['createdBy'],
+      updatedBy: json['updatedBy'],
+      // Enhanced fields
+      revision: json['revision'] ?? 1,
+      isTemplate: json['isTemplate'] ?? false,
+      templateCategory: json['templateCategory'],
+      businessUnit: json['businessUnit'],
+      costCenter: json['costCenter'],
+      currency: json['currency'] ?? 'USD',
+      exchangeRate: (json['exchangeRate'] ?? 1.0).toDouble(),
+      lastCostUpdate: _parseDateTime(json['lastCostUpdate']),
+      nextReviewDate: _parseDateTime(json['nextReviewDate']),
+      complianceFlags: List<String>.from(json['complianceFlags'] ?? []),
+      environmentalImpact: json['environmentalImpact'],
+      sustainabilityScore: json['sustainabilityScore']?.toDouble(),
+      riskAssessment: json['riskAssessment'],
+      changeHistory:
+          List<Map<String, dynamic>>.from(json['changeHistory'] ?? []),
+      attachments: List<Map<String, dynamic>>.from(json['attachments'] ?? []),
+      tags: List<String>.from(json['tags'] ?? []),
+      customFields: Map<String, dynamic>.from(json['customFields'] ?? {}),
+      integrationStatus:
+          Map<String, dynamic>.from(json['integrationStatus'] ?? {}),
+      validationErrors: List<String>.from(json['validationErrors'] ?? []),
+      auditTrail: Map<String, dynamic>.from(json['auditTrail'] ?? {}),
+    );
+  }
+
+  /// Create from Firestore document with error handling
+  factory BomModel.fromFirestore(DocumentSnapshot doc) {
+    try {
+      final data = doc.data() as Map<String, dynamic>?;
+      if (data == null) {
+        throw Exception('Document data is null');
+      }
+      return BomModel.fromJson({
+        ...data,
+        'id': doc.id,
+      });
+    } catch (e) {
+      throw Exception('Failed to parse BOM from Firestore: $e');
+    }
+  }
+
+  /// Create from domain entity with comprehensive mapping
+  factory BomModel.fromDomain(BillOfMaterials entity) {
+    return BomModel(
+      id: entity.id,
+      bomCode: entity.bomCode,
+      bomName: entity.bomName,
+      productId: entity.productId,
+      productCode: entity.productCode,
+      productName: entity.productName,
+      bomType: entity.bomType.name,
+      version: entity.version,
+      baseQuantity: entity.baseQuantity,
+      baseUnit: entity.baseUnit,
+      status: entity.status.name,
+      items: entity.items.map((item) => _bomItemToMap(item)).toList(),
+      totalCost: entity.totalCost,
+      laborCost: entity.laborCost,
+      overheadCost: entity.overheadCost,
+      setupCost: entity.setupCost,
+      yieldPercentage: entity.yieldPercentage,
+      description: entity.description,
+      notes: entity.notes,
+      approvedBy: entity.approvedBy,
+      approvedAt: entity.approvedAt,
+      effectiveFrom: entity.effectiveFrom,
+      effectiveTo: entity.effectiveTo,
+      productionInstructions: entity.productionInstructions,
+      qualityRequirements: entity.qualityRequirements,
+      packagingInstructions: entity.packagingInstructions,
+      alternativeBomIds: entity.alternativeBomIds,
+      parentBomId: entity.parentBomId,
+      childBomIds: entity.childBomIds,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+      createdBy: entity.createdBy,
+      updatedBy: entity.updatedBy,
+    );
+  }
   const BomModel({
     required this.id,
     required this.bomCode,
@@ -352,69 +470,6 @@ class BomModel {
     );
   }
 
-  factory BomModel.fromJson(Map<String, dynamic> json) {
-    return BomModel(
-      id: json['id'] ?? '',
-      bomCode: json['bomCode'] ?? '',
-      bomName: json['bomName'] ?? '',
-      productId: json['productId'] ?? '',
-      productCode: json['productCode'] ?? '',
-      productName: json['productName'] ?? '',
-      bomType: json['bomType'] ?? '',
-      version: json['version'] ?? '',
-      baseQuantity: (json['baseQuantity'] ?? 0.0).toDouble(),
-      baseUnit: json['baseUnit'] ?? '',
-      status: json['status'] ?? 'draft',
-      items: List<Map<String, dynamic>>.from(json['items'] ?? []),
-      totalCost: (json['totalCost'] ?? 0.0).toDouble(),
-      laborCost: (json['laborCost'] ?? 0.0).toDouble(),
-      overheadCost: (json['overheadCost'] ?? 0.0).toDouble(),
-      setupCost: (json['setupCost'] ?? 0.0).toDouble(),
-      yieldPercentage: (json['yieldPercentage'] ?? 0.0).toDouble(),
-      description: json['description'],
-      notes: json['notes'],
-      approvedBy: json['approvedBy'],
-      approvedAt: _parseDateTime(json['approvedAt']),
-      effectiveFrom: _parseDateTime(json['effectiveFrom']),
-      effectiveTo: _parseDateTime(json['effectiveTo']),
-      productionInstructions: json['productionInstructions'],
-      qualityRequirements: json['qualityRequirements'],
-      packagingInstructions: json['packagingInstructions'],
-      alternativeBomIds: json['alternativeBomIds'] != null
-          ? List<String>.from(json['alternativeBomIds'])
-          : null,
-      parentBomId: json['parentBomId'],
-      childBomIds: List<String>.from(json['childBomIds'] ?? []),
-      createdAt: _parseDateTime(json['createdAt']) ?? DateTime.now(),
-      updatedAt: _parseDateTime(json['updatedAt']) ?? DateTime.now(),
-      createdBy: json['createdBy'],
-      updatedBy: json['updatedBy'],
-      // Enhanced fields
-      revision: json['revision'] ?? 1,
-      isTemplate: json['isTemplate'] ?? false,
-      templateCategory: json['templateCategory'],
-      businessUnit: json['businessUnit'],
-      costCenter: json['costCenter'],
-      currency: json['currency'] ?? 'USD',
-      exchangeRate: (json['exchangeRate'] ?? 1.0).toDouble(),
-      lastCostUpdate: _parseDateTime(json['lastCostUpdate']),
-      nextReviewDate: _parseDateTime(json['nextReviewDate']),
-      complianceFlags: List<String>.from(json['complianceFlags'] ?? []),
-      environmentalImpact: json['environmentalImpact'],
-      sustainabilityScore: json['sustainabilityScore']?.toDouble(),
-      riskAssessment: json['riskAssessment'],
-      changeHistory:
-          List<Map<String, dynamic>>.from(json['changeHistory'] ?? []),
-      attachments: List<Map<String, dynamic>>.from(json['attachments'] ?? []),
-      tags: List<String>.from(json['tags'] ?? []),
-      customFields: Map<String, dynamic>.from(json['customFields'] ?? {}),
-      integrationStatus:
-          Map<String, dynamic>.from(json['integrationStatus'] ?? {}),
-      validationErrors: List<String>.from(json['validationErrors'] ?? []),
-      auditTrail: Map<String, dynamic>.from(json['auditTrail'] ?? {}),
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -472,61 +527,6 @@ class BomModel {
       'validationErrors': validationErrors,
       'auditTrail': auditTrail,
     };
-  }
-
-  /// Create from Firestore document with error handling
-  factory BomModel.fromFirestore(DocumentSnapshot doc) {
-    try {
-      final data = doc.data() as Map<String, dynamic>?;
-      if (data == null) {
-        throw Exception('Document data is null');
-      }
-      return BomModel.fromJson({
-        ...data,
-        'id': doc.id,
-      });
-    } catch (e) {
-      throw Exception('Failed to parse BOM from Firestore: $e');
-    }
-  }
-
-  /// Create from domain entity with comprehensive mapping
-  factory BomModel.fromDomain(BillOfMaterials entity) {
-    return BomModel(
-      id: entity.id,
-      bomCode: entity.bomCode,
-      bomName: entity.bomName,
-      productId: entity.productId,
-      productCode: entity.productCode,
-      productName: entity.productName,
-      bomType: entity.bomType.name,
-      version: entity.version,
-      baseQuantity: entity.baseQuantity,
-      baseUnit: entity.baseUnit,
-      status: entity.status.name,
-      items: entity.items.map((item) => _bomItemToMap(item)).toList(),
-      totalCost: entity.totalCost,
-      laborCost: entity.laborCost,
-      overheadCost: entity.overheadCost,
-      setupCost: entity.setupCost,
-      yieldPercentage: entity.yieldPercentage,
-      description: entity.description,
-      notes: entity.notes,
-      approvedBy: entity.approvedBy,
-      approvedAt: entity.approvedAt,
-      effectiveFrom: entity.effectiveFrom,
-      effectiveTo: entity.effectiveTo,
-      productionInstructions: entity.productionInstructions,
-      qualityRequirements: entity.qualityRequirements,
-      packagingInstructions: entity.packagingInstructions,
-      alternativeBomIds: entity.alternativeBomIds,
-      parentBomId: entity.parentBomId,
-      childBomIds: entity.childBomIds,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-      createdBy: entity.createdBy,
-      updatedBy: entity.updatedBy,
-    );
   }
 
   /// Convert to domain entity with validation

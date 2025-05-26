@@ -2,13 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/order_mapper.dart';
 import '../../data/models/order_model.dart';
-import '../../domain/providers/order_usecase_providers.dart';
-import '../../domain/entities/order_audit_trail_entity.dart';
-import '../../data/providers/order_data_layer_providers.dart';
 import '../../data/providers/order_audit_trail_data_layer_providers.dart';
+import '../../data/providers/order_data_layer_providers.dart';
 import '../../data/services/notification_service.dart';
 import '../../data/services/order_status_automation_service.dart';
+import '../../domain/entities/order_audit_trail_entity.dart';
 import '../../domain/providers/order_audit_trail_usecase_providers.dart';
+import '../../domain/providers/order_usecase_providers.dart';
 
 class OrderNotifier extends StateNotifier<AsyncValue<List<OrderModel>>> {
   OrderNotifier(this.ref) : super(const AsyncValue.loading()) {

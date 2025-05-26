@@ -4,9 +4,6 @@ import '../../domain/entities/bom_item.dart';
 
 /// Mobile-optimized floating action button with label
 class MobileFloatingActionButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final IconData icon;
-  final String label;
 
   const MobileFloatingActionButton({
     super.key,
@@ -14,6 +11,9 @@ class MobileFloatingActionButton extends StatelessWidget {
     required this.icon,
     required this.label,
   });
+  final VoidCallback onPressed;
+  final IconData icon;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +28,6 @@ class MobileFloatingActionButton extends StatelessWidget {
 
 /// Mobile-optimized BOM card with swipe actions
 class MobileBomCard extends StatelessWidget {
-  final BillOfMaterials bom;
-  final VoidCallback onTap;
-  final VoidCallback onEdit;
-  final VoidCallback onDuplicate;
-  final VoidCallback onDelete;
-  final VoidCallback onShare;
 
   const MobileBomCard({
     super.key,
@@ -44,6 +38,12 @@ class MobileBomCard extends StatelessWidget {
     required this.onDelete,
     required this.onShare,
   });
+  final BillOfMaterials bom;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDuplicate;
+  final VoidCallback onDelete;
+  final VoidCallback onShare;
 
   @override
   Widget build(BuildContext context) {
@@ -336,10 +336,6 @@ class MobileBomCard extends StatelessWidget {
 
 /// Mobile-optimized BOM item card
 class MobileBomItemCard extends StatelessWidget {
-  final BomItem item;
-  final VoidCallback onTap;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
 
   const MobileBomItemCard({
     super.key,
@@ -348,6 +344,10 @@ class MobileBomItemCard extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
   });
+  final BomItem item;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -539,10 +539,6 @@ class MobileBomItemCard extends StatelessWidget {
 
 /// Mobile-optimized expandable card
 class MobileExpandableCard extends StatelessWidget {
-  final String title;
-  final Widget child;
-  final bool isExpanded;
-  final VoidCallback onToggle;
 
   const MobileExpandableCard({
     super.key,
@@ -551,6 +547,10 @@ class MobileExpandableCard extends StatelessWidget {
     required this.isExpanded,
     required this.onToggle,
   });
+  final String title;
+  final Widget child;
+  final bool isExpanded;
+  final VoidCallback onToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -590,9 +590,9 @@ class MobileExpandableCard extends StatelessWidget {
 
 /// Mobile item detail bottom sheet
 class MobileItemDetailSheet extends StatelessWidget {
-  final BomItem item;
 
   const MobileItemDetailSheet({super.key, required this.item});
+  final BomItem item;
 
   @override
   Widget build(BuildContext context) {

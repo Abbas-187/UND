@@ -1,6 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 import '../../domain/usecases/analytics/customer_demand_analytics_usecase.dart';
 import '../providers/inventory_analytics_provider.dart';
@@ -692,7 +692,7 @@ class _DemandInsightsViewState extends ConsumerState<DemandInsightsView> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/bom_model.dart';
 import '../models/bom_item_model.dart';
+import '../models/bom_model.dart';
 
 /// Firestore datasource for BOM operations
 class BomFirestoreDatasource {
@@ -203,7 +203,7 @@ class BomFirestoreDatasource {
     final snapshot = await _firestore
         .collection(_bomsCollection)
         .where('bomCode', isGreaterThanOrEqualTo: query)
-        .where('bomCode', isLessThan: query + 'z')
+        .where('bomCode', isLessThan: '${query}z')
         .get();
     return snapshot.docs.map((doc) => BomModel.fromFirestore(doc)).toList();
   }

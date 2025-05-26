@@ -2,16 +2,9 @@ import 'package:flutter/material.dart';
 
 /// Bottom action bar for bulk BOM operations
 class BulkActionBar extends StatelessWidget {
-  final int selectedCount;
-  final VoidCallback onBulkUpdate;
-  final VoidCallback onBulkDelete;
-  final VoidCallback onBulkCopy;
-  final VoidCallback onBulkStatusChange;
-  final VoidCallback onBulkCostRecalculation;
-  final VoidCallback onClearSelection;
 
   const BulkActionBar({
-    Key? key,
+    super.key,
     required this.selectedCount,
     required this.onBulkUpdate,
     required this.onBulkDelete,
@@ -19,7 +12,14 @@ class BulkActionBar extends StatelessWidget {
     required this.onBulkStatusChange,
     required this.onBulkCostRecalculation,
     required this.onClearSelection,
-  }) : super(key: key);
+  });
+  final int selectedCount;
+  final VoidCallback onBulkUpdate;
+  final VoidCallback onBulkDelete;
+  final VoidCallback onBulkCopy;
+  final VoidCallback onBulkStatusChange;
+  final VoidCallback onBulkCostRecalculation;
+  final VoidCallback onClearSelection;
 
   @override
   Widget build(BuildContext context) {

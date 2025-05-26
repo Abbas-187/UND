@@ -6,13 +6,13 @@ import 'package:intl/intl.dart';
 import '../../../../../common/widgets/detail_appbar.dart';
 import '../../../../../common/widgets/loading_overlay.dart';
 import '../../../../../common/widgets/status_badge.dart';
+import '../../../../inventory/domain/entities/inventory_item.dart';
 import '../../../../suppliers/presentation/providers/supplier_provider.dart';
 import '../../../domain/entities/purchase_order.dart';
 import '../../../domain/services/purchase_order_print_service.dart';
-import '../../providers/purchase_order_providers.dart';
-import '../../providers/inventory_provider.dart';
-import '../../../../inventory/domain/entities/inventory_item.dart';
 import '../../data/in_memory_purchase_requests.dart';
+import '../../providers/inventory_provider.dart';
+import '../../providers/purchase_order_providers.dart';
 
 /// Provider for PurchaseOrderPrintService to resolve the missing reference
 final purchaseOrderPrintServiceProvider =
@@ -246,11 +246,11 @@ class PurchaseOrderDetailScreen extends ConsumerWidget {
                           final firstItemId = purchaseOrder.items.first.itemId;
                           firstSubCat = itemsAsync.when(
                             data: (items) {
-                              final InventoryItem? firstItem = items.firstWhere(
+                              final InventoryItem firstItem = items.firstWhere(
                                 (item) => item.id == firstItemId,
                                 orElse: () => null as dynamic,
                               );
-                              return firstItem?.subCategory;
+                              return firstItem.subCategory;
                             },
                             loading: () => null,
                             error: (e, s) => null,

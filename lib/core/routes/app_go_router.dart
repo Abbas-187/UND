@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/ai/presentation/screens/ai_dashboard_screen.dart';
 import '../../features/analytics/presentation/screens/analytics_dashboard_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/bom/presentation/screens/bom_create_screen.dart';
+import '../../features/bom/presentation/screens/bom_dashboard_screen.dart';
+import '../../features/bom/presentation/screens/bom_detail_screen.dart';
+import '../../features/bom/presentation/screens/bom_edit_screen.dart';
+// BOM module imports
+import '../../features/bom/presentation/screens/bom_list_screen.dart';
+import '../../features/bom/presentation/screens/bom_main_screen.dart';
 import '../../features/crm/models/crm_report.dart';
 import '../../features/crm/models/customer.dart';
 import '../../features/crm/screens/crm_analytics_dashboard_screen.dart';
@@ -45,6 +53,7 @@ import '../../features/inventory/presentation/screens/dairy_inventory_screen.dar
 import '../../features/inventory/presentation/screens/inventory_adjustment_history_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_alerts_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_analytics_dashboard_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_audit_log_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_category_management_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_dashboard_page.dart';
 import '../../features/inventory/presentation/screens/inventory_database_management_screen.dart';
@@ -68,13 +77,19 @@ import '../../features/order_management/presentation/screens/order_creation_edit
 import '../../features/order_management/presentation/screens/order_detail_screen.dart';
 import '../../features/order_management/presentation/screens/order_list_screen.dart';
 import '../../features/procurement/presentation/screens/po_approval_screen.dart';
+import '../../features/procurement/presentation/screens/po_approvals_list_screen.dart';
 import '../../features/procurement/presentation/screens/procurement_dashboard_screen.dart';
 import '../../features/procurement/presentation/screens/procurement_main_screen.dart';
 import '../../features/procurement/presentation/screens/purchase_order/purchase_order_create_screen.dart';
 import '../../features/procurement/presentation/screens/purchase_order/purchase_order_detail_screen.dart';
 import '../../features/procurement/presentation/screens/purchase_order/purchase_order_list_screen.dart';
+import '../../features/procurement/presentation/screens/purchase_request_create_screen.dart';
+import '../../features/procurement/presentation/screens/requested_purchase_orders_screen.dart';
 import '../../features/procurement/presentation/screens/test_navigation_screen.dart';
 import '../../features/reports/screens/inventory_report_screen.dart';
+import '../../features/sales/presentation/screens/analytics/sales_analytics_screen.dart';
+import '../../features/sales/presentation/screens/customers/customer_list_screen.dart';
+import '../../features/sales/presentation/screens/dashboard/sales_dashboard_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/shared/presentation/screens/app_settings_screen.dart';
 import '../../features/suppliers/presentation/screens/supplier_contract_detail_screen.dart';
@@ -84,13 +99,6 @@ import '../../features/suppliers/presentation/screens/suppliers_screen.dart';
 import '../auth/services/auth_service.dart';
 import '../config.dart';
 import '../layout/main_layout.dart';
-import '../../features/sales/presentation/screens/customers/customer_list_screen.dart';
-import '../../features/sales/presentation/screens/dashboard/sales_dashboard_screen.dart';
-import '../../features/sales/presentation/screens/analytics/sales_analytics_screen.dart';
-import '../../features/inventory/presentation/screens/inventory_audit_log_screen.dart';
-import '../../features/procurement/presentation/screens/purchase_request_create_screen.dart';
-import '../../features/procurement/presentation/screens/requested_purchase_orders_screen.dart';
-import '../../features/procurement/presentation/screens/po_approvals_list_screen.dart';
 
 /// Centralized string constants for named routes
 class AppRoutes {
@@ -100,6 +108,8 @@ class AppRoutes {
   static const analytics = '/analytics';
   static const forecasting = '/forecasting';
   static const milkReception = '/milk-reception';
+  // AI module
+  static const aiDashboard = '/ai-dashboard';
   // Supplier module
   static const suppliers = '/suppliers';
   static const supplierDetails = '/suppliers/details/:id';
@@ -193,9 +203,9 @@ class AppRoutes {
   static const editMaintenanceRecord =
       '/factory/equipment-maintenance/edit-record';
   static const productionOrders = '/factory/production/orders';
-  static const recipes = '/factory/production/recipes';
-  static const recipeCreate = '/factory/production/recipes/create';
-  static const recipeDetail = '/factory/production/recipes/detail';
+  static const recipes = '/bom/list';
+  static const recipeCreate = '/bom/create';
+  static const recipeDetail = '/bom/detail';
   // Milk Reception
   static const milkQualityTests = '/milk-reception/quality-tests';
   // Analytics
@@ -207,6 +217,11 @@ class AppRoutes {
   static const orderCreate = '/order-management/create';
   static const login = '/login';
   static const unauthorized = '/unauthorized';
+
+  // BOM module routes (redirected from recipe)
+  static const bomList = '/bom/list';
+  static const bomCreate = '/bom/create';
+  static const bomDetail = '/bom/detail';
 }
 
 // Custom ChangeNotifier to refresh GoRouter on stream events
@@ -433,6 +448,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => KeyedSubtree(
               key: ValueKey(AppRoutes.analytics),
               child: const AnalyticsDashboardScreen(),
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.aiDashboard,
+            builder: (context, state) => KeyedSubtree(
+              key: ValueKey(AppRoutes.aiDashboard),
+              child: const AIDashboardScreen(),
             ),
           ),
           GoRoute(
@@ -667,6 +689,57 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/procurement/po-approvals',
             builder: (context, state) => const POApprovalsListScreen(),
+          ),
+          // BOM module routes
+          GoRoute(
+            path: '/bom',
+            builder: (context, state) => KeyedSubtree(
+              key: const ValueKey('/bom'),
+              child: const BomMainScreen(),
+            ),
+            routes: [
+              GoRoute(
+                path: 'dashboard',
+                builder: (context, state) => KeyedSubtree(
+                  key: const ValueKey('/bom/dashboard'),
+                  child: const BomDashboardScreen(),
+                ),
+              ),
+              GoRoute(
+                path: 'list',
+                builder: (context, state) => KeyedSubtree(
+                  key: const ValueKey('/bom/list'),
+                  child: const BomListScreen(),
+                ),
+              ),
+              GoRoute(
+                path: 'create',
+                builder: (context, state) => KeyedSubtree(
+                  key: const ValueKey('/bom/create'),
+                  child: const BomCreateScreen(),
+                ),
+              ),
+              GoRoute(
+                path: 'detail/:id',
+                builder: (context, state) {
+                  final bomId = state.pathParameters['id']!;
+                  return KeyedSubtree(
+                    key: ValueKey('/bom/detail/$bomId'),
+                    child: BomDetailScreen(bomId: bomId),
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'edit/:id',
+                builder: (context, state) {
+                  final bomId = state.pathParameters['id']!;
+                  return KeyedSubtree(
+                    key: ValueKey('/bom/edit/$bomId'),
+                    child: BomEditScreen(bomId: bomId),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

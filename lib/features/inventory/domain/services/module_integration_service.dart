@@ -5,7 +5,6 @@ import '../../../factory/data/models/production_order_model.dart';
 import '../../../factory/domain/providers/production_provider.dart';
 import '../../../logistics/domain/providers/delivery_provider.dart';
 import '../../../order_management/data/models/order_model.dart';
-import '../../../order_management/presentation/providers/order_provider.dart';
 import '../../../order_management/domain/providers/order_usecase_providers.dart';
 import '../../domain/providers/inventory_provider.dart' as inventory_domain;
 import '../entities/inventory_item.dart';
@@ -207,8 +206,6 @@ class ModuleIntegrationService {
     double quantityChange,
     String reason, {
     String? referenceId,
-    String? batchNumber,
-    DateTime? expiryDate,
   }) async {
     final repository = _ref.read(inventory_domain.inventoryRepositoryProvider);
 

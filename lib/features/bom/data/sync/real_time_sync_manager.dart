@@ -5,14 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import '../../domain/entities/bill_of_materials.dart';
-import '../../domain/entities/bom_item.dart';
 import '../cache/bom_cache_manager.dart';
 
 /// Real-time synchronization manager for BOM data
 class RealTimeSyncManager {
-  static final RealTimeSyncManager _instance = RealTimeSyncManager._internal();
   factory RealTimeSyncManager() => _instance;
   RealTimeSyncManager._internal();
+  static final RealTimeSyncManager _instance = RealTimeSyncManager._internal();
 
   final Logger _logger = Logger();
   final StreamController<SyncEvent> _syncController =
@@ -385,11 +384,6 @@ class RealTimeSyncManager {
 
 /// Sync event
 class SyncEvent {
-  final SyncEventType type;
-  final String entityId;
-  final DateTime timestamp;
-  final dynamic data;
-  final String? error;
 
   SyncEvent({
     required this.type,
@@ -398,6 +392,11 @@ class SyncEvent {
     this.data,
     this.error,
   });
+  final SyncEventType type;
+  final String entityId;
+  final DateTime timestamp;
+  final dynamic data;
+  final String? error;
 }
 
 /// Sync event types
@@ -413,11 +412,6 @@ enum SyncEventType {
 
 /// Sync operation
 class SyncOperation {
-  final SyncOperationType type;
-  final String entityId;
-  final DateTime timestamp;
-  final int retryCount;
-  final Map<String, dynamic>? metadata;
 
   SyncOperation({
     required this.type,
@@ -426,6 +420,11 @@ class SyncOperation {
     this.retryCount = 0,
     this.metadata,
   });
+  final SyncOperationType type;
+  final String entityId;
+  final DateTime timestamp;
+  final int retryCount;
+  final Map<String, dynamic>? metadata;
 
   SyncOperation copyWith({
     SyncOperationType? type,
@@ -456,10 +455,6 @@ enum SyncOperationType {
 
 /// Sync status
 class SyncStatus {
-  final bool isOnline;
-  final bool isSyncing;
-  final int queuedOperations;
-  final DateTime? lastSyncTime;
 
   SyncStatus({
     required this.isOnline,
@@ -467,28 +462,27 @@ class SyncStatus {
     required this.queuedOperations,
     this.lastSyncTime,
   });
+  final bool isOnline;
+  final bool isSyncing;
+  final int queuedOperations;
+  final DateTime? lastSyncTime;
 }
 
 /// Sync criteria for selective sync
 class SyncCriteria {
-  final List<String>? bomIds;
-  final DateTime? since;
-  final List<String>? userIds;
 
   SyncCriteria({
     this.bomIds,
     this.since,
     this.userIds,
   });
+  final List<String>? bomIds;
+  final DateTime? since;
+  final List<String>? userIds;
 }
 
 /// Sync conflict
 class SyncConflict {
-  final String entityId;
-  final String field;
-  final dynamic localValue;
-  final dynamic serverValue;
-  final ConflictResolutionStrategy resolutionStrategy;
 
   SyncConflict({
     required this.entityId,
@@ -497,6 +491,11 @@ class SyncConflict {
     required this.serverValue,
     required this.resolutionStrategy,
   });
+  final String entityId;
+  final String field;
+  final dynamic localValue;
+  final dynamic serverValue;
+  final ConflictResolutionStrategy resolutionStrategy;
 }
 
 /// Conflict resolution strategies

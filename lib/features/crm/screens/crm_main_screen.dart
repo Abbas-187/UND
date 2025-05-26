@@ -1,15 +1,15 @@
 // Placeholder for CRM main screen
 import 'package:flutter/material.dart';
-import '../models/customer.dart';
-import '../models/order.dart';
+
 import '../models/crm_report.dart';
+import '../models/customer.dart';
 import 'crm_analytics_dashboard_screen.dart';
-import 'customer_search_screen.dart';
-import 'customer_bulk_actions_screen.dart';
-import 'customer_import_export_screen.dart';
+import 'crm_onboarding_screen.dart';
 import 'crm_reminders_screen.dart';
 import 'crm_report_screen.dart';
-import 'crm_onboarding_screen.dart';
+import 'customer_bulk_actions_screen.dart';
+import 'customer_import_export_screen.dart';
+import 'customer_search_screen.dart';
 import 'customer_tagging_screen.dart';
 
 class CrmMainScreen extends StatelessWidget {
@@ -141,11 +141,11 @@ class CrmMainScreen extends StatelessWidget {
 }
 
 class _CrmNavCard extends StatelessWidget {
+  const _CrmNavCard(
+      {required this.title, required this.icon, required this.onTap});
   final String title;
   final IconData icon;
   final VoidCallback onTap;
-  const _CrmNavCard(
-      {required this.title, required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

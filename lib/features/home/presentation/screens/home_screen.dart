@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../core/routes/app_go_router.dart';
 import '../../../../features/shared/models/app_modules.dart';
@@ -88,12 +88,6 @@ final Map<String, String Function(AppLocalizations)> l10nModuleGetters = {
   'productionListDesc': (l10n) => l10n.productionListDesc,
   'productionExecutionDetail': (l10n) => l10n.productionExecutionDetail,
   'productionExecutionDetailDesc': (l10n) => l10n.productionExecutionDetailDesc,
-  'recipeList': (l10n) => l10n.recipeList,
-  'recipeListDesc': (l10n) => l10n.recipeListDesc,
-  'recipeCreate': (l10n) => l10n.recipeCreate,
-  'recipeCreateDesc': (l10n) => l10n.recipeCreateDesc,
-  'recipeDetail': (l10n) => l10n.recipeDetail,
-  'recipeDetailDesc': (l10n) => l10n.recipeDetailDesc,
   'equipmentDetail': (l10n) => l10n.equipmentDetail,
   'equipmentDetailDesc': (l10n) => l10n.equipmentDetailDesc,
   'maintenanceRecordDetail': (l10n) => l10n.maintenanceRecordDetail,
@@ -152,6 +146,14 @@ final Map<String, String Function(AppLocalizations)> l10nModuleGetters = {
   'salesDashboardDesc': (l10n) => l10n.salesDashboardDesc,
   'salesAnalytics': (l10n) => l10n.salesAnalytics,
   'salesAnalyticsDesc': (l10n) => l10n.salesAnalyticsDesc,
+
+  // New BOM module screens
+  'bomList': (l10n) => 'BOM List',
+  'bomListDesc': (l10n) => 'View and manage Bills of Materials',
+  'bomCreate': (l10n) => 'Create BOM',
+  'bomCreateDesc': (l10n) => 'Create new Bill of Materials',
+  'bomDetail': (l10n) => 'BOM Details',
+  'bomDetailDesc': (l10n) => 'View Bill of Materials details',
 };
 
 String getL10nString(AppLocalizations l10n, String key) {
@@ -1232,6 +1234,13 @@ class HomeScreen extends ConsumerWidget {
 
     // Filter quick actions based on user role
     final List<Map<String, dynamic>> quickActions = [
+      {
+        'title': 'BOM Management',
+        'icon': Icons.menu_book,
+        'color': Colors.deepOrange,
+        'route': '/bom',
+        'moduleId': 'bom',
+      },
       {
         'title': 'Inventory Report',
         'icon': Icons.bar_chart,

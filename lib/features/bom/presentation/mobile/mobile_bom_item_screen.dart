@@ -5,9 +5,9 @@ import '../../domain/entities/bom_item.dart';
 import '../widgets/mobile_optimized_widgets.dart';
 
 class MobileBomItemScreen extends ConsumerStatefulWidget {
-  final BillOfMaterials bom;
 
   const MobileBomItemScreen({super.key, required this.bom});
+  final BillOfMaterials bom;
 
   @override
   ConsumerState<MobileBomItemScreen> createState() =>
@@ -19,15 +19,15 @@ class _MobileBomItemScreenState extends ConsumerState<MobileBomItemScreen>
   late TabController _tabController;
   final _scrollController = ScrollController();
 
-  bool _isExpanded = false;
+  final bool _isExpanded = false;
   bool _isLoading = false;
   List<BomItem> _bomItems = [];
 
   // Expandable sections state
   bool _headerExpanded = true;
-  bool _costExpanded = false;
-  bool _itemsExpanded = true;
-  bool _notesExpanded = false;
+  final bool _costExpanded = false;
+  final bool _itemsExpanded = true;
+  final bool _notesExpanded = false;
 
   @override
   void initState() {
@@ -741,9 +741,9 @@ class _MobileBomItemScreenState extends ConsumerState<MobileBomItemScreen>
 
 // Sticky tab bar delegate
 class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar tabBar;
 
   _StickyTabBarDelegate(this.tabBar);
+  final TabBar tabBar;
 
   @override
   double get minExtent => tabBar.preferredSize.height;

@@ -7,10 +7,10 @@ import '../../../inventory/domain/repositories/inventory_repository.dart'
     hide inventoryRepositoryProvider;
 import '../../../sales/data/repositories/sales_repository.dart';
 import '../../data/models/sales_forecast_model.dart';
+import '../../domain/entities/demand_signal_model.dart';
 import '../../domain/entities/time_series_point.dart';
 import '../../domain/services/forecasting_service.dart';
 import '../../domain/usecases/get_crm_demand_signals_usecase.dart';
-import '../../domain/entities/demand_signal_model.dart';
 
 /// States for the forecasting feature
 abstract class ForecastingState {}

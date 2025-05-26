@@ -4,8 +4,8 @@ import '../../domain/entities/bill_of_materials.dart';
 import '../../domain/entities/bom_item.dart';
 import '../../domain/repositories/bom_repository.dart';
 import '../datasources/bom_firestore_datasource.dart';
-import '../models/bom_model.dart';
 import '../models/bom_item_model.dart';
+import '../models/bom_model.dart';
 
 /// Implementation of BomRepository using Firebase Firestore
 class BomRepositoryImpl implements BomRepository {

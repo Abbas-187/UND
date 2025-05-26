@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../warehouse/presentation/widgets/widgets.dart';
 import '../../data/models/quality_status.dart';
@@ -743,7 +743,7 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
                   .toList(),
               onChanged: (value) => selectedStatus = value,
               decoration: InputDecoration(
-                labelText: l10n?.newStatus as String? ?? 'New Status',
+                labelText: l10n?.newStatus ?? 'New Status',
               ),
             ),
             const SizedBox(height: 16),
@@ -803,11 +803,13 @@ class InventoryItemDetailsScreen extends ConsumerWidget {
   QualityStatus _parseQualityStatusFromString(
       BuildContext context, String status) {
     final l10n = AppLocalizations.of(context);
-    if (status == (l10n?.excellent ?? 'Excellent'))
+    if (status == (l10n?.excellent ?? 'Excellent')) {
       return QualityStatus.excellent;
+    }
     if (status == (l10n?.good ?? 'Good')) return QualityStatus.good;
-    if (status == (l10n?.acceptable ?? 'Acceptable'))
+    if (status == (l10n?.acceptable ?? 'Acceptable')) {
       return QualityStatus.acceptable;
+    }
     if (status == (l10n?.warning ?? 'Warning')) return QualityStatus.warning;
     if (status == (l10n?.critical ?? 'Critical')) return QualityStatus.critical;
     if (status == (l10n?.rejected ?? 'Rejected')) return QualityStatus.rejected;

@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../domain/services/inventory_analytics_service.dart';
+import '../../domain/usecases/analytics/excess_obsolete_analysis_usecase.dart';
 import '../../domain/usecases/analytics/inventory_turnover_usecase.dart';
 import '../../domain/usecases/analytics/stockout_analysis_usecase.dart';
-import '../../domain/usecases/analytics/excess_obsolete_analysis_usecase.dart';
 import '../../providers/inventory_analytics_provider.dart';
 import 'kpi_card.dart';
 

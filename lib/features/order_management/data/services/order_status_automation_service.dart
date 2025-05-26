@@ -5,15 +5,15 @@ import 'notification_service.dart';
 import 'order_audit_trail_service.dart';
 
 class OrderStatusAutomationService {
-  final OrderRepository orderRepository;
-  final OrderAuditTrailService auditTrailService;
-  final NotificationService notificationService;
 
   OrderStatusAutomationService({
     required this.orderRepository,
     required this.auditTrailService,
     required this.notificationService,
   });
+  final OrderRepository orderRepository;
+  final OrderAuditTrailService auditTrailService;
+  final NotificationService notificationService;
 
   Future<void> automateStatusTransition(OrderEntity order) async {
     final prevStatus = order.status;

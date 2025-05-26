@@ -4,9 +4,9 @@ import '../../domain/entities/bom_template.dart';
 import 'bom_template_create_screen.dart';
 
 class BomTemplateDetailScreen extends ConsumerStatefulWidget {
-  final BomTemplate template;
 
   const BomTemplateDetailScreen({super.key, required this.template});
+  final BomTemplate template;
 
   @override
   ConsumerState<BomTemplateDetailScreen> createState() =>
@@ -783,9 +783,9 @@ class _BomTemplateDetailScreenState
 
 // Supporting dialog widgets
 class _UseTemplateDialog extends StatefulWidget {
-  final BomTemplate template;
 
   const _UseTemplateDialog({required this.template});
+  final BomTemplate template;
 
   @override
   State<_UseTemplateDialog> createState() => _UseTemplateDialogState();
@@ -852,8 +852,9 @@ class _UseTemplateDialogState extends State<_UseTemplateDialog> {
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value?.isEmpty ?? true) return 'Required';
-                        if (double.tryParse(value!) == null)
+                        if (double.tryParse(value!) == null) {
                           return 'Invalid number';
+                        }
                         return null;
                       },
                     ),
@@ -899,9 +900,9 @@ class _UseTemplateDialogState extends State<_UseTemplateDialog> {
 }
 
 class _DuplicateTemplateDialog extends StatefulWidget {
-  final BomTemplate template;
 
   const _DuplicateTemplateDialog({required this.template});
+  final BomTemplate template;
 
   @override
   State<_DuplicateTemplateDialog> createState() =>

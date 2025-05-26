@@ -8,8 +8,8 @@ class ProductionSlotModel {
     required this.startTime,
     required this.endTime,
     required this.plannedQuantity,
-    this.recipeId,
-    this.recipeVersion,
+    this.bomId,
+    this.bomVersion,
     required this.status,
     required this.assignedStaffId,
     this.comments,
@@ -28,8 +28,8 @@ class ProductionSlotModel {
       startTime: DateTime.parse(json['startTime']),
       endTime: DateTime.parse(json['endTime']),
       plannedQuantity: (json['plannedQuantity'] as num).toDouble(),
-      recipeId: json['recipeId'],
-      recipeVersion: json['recipeVersion'],
+      bomId: json['bomId'],
+      bomVersion: json['bomVersion'],
       status: SlotStatus.values
           .firstWhere((e) => e.toString() == 'SlotStatus.${json['status']}'),
       assignedStaffId: json['assignedStaffId'],
@@ -47,8 +47,8 @@ class ProductionSlotModel {
   final DateTime startTime;
   final DateTime endTime;
   final double plannedQuantity;
-  final String? recipeId;
-  final String? recipeVersion;
+  final String? bomId;
+  final String? bomVersion;
   final SlotStatus status;
   final String assignedStaffId;
   final String? comments;
@@ -66,8 +66,8 @@ class ProductionSlotModel {
       'startTime': startTime.toIso8601String(),
       'endTime': endTime.toIso8601String(),
       'plannedQuantity': plannedQuantity,
-      'recipeId': recipeId,
-      'recipeVersion': recipeVersion,
+      'bomId': bomId,
+      'bomVersion': bomVersion,
       'status': status.toString().split('.').last,
       'assignedStaffId': assignedStaffId,
       'comments': comments,
@@ -86,8 +86,8 @@ class ProductionSlotModel {
     DateTime? startTime,
     DateTime? endTime,
     double? plannedQuantity,
-    String? recipeId,
-    String? recipeVersion,
+    String? bomId,
+    String? bomVersion,
     SlotStatus? status,
     String? assignedStaffId,
     String? comments,
@@ -104,8 +104,8 @@ class ProductionSlotModel {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       plannedQuantity: plannedQuantity ?? this.plannedQuantity,
-      recipeId: recipeId ?? this.recipeId,
-      recipeVersion: recipeVersion ?? this.recipeVersion,
+      bomId: bomId ?? this.bomId,
+      bomVersion: bomVersion ?? this.bomVersion,
       status: status ?? this.status,
       assignedStaffId: assignedStaffId ?? this.assignedStaffId,
       comments: comments ?? this.comments,

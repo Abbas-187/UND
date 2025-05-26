@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../factory/data/models/recipe_ingredient_model.dart';
+import '../../../bom/domain/entities/bom_item.dart';
 import '../models/inventory_item_model.dart';
 
 // Provider for DairyInventoryProvider
@@ -146,14 +146,40 @@ class DairyInventoryProvider {
     // Functionality removed for Firebase integration
   }
 
-  /// Get recipe ingredients by recipe ID
-  List<RecipeIngredientModel>? getRecipeIngredients(String recipeId) {
-    // Mock implementation: Replace with actual logic to fetch recipe ingredients
+  /// Get BOM ingredients by BOM ID
+  List<BomItem>? getBomIngredients(String bomId) {
+    // Mock implementation: Replace with actual logic to fetch BOM ingredients
     return [
-      RecipeIngredientModel(
-          id: 'item1', name: 'Milk', quantity: 2.0, unit: 'liters'),
-      RecipeIngredientModel(
-          id: 'item2', name: 'Sugar', quantity: 1.5, unit: 'kg'),
+      BomItem(
+        id: 'bom-item-1',
+        bomId: bomId,
+        itemId: 'item1',
+        itemCode: 'MILK-001',
+        itemName: 'Milk',
+        itemDescription: 'Fresh milk',
+        itemType: BomItemType.rawMaterial,
+        quantity: 2.0,
+        unit: 'liters',
+        consumptionType: ConsumptionType.variable,
+        sequenceNumber: 1,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
+      BomItem(
+        id: 'bom-item-2',
+        bomId: bomId,
+        itemId: 'item2',
+        itemCode: 'SUGAR-001',
+        itemName: 'Sugar',
+        itemDescription: 'White sugar',
+        itemType: BomItemType.rawMaterial,
+        quantity: 1.5,
+        unit: 'kg',
+        consumptionType: ConsumptionType.variable,
+        sequenceNumber: 2,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
     ];
   }
 }

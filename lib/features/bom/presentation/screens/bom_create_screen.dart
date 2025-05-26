@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../domain/entities/bill_of_materials.dart';
 import '../../domain/entities/bom_item.dart';
 import '../providers/bom_providers.dart';
-import '../widgets/bom_form.dart';
 
 class BomCreateScreen extends ConsumerStatefulWidget {
   const BomCreateScreen({

@@ -1,9 +1,7 @@
-import '../entities/cycle_count_item.dart';
-import '../entities/cycle_count_sheet.dart';
+import '../../data/models/inventory_movement_item_model.dart';
+import '../../data/models/inventory_movement_model.dart';
 import '../repositories/cycle_count_sheet_repository.dart';
 import '../repositories/inventory_repository.dart';
-import '../../data/models/inventory_movement_model.dart';
-import '../../data/models/inventory_movement_item_model.dart';
 
 class ApproveCycleCountAdjustmentUseCase {
   ApproveCycleCountAdjustmentUseCase({

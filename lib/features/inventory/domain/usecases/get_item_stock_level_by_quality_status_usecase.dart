@@ -1,4 +1,3 @@
-import '../entities/inventory_item.dart';
 import '../repositories/inventory_repository.dart';
 
 /// Use case to get stock levels filtered by quality status

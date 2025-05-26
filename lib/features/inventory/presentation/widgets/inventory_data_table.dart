@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/inventory_item.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../domain/entities/inventory_item.dart';
 
 class InventoryDataTable extends StatefulWidget {
   const InventoryDataTable({

@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../inventory/domain/services/supplier_integration_service.dart';
 import '../../../inventory/domain/usecases/process_goods_receipt_usecase.dart';
 import '../../../inventory/domain/usecases/process_return_to_supplier_usecase.dart';
-import '../../../inventory/domain/services/supplier_integration_service.dart';
+import '../../data/models/purchase_order_model.dart';
+import '../entities/purchase_order.dart' as entity;
 import '../integration/procurement_inventory_integration.dart';
 import '../repositories/purchase_order_repository.dart';
 import '../usecases/purchase_order_usecases.dart';
-import '../entities/purchase_order.dart' as entity;
-import '../../data/models/purchase_order_model.dart';
 
 /// Comprehensive procurement service that handles the full procurement lifecycle
 /// with deep inventory integration

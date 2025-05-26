@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../models/procurement_request.dart';
-import '../../services/procurement_service.dart';
-import '../../../order_management/data/models/order_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../common/widgets/searchable_dropdown.dart';
 import '../../../inventory/presentation/providers/inventory_provider.dart';
 
-class PurchaseRequestCreateScreen extends ConsumerStatefulWidget {
-  final dynamic item; // Should be InventoryItem, but dynamic for now
+class PurchaseRequestCreateScreen extends ConsumerStatefulWidget { // Should be InventoryItem, but dynamic for now
   const PurchaseRequestCreateScreen({super.key, this.item});
+  final dynamic item;
 
   @override
   ConsumerState<PurchaseRequestCreateScreen> createState() =>
@@ -120,11 +117,14 @@ class _PurchaseRequestCreateScreenState
               type: StepperType.vertical,
               currentStep: _step,
               onStepContinue: () {
-                if (_step == 0 && !_isPrefilled && _selectedItem == null)
+                if (_step == 0 && !_isPrefilled && _selectedItem == null) {
                   return;
+                }
                 if (_step == 1 &&
                     (_quantityController.text.isEmpty ||
-                        _safetyStockController.text.isEmpty)) return;
+                        _safetyStockController.text.isEmpty)) {
+                  return;
+                }
                 if (_step == 2) {
                   _submit();
                   return;
@@ -550,9 +550,9 @@ class _PurchaseRequestCreateScreenState
 }
 
 class _PurchaseSuggestion {
+  _PurchaseSuggestion({required this.suggestedQuantity, this.safetyStock});
   final double suggestedQuantity;
   final double? safetyStock;
-  _PurchaseSuggestion({required this.suggestedQuantity, this.safetyStock});
 }
 
 // Move this to the top-level so it can be imported elsewhere

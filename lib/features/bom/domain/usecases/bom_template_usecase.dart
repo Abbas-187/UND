@@ -1,14 +1,14 @@
-import '../entities/bom_template.dart';
 import '../entities/bill_of_materials.dart';
 import '../entities/bom_item.dart';
-import '../repositories/bom_template_repository.dart';
+import '../entities/bom_template.dart';
 import '../repositories/bom_repository.dart';
+import '../repositories/bom_template_repository.dart';
 
 class BomTemplateUseCase {
-  final BomTemplateRepository _templateRepository;
-  final BomRepository _bomRepository;
 
   BomTemplateUseCase(this._templateRepository, this._bomRepository);
+  final BomTemplateRepository _templateRepository;
+  final BomRepository _bomRepository;
 
   // Template CRUD operations
   Future<List<BomTemplate>> getAllTemplates() async {

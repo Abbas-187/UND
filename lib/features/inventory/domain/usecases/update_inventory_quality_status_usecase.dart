@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../data/models/quality_status.dart';
-import '../../data/models/inventory_movement_model.dart';
 import '../../data/models/inventory_movement_item_model.dart';
+import '../../data/models/inventory_movement_model.dart';
+import '../../data/models/quality_status.dart';
 import '../entities/inventory_item.dart';
-import '../repositories/inventory_repository.dart';
 import '../providers/inventory_repository_provider.dart' as repo_provider;
+import '../repositories/inventory_repository.dart';
 
 /// Result of quality status update operation
 class QualityStatusUpdateResult {

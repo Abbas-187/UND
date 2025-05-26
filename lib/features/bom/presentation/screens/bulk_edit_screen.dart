@@ -1,22 +1,22 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:file_picker/file_picker.dart';
 
+import '../../data/services/bulk_import_service.dart';
 import '../../domain/entities/bill_of_materials.dart';
 import '../../domain/usecases/bulk_operations_usecase.dart';
-import '../../data/services/bulk_import_service.dart';
 import '../widgets/bulk_action_bar.dart';
 
 /// Comprehensive bulk edit screen for BOM management
 class BulkEditScreen extends ConsumerStatefulWidget {
-  final List<BillOfMaterials>? initialBoms;
 
   const BulkEditScreen({
-    Key? key,
+    super.key,
     this.initialBoms,
-  }) : super(key: key);
+  });
+  final List<BillOfMaterials>? initialBoms;
 
   @override
   ConsumerState<BulkEditScreen> createState() => _BulkEditScreenState();
@@ -1093,14 +1093,14 @@ class _BulkEditScreenState extends ConsumerState<BulkEditScreen>
 // Supporting dialog widgets
 
 class BulkUpdateDialog extends StatefulWidget {
-  final List<String> selectedBomIds;
-  final Function(Map<String, dynamic>) onUpdate;
 
   const BulkUpdateDialog({
-    Key? key,
+    super.key,
     required this.selectedBomIds,
     required this.onUpdate,
-  }) : super(key: key);
+  });
+  final List<String> selectedBomIds;
+  final Function(Map<String, dynamic>) onUpdate;
 
   @override
   State<BulkUpdateDialog> createState() => _BulkUpdateDialogState();
@@ -1188,14 +1188,14 @@ class _BulkUpdateDialogState extends State<BulkUpdateDialog> {
 }
 
 class BulkCopyDialog extends StatefulWidget {
-  final List<String> selectedBomIds;
-  final Function(String, bool) onCopy;
 
   const BulkCopyDialog({
-    Key? key,
+    super.key,
     required this.selectedBomIds,
     required this.onCopy,
-  }) : super(key: key);
+  });
+  final List<String> selectedBomIds;
+  final Function(String, bool) onCopy;
 
   @override
   State<BulkCopyDialog> createState() => _BulkCopyDialogState();
@@ -1246,14 +1246,14 @@ class _BulkCopyDialogState extends State<BulkCopyDialog> {
 }
 
 class BulkStatusChangeDialog extends StatefulWidget {
-  final List<String> selectedBomIds;
-  final Function(BomStatus, String?) onStatusChange;
 
   const BulkStatusChangeDialog({
-    Key? key,
+    super.key,
     required this.selectedBomIds,
     required this.onStatusChange,
-  }) : super(key: key);
+  });
+  final List<String> selectedBomIds;
+  final Function(BomStatus, String?) onStatusChange;
 
   @override
   State<BulkStatusChangeDialog> createState() => _BulkStatusChangeDialogState();

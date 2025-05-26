@@ -4,34 +4,30 @@ import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../common/widgets/detail_appbar.dart';
-import '../../../../../common/widgets/error_dialog.dart';
 import '../../../../../common/widgets/loading_overlay.dart';
 import '../../../../../domain/entities/supporting_document.dart';
 import '../../../../../utils/formatters/currency_formatter.dart';
 import '../../../../../utils/validators/form_validators.dart';
+import '../../../../inventory/domain/entities/inventory_item.dart' as invitem;
 import '../../../../suppliers/domain/entities/supplier.dart';
 import '../../../../suppliers/presentation/providers/supplier_provider.dart';
-import '../../../../inventory/domain/entities/inventory_item.dart' as invitem;
 import '../../../domain/entities/inventory_item.dart' as pitem;
-import '../../../domain/entities/purchase_order.dart' as purchase_order
-    show SupportingDocument;
 import '../../../domain/entities/purchase_order.dart' hide SupportingDocument;
+import '../../../domain/utils/inventory_item_mapper.dart';
+import '../../data/in_memory_purchase_requests.dart';
 import '../../providers/inventory_provider.dart';
-import '../../providers/purchase_order_providers.dart';
 import '../../widgets/document_attachment_picker.dart';
 import '../../widgets/purchase_order_item_form.dart';
-import '../../data/in_memory_purchase_requests.dart';
-import '../../../domain/utils/inventory_item_mapper.dart';
 
 class PurchaseOrderCreateScreen extends ConsumerStatefulWidget {
-  final dynamic initialItem;
-  final double? initialQuantity;
-  final String? initialSupplier;
   const PurchaseOrderCreateScreen(
       {super.key,
       this.initialItem,
       this.initialQuantity,
       this.initialSupplier});
+  final dynamic initialItem;
+  final double? initialQuantity;
+  final String? initialSupplier;
 
   @override
   ConsumerState<PurchaseOrderCreateScreen> createState() =>
@@ -1056,16 +1052,16 @@ class _PurchaseOrderCreateScreenState
 }
 
 class _SectionCard extends StatelessWidget {
-  final Color color;
-  final IconData icon;
-  final String title;
-  final Widget child;
   const _SectionCard({
     required this.color,
     required this.icon,
     required this.title,
     required this.child,
   });
+  final Color color;
+  final IconData icon;
+  final String title;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -1121,13 +1117,6 @@ class _SectionCard extends StatelessWidget {
 }
 
 class _ThemedTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-  final String hint;
-  final IconData icon;
-  final int maxLines;
-  final Widget? suffix;
-  final String? Function(String?)? validator;
   const _ThemedTextField({
     required this.controller,
     required this.label,
@@ -1137,6 +1126,13 @@ class _ThemedTextField extends StatelessWidget {
     this.suffix,
     this.validator,
   });
+  final TextEditingController controller;
+  final String label;
+  final String hint;
+  final IconData icon;
+  final int maxLines;
+  final Widget? suffix;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -1162,14 +1158,14 @@ class _ThemedTextField extends StatelessWidget {
 
 // Add a new widget for the pinned summary
 class _PinnedOrderSummary extends StatelessWidget {
-  final List<PurchaseOrderItem> items;
-  final bool includeVAT;
-  final ValueChanged<bool> onVATChanged;
   const _PinnedOrderSummary({
     required this.items,
     required this.includeVAT,
     required this.onVATChanged,
   });
+  final List<PurchaseOrderItem> items;
+  final bool includeVAT;
+  final ValueChanged<bool> onVATChanged;
 
   @override
   Widget build(BuildContext context) {

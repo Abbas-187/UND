@@ -226,10 +226,6 @@ enum OrderStatus {
 }
 
 class OrderStatusHistoryModel {
-  final OrderStatus status;
-  final DateTime timestamp;
-  final String? userId;
-  final String? notes;
 
   OrderStatusHistoryModel({
     required this.status,
@@ -238,13 +234,6 @@ class OrderStatusHistoryModel {
     this.notes,
   });
 
-  Map<String, dynamic> toJson() => {
-        'status': status.name,
-        'timestamp': timestamp.toIso8601String(),
-        if (userId != null) 'userId': userId,
-        if (notes != null) 'notes': notes,
-      };
-
   factory OrderStatusHistoryModel.fromJson(Map<String, dynamic> json) =>
       OrderStatusHistoryModel(
         status: OrderStatus.values.firstWhere((e) => e.name == json['status']),
@@ -252,4 +241,15 @@ class OrderStatusHistoryModel {
         userId: json['userId'],
         notes: json['notes'],
       );
+  final OrderStatus status;
+  final DateTime timestamp;
+  final String? userId;
+  final String? notes;
+
+  Map<String, dynamic> toJson() => {
+        'status': status.name,
+        'timestamp': timestamp.toIso8601String(),
+        if (userId != null) 'userId': userId,
+        if (notes != null) 'notes': notes,
+      };
 }

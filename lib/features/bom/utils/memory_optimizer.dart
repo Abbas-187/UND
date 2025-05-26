@@ -7,9 +7,9 @@ import 'package:logger/logger.dart';
 
 /// Memory optimization utilities for BOM module
 class MemoryOptimizer {
-  static final MemoryOptimizer _instance = MemoryOptimizer._internal();
   factory MemoryOptimizer() => _instance;
   MemoryOptimizer._internal();
+  static final MemoryOptimizer _instance = MemoryOptimizer._internal();
 
   final Logger _logger = Logger();
   final Map<Type, ObjectPool> _objectPools = {};
@@ -217,10 +217,10 @@ class MemoryOptimizer {
 
 /// Object pool for reusing objects
 class ObjectPool<T> {
-  final Queue<T> _pool = Queue<T>();
-  final int maxSize;
 
   ObjectPool({this.maxSize = 100});
+  final Queue<T> _pool = Queue<T>();
+  final int maxSize;
 
   bool get isEmpty => _pool.isEmpty;
   bool get isNotEmpty => _pool.isNotEmpty;
@@ -246,10 +246,6 @@ class ObjectPool<T> {
 
 /// Memory usage statistics
 class MemoryStats {
-  final double usedMemoryMB;
-  final double totalMemoryMB;
-  final int gcCount;
-  final DateTime timestamp;
 
   MemoryStats({
     required this.usedMemoryMB,
@@ -257,6 +253,10 @@ class MemoryStats {
     required this.gcCount,
     required this.timestamp,
   });
+  final double usedMemoryMB;
+  final double totalMemoryMB;
+  final int gcCount;
+  final DateTime timestamp;
 
   double get usagePercentage => (usedMemoryMB / totalMemoryMB) * 100;
   double get availableMemoryMB => totalMemoryMB - usedMemoryMB;

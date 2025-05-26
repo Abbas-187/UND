@@ -1,4 +1,3 @@
-
 /*import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/analytics/data/mock_analytics_data.dart';
@@ -922,63 +921,21 @@ class MockDataService {
     }
   }
 
-  /// Check if inventory has enough for a recipe (mock: always true)
-  bool checkInventoryForRecipe(String recipeId, double batchSize) {
-    // For demo, always return true
+  /// Check if inventory has enough for a BOM (mock: always true)
+  bool checkInventoryForBom(String bomId, double batchSize) {
+    // Mock implementation: always return true
     return true;
   }
 
-  /// Get recipe ingredients (mock: returns a list of maps)
-  List<Map<String, dynamic>> getRecipeIngredients(String recipeId) {
-    // For demo, return a mock list
-    return [
-      {
-        'ingredient': 'Camel Milk',
-        'quantity': 10,
-        'unit': 'Liters',
-      },
-      {
-        'ingredient': 'Date Syrup',
-        'quantity': 2,
-        'unit': 'Kg',
-      },
-    ];
+  /// Get BOM ingredients (mock: returns a list of maps)
+  List<Map<String, dynamic>> getBomIngredients(String bomId) {
+    // Mock implementation: return sample ingredients
+    return bomIngredients[bomId] ?? [];
   }
 
-  /// Get inventory forecast (mock: returns a list of maps)
-  List<Map<String, dynamic>> getInventoryForecast(String itemId) {
-    // For demo, return a mock forecast
-    return [
-      {'date': DateTime.now().add(const Duration(days: 1)), 'forecast': 100},
-      {'date': DateTime.now().add(const Duration(days: 2)), 'forecast': 90},
-      {'date': DateTime.now().add(const Duration(days: 3)), 'forecast': 80},
-    ];
-  }
-
-  /// Get procurement needs (mock: returns a list of maps)
-  List<Map<String, dynamic>> getProcurementNeeds() {
-    // For demo, return a mock list
-    return [
-      {'item': 'Camel Milk', 'needed': 200, 'unit': 'Liters'},
-      {'item': 'Date Syrup', 'needed': 50, 'unit': 'Kg'},
-    ];
-  }
-
-  /// Adjust quantity of an inventory item
-  void adjustQuantity(String itemId, double adjustment, String reason) {
-    final idx = inventoryItems.indexWhere((item) => item.id == itemId);
-    if (idx != -1) {
-      final item = inventoryItems[idx];
-      inventoryItems[idx] = item.copyWith(
-        quantity: item.quantity + adjustment,
-        lastUpdated: DateTime.now(),
-      );
-    }
-  }
-
-  /// Mock recipe ingredients by recipe ID
-  Map<String, List<Map<String, dynamic>>> get recipeIngredients => {
-        'recipe-001': [
+  /// Mock BOM ingredients by BOM ID
+  Map<String, List<Map<String, dynamic>>> get bomIngredients => {
+        'bom-001': [
           {
             'ingredientId': 'inv-001',
             'name': 'Camel Milk',
@@ -992,7 +949,7 @@ class MockDataService {
             'unit': 'Kg',
           },
         ],
-        'recipe-002': [
+        'bom-002': [
           {
             'ingredientId': 'inv-001',
             'name': 'Camel Milk',
@@ -1012,7 +969,7 @@ class MockDataService {
             'unit': 'Liters',
           },
         ],
-        'recipe-003': [
+        'bom-003': [
           {
             'ingredientId': 'inv-014',
             'name': 'Cow Milk',

@@ -240,8 +240,8 @@ class InventoryDatabaseController extends StateNotifier<AsyncValue<void>> {
     return _inventoryRepository.countItemsBySupplier(supplier);
   }
 
-  /// Count number of recipes using item
-  Future<int> countRecipesUsingItem(String itemId) async {
-    return _inventoryRepository.countRecipesUsingItem(itemId);
+  /// Count number of BOMs using item
+  Future<int> countBomsUsingItem(String itemId) async {
+    return _inventoryRepository.countBomsUsingItem(itemId);
   }
 }

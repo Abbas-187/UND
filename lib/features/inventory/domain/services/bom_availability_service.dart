@@ -1,5 +1,4 @@
 import '../entities/inventory_alert.dart';
-import '../entities/reservation.dart';
 
 class BomAvailabilityService {
   // Calculate availability percentage for a BOM batch
@@ -378,11 +377,6 @@ class BomAvailabilityService {
 
 // Helper classes
 class _BomItem {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final double quantity;
-  final String unit;
 
   _BomItem({
     required this.itemId,
@@ -391,36 +385,41 @@ class _BomItem {
     required this.quantity,
     required this.unit,
   });
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final double quantity;
+  final String unit;
 }
 
 class _IncomingPO {
-  final double quantity;
-  final DateTime expectedDeliveryDate;
 
   _IncomingPO({
     required this.quantity,
     required this.expectedDeliveryDate,
   });
+  final double quantity;
+  final DateTime expectedDeliveryDate;
 }
 
 class _IncomingProduction {
-  final double quantity;
-  final DateTime expectedCompletionDate;
 
   _IncomingProduction({
     required this.quantity,
     required this.expectedCompletionDate,
   });
+  final double quantity;
+  final DateTime expectedCompletionDate;
 }
 
 class _ExpiringBatch {
-  final String batchNumber;
-  final double quantity;
-  final DateTime expiryDate;
 
   _ExpiringBatch({
     required this.batchNumber,
     required this.quantity,
     required this.expiryDate,
   });
+  final String batchNumber;
+  final double quantity;
+  final DateTime expiryDate;
 }

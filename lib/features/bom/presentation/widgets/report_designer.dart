@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/report.dart';
 
 class ReportDesigner extends StatefulWidget {
-  final List<ReportField> availableFields;
-  final List<ReportField> selectedFields;
-  final Function(ReportField) onFieldAdded;
-  final Function(ReportField) onFieldRemoved;
-  final Function(int, int) onFieldReordered;
-
   const ReportDesigner({
     super.key,
     required this.availableFields,
@@ -16,6 +10,11 @@ class ReportDesigner extends StatefulWidget {
     required this.onFieldRemoved,
     required this.onFieldReordered,
   });
+  final List<ReportField> availableFields;
+  final List<ReportField> selectedFields;
+  final Function(ReportField) onFieldAdded;
+  final Function(ReportField) onFieldRemoved;
+  final Function(int, int) onFieldReordered;
 
   @override
   State<ReportDesigner> createState() => _ReportDesignerState();
@@ -47,7 +46,7 @@ class _ReportDesignerState extends State<ReportDesigner> {
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           child: Row(
             children: [
               const Icon(Icons.storage),
@@ -105,7 +104,7 @@ class _ReportDesignerState extends State<ReportDesigner> {
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           child: Row(
             children: [
               const Icon(Icons.view_column),
@@ -120,7 +119,8 @@ class _ReportDesignerState extends State<ReportDesigner> {
         Expanded(
           child: widget.selectedFields.isEmpty
               ? DragTarget<ReportField>(
-                  onAccept: (field) => widget.onFieldAdded(field),
+                  onAcceptWithDetails: (details) =>
+                      widget.onFieldAdded(details.data),
                   builder: (context, candidateData, rejectedData) {
                     return Container(
                       width: double.infinity,
@@ -168,7 +168,8 @@ class _ReportDesignerState extends State<ReportDesigner> {
                     final field = widget.selectedFields[index];
                     return DragTarget<ReportField>(
                       key: ValueKey(field.id),
-                      onAccept: (droppedField) {
+                      onAcceptWithDetails: (details) {
+                        final droppedField = details.data;
                         if (!widget.selectedFields
                             .any((f) => f.id == droppedField.id)) {
                           widget.onFieldAdded(droppedField);
@@ -264,11 +265,6 @@ class _ReportDesignerState extends State<ReportDesigner> {
 }
 
 class ReportFieldCard extends StatelessWidget {
-  final ReportField field;
-  final bool isSelected;
-  final VoidCallback? onTap;
-  final VoidCallback? onRemove;
-
   const ReportFieldCard({
     super.key,
     required this.field,
@@ -276,6 +272,10 @@ class ReportFieldCard extends StatelessWidget {
     this.onTap,
     this.onRemove,
   });
+  final ReportField field;
+  final bool isSelected;
+  final VoidCallback? onTap;
+  final VoidCallback? onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -390,14 +390,13 @@ class ReportFieldCard extends StatelessWidget {
 }
 
 class ReportPreview extends StatelessWidget {
-  final ReportDefinition definition;
-  final ReportResult? result;
-
   const ReportPreview({
     super.key,
     required this.definition,
     this.result,
   });
+  final ReportDefinition definition;
+  final ReportResult? result;
 
   @override
   Widget build(BuildContext context) {

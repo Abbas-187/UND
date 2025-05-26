@@ -5,6 +5,115 @@ import '../../domain/entities/bom_item.dart';
 /// Comprehensive and robust data model for BOM Item that handles Firebase serialization
 /// with enterprise-grade validation, business logic, and error handling
 class BomItemModel {
+
+  factory BomItemModel.fromJson(Map<String, dynamic> json) {
+    return BomItemModel(
+      id: json['id'] ?? '',
+      bomId: json['bomId'] ?? '',
+      itemId: json['itemId'] ?? '',
+      itemCode: json['itemCode'] ?? '',
+      itemName: json['itemName'] ?? '',
+      itemDescription: json['itemDescription'] ?? '',
+      itemType: json['itemType'] ?? '',
+      quantity: (json['quantity'] ?? 0.0).toDouble(),
+      unit: json['unit'] ?? '',
+      consumptionType: json['consumptionType'] ?? '',
+      sequenceNumber: json['sequenceNumber'] ?? 0,
+      wastagePercentage: (json['wastagePercentage'] ?? 0.0).toDouble(),
+      yieldPercentage: (json['yieldPercentage'] ?? 0.0).toDouble(),
+      costPerUnit: (json['costPerUnit'] ?? 0.0).toDouble(),
+      totalCost: (json['totalCost'] ?? 0.0).toDouble(),
+      alternativeItemId: json['alternativeItemId'],
+      supplierCode: json['supplierCode'],
+      batchNumber: json['batchNumber'],
+      expiryDate: _parseDateTime(json['expiryDate']),
+      qualityGrade: json['qualityGrade'],
+      storageLocation: json['storageLocation'],
+      specifications: json['specifications'],
+      qualityParameters: json['qualityParameters'],
+      status: json['status'] ?? 'active',
+      notes: json['notes'],
+      effectiveFrom: _parseDateTime(json['effectiveFrom']),
+      effectiveTo: _parseDateTime(json['effectiveTo']),
+      createdAt: _parseDateTime(json['createdAt']) ?? DateTime.now(),
+      updatedAt: _parseDateTime(json['updatedAt']) ?? DateTime.now(),
+      createdBy: json['createdBy'],
+      updatedBy: json['updatedBy'],
+      // Enhanced fields
+      leadTime: json['leadTime'] ?? 0,
+      minimumOrderQuantity: (json['minimumOrderQuantity'] ?? 0.0).toDouble(),
+      maximumOrderQuantity: json['maximumOrderQuantity']?.toDouble(),
+      reorderPoint: (json['reorderPoint'] ?? 0.0).toDouble(),
+      safetyStock: (json['safetyStock'] ?? 0.0).toDouble(),
+      standardCost: (json['standardCost'] ?? 0.0).toDouble(),
+      lastCostUpdate: _parseDateTime(json['lastCostUpdate']),
+      priceVariance: (json['priceVariance'] ?? 0.0).toDouble(),
+      supplierPartNumber: json['supplierPartNumber'],
+      manufacturerPartNumber: json['manufacturerPartNumber'],
+      hazardousClassification: json['hazardousClassification'],
+      shelfLife: json['shelfLife'],
+      storageConditions: json['storageConditions'],
+      handlingInstructions: json['handlingInstructions'],
+      qualityControlRequired: json['qualityControlRequired'] ?? false,
+      inspectionCriteria: json['inspectionCriteria'],
+      certificationRequired: json['certificationRequired'] ?? false,
+      certificationDetails: json['certificationDetails'],
+      environmentalImpact: json['environmentalImpact'],
+      carbonFootprint: (json['carbonFootprint'] ?? 0.0).toDouble(),
+      recyclable: json['recyclable'] ?? false,
+      substitutes: List<String>.from(json['substitutes'] ?? []),
+      crossReferences: List<String>.from(json['crossReferences'] ?? []),
+      usageHistory: List<Map<String, dynamic>>.from(json['usageHistory'] ?? []),
+      costHistory: List<Map<String, dynamic>>.from(json['costHistory'] ?? []),
+      supplierRating: (json['supplierRating'] ?? 0.0).toDouble(),
+      qualityRating: (json['qualityRating'] ?? 0.0).toDouble(),
+      deliveryRating: (json['deliveryRating'] ?? 0.0).toDouble(),
+      riskFactors: List<String>.from(json['riskFactors'] ?? []),
+      complianceFlags: List<String>.from(json['complianceFlags'] ?? []),
+      customAttributes:
+          Map<String, dynamic>.from(json['customAttributes'] ?? {}),
+      integrationData: Map<String, dynamic>.from(json['integrationData'] ?? {}),
+      validationErrors: List<String>.from(json['validationErrors'] ?? []),
+      auditTrail: Map<String, dynamic>.from(json['auditTrail'] ?? {}),
+    );
+  }
+
+  /// Create from domain entity with comprehensive mapping
+  factory BomItemModel.fromDomain(BomItem entity) {
+    return BomItemModel(
+      id: entity.id,
+      bomId: entity.bomId,
+      itemId: entity.itemId,
+      itemCode: entity.itemCode,
+      itemName: entity.itemName,
+      itemDescription: entity.itemDescription,
+      itemType: entity.itemType.name,
+      quantity: entity.quantity,
+      unit: entity.unit,
+      consumptionType: entity.consumptionType.name,
+      sequenceNumber: entity.sequenceNumber,
+      wastagePercentage: entity.wastagePercentage,
+      yieldPercentage: entity.yieldPercentage,
+      costPerUnit: entity.costPerUnit,
+      totalCost: entity.totalCost,
+      alternativeItemId: entity.alternativeItemId,
+      supplierCode: entity.supplierCode,
+      batchNumber: entity.batchNumber,
+      expiryDate: entity.expiryDate,
+      qualityGrade: entity.qualityGrade,
+      storageLocation: entity.storageLocation,
+      specifications: entity.specifications,
+      qualityParameters: entity.qualityParameters,
+      status: entity.status.name,
+      notes: entity.notes,
+      effectiveFrom: entity.effectiveFrom,
+      effectiveTo: entity.effectiveTo,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+      createdBy: entity.createdBy,
+      updatedBy: entity.updatedBy,
+    );
+  }
   const BomItemModel({
     required this.id,
     required this.bomId,
@@ -156,8 +265,9 @@ class BomItemModel {
 
     // Quantity validation
     if (quantity <= 0) errors.add('Quantity must be positive');
-    if (minimumOrderQuantity < 0)
+    if (minimumOrderQuantity < 0) {
       errors.add('Minimum order quantity cannot be negative');
+    }
     if (maximumOrderQuantity != null &&
         maximumOrderQuantity! < minimumOrderQuantity) {
       errors.add('Maximum order quantity must be greater than minimum');
@@ -260,14 +370,14 @@ class BomItemModel {
     int criticalityScore = 0;
 
     // High cost items are more critical
-    if (costPerUnit > 100)
+    if (costPerUnit > 100) {
       criticalityScore += 2;
-    else if (costPerUnit > 50) criticalityScore += 1;
+    } else if (costPerUnit > 50) criticalityScore += 1;
 
     // Long lead time items are more critical
-    if (leadTime > 30)
+    if (leadTime > 30) {
       criticalityScore += 2;
-    else if (leadTime > 14) criticalityScore += 1;
+    } else if (leadTime > 14) criticalityScore += 1;
 
     // Items with quality requirements are more critical
     if (requiresQualityInspection) criticalityScore += 1;
@@ -471,78 +581,6 @@ class BomItemModel {
     );
   }
 
-  factory BomItemModel.fromJson(Map<String, dynamic> json) {
-    return BomItemModel(
-      id: json['id'] ?? '',
-      bomId: json['bomId'] ?? '',
-      itemId: json['itemId'] ?? '',
-      itemCode: json['itemCode'] ?? '',
-      itemName: json['itemName'] ?? '',
-      itemDescription: json['itemDescription'] ?? '',
-      itemType: json['itemType'] ?? '',
-      quantity: (json['quantity'] ?? 0.0).toDouble(),
-      unit: json['unit'] ?? '',
-      consumptionType: json['consumptionType'] ?? '',
-      sequenceNumber: json['sequenceNumber'] ?? 0,
-      wastagePercentage: (json['wastagePercentage'] ?? 0.0).toDouble(),
-      yieldPercentage: (json['yieldPercentage'] ?? 0.0).toDouble(),
-      costPerUnit: (json['costPerUnit'] ?? 0.0).toDouble(),
-      totalCost: (json['totalCost'] ?? 0.0).toDouble(),
-      alternativeItemId: json['alternativeItemId'],
-      supplierCode: json['supplierCode'],
-      batchNumber: json['batchNumber'],
-      expiryDate: _parseDateTime(json['expiryDate']),
-      qualityGrade: json['qualityGrade'],
-      storageLocation: json['storageLocation'],
-      specifications: json['specifications'],
-      qualityParameters: json['qualityParameters'],
-      status: json['status'] ?? 'active',
-      notes: json['notes'],
-      effectiveFrom: _parseDateTime(json['effectiveFrom']),
-      effectiveTo: _parseDateTime(json['effectiveTo']),
-      createdAt: _parseDateTime(json['createdAt']) ?? DateTime.now(),
-      updatedAt: _parseDateTime(json['updatedAt']) ?? DateTime.now(),
-      createdBy: json['createdBy'],
-      updatedBy: json['updatedBy'],
-      // Enhanced fields
-      leadTime: json['leadTime'] ?? 0,
-      minimumOrderQuantity: (json['minimumOrderQuantity'] ?? 0.0).toDouble(),
-      maximumOrderQuantity: json['maximumOrderQuantity']?.toDouble(),
-      reorderPoint: (json['reorderPoint'] ?? 0.0).toDouble(),
-      safetyStock: (json['safetyStock'] ?? 0.0).toDouble(),
-      standardCost: (json['standardCost'] ?? 0.0).toDouble(),
-      lastCostUpdate: _parseDateTime(json['lastCostUpdate']),
-      priceVariance: (json['priceVariance'] ?? 0.0).toDouble(),
-      supplierPartNumber: json['supplierPartNumber'],
-      manufacturerPartNumber: json['manufacturerPartNumber'],
-      hazardousClassification: json['hazardousClassification'],
-      shelfLife: json['shelfLife'],
-      storageConditions: json['storageConditions'],
-      handlingInstructions: json['handlingInstructions'],
-      qualityControlRequired: json['qualityControlRequired'] ?? false,
-      inspectionCriteria: json['inspectionCriteria'],
-      certificationRequired: json['certificationRequired'] ?? false,
-      certificationDetails: json['certificationDetails'],
-      environmentalImpact: json['environmentalImpact'],
-      carbonFootprint: (json['carbonFootprint'] ?? 0.0).toDouble(),
-      recyclable: json['recyclable'] ?? false,
-      substitutes: List<String>.from(json['substitutes'] ?? []),
-      crossReferences: List<String>.from(json['crossReferences'] ?? []),
-      usageHistory: List<Map<String, dynamic>>.from(json['usageHistory'] ?? []),
-      costHistory: List<Map<String, dynamic>>.from(json['costHistory'] ?? []),
-      supplierRating: (json['supplierRating'] ?? 0.0).toDouble(),
-      qualityRating: (json['qualityRating'] ?? 0.0).toDouble(),
-      deliveryRating: (json['deliveryRating'] ?? 0.0).toDouble(),
-      riskFactors: List<String>.from(json['riskFactors'] ?? []),
-      complianceFlags: List<String>.from(json['complianceFlags'] ?? []),
-      customAttributes:
-          Map<String, dynamic>.from(json['customAttributes'] ?? {}),
-      integrationData: Map<String, dynamic>.from(json['integrationData'] ?? {}),
-      validationErrors: List<String>.from(json['validationErrors'] ?? []),
-      auditTrail: Map<String, dynamic>.from(json['auditTrail'] ?? {}),
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -612,43 +650,6 @@ class BomItemModel {
       'validationErrors': validationErrors,
       'auditTrail': auditTrail,
     };
-  }
-
-  /// Create from domain entity with comprehensive mapping
-  factory BomItemModel.fromDomain(BomItem entity) {
-    return BomItemModel(
-      id: entity.id,
-      bomId: entity.bomId,
-      itemId: entity.itemId,
-      itemCode: entity.itemCode,
-      itemName: entity.itemName,
-      itemDescription: entity.itemDescription,
-      itemType: entity.itemType.name,
-      quantity: entity.quantity,
-      unit: entity.unit,
-      consumptionType: entity.consumptionType.name,
-      sequenceNumber: entity.sequenceNumber,
-      wastagePercentage: entity.wastagePercentage,
-      yieldPercentage: entity.yieldPercentage,
-      costPerUnit: entity.costPerUnit,
-      totalCost: entity.totalCost,
-      alternativeItemId: entity.alternativeItemId,
-      supplierCode: entity.supplierCode,
-      batchNumber: entity.batchNumber,
-      expiryDate: entity.expiryDate,
-      qualityGrade: entity.qualityGrade,
-      storageLocation: entity.storageLocation,
-      specifications: entity.specifications,
-      qualityParameters: entity.qualityParameters,
-      status: entity.status.name,
-      notes: entity.notes,
-      effectiveFrom: entity.effectiveFrom,
-      effectiveTo: entity.effectiveTo,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
-      createdBy: entity.createdBy,
-      updatedBy: entity.updatedBy,
-    );
   }
 
   /// Convert to domain entity with validation

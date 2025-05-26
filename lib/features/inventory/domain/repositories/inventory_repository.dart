@@ -68,8 +68,8 @@ abstract class InventoryRepository {
   /// Count how many items exist for a given supplier
   Future<int> countItemsBySupplier(String supplier);
 
-  /// Count how many recipes reference a given inventory item
-  Future<int> countRecipesUsingItem(String itemId);
+  /// Count how many BOMs reference a given inventory item
+  Future<int> countBomsUsingItem(String itemId);
 
   // Batch operations
   Future<void> batchUpdateItems(List<InventoryItem> items);
@@ -192,8 +192,8 @@ abstract class InventoryRepository {
     DateTime endDate,
   );
 
-  /// Allocates inventory based on a recipe
-  Future<bool> allocateInventoryForRecipe(String recipeId, double batchSize);
+  /// Allocates inventory based on a BOM
+  Future<bool> allocateInventoryForBom(String bomId, double batchSize);
 }
 
 /// Inventory valuation for a single item

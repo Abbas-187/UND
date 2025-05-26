@@ -40,6 +40,7 @@ class UserRoles {
     allowedModules: [
       'inventory',
       'factory',
+      'bom',
       'milk_reception',
       'procurement',
       'analytics',
@@ -61,6 +62,7 @@ class UserRoles {
     allowedModules: [
       'inventory',
       'factory',
+      'bom',
       'milk_reception',
       'procurement',
       'analytics',
@@ -75,9 +77,9 @@ class UserRoles {
   static const UserRole worker = UserRole(
     id: 'worker',
     name: 'Factory Worker',
-    description: 'Access to factory and inventory only',
+    description: 'Access to factory, BOM, and inventory',
     icon: Icons.engineering,
-    allowedModules: ['factory', 'inventory'],
+    allowedModules: ['factory', 'bom', 'inventory'],
     canAccessSettings: false,
   );
 

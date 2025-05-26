@@ -1,18 +1,17 @@
-import '../../entities/bill_of_materials.dart';
 import '../../../inventory/domain/entities/inventory_alert.dart';
 import '../../../inventory/domain/entities/reservation.dart';
 import '../../../inventory/domain/services/bom_availability_service.dart';
 import '../../../inventory/domain/services/reservation_service.dart';
 
 class BomInventoryIntegrationUseCase {
-  final BomAvailabilityService _availabilityService;
-  final ReservationService _reservationService;
 
   BomInventoryIntegrationUseCase({
     required BomAvailabilityService availabilityService,
     required ReservationService reservationService,
   })  : _availabilityService = availabilityService,
         _reservationService = reservationService;
+  final BomAvailabilityService _availabilityService;
+  final ReservationService _reservationService;
 
   // Check complete BOM availability with detailed analysis
   Future<BomAvailabilityResult> checkBomAvailability(
@@ -373,16 +372,6 @@ class BomInventoryIntegrationUseCase {
 
 // Supporting classes
 class BomAvailabilityResult {
-  final String bomId;
-  final double batchSize;
-  final double availabilityPercentage;
-  final BomAvailabilityStatus status;
-  final List<InventoryAlert> shortageAlerts;
-  final List<InventoryAlert> futureShortages;
-  final List<InventoryAlert> expiryAlerts;
-  final List<Reservation> currentReservations;
-  final DateTime checkedAt;
-  final List<String> recommendations;
 
   BomAvailabilityResult({
     required this.bomId,
@@ -396,17 +385,19 @@ class BomAvailabilityResult {
     required this.checkedAt,
     required this.recommendations,
   });
+  final String bomId;
+  final double batchSize;
+  final double availabilityPercentage;
+  final BomAvailabilityStatus status;
+  final List<InventoryAlert> shortageAlerts;
+  final List<InventoryAlert> futureShortages;
+  final List<InventoryAlert> expiryAlerts;
+  final List<Reservation> currentReservations;
+  final DateTime checkedAt;
+  final List<String> recommendations;
 }
 
 class BomReservationResult {
-  final String bomId;
-  final String productionOrderId;
-  final double batchSize;
-  final bool isFullyReserved;
-  final List<Reservation> reservations;
-  final List<ReservationFailure> failures;
-  final List<String> recommendations;
-  final DateTime processedAt;
 
   BomReservationResult({
     required this.bomId,
@@ -418,14 +409,17 @@ class BomReservationResult {
     required this.recommendations,
     required this.processedAt,
   });
+  final String bomId;
+  final String productionOrderId;
+  final double batchSize;
+  final bool isFullyReserved;
+  final List<Reservation> reservations;
+  final List<ReservationFailure> failures;
+  final List<String> recommendations;
+  final DateTime processedAt;
 }
 
 class MaterialConsumptionResult {
-  final String bomId;
-  final String productionOrderId;
-  final List<MaterialConsumption> consumptions;
-  final List<ConsumptionFailure> failures;
-  final DateTime processedAt;
 
   MaterialConsumptionResult({
     required this.bomId,
@@ -434,13 +428,14 @@ class MaterialConsumptionResult {
     required this.failures,
     required this.processedAt,
   });
+  final String bomId;
+  final String productionOrderId;
+  final List<MaterialConsumption> consumptions;
+  final List<ConsumptionFailure> failures;
+  final DateTime processedAt;
 }
 
 class BomInventoryStatus {
-  final String bomId;
-  final List<BomItemStatus> itemStatuses;
-  final int totalActiveReservations;
-  final DateTime lastUpdated;
 
   BomInventoryStatus({
     required this.bomId,
@@ -448,16 +443,13 @@ class BomInventoryStatus {
     required this.totalActiveReservations,
     required this.lastUpdated,
   });
+  final String bomId;
+  final List<BomItemStatus> itemStatuses;
+  final int totalActiveReservations;
+  final DateTime lastUpdated;
 }
 
 class BomItemStatus {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final double requiredQuantity;
-  final double availableQuantity;
-  final double reservedQuantity;
-  final List<Reservation> activeReservations;
 
   BomItemStatus({
     required this.itemId,
@@ -468,14 +460,16 @@ class BomItemStatus {
     required this.reservedQuantity,
     required this.activeReservations,
   });
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final double requiredQuantity;
+  final double availableQuantity;
+  final double reservedQuantity;
+  final List<Reservation> activeReservations;
 }
 
 class MaterialConsumption {
-  final String itemId;
-  final String reservationId;
-  final double reservedQuantity;
-  final double consumedQuantity;
-  final DateTime consumedAt;
 
   MaterialConsumption({
     required this.itemId,
@@ -484,14 +478,14 @@ class MaterialConsumption {
     required this.consumedQuantity,
     required this.consumedAt,
   });
+  final String itemId;
+  final String reservationId;
+  final double reservedQuantity;
+  final double consumedQuantity;
+  final DateTime consumedAt;
 }
 
 class ConsumptionFailure {
-  final String itemId;
-  final String? reservationId;
-  final double requestedQuantity;
-  final double availableQuantity;
-  final String reason;
 
   ConsumptionFailure({
     required this.itemId,
@@ -500,6 +494,11 @@ class ConsumptionFailure {
     required this.availableQuantity,
     required this.reason,
   });
+  final String itemId;
+  final String? reservationId;
+  final double requestedQuantity;
+  final double availableQuantity;
+  final String reason;
 }
 
 enum BomAvailabilityStatus {
@@ -510,8 +509,8 @@ enum BomAvailabilityStatus {
 }
 
 class BomInventoryException implements Exception {
-  final String message;
   BomInventoryException(this.message);
+  final String message;
 
   @override
   String toString() => 'BomInventoryException: $message';

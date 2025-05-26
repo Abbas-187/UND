@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/bill_of_materials.dart';
-import '../../domain/entities/bom_item.dart';
 import '../widgets/mobile_optimized_widgets.dart';
 import 'mobile_bom_item_screen.dart';
 

@@ -5,8 +5,6 @@ import 'package:intl/intl.dart';
 import '../../../factory/data/models/production_order_model.dart';
 import '../../../factory/domain/providers/production_provider.dart';
 import '../../domain/services/production_integration_service.dart';
-import '../../domain/usecases/production/issue_materials_to_production_usecase.dart';
-import '../../domain/usecases/production/receive_finished_goods_usecase.dart';
 
 /// Production Integration View for managing inventory-production workflows
 class ProductionIntegrationView extends ConsumerStatefulWidget {

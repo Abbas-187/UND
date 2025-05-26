@@ -3,6 +3,8 @@ import 'package:logger/logger.dart';
 
 import '../../../../core/config/app_config.dart';
 import '../../../../core/logging/logging_service.dart';
+import '../../../../core/data/optimized_repository.dart';
+import '../../../../core/data/unified_data_manager.dart';
 import '../../domain/entities/cost_layer.dart';
 import '../../domain/entities/cost_method_setting.dart';
 import '../../domain/entities/inventory_item.dart';
@@ -10,212 +12,369 @@ import '../../domain/repositories/inventory_repository.dart';
 import '../models/inventory_item_model.dart';
 import '../models/inventory_movement_model.dart';
 
-/// Implementation of the [InventoryRepository] interface using Firebase Firestore
-class InventoryRepositoryImpl implements InventoryRepository {
+/// Optimized implementation of the [InventoryRepository] interface using Firebase Firestore
+class InventoryRepositoryImpl extends FirebaseOptimizedRepository<InventoryItem>
+    implements InventoryRepository {
   InventoryRepositoryImpl({
     LoggingService? loggingService,
     FirebaseFirestore? firestore,
+    Logger? logger,
   })  : _loggingService = loggingService ??
             LoggingService(Logger(printer: PrettyPrinter()), AppConfig()),
-        _firestore = firestore ?? FirebaseFirestore.instance;
-  final FirebaseFirestore _firestore;
+        super(
+          firestore: firestore ?? FirebaseFirestore.instance,
+          logger: logger ?? Logger(),
+          collectionName: 'inventoryItems',
+        );
+
   final LoggingService _loggingService;
 
-  CollectionReference<Map<String, dynamic>> get _inventoryCollection =>
-      _firestore.collection('inventoryItems');
-
-  CollectionReference get _movementsCollection =>
-      _firestore.collection('inventory_movements');
-
-  CollectionReference get _costLayersCollection =>
-      _firestore.collection('inventory_cost_layers');
+  // Override optimized repository methods
+  @override
+  InventoryItem fromFirestore(DocumentSnapshot doc) {
+    return InventoryItemModel.fromFirestore(
+      doc as DocumentSnapshot<Map<String, dynamic>>,
+    ).toDomain();
+  }
 
   @override
+  Map<String, dynamic> toFirestore(InventoryItem item) {
+    final model = InventoryItemModel.fromDomain(item);
+    final json = model.toJson();
+    json.remove('id'); // Remove ID as it's handled by Firestore
+    return json;
+  }
+
+  @override
+  String getId(InventoryItem item) => item.id;
+
+  // Legacy collection references for backward compatibility
+  CollectionReference<Map<String, dynamic>> get _inventoryCollection =>
+      firestore.collection('inventoryItems');
+
+  CollectionReference get _movementsCollection =>
+      firestore.collection('inventory_movements');
+
+  CollectionReference get _costLayersCollection =>
+      firestore.collection('inventory_cost_layers');
+
+  // Implement InventoryRepository interface methods using optimized base
+  @override
   Future<List<InventoryItem>> getItems() async {
-    try {
-      final snapshot = await _inventoryCollection.get();
-      return snapshot.docs
-          .map((doc) => InventoryItemModel.fromFirestore(doc).toDomain())
-          .toList();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to get inventory items', e, stackTrace);
-      return [];
-    }
+    return await PerformanceMonitor.trackAsync(
+      'inventory_get_items',
+      () async {
+        final result = await findMany(const QueryParams(limit: 1000));
+        return result.items;
+      },
+    );
   }
 
   @override
   Future<InventoryItem?> getItem(String id) async {
-    try {
-      final doc = await _inventoryCollection.doc(id).get();
-      if (!doc.exists) return null;
-      return InventoryItemModel.fromFirestore(
-        doc,
-      ).toDomain();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to get inventory item: $id', e, stackTrace);
-      return null;
-    }
+    return await PerformanceMonitor.trackAsync(
+      'inventory_get_item',
+      () async {
+        return await findById(id);
+      },
+    );
   }
 
   @override
   Future<InventoryItem> addItem(InventoryItem item) async {
-    try {
-      final model = InventoryItemModel.fromDomain(item);
-      final docRef = item.id.isEmpty
-          ? _inventoryCollection.doc()
-          : _inventoryCollection.doc(item.id);
+    return await PerformanceMonitor.trackAsync(
+      'inventory_add_item',
+      () async {
+        final savedItem = await create(item);
 
-      await docRef.set(model.toJson());
+        // Emit domain event
+        UnifiedDataManager.instance.publishEvent(InventoryUpdatedEvent(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          timestamp: DateTime.now(),
+          aggregateId: savedItem.id,
+          itemId: savedItem.id,
+          oldQuantity: 0,
+          newQuantity: savedItem.quantity,
+          reason: 'Item created',
+        ));
 
-      // Update the ID if it was auto-generated
-      final updatedItem = item.id.isEmpty ? item.copyWith(id: docRef.id) : item;
-
-      return updatedItem;
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to add inventory item', e, stackTrace);
-      rethrow;
-    }
+        return savedItem;
+      },
+    );
   }
 
   @override
   Future<void> updateItem(InventoryItem item) async {
-    try {
-      final model = InventoryItemModel.fromDomain(item);
-      await _inventoryCollection.doc(item.id).update(model.toJson());
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to update inventory item', e, stackTrace);
-      rethrow;
-    }
+    await PerformanceMonitor.trackAsync(
+      'inventory_update_item',
+      () async {
+        // Get old quantity for event
+        final oldItem = await findById(item.id);
+        final oldQuantity = oldItem?.quantity ?? 0;
+
+        await update(item.id, item);
+
+        // Emit domain event
+        UnifiedDataManager.instance.publishEvent(InventoryUpdatedEvent(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          timestamp: DateTime.now(),
+          aggregateId: item.id,
+          itemId: item.id,
+          oldQuantity: oldQuantity,
+          newQuantity: item.quantity,
+          reason: 'Item updated',
+        ));
+      },
+    );
   }
 
   @override
   Future<void> deleteItem(String id) async {
-    try {
-      await _inventoryCollection.doc(id).delete();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to delete inventory item', e, stackTrace);
-      rethrow;
-    }
+    await PerformanceMonitor.trackAsync(
+      'inventory_delete_item',
+      () async {
+        await delete(id);
+
+        // Emit domain event
+        UnifiedDataManager.instance.publishEvent(InventoryUpdatedEvent(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          timestamp: DateTime.now(),
+          aggregateId: id,
+          itemId: id,
+          oldQuantity: 0,
+          newQuantity: 0,
+          reason: 'Item deleted',
+        ));
+      },
+    );
   }
 
   @override
   Stream<List<InventoryItem>> watchAllItems() {
-    try {
-      return _inventoryCollection.snapshots().map(
-            (snapshot) => snapshot.docs
-                .map((doc) => InventoryItemModel.fromFirestore(
-                        doc as DocumentSnapshot<Map<String, dynamic>>)
-                    .toDomain())
-                .toList(),
-          );
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to watch inventory items', e, stackTrace);
-      return Stream.value([]);
-    }
+    return watchMany(const QueryParams(limit: 1000));
   }
 
   @override
   Stream<InventoryItem> watchItem(String id) {
-    try {
-      return _inventoryCollection.doc(id).snapshots().map(
-            (doc) => InventoryItemModel.fromFirestore(
-              doc,
-            ).toDomain(),
-          );
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to watch inventory item', e, stackTrace);
-      return Stream.empty();
-    }
+    return watchById(id).map((item) => item!);
+  }
+
+  // Optimized methods using the base class
+  @override
+  Future<List<InventoryItem>> getLowStockItems() async {
+    return await PerformanceMonitor.trackAsync(
+      'inventory_get_low_stock',
+      () async {
+        const cacheKey = 'inventory_low_stock_items';
+
+        final cached = SmartCache.get<List<InventoryItem>>(cacheKey);
+        if (cached != null) {
+          logger.d('Cache hit for low stock items');
+          return cached;
+        }
+
+        final result = await findMany(const QueryParams(limit: 1000));
+        final lowStockItems = result.items
+            .where((item) => item.quantity <= item.lowStockThreshold)
+            .toList();
+
+        SmartCache.set(cacheKey, lowStockItems,
+            ttl: const Duration(minutes: 5));
+        return lowStockItems;
+      },
+    );
+  }
+
+  @override
+  Future<List<InventoryItem>> getItemsNeedingReorder() async {
+    return await PerformanceMonitor.trackAsync(
+      'inventory_get_reorder_items',
+      () async {
+        const cacheKey = 'inventory_reorder_items';
+
+        final cached = SmartCache.get<List<InventoryItem>>(cacheKey);
+        if (cached != null) {
+          return cached;
+        }
+
+        final result = await findMany(const QueryParams(limit: 1000));
+        final reorderItems = result.items
+            .where((item) => item.quantity <= item.reorderPoint)
+            .toList();
+
+        SmartCache.set(cacheKey, reorderItems, ttl: const Duration(minutes: 5));
+        return reorderItems;
+      },
+    );
+  }
+
+  @override
+  Future<List<InventoryItem>> searchItems(String query) async {
+    return await PerformanceMonitor.trackAsync(
+      'inventory_search_items',
+      () async {
+        final result = await findMany(QueryParams(
+          searchTerm: query,
+          limit: 100,
+        ));
+        return result.items;
+      },
+    );
+  }
+
+  @override
+  Future<List<InventoryItem>> filterItems({
+    String? category,
+    String? subCategory,
+    String? location,
+    String? supplier,
+    bool? lowStock,
+    bool? needsReorder,
+    bool? expired,
+  }) async {
+    return await PerformanceMonitor.trackAsync(
+      'inventory_filter_items',
+      () async {
+        final filters = <String, dynamic>{};
+
+        if (category != null && category.isNotEmpty) {
+          filters['category'] = category;
+        }
+        if (subCategory != null && subCategory.isNotEmpty) {
+          filters['subCategory'] = subCategory;
+        }
+        if (location != null && location.isNotEmpty) {
+          filters['location'] = location;
+        }
+        if (supplier != null && supplier.isNotEmpty) {
+          filters['supplier'] = supplier;
+        }
+
+        final result = await findMany(QueryParams(
+          filters: filters,
+          limit: 1000,
+        ));
+
+        var items = result.items;
+
+        // Client-side filters for complex conditions
+        if (lowStock == true) {
+          items = items
+              .where((item) => item.quantity <= item.lowStockThreshold)
+              .toList();
+        }
+        if (needsReorder == true) {
+          items = items
+              .where((item) => item.quantity <= item.reorderPoint)
+              .toList();
+        }
+        if (expired == true) {
+          final now = DateTime.now();
+          items = items
+              .where((item) =>
+                  item.expiryDate != null && item.expiryDate!.isBefore(now))
+              .toList();
+        }
+
+        return items;
+      },
+    );
+  }
+
+  @override
+  Future<void> batchUpdateItems(List<InventoryItem> items) async {
+    await PerformanceMonitor.trackAsync(
+      'inventory_batch_update',
+      () async {
+        final itemMap = <String, InventoryItem>{};
+        for (final item in items) {
+          itemMap[item.id] = item;
+        }
+
+        await updateBatch(itemMap);
+
+        // Emit events for all updated items
+        for (final item in items) {
+          UnifiedDataManager.instance.publishEvent(InventoryUpdatedEvent(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            timestamp: DateTime.now(),
+            aggregateId: item.id,
+            itemId: item.id,
+            oldQuantity: 0, // We don't have old quantity in batch update
+            newQuantity: item.quantity,
+            reason: 'Batch update',
+          ));
+        }
+      },
+    );
   }
 
   @override
   Future<InventoryItem> adjustQuantity(String id, double adjustment,
       String reason, String initiatingEmployeeId) async {
-    try {
-      // Get current item
-      final itemSnapshot = await _inventoryCollection.doc(id).get();
-      if (!itemSnapshot.exists) {
-        throw Exception('Item not found: $id');
-      }
+    return await PerformanceMonitor.trackAsync(
+      'inventory_adjust_quantity',
+      () async {
+        final item = await findById(id);
+        if (item == null) {
+          throw Exception('Item not found: $id');
+        }
 
-      final item = InventoryItemModel.fromFirestore(itemSnapshot).toDomain();
+        final oldQuantity = item.quantity;
+        final newQuantity = oldQuantity + adjustment;
 
-      // Calculate new quantity
-      final newQuantity = item.quantity + adjustment;
-      if (newQuantity < 0) {
-        throw Exception('Adjustment would result in negative quantity');
-      }
+        final updatedItem = item.copyWith(
+          quantity: newQuantity,
+          lastUpdated: DateTime.now(),
+        );
 
-      // Update item with new quantity
-      final updatedItem = item.copyWith(
-        quantity: newQuantity,
-        lastUpdated: DateTime.now(),
-      );
+        await update(id, updatedItem);
 
-      await updateItem(updatedItem);
+        // Emit domain event
+        UnifiedDataManager.instance.publishEvent(InventoryUpdatedEvent(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          timestamp: DateTime.now(),
+          aggregateId: id,
+          itemId: id,
+          oldQuantity: oldQuantity,
+          newQuantity: newQuantity,
+          reason: reason,
+        ));
 
-      // Record the adjustment in a separate collection for audit trail
-      await _firestore.collection('inventory_adjustments').add({
-        'itemId': id,
-        'itemName': item.name,
-        'previousQuantity': item.quantity,
-        'adjustment': adjustment,
-        'newQuantity': newQuantity,
-        'reason': reason,
-        'initiatingEmployeeId': initiatingEmployeeId,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
+        return updatedItem;
+      },
+    );
+  }
 
-      return updatedItem;
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to adjust quantity', e, stackTrace);
-      rethrow;
-    }
+  // Legacy methods - keeping for backward compatibility
+  @override
+  Future<List<InventoryItem>> getItemsBelowReorderLevel() async {
+    return getItemsNeedingReorder();
   }
 
   @override
-  Future<List<InventoryItem>> getLowStockItems() async {
-    try {
-      final items = await getItems();
-      return items
-          .where((item) => item.quantity <= item.lowStockThreshold)
-          .toList();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to get low stock items', e, stackTrace);
-      return [];
-    }
-  }
-
-  @override
-  Future<List<InventoryItem>> getItemsNeedingReorder() async {
-    try {
-      final items = await getItems();
-      return items.where((item) => item.quantity <= item.reorderPoint).toList();
-    } catch (e, stackTrace) {
-      _loggingService.error(
-          'Failed to get items needing reorder', e, stackTrace);
-      return [];
-    }
+  Future<List<InventoryItem>> getItemsAtCriticalLevel() async {
+    return getLowStockItems();
   }
 
   @override
   Future<List<InventoryItem>> getExpiringItems(DateTime before) async {
-    try {
-      final items = await getItems();
-      return items
-          .where((item) =>
-              item.expiryDate != null && item.expiryDate!.isBefore(before))
-          .toList();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to get expiring items', e, stackTrace);
-      return [];
-    }
+    return await PerformanceMonitor.trackAsync(
+      'inventory_get_expiring_items',
+      () async {
+        final result = await findMany(const QueryParams(limit: 1000));
+        return result.items
+            .where((item) =>
+                item.expiryDate != null && item.expiryDate!.isBefore(before))
+            .toList();
+      },
+    );
   }
 
   @override
   Future<List<dynamic>> getItemMovementHistory(String id) async {
     try {
-      final adjustments = await _firestore
+      final adjustments = await firestore
           .collection('inventory_adjustments')
           .where('itemId', isEqualTo: id)
           .orderBy('timestamp', descending: true)
@@ -230,207 +389,33 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<List<InventoryItem>> searchItems(String query) async {
-    try {
-      if (query.isEmpty) return getItems();
-
-      final lowercaseQuery = query.toLowerCase();
-      final items = await getItems();
-
-      return items.where((item) {
-        return item.name.toLowerCase().contains(lowercaseQuery) ||
-            item.category.toLowerCase().contains(lowercaseQuery) ||
-            item.location.toLowerCase().contains(lowercaseQuery) ||
-            (item.batchNumber != null &&
-                item.batchNumber!.toLowerCase().contains(lowercaseQuery));
-      }).toList();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to search items', e, stackTrace);
-      return [];
-    }
-  }
-
-  @override
-  Future<List<InventoryItem>> filterItems({
-    String? category,
-    String? subCategory,
-    String? location,
-    String? supplier,
-    bool? lowStock,
-    bool? needsReorder,
-    bool? expired,
-  }) async {
-    try {
-      // Build Firestore query for equality filters
-      Query<Map<String, dynamic>> query = _inventoryCollection;
-      if (category != null && category.isNotEmpty) {
-        query = query.where('category', isEqualTo: category);
-      }
-      if (subCategory != null && subCategory.isNotEmpty) {
-        query = query.where('subCategory', isEqualTo: subCategory);
-      }
-      if (location != null && location.isNotEmpty) {
-        query = query.where('location', isEqualTo: location);
-      }
-      if (supplier != null && supplier.isNotEmpty) {
-        query = query.where('supplier', isEqualTo: supplier);
-      }
-      if (expired == true) {
-        final nowTs = Timestamp.fromDate(DateTime.now());
-        query = query.where('expiryDate', isLessThan: nowTs);
-      }
-      // Execute server-side query
-      final snapshot = await query.get();
-      var items = snapshot.docs
-          .map((doc) => InventoryItemModel.fromFirestore(doc).toDomain())
-          .toList();
-      // Client-side filters
-      if (lowStock == true) {
-        items = items
-            .where((item) => item.quantity <= item.lowStockThreshold)
-            .toList();
-      }
-      if (needsReorder == true) {
-        items =
-            items.where((item) => item.quantity <= item.reorderPoint).toList();
-      }
-      return items;
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to filter items', e, stackTrace);
-      return [];
-    }
-  }
-
-  @override
-  Future<void> batchUpdateItems(List<InventoryItem> items) async {
-    try {
-      final batch = _firestore.batch();
-
-      for (final item in items) {
-        final model = InventoryItemModel.fromDomain(item);
-        batch.set(_inventoryCollection.doc(item.id), model.toJson());
-      }
-
-      await batch.commit();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to batch update items', e, stackTrace);
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> batchDeleteItems(List<String> ids) async {
-    try {
-      final batch = _firestore.batch();
-
-      for (final id in ids) {
-        batch.delete(_inventoryCollection.doc(id));
-      }
-
-      await batch.commit();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to batch delete items', e, stackTrace);
-      rethrow;
-    }
-  }
-
-  @override
-  Stream<List<InventoryItem>> watchLowStockItems() {
-    try {
-      // This is a client-side filter since Firestore doesn't support
-      // dynamic field comparisons
-      return watchAllItems().map((items) => items
-          .where((item) => item.quantity <= item.lowStockThreshold)
-          .toList());
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to watch low stock items', e, stackTrace);
-      return Stream.value([]);
-    }
-  }
-
-  @override
-  Future<List<InventoryItem>> getItemsAtCriticalLevel() async {
-    try {
-      final items = await getItems();
-      // Define critical as items below half of their reorder point
-      return items
-          .where((item) => item.quantity <= item.reorderPoint / 2)
-          .toList();
-    } catch (e, stackTrace) {
-      _loggingService.error(
-          'Failed to get items at critical level', e, stackTrace);
-      return [];
-    }
-  }
-
-  @override
-  Future<List<InventoryItem>> getItemsBelowReorderLevel() async {
-    try {
-      final items = await getItems();
-      return items.where((item) => item.quantity <= item.reorderPoint).toList();
-    } catch (e, stackTrace) {
-      _loggingService.error(
-          'Failed to get items below reorder level', e, stackTrace);
-      return [];
-    }
-  }
-
-  @override
-  Future<Map<String, double>> getInventoryValueByCategory() async {
-    try {
-      final items = await getItems();
-      final valueByCategory = <String, double>{};
-
-      for (final item in items) {
-        final value = (item.cost ?? 0) * item.quantity;
-        valueByCategory[item.category] =
-            (valueByCategory[item.category] ?? 0) + value;
-      }
-
-      return valueByCategory;
-    } catch (e, stackTrace) {
-      _loggingService.error(
-          'Failed to get inventory value by category', e, stackTrace);
-      return {};
-    }
-  }
-
-  @override
   Future<List<InventoryItem>> getTopMovingItems(int limit) async {
-    try {
-      // This would typically need movement data, but for now we'll just return
-      // items sorted by value (cost * quantity) as a placeholder
-      final items = await getItems();
-      items.sort((a, b) {
-        final aValue = (a.cost ?? 0) * a.quantity;
-        final bValue = (b.cost ?? 0) * b.quantity;
-        return bValue.compareTo(aValue); // Descending order
-      });
-
-      return items.take(limit).toList();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to get top moving items', e, stackTrace);
-      return [];
-    }
+    return await PerformanceMonitor.trackAsync(
+      'inventory_get_top_moving',
+      () async {
+        final result = await findMany(QueryParams(
+          limit: limit,
+          orderBy: 'quantity',
+          orderDirection: 'desc',
+        ));
+        return result.items;
+      },
+    );
   }
 
   @override
   Future<List<InventoryItem>> getSlowMovingItems(int limit) async {
-    try {
-      // This would typically need movement data, but for now we'll just return
-      // items sorted by value (cost * quantity) in ascending order as a placeholder
-      final items = await getItems();
-      items.sort((a, b) {
-        final aValue = (a.cost ?? 0) * a.quantity;
-        final bValue = (b.cost ?? 0) * b.quantity;
-        return aValue.compareTo(bValue); // Ascending order
-      });
-
-      return items.take(limit).toList();
-    } catch (e, stackTrace) {
-      _loggingService.error('Failed to get slow moving items', e, stackTrace);
-      return [];
-    }
+    return await PerformanceMonitor.trackAsync(
+      'inventory_get_slow_moving',
+      () async {
+        final result = await findMany(QueryParams(
+          limit: limit,
+          orderBy: 'quantity',
+          orderDirection: 'asc',
+        ));
+        return result.items;
+      },
+    );
   }
 
   @override
@@ -466,16 +451,15 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<int> countRecipesUsingItem(String itemId) async {
+  Future<int> countBomsUsingItem(String itemId) async {
     try {
-      final snapshot = await _firestore
-          .collection('recipes')
-          .where('ingredientIds', arrayContains: itemId)
+      final querySnapshot = await firestore
+          .collection('boms')
+          .where('ingredients', arrayContains: itemId)
           .get();
-      return snapshot.size;
+      return querySnapshot.docs.length;
     } catch (e, stackTrace) {
-      _loggingService.error(
-          'Failed to count recipes using item', e, stackTrace);
+      _loggingService.error('Failed to count BOMs using item', e, stackTrace);
       return 0;
     }
   }
@@ -649,7 +633,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
           .get();
 
       if (costLayerQuery.docs.isNotEmpty) {
-        final batch = _firestore.batch();
+        final batch = firestore.batch();
         for (final doc in costLayerQuery.docs) {
           batch.delete(doc.reference);
         }
@@ -886,11 +870,67 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<bool> allocateInventoryForRecipe(
-      String recipeId, double quantity) async {
-    // Implement logic to allocate inventory for a recipe
+  Future<bool> allocateInventoryForBom(String bomId, double quantity) async {
+    // Implement logic to allocate inventory for a BOM
     // This is a placeholder implementation
-    throw UnimplementedError(
-        'allocateInventoryForRecipe is not implemented yet.');
+    throw UnimplementedError('allocateInventoryForBom is not implemented yet.');
+  }
+
+  @override
+  Future<void> batchDeleteItems(List<String> ids) async {
+    await PerformanceMonitor.trackAsync(
+      'inventory_batch_delete',
+      () async {
+        await deleteBatch(ids);
+
+        // Emit events for all deleted items
+        for (final id in ids) {
+          UnifiedDataManager.instance.publishEvent(InventoryUpdatedEvent(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            timestamp: DateTime.now(),
+            aggregateId: id,
+            itemId: id,
+            oldQuantity: 0,
+            newQuantity: 0,
+            reason: 'Batch delete',
+          ));
+        }
+      },
+    );
+  }
+
+  @override
+  Stream<List<InventoryItem>> watchLowStockItems() {
+    return watchMany(const QueryParams(limit: 1000)).map((items) => items
+        .where((item) => item.quantity <= item.lowStockThreshold)
+        .toList());
+  }
+
+  @override
+  Future<Map<String, double>> getInventoryValueByCategory() async {
+    return await PerformanceMonitor.trackAsync(
+      'inventory_get_value_by_category',
+      () async {
+        const cacheKey = 'inventory_value_by_category';
+
+        final cached = SmartCache.get<Map<String, double>>(cacheKey);
+        if (cached != null) {
+          return cached;
+        }
+
+        final result = await findMany(const QueryParams(limit: 1000));
+        final valueByCategory = <String, double>{};
+
+        for (final item in result.items) {
+          final value = (item.cost ?? 0) * item.quantity;
+          valueByCategory[item.category] =
+              (valueByCategory[item.category] ?? 0) + value;
+        }
+
+        SmartCache.set(cacheKey, valueByCategory,
+            ttl: const Duration(minutes: 10));
+        return valueByCategory;
+      },
+    );
   }
 }

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../providers/inventory_provider.dart';
-import '../widgets/low_stock_alerts_banner.dart';
-import '../widgets/inventory_filter_bar.dart';
-import '../widgets/inventory_analytics_card.dart';
-import '../widgets/inventory_item_card.dart';
-import '../widgets/dashboard/inventory_dashboard_widgets.dart';
 import '../../../procurement/presentation/data/in_memory_purchase_requests.dart';
+import '../providers/inventory_provider.dart';
+import '../widgets/inventory_analytics_card.dart';
+import '../widgets/inventory_filter_bar.dart';
 
 class InventoryScreen extends ConsumerWidget {
   const InventoryScreen({super.key});
@@ -70,7 +67,7 @@ class InventoryScreen extends ConsumerWidget {
         ],
       ),
       body: Container(
-        color: theme.colorScheme.background,
+        color: theme.colorScheme.surface,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0),
@@ -181,8 +178,8 @@ void _showQuickActions(BuildContext context, dynamic item) {
 }
 
 class _LowStockPreviewBanner extends ConsumerWidget {
-  final VoidCallback onShowAll;
   const _LowStockPreviewBanner({required this.onShowAll});
+  final VoidCallback onShowAll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -262,10 +259,10 @@ class _LowStockPreviewBanner extends ConsumerWidget {
 }
 
 class _InventoryTableSection extends StatefulWidget {
-  final AsyncValue<List<dynamic>> filteredItems;
-  final VoidCallback onRefresh;
   const _InventoryTableSection(
       {required this.filteredItems, required this.onRefresh});
+  final AsyncValue<List<dynamic>> filteredItems;
+  final VoidCallback onRefresh;
 
   @override
   State<_InventoryTableSection> createState() => _InventoryTableSectionState();
@@ -376,8 +373,8 @@ class _InventoryTableSectionState extends State<_InventoryTableSection> {
                 child: DataTable(
                   sortColumnIndex: _sortColumnIndex,
                   sortAscending: _sortAscending,
-                  headingRowColor: MaterialStateProperty.all(
-                      theme.colorScheme.surfaceVariant),
+                  headingRowColor: WidgetStateProperty.all(
+                      theme.colorScheme.surfaceContainerHighest),
                   columns: [
                     DataColumn(
                       label: Text(l10n?.name ?? 'Name'),
@@ -641,8 +638,8 @@ class _InventoryTableSectionState extends State<_InventoryTableSection> {
 }
 
 class _InventoryModernCard extends StatelessWidget {
-  final dynamic item;
   const _InventoryModernCard({required this.item});
+  final dynamic item;
 
   @override
   Widget build(BuildContext context) {
@@ -855,8 +852,8 @@ class _InventoryModernCard extends StatelessWidget {
 }
 
 class _QualityStatusChip extends StatelessWidget {
-  final String status;
   const _QualityStatusChip({required this.status});
+  final String status;
 
   @override
   Widget build(BuildContext context) {

@@ -54,8 +54,6 @@ class OrderFormState {
 }
 
 class ProductList {
-  final String name;
-  final List<OrderItemModel> items;
   ProductList({required this.name, required this.items});
 
   factory ProductList.fromJson(Map<String, dynamic> json) => ProductList(
@@ -64,6 +62,8 @@ class ProductList {
             .map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
+  final String name;
+  final List<OrderItemModel> items;
   Map<String, dynamic> toJson() => {
         'name': name,
         'items': items.map((e) => e.toJson()).toList(),

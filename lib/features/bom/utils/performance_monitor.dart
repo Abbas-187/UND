@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
@@ -10,9 +9,9 @@ import 'memory_optimizer.dart';
 
 /// Comprehensive performance monitoring for BOM module
 class PerformanceMonitor {
-  static final PerformanceMonitor _instance = PerformanceMonitor._internal();
   factory PerformanceMonitor() => _instance;
   PerformanceMonitor._internal();
+  static final PerformanceMonitor _instance = PerformanceMonitor._internal();
 
   final Logger _logger = Logger();
   final Map<String, PerformanceMetric> _metrics = {};
@@ -402,11 +401,11 @@ class PerformanceMonitor {
 
 /// Performance metric with statistical tracking
 class PerformanceMetric {
+
+  PerformanceMetric({required this.name, this.unit});
   final String name;
   final String? unit;
   final List<MetricValue> _values = [];
-
-  PerformanceMetric({required this.name, this.unit});
 
   void addValue(double value, {Map<String, dynamic>? metadata}) {
     _values.add(MetricValue(
@@ -446,26 +445,19 @@ class PerformanceMetric {
 
 /// Individual metric value with timestamp
 class MetricValue {
-  final double value;
-  final DateTime timestamp;
-  final Map<String, dynamic>? metadata;
 
   MetricValue({
     required this.value,
     required this.timestamp,
     this.metadata,
   });
+  final double value;
+  final DateTime timestamp;
+  final Map<String, dynamic>? metadata;
 }
 
 /// Performance dashboard data
 class PerformanceDashboard {
-  final Map<String, PerformanceMetric> metrics;
-  final List<PerformanceEvent> recentEvents;
-  final CacheStatistics cacheStatistics;
-  final MemoryStats memoryStats;
-  final SystemHealth systemHealth;
-  final List<String> recommendations;
-  final DateTime timestamp;
 
   PerformanceDashboard({
     required this.metrics,
@@ -476,16 +468,17 @@ class PerformanceDashboard {
     required this.recommendations,
     required this.timestamp,
   });
+  final Map<String, PerformanceMetric> metrics;
+  final List<PerformanceEvent> recentEvents;
+  final CacheStatistics cacheStatistics;
+  final MemoryStats memoryStats;
+  final SystemHealth systemHealth;
+  final List<String> recommendations;
+  final DateTime timestamp;
 }
 
 /// System health metrics
 class SystemHealth {
-  final double overallScore;
-  final double memoryHealth;
-  final double cacheHealth;
-  final double performanceHealth;
-  final double errorHealth;
-  final DateTime timestamp;
 
   SystemHealth({
     required this.overallScore,
@@ -495,6 +488,12 @@ class SystemHealth {
     required this.errorHealth,
     required this.timestamp,
   });
+  final double overallScore;
+  final double memoryHealth;
+  final double cacheHealth;
+  final double performanceHealth;
+  final double errorHealth;
+  final DateTime timestamp;
 
   String get healthStatus {
     if (overallScore >= 0.8) return 'Excellent';
@@ -506,10 +505,6 @@ class SystemHealth {
 
 /// Performance event
 class PerformanceEvent {
-  final PerformanceEventType type;
-  final String name;
-  final double? value;
-  final DateTime timestamp;
 
   PerformanceEvent({
     required this.type,
@@ -517,6 +512,10 @@ class PerformanceEvent {
     this.value,
     required this.timestamp,
   });
+  final PerformanceEventType type;
+  final String name;
+  final double? value;
+  final DateTime timestamp;
 }
 
 /// Performance event types
@@ -530,10 +529,6 @@ enum PerformanceEventType {
 
 /// Performance alert
 class PerformanceAlert {
-  final PerformanceAlertType type;
-  final String message;
-  final DateTime timestamp;
-  final AlertSeverity severity;
 
   PerformanceAlert({
     required this.type,
@@ -541,6 +536,10 @@ class PerformanceAlert {
     required this.timestamp,
     required this.severity,
   });
+  final PerformanceAlertType type;
+  final String message;
+  final DateTime timestamp;
+  final AlertSeverity severity;
 }
 
 /// Performance alert types

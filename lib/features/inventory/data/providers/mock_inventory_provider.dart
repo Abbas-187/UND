@@ -102,14 +102,14 @@ class MockInventoryProvider {
     return movement.movementId;
   }
 
-  // Check availability for recipe
-  bool checkInventoryForRecipe(String recipeId, double batchSize) {
-    return mockDataService.checkInventoryForRecipe(recipeId, batchSize);
+  // Check availability for BOM
+  bool checkInventoryForBom(String bomId, double batchSize) {
+    return mockDataService.checkInventoryForBom(bomId, batchSize);
   }
 
-  // Get recipe ingredients
-  List<Map<String, dynamic>> getRecipeIngredients(String recipeId) {
-    return mockDataService.getRecipeIngredients(recipeId);
+  // Get BOM ingredients
+  List<Map<String, dynamic>> getBomIngredients(String bomId) {
+    return mockDataService.getBomIngredients(bomId);
   }
 
   // Get forecast for item

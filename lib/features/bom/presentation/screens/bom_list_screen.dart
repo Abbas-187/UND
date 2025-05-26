@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../domain/entities/bill_of_materials.dart';
 import '../../../shared/widgets/status_indicator.dart';
+import '../../domain/entities/bill_of_materials.dart';
 import '../providers/bom_providers.dart';
 import '../widgets/bom_list_item.dart';
 
@@ -107,8 +107,8 @@ class _BomListScreenState extends ConsumerState<BomListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/bom/create'),
-        child: const Icon(Icons.add),
         tooltip: 'Create New BOM',
+        child: const Icon(Icons.add),
       ),
     );
   }

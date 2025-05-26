@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../usecases/analytics/inventory_turnover_usecase.dart';
-import '../usecases/analytics/stockout_analysis_usecase.dart';
+import '../providers/inventory_repository_provider.dart' as repo_provider;
+import '../repositories/inventory_repository.dart';
+import '../usecases/analytics/continuous_improvement_usecase.dart';
+import '../usecases/analytics/customer_demand_analytics_usecase.dart';
 import '../usecases/analytics/excess_obsolete_analysis_usecase.dart'
     hide RiskLevel;
-import '../usecases/analytics/customer_demand_analytics_usecase.dart';
-import '../usecases/analytics/continuous_improvement_usecase.dart';
-import '../repositories/inventory_repository.dart';
-import '../providers/inventory_repository_provider.dart' as repo_provider;
+import '../usecases/analytics/inventory_turnover_usecase.dart';
+import '../usecases/analytics/stockout_analysis_usecase.dart';
 
 /// Comprehensive inventory analytics dashboard data
 class InventoryAnalyticsDashboard {

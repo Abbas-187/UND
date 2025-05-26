@@ -1,5 +1,4 @@
 import '../entities/reservation.dart';
-import '../entities/inventory_item.dart';
 
 class ReservationService {
   // Core reservation operations
@@ -462,12 +461,6 @@ class ReservationService {
 
 // Helper classes
 class _ItemRequirement {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final double quantity;
-  final String unit;
-
   _ItemRequirement({
     required this.itemId,
     required this.itemCode,
@@ -475,15 +468,14 @@ class _ItemRequirement {
     required this.quantity,
     required this.unit,
   });
-}
-
-class _BomItem {
   final String itemId;
   final String itemCode;
   final String itemName;
   final double quantity;
   final String unit;
+}
 
+class _BomItem {
   _BomItem({
     required this.itemId,
     required this.itemCode,
@@ -491,23 +483,27 @@ class _BomItem {
     required this.quantity,
     required this.unit,
   });
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final double quantity;
+  final String unit;
 }
 
 class _ReservationAttempt {
+  _ReservationAttempt({this.reservation, this.failure});
   final Reservation? reservation;
   final ReservationFailure? failure;
-
-  _ReservationAttempt({this.reservation, this.failure});
 }
 
 class _BatchSelection {
-  final String? warehouseId;
-  final String? batchNumber;
-  final String? lotNumber;
-
   _BatchSelection({
     this.warehouseId,
     this.batchNumber,
     this.lotNumber,
   });
+
+  final String? warehouseId;
+  final String? batchNumber;
+  final String? lotNumber;
 }

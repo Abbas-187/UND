@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/quality_status.dart';
 import '../entities/cost_layer.dart';
 import '../entities/inventory_item.dart';
-import '../repositories/inventory_repository.dart';
 import '../providers/inventory_repository_provider.dart' as repo_provider;
+import '../repositories/inventory_repository.dart';
 
 /// Allocation request for inventory items
 class InventoryAllocationRequest {

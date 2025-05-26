@@ -56,10 +56,10 @@ class _MovementApprovalDialogState extends State<MovementApprovalDialog> {
             children: [
               Text(
                 widget.isApproval
-                    ? (l10n != null && l10n.aboutToApprove != null
+                    ? (l10n != null
                         ? l10n.aboutToApprove(widget.movementId)
                         : 'About to approve ${widget.movementId}')
-                    : (l10n != null && l10n.aboutToReject != null
+                    : (l10n != null
                         ? l10n.aboutToReject(widget.movementId)
                         : 'About to reject ${widget.movementId}'),
                 style: theme.textTheme.bodyMedium,

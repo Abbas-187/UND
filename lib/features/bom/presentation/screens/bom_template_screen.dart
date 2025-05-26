@@ -578,9 +578,9 @@ class _BomTemplateScreenState extends ConsumerState<BomTemplateScreen>
 }
 
 class _UseTemplateDialog extends StatefulWidget {
-  final BomTemplate template;
 
   const _UseTemplateDialog({required this.template});
+  final BomTemplate template;
 
   @override
   State<_UseTemplateDialog> createState() => _UseTemplateDialogState();
@@ -725,9 +725,9 @@ class _UseTemplateDialogState extends State<_UseTemplateDialog> {
 }
 
 class _DuplicateTemplateDialog extends StatefulWidget {
-  final BomTemplate template;
 
   const _DuplicateTemplateDialog({required this.template});
+  final BomTemplate template;
 
   @override
   State<_DuplicateTemplateDialog> createState() =>

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../shared/widgets/status_indicator.dart';
 import '../../domain/entities/bill_of_materials.dart';
 import '../../domain/entities/bom_item.dart';
-import '../../../shared/widgets/status_indicator.dart';
 import '../providers/bom_providers.dart';
-import '../widgets/bom_item_list.dart';
 import '../widgets/bom_cost_breakdown.dart';
 
 class BomDetailScreen extends ConsumerWidget {
@@ -686,7 +685,7 @@ class BomItemCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

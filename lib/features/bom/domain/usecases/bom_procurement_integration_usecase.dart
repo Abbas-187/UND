@@ -2,11 +2,11 @@ import '../../../procurement/domain/entities/purchase_order.dart';
 import '../../../procurement/domain/services/supplier_quote_service.dart';
 
 class BomProcurementIntegrationUseCase {
-  final SupplierQuoteService _supplierQuoteService;
 
   BomProcurementIntegrationUseCase({
     required SupplierQuoteService supplierQuoteService,
   }) : _supplierQuoteService = supplierQuoteService;
+  final SupplierQuoteService _supplierQuoteService;
 
   // Generate comprehensive procurement recommendations for a BOM
   Future<BomProcurementAnalysis> analyzeBomProcurement(
@@ -530,15 +530,6 @@ class BomProcurementIntegrationUseCase {
 
 // Supporting classes
 class BomProcurementAnalysis {
-  final String bomId;
-  final double batchSize;
-  final ProcurementRecommendation recommendations;
-  final ProcurementCostBreakdown costBreakdown;
-  final Map<String, double> tcoAnalysis;
-  final Map<String, List<SupplierAlternative>> alternatives;
-  final List<String> insights;
-  final OptimizationCriteria optimizationCriteria;
-  final DateTime analyzedAt;
 
   BomProcurementAnalysis({
     required this.bomId,
@@ -551,16 +542,18 @@ class BomProcurementAnalysis {
     required this.optimizationCriteria,
     required this.analyzedAt,
   });
+  final String bomId;
+  final double batchSize;
+  final ProcurementRecommendation recommendations;
+  final ProcurementCostBreakdown costBreakdown;
+  final Map<String, double> tcoAnalysis;
+  final Map<String, List<SupplierAlternative>> alternatives;
+  final List<String> insights;
+  final OptimizationCriteria optimizationCriteria;
+  final DateTime analyzedAt;
 }
 
 class BomPurchaseOrderResult {
-  final String bomId;
-  final double batchSize;
-  final List<PurchaseOrder> purchaseOrders;
-  final PurchaseOrderSummary summary;
-  final List<String> recommendations;
-  final DateTime createdAt;
-  final String createdBy;
 
   BomPurchaseOrderResult({
     required this.bomId,
@@ -571,13 +564,16 @@ class BomPurchaseOrderResult {
     required this.createdAt,
     required this.createdBy,
   });
+  final String bomId;
+  final double batchSize;
+  final List<PurchaseOrder> purchaseOrders;
+  final PurchaseOrderSummary summary;
+  final List<String> recommendations;
+  final DateTime createdAt;
+  final String createdBy;
 }
 
 class BomSupplierComparison {
-  final String bomId;
-  final Map<String, ItemSupplierComparison> itemComparisons;
-  final List<String> insights;
-  final DateTime comparedAt;
 
   BomSupplierComparison({
     required this.bomId,
@@ -585,16 +581,13 @@ class BomSupplierComparison {
     required this.insights,
     required this.comparedAt,
   });
+  final String bomId;
+  final Map<String, ItemSupplierComparison> itemComparisons;
+  final List<String> insights;
+  final DateTime comparedAt;
 }
 
 class BomProcurementSchedule {
-  final String bomId;
-  final double batchSize;
-  final DateTime productionStartDate;
-  final List<ProcurementScheduleItem> scheduleItems;
-  final List<String> insights;
-  final double totalEstimatedCost;
-  final DateTime createdAt;
 
   BomProcurementSchedule({
     required this.bomId,
@@ -605,15 +598,16 @@ class BomProcurementSchedule {
     required this.totalEstimatedCost,
     required this.createdAt,
   });
+  final String bomId;
+  final double batchSize;
+  final DateTime productionStartDate;
+  final List<ProcurementScheduleItem> scheduleItems;
+  final List<String> insights;
+  final double totalEstimatedCost;
+  final DateTime createdAt;
 }
 
 class ProcurementCostBreakdown {
-  final double totalCost;
-  final Map<String, double> itemCosts;
-  final Map<String, double> supplierCosts;
-  final String mostExpensiveItem;
-  final double mostExpensiveItemCost;
-  final double averageItemCost;
 
   ProcurementCostBreakdown({
     required this.totalCost,
@@ -623,17 +617,15 @@ class ProcurementCostBreakdown {
     required this.mostExpensiveItemCost,
     required this.averageItemCost,
   });
+  final double totalCost;
+  final Map<String, double> itemCosts;
+  final Map<String, double> supplierCosts;
+  final String mostExpensiveItem;
+  final double mostExpensiveItemCost;
+  final double averageItemCost;
 }
 
 class SupplierAlternative {
-  final String supplierId;
-  final String supplierName;
-  final double unitPrice;
-  final int leadTimeDays;
-  final double? qualityRating;
-  final double? deliveryRating;
-  final double priceDifference;
-  final int leadTimeDifference;
 
   SupplierAlternative({
     required this.supplierId,
@@ -645,15 +637,17 @@ class SupplierAlternative {
     required this.priceDifference,
     required this.leadTimeDifference,
   });
+  final String supplierId;
+  final String supplierName;
+  final double unitPrice;
+  final int leadTimeDays;
+  final double? qualityRating;
+  final double? deliveryRating;
+  final double priceDifference;
+  final int leadTimeDifference;
 }
 
 class ItemSupplierComparison {
-  final String itemId;
-  final List<SupplierQuote> quotes;
-  final String recommendedSupplier;
-  final Map<String, double> supplierScores;
-  final PriceRange priceRange;
-  final LeadTimeRange leadTimeRange;
 
   ItemSupplierComparison({
     required this.itemId,
@@ -663,45 +657,39 @@ class ItemSupplierComparison {
     required this.priceRange,
     required this.leadTimeRange,
   });
+  final String itemId;
+  final List<SupplierQuote> quotes;
+  final String recommendedSupplier;
+  final Map<String, double> supplierScores;
+  final PriceRange priceRange;
+  final LeadTimeRange leadTimeRange;
 }
 
 class PriceRange {
-  final double min;
-  final double max;
-  final double average;
 
   PriceRange({
     required this.min,
     required this.max,
     required this.average,
   });
+  final double min;
+  final double max;
+  final double average;
 }
 
 class LeadTimeRange {
-  final int min;
-  final int max;
-  final int average;
 
   LeadTimeRange({
     required this.min,
     required this.max,
     required this.average,
   });
+  final int min;
+  final int max;
+  final int average;
 }
 
 class ProcurementScheduleItem {
-  final String itemId;
-  final String itemCode;
-  final String itemName;
-  final String supplierId;
-  final String supplierName;
-  final double quantity;
-  final double unitPrice;
-  final double totalCost;
-  final int leadTimeDays;
-  final DateTime recommendedOrderDate;
-  final DateTime expectedDeliveryDate;
-  final int priority;
 
   ProcurementScheduleItem({
     required this.itemId,
@@ -717,14 +705,21 @@ class ProcurementScheduleItem {
     required this.expectedDeliveryDate,
     required this.priority,
   });
+  final String itemId;
+  final String itemCode;
+  final String itemName;
+  final String supplierId;
+  final String supplierName;
+  final double quantity;
+  final double unitPrice;
+  final double totalCost;
+  final int leadTimeDays;
+  final DateTime recommendedOrderDate;
+  final DateTime expectedDeliveryDate;
+  final int priority;
 }
 
 class PurchaseOrderSummary {
-  final int totalOrders;
-  final double totalAmount;
-  final int uniqueSuppliers;
-  final int totalItems;
-  final double averageOrderValue;
 
   PurchaseOrderSummary({
     required this.totalOrders,
@@ -733,11 +728,16 @@ class PurchaseOrderSummary {
     required this.totalItems,
     required this.averageOrderValue,
   });
+  final int totalOrders;
+  final double totalAmount;
+  final int uniqueSuppliers;
+  final int totalItems;
+  final double averageOrderValue;
 }
 
 class BomProcurementException implements Exception {
-  final String message;
   BomProcurementException(this.message);
+  final String message;
 
   @override
   String toString() => 'BomProcurementException: $message';

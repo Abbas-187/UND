@@ -137,7 +137,7 @@ class BomCostBreakdown extends StatelessWidget {
         const SizedBox(height: 4),
         LinearProgressIndicator(
           value: percentage / 100,
-          backgroundColor: theme.colorScheme.surfaceVariant,
+          backgroundColor: theme.colorScheme.surfaceContainerHighest,
           valueColor: AlwaysStoppedAnimation<Color>(color),
         ),
       ],

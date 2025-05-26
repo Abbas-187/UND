@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../data/models/order_model.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/providers/order_usecase_providers.dart';
 import '../widgets/backorder_management_widget.dart';
-import '../../data/models/order_model.dart';
 
 class OrderDetailScreen extends ConsumerStatefulWidget {
   const OrderDetailScreen({super.key});

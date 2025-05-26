@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+
 class TemplateSearchBar extends StatefulWidget {
-  final Function(String) onSearchChanged;
-  final String? initialValue;
-  final String hintText;
 
   const TemplateSearchBar({
     super.key,
@@ -12,6 +10,9 @@ class TemplateSearchBar extends StatefulWidget {
     this.initialValue,
     this.hintText = 'Search templates...',
   });
+  final Function(String) onSearchChanged;
+  final String? initialValue;
+  final String hintText;
 
   @override
   State<TemplateSearchBar> createState() => _TemplateSearchBarState();

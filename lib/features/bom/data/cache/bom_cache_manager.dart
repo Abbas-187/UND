@@ -5,14 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import '../../domain/entities/bill_of_materials.dart';
-import '../../domain/entities/bom_item.dart';
 import 'cache_strategies.dart';
 
 /// Comprehensive caching manager for BOM data
 class BomCacheManager {
-  static final BomCacheManager _instance = BomCacheManager._internal();
   factory BomCacheManager() => _instance;
   BomCacheManager._internal();
+  static final BomCacheManager _instance = BomCacheManager._internal();
 
   final Map<String, CachedData> _cache = {};
   final Map<String, Timer> _expirationTimers = {};
@@ -313,11 +312,6 @@ class BomCacheManager {
 
 /// Cached data wrapper
 class CachedData {
-  final dynamic data;
-  final DateTime expiresAt;
-  final CacheStrategy strategy;
-  final int size;
-  DateTime lastAccessed;
 
   CachedData({
     required this.data,
@@ -325,6 +319,11 @@ class CachedData {
     required this.strategy,
     required this.size,
   }) : lastAccessed = DateTime.now();
+  final dynamic data;
+  final DateTime expiresAt;
+  final CacheStrategy strategy;
+  final int size;
+  DateTime lastAccessed;
 
   bool get isExpired => DateTime.now().isAfter(expiresAt);
 
@@ -335,11 +334,6 @@ class CachedData {
 
 /// Cache event for monitoring
 class CacheEvent {
-  final CacheEventType type;
-  final String key;
-  final DateTime timestamp;
-  final int? dataSize;
-  final int? count;
 
   CacheEvent({
     required this.type,
@@ -348,6 +342,11 @@ class CacheEvent {
     this.dataSize,
     this.count,
   });
+  final CacheEventType type;
+  final String key;
+  final DateTime timestamp;
+  final int? dataSize;
+  final int? count;
 }
 
 /// Cache event types
@@ -364,12 +363,6 @@ enum CacheEventType {
 
 /// Cache statistics
 class CacheStatistics {
-  final int totalEntries;
-  final int activeEntries;
-  final int expiredEntries;
-  final int totalSizeBytes;
-  final double hitRate;
-  final double averageAccessTime;
 
   CacheStatistics({
     required this.totalEntries,
@@ -379,11 +372,18 @@ class CacheStatistics {
     required this.hitRate,
     required this.averageAccessTime,
   });
+  final int totalEntries;
+  final int activeEntries;
+  final int expiredEntries;
+  final int totalSizeBytes;
+  final double hitRate;
+  final double averageAccessTime;
 
   String get formattedSize {
     if (totalSizeBytes < 1024) return '${totalSizeBytes}B';
-    if (totalSizeBytes < 1024 * 1024)
+    if (totalSizeBytes < 1024 * 1024) {
       return '${(totalSizeBytes / 1024).toStringAsFixed(1)}KB';
+    }
     return '${(totalSizeBytes / (1024 * 1024)).toStringAsFixed(1)}MB';
   }
 }

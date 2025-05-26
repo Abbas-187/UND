@@ -42,8 +42,7 @@ class _BatchInventoryScreenState extends ConsumerState<BatchInventoryScreen> {
                 // Filter to only show selected items
                 final selectedItems = inventoryItems
                     .where((item) =>
-                        item.id != null &&
-                        batchSelectionState.contains(item.id!))
+                        batchSelectionState.contains(item.id))
                     .toList();
 
                 if (selectedItems.isEmpty) {
@@ -80,7 +79,7 @@ class _BatchInventoryScreenState extends ConsumerState<BatchInventoryScreen> {
                           onPressed: () {
                             ref
                                 .read(batchOperationsStateProvider.notifier)
-                                .toggleItemSelection(item.id!);
+                                .toggleItemSelection(item.id);
                           },
                         ),
                       ),

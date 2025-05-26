@@ -214,6 +214,11 @@ class _MainLayoutState extends State<MainLayout> {
         'route': '/analytics',
       },
       {
+        'icon': Icons.smart_toy,
+        'label': Text('AI Dashboard'),
+        'route': AppRoutes.aiDashboard,
+      },
+      {
         'icon': Icons.trending_up,
         'label': Text('Forecasting'),
         'route': '/forecasting',
@@ -369,10 +374,12 @@ class _MainLayoutState extends State<MainLayout> {
       return 7;
     } else if (routeName.startsWith('/analytics')) {
       return 8;
-    } else if (routeName.startsWith('/forecasting')) {
+    } else if (routeName.startsWith(AppRoutes.aiDashboard)) {
       return 9;
-    } else if (routeName == AppRoutes.settings) {
+    } else if (routeName.startsWith('/forecasting')) {
       return 10;
+    } else if (routeName == AppRoutes.settings) {
+      return 11;
     }
 
     return 0;

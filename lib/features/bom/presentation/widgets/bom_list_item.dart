@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/entities/bill_of_materials.dart';
 import '../../../shared/widgets/status_indicator.dart';
+import '../../domain/entities/bill_of_materials.dart';
 
 class BomListItem extends StatelessWidget {
   const BomListItem({
@@ -181,7 +181,7 @@ class BomListItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

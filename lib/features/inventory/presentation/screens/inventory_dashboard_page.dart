@@ -1,13 +1,11 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../widgets/dashboard/inventory_dashboard_widgets.dart';
 import '../../presentation/providers/inventory_provider.dart';
-import '../providers/inventory_provider.dart'
-    show filteredInventoryItemsProvider;
+import '../widgets/dashboard/inventory_dashboard_widgets.dart';
 
 class InventoryDashboardPage extends ConsumerWidget {
   const InventoryDashboardPage({super.key});
@@ -74,7 +72,7 @@ class InventoryDashboardPage extends ConsumerWidget {
                 Center(
                   child: OutlinedButton.icon(
                     icon: const Icon(Icons.list),
-                    label: Text(l10n?.viewAllMovements ?? 'View All Movements'),
+                    label: Text(l10n.viewAllMovements ?? 'View All Movements'),
                     onPressed: () => context.go('/inventory/movements'),
                   ),
                 ),
@@ -141,16 +139,16 @@ class _MetricsSummaryRow extends ConsumerWidget {
 }
 
 class _MetricCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final String semanticLabel;
   const _MetricCard({
     required this.icon,
     required this.label,
     required this.value,
     required this.semanticLabel,
   });
+  final IconData icon;
+  final String label;
+  final String value;
+  final String semanticLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -215,8 +213,8 @@ class _ShimmerCard extends StatelessWidget {
 }
 
 class _MetricsError extends StatelessWidget {
-  final String error;
   const _MetricsError({required this.error});
+  final String error;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -317,9 +315,9 @@ class _TrendsChartSection extends ConsumerWidget {
 }
 
 class _DashboardHeader extends StatelessWidget {
+  const _DashboardHeader({required this.l10n, required this.theme});
   final AppLocalizations l10n;
   final ThemeData theme;
-  const _DashboardHeader({required this.l10n, required this.theme});
 
   @override
   Widget build(BuildContext context) {

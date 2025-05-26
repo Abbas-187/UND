@@ -1,6 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../inventory/domain/usecases/update_inventory_quality_status_usecase.dart';
 import '../../../../inventory/data/models/quality_status.dart';
+import '../../../../inventory/domain/usecases/update_inventory_quality_status_usecase.dart';
 import '../models/quality_control_result_model.dart';
 
 /// Maps factory QC result to inventory quality status

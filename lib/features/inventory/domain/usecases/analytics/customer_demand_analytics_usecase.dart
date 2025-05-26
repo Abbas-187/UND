@@ -1,11 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../entities/inventory_item.dart';
-import '../../repositories/inventory_repository.dart';
-import '../../providers/inventory_repository_provider.dart' as repo_provider;
-import '../../../../crm/repositories/crm_repository.dart';
 import '../../../../crm/models/customer.dart';
-import '../../../../crm/models/order.dart';
+import '../../../../crm/repositories/crm_repository.dart';
+import '../../entities/inventory_item.dart';
+import '../../providers/inventory_repository_provider.dart' as repo_provider;
+import '../../repositories/inventory_repository.dart';
 
 /// Customer demand pattern data
 class CustomerDemandPattern {
@@ -610,8 +609,9 @@ class CustomerDemandAnalyticsUseCase {
             .reduce((a, b) => a.isAfter(b) ? a : b)
         : DateTime.now().subtract(const Duration(days: 365));
 
-    if (DateTime.now().difference(lastOrderDate).inDays > 90)
+    if (DateTime.now().difference(lastOrderDate).inDays > 90) {
       return CustomerSegment.atRisk;
+    }
 
     return CustomerSegment.regular;
   }

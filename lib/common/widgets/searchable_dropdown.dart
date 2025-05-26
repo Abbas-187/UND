@@ -3,12 +3,6 @@ import 'package:flutter/material.dart';
 /// A generic searchable dropdown widget for selecting an item from a list.
 /// As the user types, the list is filtered in real time.
 class SearchableDropdown<T> extends StatefulWidget {
-  final List<T> items;
-  final String Function(T) itemLabel;
-  final void Function(T) onSelected;
-  final String hintText;
-  final T? initialValue;
-  final bool enabled;
 
   const SearchableDropdown({
     super.key,
@@ -19,6 +13,12 @@ class SearchableDropdown<T> extends StatefulWidget {
     this.initialValue,
     this.enabled = true,
   });
+  final List<T> items;
+  final String Function(T) itemLabel;
+  final void Function(T) onSelected;
+  final String hintText;
+  final T? initialValue;
+  final bool enabled;
 
   @override
   State<SearchableDropdown<T>> createState() => _SearchableDropdownState<T>();
@@ -37,7 +37,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     _filteredItems = widget.items;
     _selectedItem = widget.initialValue;
     if (_selectedItem != null) {
-      _controller.text = widget.itemLabel(_selectedItem!);
+      _controller.text = widget.itemLabel(_selectedItem as T);
     }
   }
 
@@ -50,7 +50,7 @@ class _SearchableDropdownState<T> extends State<SearchableDropdown<T>> {
     if (widget.initialValue != oldWidget.initialValue) {
       _selectedItem = widget.initialValue;
       if (_selectedItem != null) {
-        _controller.text = widget.itemLabel(_selectedItem!);
+        _controller.text = widget.itemLabel(_selectedItem as T);
       }
     }
   }

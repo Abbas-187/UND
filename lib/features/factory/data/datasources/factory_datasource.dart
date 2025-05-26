@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/equipment_model.dart';
 import '../models/material_requisition_model.dart';
 import '../models/production_order_model.dart';
-import '../models/recipe_model.dart';
+// import '../models/recipe_model.dart'; // COMMENTED OUT: Replaced with BOM module
 
 class FactoryDatasource {
   FactoryDatasource({
@@ -18,8 +18,8 @@ class FactoryDatasource {
   // Collection references
   CollectionReference get _productionOrdersCollection =>
       _firestore.collection('production_orders');
-  CollectionReference get _recipesCollection =>
-      _firestore.collection('recipes');
+  // CollectionReference get _recipesCollection =>
+  //     _firestore.collection('recipes'); // COMMENTED OUT: Replaced with BOM module
   CollectionReference get _materialRequisitionsCollection =>
       _firestore.collection('material_requisitions');
   CollectionReference get _equipmentCollection =>
@@ -76,7 +76,8 @@ class FactoryDatasource {
         .update({'status': status, 'updatedAt': FieldValue.serverTimestamp()});
   }
 
-  // Recipes
+  // Recipes - COMMENTED OUT: Replaced with BOM module
+  /*
   Future<List<RecipeModel>> getRecipes() async {
     final snapshot = await _recipesCollection.get();
     return snapshot.docs.map((doc) {
@@ -140,6 +141,7 @@ class FactoryDatasource {
       'updatedAt': FieldValue.serverTimestamp()
     });
   }
+  */
 
   // Material Requisitions
   Future<List<MaterialRequisitionModel>> getMaterialRequisitions() async {

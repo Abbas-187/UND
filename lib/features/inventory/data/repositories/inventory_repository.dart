@@ -69,28 +69,33 @@ class InventoryRepositoryImpl implements InventoryRepository {
         snapshot.data()!..['id'] = snapshot.id);
   }
 
-  /// Allocates inventory based on a recipe
-  Future<bool> allocateInventoryForRecipe(String recipeId, double batchSize) async {
-    // Fetch the recipe ingredients
-    final ingredients = await getRecipeIngredients(recipeId);
+  /// Allocates inventory based on a BOM
+  Future<bool> allocateInventoryForBom(String bomId, double batchSize) async {
+    // Fetch the BOM ingredients
+    final ingredients = await getBomIngredients(bomId);
 
-    // Check inventory availability for each ingredient
     for (final ingredient in ingredients) {
-      final availableQuantity = await getCurrentStockQuantity(ingredient['itemId'], ingredient['warehouseId']);
       final requiredQuantity = ingredient['quantity'] * batchSize;
+      final itemId = ingredient['itemId'];
 
-      if (availableQuantity < requiredQuantity) {
-        return false; // Insufficient inventory for this ingredient
+      // Check if enough inventory is available
+      final item = await getItemById(itemId);
+      if (item == null || item.quantity < requiredQuantity) {
+        return false; // Not enough inventory
       }
+
+      // Deduct the required quantity
+      await adjustQuantity(itemId, -requiredQuantity, 'Allocated for BOM $bomId');
     }
 
-    // Reserve inventory for each ingredient
-    for (final ingredient in ingredients) {
-      final requiredQuantity = ingredient['quantity'] * batchSize;
-      await reserveInventory(ingredient['itemId'], requiredQuantity);
-    }
+    return true;
+  }
 
-    return true; // Inventory successfully allocated
+  /// Get BOM ingredients (placeholder implementation)
+  Future<List<Map<String, dynamic>>> getBomIngredients(String bomId) async {
+    // This should be implemented to fetch BOM ingredients from the BOM module
+    // For now, return empty list
+    return [];
   }
 }
 

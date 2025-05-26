@@ -2,19 +2,19 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../widgets/inventory_distribution_chart.dart';
-import '../widgets/inventory_value_chart.dart';
-import '../widgets/sales_trend_chart.dart';
-import '../widgets/top_products_chart.dart';
-import '../widgets/kpi_card.dart';
-import '../widgets/traceability_report_widget.dart';
-import '../analytics_providers.dart';
-import '../../domain/turnover_rate_usecase.dart';
-import '../../domain/stockout_rate_usecase.dart';
 import '../../domain/eo_stock_usecase.dart';
 import '../../domain/inventory_aging_usecase.dart';
+import '../../domain/stockout_rate_usecase.dart';
 import '../../domain/supplier_performance_usecase.dart';
 import '../../domain/traceability_report_usecase.dart';
+import '../../domain/turnover_rate_usecase.dart';
+import '../analytics_providers.dart';
+import '../widgets/inventory_distribution_chart.dart';
+import '../widgets/inventory_value_chart.dart';
+import '../widgets/kpi_card.dart';
+import '../widgets/sales_trend_chart.dart';
+import '../widgets/top_products_chart.dart';
+import '../widgets/traceability_report_widget.dart';
 
 class AnalyticsDashboardScreen extends ConsumerStatefulWidget {
   const AnalyticsDashboardScreen({super.key});

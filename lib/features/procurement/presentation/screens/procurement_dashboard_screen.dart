@@ -168,15 +168,15 @@ class ProcurementDashboardScreen extends StatelessWidget {
 }
 
 class _QuickActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
   const _QuickActionButton(
       {required this.icon,
       required this.label,
       required this.color,
       required this.onTap});
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -211,15 +211,15 @@ class _QuickActionButton extends StatelessWidget {
 }
 
 class _StatCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
   const _StatCard(
       {required this.icon,
       required this.label,
       required this.value,
       required this.color});
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {

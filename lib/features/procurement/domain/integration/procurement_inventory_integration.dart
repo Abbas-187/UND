@@ -7,9 +7,9 @@ import '../../../inventory/domain/providers/inventory_provider.dart';
 import '../../../inventory/domain/providers/inventory_repository_provider.dart'
     as domain_repo;
 import '../../../inventory/domain/providers/stock_level_provider.dart';
+import '../../../inventory/domain/services/supplier_integration_service.dart';
 import '../../../inventory/domain/usecases/process_goods_receipt_usecase.dart';
 import '../../../inventory/domain/usecases/process_return_to_supplier_usecase.dart';
-import '../../../inventory/domain/services/supplier_integration_service.dart';
 import '../../data/models/purchase_order_model.dart';
 import '../providers/purchase_order_provider.dart';
 import '../utils/procurement_cost_utils.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart'; // Added import
+// Added import
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/analytics/inventory_analytics_service.dart';

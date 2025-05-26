@@ -4,9 +4,8 @@ import 'package:uuid/uuid.dart';
 import '../../data/models/inventory_movement_item_model.dart';
 import '../../data/models/inventory_movement_model.dart';
 import '../entities/cost_layer.dart';
-import '../entities/inventory_item.dart';
-import '../repositories/inventory_repository.dart';
 import '../providers/inventory_repository_provider.dart' as repo_provider;
+import '../repositories/inventory_repository.dart';
 import 'process_inventory_movement_usecase.dart';
 
 /// Data transfer object for return to supplier

@@ -1,22 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
+import '../../data/cache/bom_cache_manager.dart';
+import '../../utils/performance_monitor.dart';
 import '../entities/bill_of_materials.dart';
 import '../entities/bom_item.dart';
 import '../repositories/bom_repository.dart';
-import '../../data/cache/bom_cache_manager.dart';
-import '../../utils/performance_monitor.dart';
 
 /// Comprehensive bulk operations use case for BOM management
 class BulkOperationsUseCase {
-  final BomRepository _bomRepository;
-  final BomCacheManager _cacheManager;
-  final PerformanceMonitor _performanceMonitor;
-  final Logger _logger = Logger();
 
   BulkOperationsUseCase({
     required BomRepository bomRepository,
@@ -25,6 +20,10 @@ class BulkOperationsUseCase {
   })  : _bomRepository = bomRepository,
         _cacheManager = cacheManager,
         _performanceMonitor = performanceMonitor;
+  final BomRepository _bomRepository;
+  final BomCacheManager _cacheManager;
+  final PerformanceMonitor _performanceMonitor;
+  final Logger _logger = Logger();
 
   /// Bulk update BOMs with progress tracking
   Future<BulkOperationResult> bulkUpdateBoms({
@@ -1151,14 +1150,6 @@ enum ExportFormat {
 }
 
 class BulkOperationResult {
-  final BulkOperationType operationType;
-  final BulkOperationStatus status;
-  final int totalItems;
-  final DateTime startTime;
-  final DateTime? endTime;
-  final List<String> successfulItems;
-  final Map<String, String> errors;
-  final Map<String, Map<String, dynamic>> metadata;
 
   BulkOperationResult({
     required this.operationType,
@@ -1172,6 +1163,14 @@ class BulkOperationResult {
   })  : successfulItems = successfulItems ?? [],
         errors = errors ?? {},
         metadata = metadata ?? {};
+  final BulkOperationType operationType;
+  final BulkOperationStatus status;
+  final int totalItems;
+  final DateTime startTime;
+  final DateTime? endTime;
+  final List<String> successfulItems;
+  final Map<String, String> errors;
+  final Map<String, Map<String, dynamic>> metadata;
 
   int get successCount => successfulItems.length;
   int get errorCount => errors.length;
@@ -1220,14 +1219,6 @@ class BulkOperationResult {
 }
 
 class ImportResult {
-  final DateTime startTime;
-  final DateTime? endTime;
-  final bool validateOnly;
-  int totalRows;
-  final List<int> validRows;
-  final Map<int, List<String>> errors;
-  final Map<int, String> successfulImports;
-  final bool hasErrors;
 
   ImportResult({
     required this.startTime,
@@ -1241,6 +1232,14 @@ class ImportResult {
   })  : validRows = validRows ?? [],
         errors = errors ?? {},
         successfulImports = successfulImports ?? {};
+  final DateTime startTime;
+  final DateTime? endTime;
+  final bool validateOnly;
+  int totalRows;
+  final List<int> validRows;
+  final Map<int, List<String>> errors;
+  final Map<int, String> successfulImports;
+  final bool hasErrors;
 
   int get validRowCount => validRows.length;
   int get errorRowCount => errors.length;
@@ -1286,15 +1285,6 @@ class ImportResult {
 }
 
 class ExportResult {
-  final ExportFormat format;
-  final DateTime startTime;
-  final DateTime? endTime;
-  final int totalItems;
-  final List<String> successfulItems;
-  final Map<String, String> errors;
-  final bool hasErrors;
-  String? data;
-  String? fileName;
 
   ExportResult({
     required this.format,
@@ -1308,6 +1298,15 @@ class ExportResult {
     this.fileName,
   })  : successfulItems = successfulItems ?? [],
         errors = errors ?? {};
+  final ExportFormat format;
+  final DateTime startTime;
+  final DateTime? endTime;
+  final int totalItems;
+  final List<String> successfulItems;
+  final Map<String, String> errors;
+  final bool hasErrors;
+  String? data;
+  String? fileName;
 
   int get successCount => successfulItems.length;
   int get errorCount => errors.length;
@@ -1346,13 +1345,6 @@ class ExportResult {
 }
 
 class BulkValidationResult {
-  final DateTime startTime;
-  final DateTime? endTime;
-  final int totalItems;
-  final List<String> validItems;
-  final Map<String, List<String>> invalidItems;
-  final Map<String, String> errors;
-  final bool hasErrors;
 
   BulkValidationResult({
     required this.startTime,
@@ -1365,6 +1357,13 @@ class BulkValidationResult {
   })  : validItems = validItems ?? [],
         invalidItems = invalidItems ?? {},
         errors = errors ?? {};
+  final DateTime startTime;
+  final DateTime? endTime;
+  final int totalItems;
+  final List<String> validItems;
+  final Map<String, List<String>> invalidItems;
+  final Map<String, String> errors;
+  final bool hasErrors;
 
   int get validCount => validItems.length;
   int get invalidCount => invalidItems.length;
@@ -1405,10 +1404,6 @@ class BulkValidationResult {
 
 // Progress tracking classes
 class BulkProgress {
-  final int completed;
-  final int total;
-  final String currentItem;
-  final String status;
 
   BulkProgress({
     required this.completed,
@@ -1416,17 +1411,15 @@ class BulkProgress {
     required this.currentItem,
     required this.status,
   });
+  final int completed;
+  final int total;
+  final String currentItem;
+  final String status;
 
   double get percentage => total > 0 ? (completed / total) * 100 : 0;
 }
 
 class ImportProgress {
-  final int processedRows;
-  final int totalRows;
-  final int validRows;
-  final int errorRows;
-  final int currentRow;
-  final String status;
 
   ImportProgress({
     required this.processedRows,
@@ -1436,16 +1429,18 @@ class ImportProgress {
     required this.currentRow,
     required this.status,
   });
+  final int processedRows;
+  final int totalRows;
+  final int validRows;
+  final int errorRows;
+  final int currentRow;
+  final String status;
 
   double get percentage =>
       totalRows > 0 ? (processedRows / totalRows) * 100 : 0;
 }
 
 class ExportProgress {
-  final int processedItems;
-  final int totalItems;
-  final String currentItem;
-  final String status;
 
   ExportProgress({
     required this.processedItems,
@@ -1453,18 +1448,16 @@ class ExportProgress {
     required this.currentItem,
     required this.status,
   });
+  final int processedItems;
+  final int totalItems;
+  final String currentItem;
+  final String status;
 
   double get percentage =>
       totalItems > 0 ? (processedItems / totalItems) * 100 : 0;
 }
 
 class ValidationProgress {
-  final int processedItems;
-  final int totalItems;
-  final int validItems;
-  final int invalidItems;
-  final String currentItem;
-  final String status;
 
   ValidationProgress({
     required this.processedItems,
@@ -1474,6 +1467,12 @@ class ValidationProgress {
     required this.currentItem,
     required this.status,
   });
+  final int processedItems;
+  final int totalItems;
+  final int validItems;
+  final int invalidItems;
+  final String currentItem;
+  final String status;
 
   double get percentage =>
       totalItems > 0 ? (processedItems / totalItems) * 100 : 0;
@@ -1481,45 +1480,45 @@ class ValidationProgress {
 
 // Validation classes
 class ValidationResult {
-  final bool isValid;
-  final List<String> errors;
 
   ValidationResult({
     required this.isValid,
     required this.errors,
   });
+  final bool isValid;
+  final List<String> errors;
 }
 
 class ValidationRule {
-  final String name;
-  final String description;
-  final bool Function(BillOfMaterials) validator;
 
   ValidationRule({
     required this.name,
     required this.description,
     required this.validator,
   });
+  final String name;
+  final String description;
+  final bool Function(BillOfMaterials) validator;
 }
 
 class DeletionCheck {
-  final bool allowed;
-  final String? reason;
 
   DeletionCheck({
     required this.allowed,
     this.reason,
   });
+  final bool allowed;
+  final String? reason;
 }
 
 class StatusChangeCheck {
-  final bool allowed;
-  final String? reason;
 
   StatusChangeCheck({
     required this.allowed,
     this.reason,
   });
+  final bool allowed;
+  final String? reason;
 }
 
 /// Provider for bulk operations use case

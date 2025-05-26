@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/order_form_provider.dart';
-import '../widgets/customer_dropdown.dart';
-import '../widgets/branch_dropdown.dart';
-import '../widgets/product_list_dropdown.dart';
-import '../widgets/product_quantity_list.dart';
-import '../widgets/date_picker.dart';
 import 'package:go_router/go_router.dart';
-import '../../data/models/order_model.dart';
+
 import '../../data/models/customer_model.dart';
 import '../../data/models/order_item_model.dart';
+import '../../data/models/order_model.dart';
+import '../providers/order_form_provider.dart';
+import '../widgets/branch_dropdown.dart';
+import '../widgets/customer_dropdown.dart';
+import '../widgets/date_picker.dart';
+import '../widgets/product_list_dropdown.dart';
+import '../widgets/product_quantity_list.dart';
 
 class OrderCreationEditScreen extends ConsumerStatefulWidget {
   const OrderCreationEditScreen({super.key});
@@ -92,7 +93,7 @@ class _OrderCreationEditScreenState
                       const SizedBox(height: 16),
                       // Branch selection dropdown (only shown when customer has branches)
                       if (orderFormState.selectedCustomer != null &&
-                          (orderFormState.customerBranches?.isNotEmpty ??
+                          (orderFormState.customerBranches.isNotEmpty ??
                               false))
                         const BranchDropdown(),
                       // Customer details when selected

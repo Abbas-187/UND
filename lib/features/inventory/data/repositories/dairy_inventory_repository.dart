@@ -327,46 +327,41 @@ class DairyInventoryRepository implements InventoryRepository {
   }
 
   @override
-  Future<int> countRecipesUsingItem(String itemId) async {
-    // TODO: implement real query to count recipes
+  Future<int> countBomsUsingItem(String itemId) async {
+    // TODO: implement real query to count BOMs
     return 0;
   }
 
   @override
-  Future<bool> allocateInventoryForRecipe(
-      String recipeId, double quantity) async {
-    // Validate inputs
-    if (recipeId.isEmpty || quantity <= 0) {
-      return false;
-    }
-
-    // Check inventory availability
-    final requiredItems = dairyProvider.getRecipeIngredients(recipeId);
-    if (requiredItems == null || requiredItems.isEmpty) {
-      return false;
-    }
-
-    for (final ingredient in requiredItems) {
-      final inventoryItem = dairyProvider.getItemById(ingredient.id);
-      if (inventoryItem == null ||
-          inventoryItem.quantity < ingredient.quantity * quantity) {
-        return false; // Not enough inventory
+  Future<bool> allocateInventoryForBom(String bomId, double quantity) async {
+    try {
+      if (bomId.isEmpty || quantity <= 0) {
+        return false;
       }
-    }
 
-    // Deduct inventory
-    for (final ingredient in requiredItems) {
-      final inventoryItem = dairyProvider.getItemById(ingredient.id);
-      if (inventoryItem != null) {
-        dairyProvider.adjustQuantity(
-          ingredient.id,
-          -(ingredient.quantity * quantity),
-          'Allocated for recipe $recipeId',
+      // Get BOM ingredients from BOM provider
+      final requiredItems = dairyProvider.getBomIngredients(bomId);
+
+      if (requiredItems == null || requiredItems.isEmpty) {
+        return false;
+      }
+
+      for (final item in requiredItems) {
+        final requiredQuantity = item.quantity * quantity;
+        // Use adjustQuantity to deduct inventory
+        await adjustQuantity(
+          item.itemId,
+          -requiredQuantity,
+          'Allocated for BOM $bomId',
+          'system', // initiatingEmployeeId
         );
       }
-    }
 
-    return true; // Allocation successful
+      return true;
+    } catch (e) {
+      print('Error allocating inventory for BOM: $e');
+      return false;
+    }
   }
 
   // --- BEGIN: InventoryRepository required stubs ---

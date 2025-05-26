@@ -6,18 +6,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import '../../domain/entities/bill_of_materials.dart';
-import '../../domain/entities/bom_item.dart';
 import '../../domain/repositories/bom_repository.dart';
 import '../../domain/usecases/bulk_operations_usecase.dart';
-import '../cache/bom_cache_manager.dart';
 import '../../utils/performance_monitor.dart';
+import '../cache/bom_cache_manager.dart';
 
 /// Specialized service for bulk importing BOM data from various file formats
 class BulkImportService {
-  final BomRepository _bomRepository;
-  final BomCacheManager _cacheManager;
-  final PerformanceMonitor _performanceMonitor;
-  final Logger _logger = Logger();
 
   BulkImportService({
     required BomRepository bomRepository,
@@ -26,6 +21,10 @@ class BulkImportService {
   })  : _bomRepository = bomRepository,
         _cacheManager = cacheManager,
         _performanceMonitor = performanceMonitor;
+  final BomRepository _bomRepository;
+  final BomCacheManager _cacheManager;
+  final PerformanceMonitor _performanceMonitor;
+  final Logger _logger = Logger();
 
   /// Import BOMs from CSV file
   Future<ImportResult> importFromCsvFile({
@@ -676,13 +675,6 @@ enum ImportFormat {
 }
 
 class ImportOptions {
-  final String csvDelimiter;
-  final bool hasHeader;
-  final List<ImportValidationRule> validationRules;
-  final ValidationResult Function(Map<String, dynamic>, int)? customValidator;
-  final bool skipEmptyRows;
-  final bool trimWhitespace;
-  final Map<String, String> fieldMapping;
 
   ImportOptions({
     this.csvDelimiter = ',',
@@ -694,27 +686,28 @@ class ImportOptions {
     Map<String, String>? fieldMapping,
   })  : validationRules = validationRules ?? [],
         fieldMapping = fieldMapping ?? {};
+  final String csvDelimiter;
+  final bool hasHeader;
+  final List<ImportValidationRule> validationRules;
+  final ValidationResult Function(Map<String, dynamic>, int)? customValidator;
+  final bool skipEmptyRows;
+  final bool trimWhitespace;
+  final Map<String, String> fieldMapping;
 }
 
 class ImportValidationRule {
-  final String name;
-  final String description;
-  final bool Function(Map<String, dynamic>) validator;
 
   ImportValidationRule({
     required this.name,
     required this.description,
     required this.validator,
   });
+  final String name;
+  final String description;
+  final bool Function(Map<String, dynamic>) validator;
 }
 
 class ValidationSummary {
-  final DateTime startTime;
-  final DateTime? endTime;
-  int totalRows;
-  final List<int> validRows;
-  final Map<int, List<String>> invalidRows;
-  final bool hasErrors;
 
   ValidationSummary({
     required this.startTime,
@@ -725,6 +718,12 @@ class ValidationSummary {
     this.hasErrors = false,
   })  : validRows = validRows ?? [],
         invalidRows = invalidRows ?? {};
+  final DateTime startTime;
+  final DateTime? endTime;
+  int totalRows;
+  final List<int> validRows;
+  final Map<int, List<String>> invalidRows;
+  final bool hasErrors;
 
   int get validCount => validRows.length;
   int get invalidCount => invalidRows.length;

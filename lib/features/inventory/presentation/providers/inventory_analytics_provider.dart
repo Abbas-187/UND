@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/services/inventory_analytics_service.dart';
-import '../../domain/usecases/analytics/customer_demand_analytics_usecase.dart';
 import '../../domain/usecases/analytics/continuous_improvement_usecase.dart';
+import '../../domain/usecases/analytics/customer_demand_analytics_usecase.dart';
 
 /// Provider for demand insights
 final demandInsightsProvider =

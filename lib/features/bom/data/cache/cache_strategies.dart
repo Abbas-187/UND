@@ -1,5 +1,5 @@
 /// Cache strategies and related enums for BOM caching system
-library cache_strategies;
+library;
 
 /// Different caching strategies available
 enum CacheStrategy {
@@ -54,12 +54,6 @@ enum CachePriority {
 
 /// Cache configuration for different data types
 class CacheConfig {
-  final Duration ttl;
-  final CacheStrategy strategy;
-  final InvalidationStrategy invalidationStrategy;
-  final CachePriority priority;
-  final int maxSize;
-  final bool enableCompression;
 
   const CacheConfig({
     required this.ttl,
@@ -69,6 +63,12 @@ class CacheConfig {
     this.maxSize = 1000,
     this.enableCompression = false,
   });
+  final Duration ttl;
+  final CacheStrategy strategy;
+  final InvalidationStrategy invalidationStrategy;
+  final CachePriority priority;
+  final int maxSize;
+  final bool enableCompression;
 
   /// Default configuration for BOM data
   static const bomData = CacheConfig(

@@ -109,10 +109,9 @@ class ProductionSlotDetailScreen extends ConsumerWidget {
                 _buildInfoRow('Product ID', slot.productId),
                 _buildInfoRow('Product Name', slot.productName),
                 _buildInfoRow('Planned Quantity', '${slot.plannedQuantity}'),
-                if (slot.recipeId != null)
-                  _buildInfoRow('Recipe ID', slot.recipeId!),
-                if (slot.recipeVersion != null)
-                  _buildInfoRow('Recipe Version', slot.recipeVersion!),
+                if (slot.bomId != null) _buildInfoRow('BOM ID', slot.bomId!),
+                if (slot.bomVersion != null)
+                  _buildInfoRow('BOM Version', slot.bomVersion!),
               ],
             ),
 

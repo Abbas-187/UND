@@ -2,16 +2,6 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/bom_template.dart';
 
 class TemplateFilterBar extends StatelessWidget {
-  final TemplateCategory? selectedCategory;
-  final TemplateComplexity? selectedComplexity;
-  final List<String> selectedTags;
-  final bool showOnlyPublic;
-  final bool showOnlyMine;
-  final Function(TemplateCategory?) onCategoryChanged;
-  final Function(TemplateComplexity?) onComplexityChanged;
-  final Function(List<String>) onTagsChanged;
-  final Function(bool) onPublicToggled;
-  final Function(bool) onMineToggled;
 
   const TemplateFilterBar({
     super.key,
@@ -26,6 +16,16 @@ class TemplateFilterBar extends StatelessWidget {
     required this.onPublicToggled,
     required this.onMineToggled,
   });
+  final TemplateCategory? selectedCategory;
+  final TemplateComplexity? selectedComplexity;
+  final List<String> selectedTags;
+  final bool showOnlyPublic;
+  final bool showOnlyMine;
+  final Function(TemplateCategory?) onCategoryChanged;
+  final Function(TemplateComplexity?) onComplexityChanged;
+  final Function(List<String>) onTagsChanged;
+  final Function(bool) onPublicToggled;
+  final Function(bool) onMineToggled;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,19 @@ class TemplateFilterBar extends StatelessWidget {
 
   Widget _buildCategoryFilter(BuildContext context) {
     return PopupMenuButton<TemplateCategory?>(
+      itemBuilder: (context) => [
+        const PopupMenuItem<TemplateCategory?>(
+          value: null,
+          child: Text('All Categories'),
+        ),
+        ...TemplateCategory.values.map(
+          (category) => PopupMenuItem<TemplateCategory?>(
+            value: category,
+            child: Text(_formatCategoryName(category)),
+          ),
+        ),
+      ],
+      onSelected: onCategoryChanged,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
@@ -99,24 +112,24 @@ class TemplateFilterBar extends StatelessWidget {
           ],
         ),
       ),
-      itemBuilder: (context) => [
-        const PopupMenuItem<TemplateCategory?>(
-          value: null,
-          child: Text('All Categories'),
-        ),
-        ...TemplateCategory.values.map(
-          (category) => PopupMenuItem<TemplateCategory?>(
-            value: category,
-            child: Text(_formatCategoryName(category)),
-          ),
-        ),
-      ],
-      onSelected: onCategoryChanged,
     );
   }
 
   Widget _buildComplexityFilter(BuildContext context) {
     return PopupMenuButton<TemplateComplexity?>(
+      itemBuilder: (context) => [
+        const PopupMenuItem<TemplateComplexity?>(
+          value: null,
+          child: Text('All Complexities'),
+        ),
+        ...TemplateComplexity.values.map(
+          (complexity) => PopupMenuItem<TemplateComplexity?>(
+            value: complexity,
+            child: Text(_formatComplexityName(complexity)),
+          ),
+        ),
+      ],
+      onSelected: onComplexityChanged,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
@@ -162,19 +175,6 @@ class TemplateFilterBar extends StatelessWidget {
           ],
         ),
       ),
-      itemBuilder: (context) => [
-        const PopupMenuItem<TemplateComplexity?>(
-          value: null,
-          child: Text('All Complexities'),
-        ),
-        ...TemplateComplexity.values.map(
-          (complexity) => PopupMenuItem<TemplateComplexity?>(
-            value: complexity,
-            child: Text(_formatComplexityName(complexity)),
-          ),
-        ),
-      ],
-      onSelected: onComplexityChanged,
     );
   }
 

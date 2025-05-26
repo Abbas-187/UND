@@ -12,18 +12,6 @@ enum TemplateCategory {
 enum TemplateComplexity { simple, intermediate, advanced, expert }
 
 class BomTemplateItem extends Equatable {
-  final String id;
-  final String itemCode;
-  final String itemName;
-  final String itemType;
-  final double quantity;
-  final String unit;
-  final bool isOptional;
-  final bool isVariable;
-  final double minQuantity;
-  final double maxQuantity;
-  final String? description;
-  final Map<String, dynamic> properties;
 
   const BomTemplateItem({
     required this.id,
@@ -39,6 +27,35 @@ class BomTemplateItem extends Equatable {
     this.description,
     this.properties = const {},
   });
+
+  factory BomTemplateItem.fromJson(Map<String, dynamic> json) {
+    return BomTemplateItem(
+      id: json['id'] as String,
+      itemCode: json['itemCode'] as String,
+      itemName: json['itemName'] as String,
+      itemType: json['itemType'] as String,
+      quantity: (json['quantity'] as num).toDouble(),
+      unit: json['unit'] as String,
+      isOptional: json['isOptional'] as bool? ?? false,
+      isVariable: json['isVariable'] as bool? ?? false,
+      minQuantity: (json['minQuantity'] as num?)?.toDouble() ?? 0.0,
+      maxQuantity: (json['maxQuantity'] as num?)?.toDouble() ?? double.infinity,
+      description: json['description'] as String?,
+      properties: Map<String, dynamic>.from(json['properties'] as Map? ?? {}),
+    );
+  }
+  final String id;
+  final String itemCode;
+  final String itemName;
+  final String itemType;
+  final double quantity;
+  final String unit;
+  final bool isOptional;
+  final bool isVariable;
+  final double minQuantity;
+  final double maxQuantity;
+  final String? description;
+  final Map<String, dynamic> properties;
 
   @override
   List<Object?> get props => [
@@ -102,44 +119,9 @@ class BomTemplateItem extends Equatable {
       'properties': properties,
     };
   }
-
-  factory BomTemplateItem.fromJson(Map<String, dynamic> json) {
-    return BomTemplateItem(
-      id: json['id'] as String,
-      itemCode: json['itemCode'] as String,
-      itemName: json['itemName'] as String,
-      itemType: json['itemType'] as String,
-      quantity: (json['quantity'] as num).toDouble(),
-      unit: json['unit'] as String,
-      isOptional: json['isOptional'] as bool? ?? false,
-      isVariable: json['isVariable'] as bool? ?? false,
-      minQuantity: (json['minQuantity'] as num?)?.toDouble() ?? 0.0,
-      maxQuantity: (json['maxQuantity'] as num?)?.toDouble() ?? double.infinity,
-      description: json['description'] as String?,
-      properties: Map<String, dynamic>.from(json['properties'] as Map? ?? {}),
-    );
-  }
 }
 
 class BomTemplate extends Equatable {
-  final String id;
-  final String name;
-  final String description;
-  final TemplateCategory category;
-  final TemplateComplexity complexity;
-  final String version;
-  final bool isActive;
-  final bool isPublic;
-  final String createdBy;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final List<BomTemplateItem> items;
-  final Map<String, dynamic> metadata;
-  final List<String> tags;
-  final String? thumbnailUrl;
-  final int usageCount;
-  final double rating;
-  final List<String> validationRules;
 
   const BomTemplate({
     required this.id,
@@ -161,6 +143,56 @@ class BomTemplate extends Equatable {
     this.rating = 0.0,
     this.validationRules = const [],
   });
+
+  factory BomTemplate.fromJson(Map<String, dynamic> json) {
+    return BomTemplate(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      category: TemplateCategory.values.firstWhere(
+        (e) => e.name == json['category'],
+        orElse: () => TemplateCategory.custom,
+      ),
+      complexity: TemplateComplexity.values.firstWhere(
+        (e) => e.name == json['complexity'],
+        orElse: () => TemplateComplexity.simple,
+      ),
+      version: json['version'] as String,
+      isActive: json['isActive'] as bool,
+      isPublic: json['isPublic'] as bool,
+      createdBy: json['createdBy'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      items: (json['items'] as List)
+          .map((item) => BomTemplateItem.fromJson(item as Map<String, dynamic>))
+          .toList(),
+      metadata: Map<String, dynamic>.from(json['metadata'] as Map? ?? {}),
+      tags: List<String>.from(json['tags'] as List? ?? []),
+      thumbnailUrl: json['thumbnailUrl'] as String?,
+      usageCount: json['usageCount'] as int? ?? 0,
+      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
+      validationRules:
+          List<String>.from(json['validationRules'] as List? ?? []),
+    );
+  }
+  final String id;
+  final String name;
+  final String description;
+  final TemplateCategory category;
+  final TemplateComplexity complexity;
+  final String version;
+  final bool isActive;
+  final bool isPublic;
+  final String createdBy;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final List<BomTemplateItem> items;
+  final Map<String, dynamic> metadata;
+  final List<String> tags;
+  final String? thumbnailUrl;
+  final int usageCount;
+  final double rating;
+  final List<String> validationRules;
 
   @override
   List<Object?> get props => [
@@ -247,37 +279,5 @@ class BomTemplate extends Equatable {
       'rating': rating,
       'validationRules': validationRules,
     };
-  }
-
-  factory BomTemplate.fromJson(Map<String, dynamic> json) {
-    return BomTemplate(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      category: TemplateCategory.values.firstWhere(
-        (e) => e.name == json['category'],
-        orElse: () => TemplateCategory.custom,
-      ),
-      complexity: TemplateComplexity.values.firstWhere(
-        (e) => e.name == json['complexity'],
-        orElse: () => TemplateComplexity.simple,
-      ),
-      version: json['version'] as String,
-      isActive: json['isActive'] as bool,
-      isPublic: json['isPublic'] as bool,
-      createdBy: json['createdBy'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      items: (json['items'] as List)
-          .map((item) => BomTemplateItem.fromJson(item as Map<String, dynamic>))
-          .toList(),
-      metadata: Map<String, dynamic>.from(json['metadata'] as Map? ?? {}),
-      tags: List<String>.from(json['tags'] as List? ?? []),
-      thumbnailUrl: json['thumbnailUrl'] as String?,
-      usageCount: json['usageCount'] as int? ?? 0,
-      rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      validationRules:
-          List<String>.from(json['validationRules'] as List? ?? []),
-    );
   }
 }

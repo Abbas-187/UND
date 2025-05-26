@@ -16,7 +16,7 @@ void main() {
   group('Module tiles navigation', () {
     testWidgets('tapping each module tile navigates correctly',
         (WidgetTester tester) async {
-      await tester.pumpWidget(ProviderScope(child: const MyApp()));
+      await tester.pumpWidget(ProviderScope(child: const DairyManagementApp()));
       for (final module in appModules.values) {
         // Verify tile exists
         expect(find.byIcon(module.icon), findsOneWidget);
@@ -36,7 +36,7 @@ void main() {
     testWidgets(
         'tapping each module tile and all its screens navigates correctly',
         (WidgetTester tester) async {
-      await tester.pumpWidget(ProviderScope(child: const MyApp()));
+      await tester.pumpWidget(ProviderScope(child: const DairyManagementApp()));
       for (final module in appModules.values) {
         // Tap the module tile
         expect(find.byIcon(module.icon), findsOneWidget);

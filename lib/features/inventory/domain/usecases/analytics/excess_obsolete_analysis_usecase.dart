@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../entities/inventory_item.dart';
-import '../../repositories/inventory_repository.dart';
 import '../../providers/inventory_repository_provider.dart' as repo_provider;
+import '../../repositories/inventory_repository.dart';
 
 /// Excess and obsolete stock item data
 class ExcessObsoleteItem {
@@ -301,9 +301,7 @@ class ExcessObsoleteAnalysisUseCase {
           : 999; // Very high number for items with no movements
 
       // Check expiry status
-      final daysUntilExpiry = item.expiryDate != null
-          ? item.expiryDate!.difference(DateTime.now()).inDays
-          : null;
+      final daysUntilExpiry = item.expiryDate?.difference(DateTime.now()).inDays;
 
       // Determine classification
       final classification = _classifyItem(

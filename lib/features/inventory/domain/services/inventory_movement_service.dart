@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import '../../../../core/di/app_providers.dart';
+import '../../../sales/data/repositories/product_catalog_repository.dart';
 import '../../data/models/inventory_movement_model.dart';
 import '../../data/repositories/inventory_movement_repository.dart';
 import '../validators/inventory_movement_validator.dart';
-import '../../../sales/data/repositories/product_catalog_repository.dart';
 
 /// Service class to handle inventory movement business logic
 class InventoryMovementService {

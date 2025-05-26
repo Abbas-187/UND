@@ -1,10 +1,9 @@
-import '../entities/bill_of_materials.dart';
-import '../entities/bom_item.dart';
-import '../repositories/bom_repository.dart';
+import '../../../factory/production/domain/repositories/production_repository.dart';
 import '../../../inventory/domain/repositories/inventory_repository.dart';
 import '../../../procurement/domain/repositories/procurement_repository.dart';
-import '../../../factory/production/domain/repositories/production_repository.dart';
 import '../../../sales/domain/repositories/sales_repository.dart';
+import '../entities/bom_item.dart';
+import '../repositories/bom_repository.dart';
 
 /// Result class for BOM integration operations
 class BomIntegrationResult {

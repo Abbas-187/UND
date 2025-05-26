@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/order_provider.dart';
+
 import '../../data/models/order_model.dart';
+import '../providers/order_provider.dart';
 import 'responsive_builder.dart';
 
 class BackorderManagementWidget extends ConsumerStatefulWidget {
-  final OrderModel order;
-  final void Function()? onBackorderResolved;
   const BackorderManagementWidget(
       {super.key, required this.order, this.onBackorderResolved});
+  final OrderModel order;
+  final void Function()? onBackorderResolved;
 
   @override
   ConsumerState<BackorderManagementWidget> createState() =>
@@ -19,7 +20,7 @@ class _BackorderManagementWidgetState
     extends ConsumerState<BackorderManagementWidget> {
   final Set<int> _selectedRows = {};
   bool _isLoading = false;
-  Map<int, bool> _expandedRows = {};
+  final Map<int, bool> _expandedRows = {};
 
   Color _statusColor(String? status) {
     switch (status) {
@@ -72,8 +73,9 @@ class _BackorderManagementWidgetState
                 await ref
                     .read(orderProvider.notifier)
                     .fulfillOrderItem(widget.order, item, qty);
-                if (widget.onBackorderResolved != null)
+                if (widget.onBackorderResolved != null) {
                   widget.onBackorderResolved!();
+                }
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../factory/production/domain/repositories/production_repository.dart';
 import '../../../inventory/domain/repositories/inventory_repository.dart';
 import '../../../procurement/domain/repositories/procurement_repository.dart';
-import '../../../factory/production/domain/repositories/production_repository.dart';
 import '../../../sales/domain/repositories/sales_repository.dart';
+import '../../data/repositories/bom_repository_impl.dart';
 import '../../domain/entities/bill_of_materials.dart';
 import '../../domain/entities/bom_item.dart';
 import '../../domain/repositories/bom_repository.dart';
 import '../../domain/usecases/bom_integration_usecase.dart';
-import '../../data/repositories/bom_repository_impl.dart';
 
 // Repository Providers
 final bomRepositoryProvider = Provider<BomRepository>((ref) {

@@ -1,19 +1,20 @@
 import 'dart:math';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
+import '../../../inventory/domain/entities/inventory_item.dart';
+import '../../../inventory/domain/providers/inventory_repository_provider.dart'
+    as inventory_provider;
+import '../../../inventory/domain/repositories/inventory_repository.dart';
+import '../../../suppliers/domain/repositories/supplier_repository.dart';
+import '../../../suppliers/presentation/providers/supplier_provider.dart'
+    as supplier_provider;
+import '../../presentation/providers/bom_providers.dart';
 import '../entities/bill_of_materials.dart';
 import '../entities/bom_item.dart';
 import '../entities/mrp_plan.dart';
 import '../repositories/bom_repository.dart';
-import '../../../inventory/domain/entities/inventory_item.dart';
-import '../../../inventory/domain/repositories/inventory_repository.dart';
-import '../../../suppliers/domain/repositories/supplier_repository.dart';
-import '../../presentation/providers/bom_providers.dart';
-import '../../../inventory/domain/providers/inventory_repository_provider.dart'
-    as inventory_provider;
-import '../../../suppliers/presentation/providers/supplier_provider.dart'
-    as supplier_provider;
 
 /// Production schedule entry for MRP planning
 class ProductionSchedule {

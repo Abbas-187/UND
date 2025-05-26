@@ -4,9 +4,9 @@ import '../entities/report.dart';
 import '../repositories/report_repository.dart';
 
 class AdvancedReportingUseCase {
-  final ReportRepository _reportRepository;
 
   AdvancedReportingUseCase(this._reportRepository);
+  final ReportRepository _reportRepository;
 
   // Report Definition Management
   Future<List<ReportDefinition>> getAllReportDefinitions() async {

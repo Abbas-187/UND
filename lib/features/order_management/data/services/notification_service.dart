@@ -1,14 +1,16 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 import '../../domain/entities/user_role_permission.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Service for handling order-related notifications
 class NotificationService {
+  NotificationService(this.client, this.baseUrl);
   final http.Client client;
   final String baseUrl;
-  NotificationService(this.client, this.baseUrl);
 
   /// Logs all notification attempts, successes, and failures
   void logNotification({

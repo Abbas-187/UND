@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/bom_template.dart';
 
 class TemplateCard extends StatelessWidget {
-  final BomTemplate template;
-  final VoidCallback onTap;
-  final VoidCallback onUse;
-  final VoidCallback onEdit;
-  final VoidCallback onDuplicate;
-  final VoidCallback onDelete;
 
   const TemplateCard({
     super.key,
@@ -18,6 +12,12 @@ class TemplateCard extends StatelessWidget {
     required this.onDuplicate,
     required this.onDelete,
   });
+  final BomTemplate template;
+  final VoidCallback onTap;
+  final VoidCallback onUse;
+  final VoidCallback onEdit;
+  final VoidCallback onDuplicate;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {

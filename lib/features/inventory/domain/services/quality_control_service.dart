@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/quality_status.dart';
 import '../entities/inventory_item.dart';
-import '../repositories/inventory_repository.dart';
 import '../providers/inventory_repository_provider.dart' as repo_provider;
-import '../usecases/update_inventory_quality_status_usecase.dart';
+import '../repositories/inventory_repository.dart';
 import '../usecases/allocate_quality_aware_inventory_usecase.dart';
+import '../usecases/update_inventory_quality_status_usecase.dart';
 
 /// Quality control dashboard data
 class QualityControlDashboard {

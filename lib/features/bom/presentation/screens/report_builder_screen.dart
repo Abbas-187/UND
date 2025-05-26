@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/report.dart';
 
 class ReportBuilderScreen extends ConsumerStatefulWidget {
-  final ReportDefinition? existingReport;
 
   const ReportBuilderScreen({super.key, this.existingReport});
+  final ReportDefinition? existingReport;
 
   @override
   ConsumerState<ReportBuilderScreen> createState() =>
@@ -273,7 +273,7 @@ class _ReportBuilderScreenState extends ConsumerState<ReportBuilderScreen>
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Row(
                   children: [
                     const Icon(Icons.storage),
@@ -317,7 +317,7 @@ class _ReportBuilderScreenState extends ConsumerState<ReportBuilderScreen>
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: Row(
                   children: [
                     const Icon(Icons.view_column),
@@ -798,15 +798,15 @@ class _ReportBuilderScreenState extends ConsumerState<ReportBuilderScreen>
 
 // Filter Dialog
 class _FilterDialog extends StatefulWidget {
-  final List<ReportField> availableFields;
-  final ReportFilter? existingFilter;
-  final Function(ReportFilter) onFilterAdded;
 
   const _FilterDialog({
     required this.availableFields,
     this.existingFilter,
     required this.onFilterAdded,
   });
+  final List<ReportField> availableFields;
+  final ReportFilter? existingFilter;
+  final Function(ReportFilter) onFilterAdded;
 
   @override
   State<_FilterDialog> createState() => _FilterDialogState();
@@ -922,15 +922,15 @@ class _FilterDialogState extends State<_FilterDialog> {
 
 // Chart Dialog
 class _ChartDialog extends StatefulWidget {
-  final List<ReportField> availableFields;
-  final ReportChart? existingChart;
-  final Function(ReportChart) onChartAdded;
 
   const _ChartDialog({
     required this.availableFields,
     this.existingChart,
     required this.onChartAdded,
   });
+  final List<ReportField> availableFields;
+  final ReportChart? existingChart;
+  final Function(ReportChart) onChartAdded;
 
   @override
   State<_ChartDialog> createState() => _ChartDialogState();

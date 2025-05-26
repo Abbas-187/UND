@@ -136,6 +136,21 @@ enum QualityStatus {
 
 /// Quality status change record for audit trail
 class QualityStatusChange {
+
+  factory QualityStatusChange.fromJson(Map<String, dynamic> json) {
+    return QualityStatusChange(
+      id: json['id'] as String,
+      itemId: json['itemId'] as String,
+      batchLotNumber: json['batchLotNumber'] as String?,
+      fromStatus: QualityStatus.fromCode(json['fromStatus'] as String),
+      toStatus: QualityStatus.fromCode(json['toStatus'] as String),
+      reason: json['reason'] as String,
+      changedBy: json['changedBy'] as String,
+      changedAt: DateTime.parse(json['changedAt'] as String),
+      referenceDocumentId: json['referenceDocumentId'] as String?,
+      notes: json['notes'] as String?,
+    );
+  }
   const QualityStatusChange({
     required this.id,
     required this.itemId,
@@ -173,20 +188,5 @@ class QualityStatusChange {
       'referenceDocumentId': referenceDocumentId,
       'notes': notes,
     };
-  }
-
-  factory QualityStatusChange.fromJson(Map<String, dynamic> json) {
-    return QualityStatusChange(
-      id: json['id'] as String,
-      itemId: json['itemId'] as String,
-      batchLotNumber: json['batchLotNumber'] as String?,
-      fromStatus: QualityStatus.fromCode(json['fromStatus'] as String),
-      toStatus: QualityStatus.fromCode(json['toStatus'] as String),
-      reason: json['reason'] as String,
-      changedBy: json['changedBy'] as String,
-      changedAt: DateTime.parse(json['changedAt'] as String),
-      referenceDocumentId: json['referenceDocumentId'] as String?,
-      notes: json['notes'] as String?,
-    );
   }
 }

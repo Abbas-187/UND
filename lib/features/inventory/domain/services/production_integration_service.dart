@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../factory/data/models/production_order_model.dart';
 import '../../../factory/domain/providers/production_provider.dart';
+import '../providers/inventory_repository_provider.dart' as repo_provider;
+import '../repositories/inventory_repository.dart';
 import '../usecases/production/issue_materials_to_production_usecase.dart';
 import '../usecases/production/receive_finished_goods_usecase.dart';
-import '../repositories/inventory_repository.dart';
-import '../providers/inventory_repository_provider.dart' as repo_provider;
 
 /// Complete production integration result
 class ProductionIntegrationResult {

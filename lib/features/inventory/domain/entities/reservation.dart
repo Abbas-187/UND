@@ -82,7 +82,7 @@ abstract class ReservationFailure with _$ReservationFailure {
 }
 
 @freezed
-class ReservationConflict with _$ReservationConflict {
+abstract class ReservationConflict with _$ReservationConflict {
   const factory ReservationConflict({
     required String itemId,
     required String itemCode,
@@ -98,7 +98,7 @@ class ReservationConflict with _$ReservationConflict {
 }
 
 @freezed
-class ReservationOptimization with _$ReservationOptimization {
+abstract class ReservationOptimization with _$ReservationOptimization {
   const factory ReservationOptimization({
     required List<OptimizedAllocation> optimizedAllocations,
     required List<ReservationRequest> unallocatedRequests,
@@ -111,7 +111,7 @@ class ReservationOptimization with _$ReservationOptimization {
 }
 
 @freezed
-class OptimizedAllocation with _$OptimizedAllocation {
+abstract class OptimizedAllocation with _$OptimizedAllocation {
   const factory OptimizedAllocation({
     required ReservationRequest request,
     required ReservationResult result,

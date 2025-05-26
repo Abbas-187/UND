@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/bom_template.dart';
 
 class BomTemplateCreateScreen extends ConsumerStatefulWidget {
-  final BomTemplate? template;
 
   const BomTemplateCreateScreen({super.key, this.template});
+  final BomTemplate? template;
 
   @override
   ConsumerState<BomTemplateCreateScreen> createState() =>
@@ -627,9 +627,9 @@ class _BomTemplateCreateScreenState
 
 // Supporting dialog widgets
 class _AddTagDialog extends StatefulWidget {
-  final Function(String) onAdd;
 
   const _AddTagDialog({required this.onAdd});
+  final Function(String) onAdd;
 
   @override
   State<_AddTagDialog> createState() => _AddTagDialogState();
@@ -670,10 +670,10 @@ class _AddTagDialogState extends State<_AddTagDialog> {
 }
 
 class _AddItemDialog extends StatefulWidget {
-  final BomTemplateItem? item;
-  final Function(BomTemplateItem) onAdd;
 
   const _AddItemDialog({this.item, required this.onAdd});
+  final BomTemplateItem? item;
+  final Function(BomTemplateItem) onAdd;
 
   @override
   State<_AddItemDialog> createState() => _AddItemDialogState();
@@ -768,8 +768,9 @@ class _AddItemDialogState extends State<_AddItemDialog> {
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value?.isEmpty ?? true) return 'Required';
-                          if (double.tryParse(value!) == null)
+                          if (double.tryParse(value!) == null) {
                             return 'Invalid number';
+                          }
                           return null;
                         },
                       ),
@@ -887,9 +888,9 @@ class _AddItemDialogState extends State<_AddItemDialog> {
 }
 
 class _AddValidationRuleDialog extends StatelessWidget {
-  final Function(String) onAdd;
 
   const _AddValidationRuleDialog({required this.onAdd});
+  final Function(String) onAdd;
 
   @override
   Widget build(BuildContext context) {

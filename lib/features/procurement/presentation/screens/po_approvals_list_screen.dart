@@ -124,7 +124,7 @@ class _POApprovalsListScreenState extends State<POApprovalsListScreen> {
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
-              backgroundColor: colorScheme.background,
+              backgroundColor: colorScheme.surface,
               builder: (context) => Padding(
                 padding: const EdgeInsets.all(24.0),
                 child: Column(
@@ -157,11 +157,11 @@ class _POApprovalsListScreenState extends State<POApprovalsListScreen> {
         body: SafeArea(
           child: Container(
             decoration: BoxDecoration(
-              color: colorScheme.background,
+              color: colorScheme.surface,
               gradient: LinearGradient(
                 colors: [
-                  colorScheme.background,
-                  colorScheme.surfaceVariant.withOpacity(0.5)
+                  colorScheme.surface,
+                  colorScheme.surfaceContainerHighest.withOpacity(0.5)
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -261,11 +261,11 @@ class _POApprovalsListScreenState extends State<POApprovalsListScreen> {
 }
 
 class _SummaryHeader extends StatelessWidget {
+  const _SummaryHeader(
+      {required this.pending, required this.approved, required this.rejected});
   final int pending;
   final int approved;
   final int rejected;
-  const _SummaryHeader(
-      {required this.pending, required this.approved, required this.rejected});
 
   @override
   Widget build(BuildContext context) {
@@ -305,15 +305,15 @@ class _SummaryHeader extends StatelessWidget {
 }
 
 class _StatusCount extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final int count;
-  final Color color;
   const _StatusCount(
       {required this.icon,
       required this.label,
       required this.count,
       required this.color});
+  final IconData icon;
+  final String label;
+  final int count;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -332,8 +332,8 @@ class _StatusCount extends StatelessWidget {
 }
 
 class _POApprovalCard extends StatelessWidget {
-  final Map<String, dynamic> po;
   const _POApprovalCard({required this.po});
+  final Map<String, dynamic> po;
 
   Color _statusColor(BuildContext context, String status) {
     final colorScheme = Theme.of(context).colorScheme;

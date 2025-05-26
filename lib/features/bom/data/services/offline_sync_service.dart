@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import '../../domain/entities/bill_of_materials.dart';
 import '../../domain/entities/bom_item.dart';
@@ -22,15 +21,6 @@ enum SyncStatus {
 
 /// Represents a pending sync operation
 class SyncOperation {
-  final String id;
-  final SyncOperationType type;
-  final String entityType;
-  final String entityId;
-  final Map<String, dynamic> data;
-  final DateTime timestamp;
-  final SyncStatus status;
-  final String? errorMessage;
-  final int retryCount;
 
   const SyncOperation({
     required this.id,
@@ -43,6 +33,34 @@ class SyncOperation {
     this.errorMessage,
     this.retryCount = 0,
   });
+
+  factory SyncOperation.fromJson(Map<String, dynamic> json) {
+    return SyncOperation(
+      id: json['id'] as String,
+      type: SyncOperationType.values.firstWhere(
+        (e) => e.name == json['type'],
+      ),
+      entityType: json['entityType'] as String,
+      entityId: json['entityId'] as String,
+      data: Map<String, dynamic>.from(json['data'] as Map),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      status: SyncStatus.values.firstWhere(
+        (e) => e.name == json['status'],
+        orElse: () => SyncStatus.pending,
+      ),
+      errorMessage: json['errorMessage'] as String?,
+      retryCount: json['retryCount'] as int? ?? 0,
+    );
+  }
+  final String id;
+  final SyncOperationType type;
+  final String entityType;
+  final String entityId;
+  final Map<String, dynamic> data;
+  final DateTime timestamp;
+  final SyncStatus status;
+  final String? errorMessage;
+  final int retryCount;
 
   SyncOperation copyWith({
     String? id,
@@ -80,25 +98,6 @@ class SyncOperation {
       'errorMessage': errorMessage,
       'retryCount': retryCount,
     };
-  }
-
-  factory SyncOperation.fromJson(Map<String, dynamic> json) {
-    return SyncOperation(
-      id: json['id'] as String,
-      type: SyncOperationType.values.firstWhere(
-        (e) => e.name == json['type'],
-      ),
-      entityType: json['entityType'] as String,
-      entityId: json['entityId'] as String,
-      data: Map<String, dynamic>.from(json['data'] as Map),
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      status: SyncStatus.values.firstWhere(
-        (e) => e.name == json['status'],
-        orElse: () => SyncStatus.pending,
-      ),
-      errorMessage: json['errorMessage'] as String?,
-      retryCount: json['retryCount'] as int? ?? 0,
-    );
   }
 }
 

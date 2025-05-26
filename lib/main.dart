@@ -7,30 +7,18 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
-// Import real implementation dependencies
 import 'core/routes/app_go_router.dart';
-import 'features/auth/data/datasources/firebase_auth_datasource.dart'; // Real Firebase auth datasource
-import 'features/auth/data/repositories/auth_repository_impl.dart';
-import 'features/auth/domain/repositories/auth_repository.dart' as domain_auth;
-import 'features/factory/production/data/repositories/production_execution_repository_impl.dart';
-import 'features/factory/production/presentation/providers/production_execution_providers.dart'
-    as production;
-import 'features/inventory/data/repositories/inventory_movement_repository.dart';
 import 'features/inventory/data/repositories/inventory_movement_repository_impl.dart';
 import 'features/inventory/domain/providers/inventory_repository_provider.dart';
-import 'features/inventory/domain/services/inventory_rop_safety_stock_scheduler.dart';
-import 'features/inventory/domain/usecases/apply_dynamic_reorder_point_usecase.dart';
-import 'features/shared/presentation/screens/app_settings_screen.dart';
+import 'features/inventory/domain/services/optimized_inventory_rop_safety_stock_scheduler.dart';
 import 'firebase_options.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'theme/app_theme.dart';
-
-// Use real Firebase implementation
-// (mock-data block removed)
+import 'core/data/unified_data_manager.dart';
+import 'core/error/error_boundary.dart';
 
 // Create inventory movement repository provider with real Firebase
 final inventoryMovementRepositoryProvider =
-    Provider<InventoryMovementRepository>((ref) {
+    Provider<InventoryMovementRepositoryImpl>((ref) {
   return InventoryMovementRepositoryImpl(
     firestore: FirebaseFirestore.instance,
     logger: Logger(),
@@ -48,23 +36,21 @@ class RopSafetyStockSchedulerProvider extends ConsumerStatefulWidget {
 
 class _RopSafetyStockSchedulerProviderState
     extends ConsumerState<RopSafetyStockSchedulerProvider> {
-  InventoryRopSafetyStockScheduler? _scheduler;
+  OptimizedInventoryRopSafetyStockScheduler? _scheduler;
 
   @override
   void initState() {
     super.initState();
-    // Use ProviderContainer for non-widget Riverpod context
-    final container = ProviderContainer();
-    // Use the container directly to get the required providers
-    final inventoryRepo = container.read(inventoryRepositoryProvider);
-    final applyDynamicRop =
-        container.read(applyDynamicReorderPointUseCaseProvider);
-    _scheduler = InventoryRopSafetyStockScheduler(
-      ref: container,
-      inventoryRepository: inventoryRepo,
-      applyDynamicRopUseCase: applyDynamicRop,
-    );
-    _scheduler!.start();
+
+    // Initialize scheduler after frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        _scheduler = ref.read(optimizedRopSchedulerProvider);
+        _scheduler!.start();
+      } catch (e) {
+        debugPrint('Failed to initialize ROP scheduler: $e');
+      }
+    });
   }
 
   @override
@@ -77,7 +63,7 @@ class _RopSafetyStockSchedulerProviderState
   Widget build(BuildContext context) => widget.child;
 }
 
-Future<void> main() async {
+void main() async {
   // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -88,75 +74,92 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize Unified Data Manager
+  await UnifiedDataManager.instance.initialize();
+
+  // Setup global error handling for better debugging
+  FlutterError.onError = (FlutterErrorDetails details) {
+    // Log errors for debugging
+    debugPrint('Flutter Error: ${details.exception}');
+    debugPrint('Stack trace: ${details.stack}');
+
+    // Track error with analytics
+    ErrorAnalytics.trackError(
+      details.exception,
+      details.stack,
+      context: 'FlutterError',
+    );
+  };
+
   // Ensure user is signed out on startup to always show login screen
   await FirebaseAuth.instance.signOut();
 
   runApp(
     ProviderScope(
-      overrides: [
-        // Override with real implementations
-        production.productionExecutionRepositoryProvider.overrideWith(
-          (ref) => ProductionExecutionRepositoryImpl(
-            firestore: FirebaseFirestore.instance,
-            logger: Logger(),
-          ),
-        ),
-
-        // Override the auth repository provider with real implementation
-        domain_auth.authRepositoryProvider.overrideWith(
-          (ref) =>
-              AuthRepositoryImpl(ref.watch(firebaseAuthDataSourceProvider)),
-        ),
-      ],
-      child: RopSafetyStockSchedulerProvider(child: const MyApp()),
+      child: RopSafetyStockSchedulerProvider(
+        child: const DairyManagementApp(),
+      ),
     ),
   );
 }
 
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+class DairyManagementApp extends ConsumerWidget {
+  const DairyManagementApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch app settings for changes
-    final appSettings = ref.watch(appSettingsProvider);
-    final currentLocale = Locale(appSettings.language);
+    return ErrorBoundary(
+      child: PerformanceMonitorWidget(
+        child: MaterialApp.router(
+          title: 'Dairy Management System',
+          theme: AppTheme.lightTheme(const Locale('en')),
+          darkTheme: AppTheme.darkTheme(const Locale('en')),
+          themeMode: ThemeMode.system,
+          routerConfig: ref.watch(goRouterProvider),
+          debugShowCheckedModeBanner: false,
 
-    return RopSafetyStockSchedulerProvider(
-      child: MaterialApp.router(
-        title: 'UND Dairy Management',
-        theme: AppTheme.lightTheme(currentLocale),
-        darkTheme: AppTheme.darkTheme(currentLocale),
-        themeMode: appSettings.themeMode,
-        locale: currentLocale,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en'), // English
-          Locale('ar'), // Arabic
-          Locale('ur'), // Urdu
-          Locale('hi'), // Hindi
-        ],
-        routerConfig: ref.watch(goRouterProvider),
-        debugShowCheckedModeBanner: false,
-        builder: (context, child) {
-          // Disable semantic nodes that cause accessibility bridge errors on Windows
-          return MediaQuery(
-            // Prevent some accessibility issues by limiting the update frequency
-            data: MediaQuery.of(context).copyWith(
-              accessibleNavigation: false,
-            ),
-            child: ExcludeSemantics(
-              // Selectively disable problematic semantic nodes while maintaining core accessibility
-              excluding: false,
+          // Global error handling
+          builder: (context, child) {
+            return ErrorBoundary(
               child: child ?? const SizedBox.shrink(),
-            ),
-          );
-        },
+              errorBuilder: (error, stackTrace, retry) {
+                return Scaffold(
+                  body: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Colors.red,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Application Error',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          error.toString(),
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: retry,
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Restart App'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

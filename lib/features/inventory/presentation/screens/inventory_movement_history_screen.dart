@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/inventory_item.dart';
 import '../../domain/providers/inventory_provider.dart';
@@ -256,7 +256,7 @@ class _InventoryMovementHistoryScreenState
             const Divider(),
             // TODO: Add 'reasonWithText' to ARB and regenerate localizations
             // Text(l10n?.reasonWithText(reason) ?? ''),
-            Text('Reason: \\${reason}'),
+            Text('Reason: \\$reason'),
             const SizedBox(height: 4),
             // TODO: Add 'dateWithValue' to ARB and regenerate localizations
             // l10n?.dateWithValue(_formatDateTime(timestamp)) ?? '',

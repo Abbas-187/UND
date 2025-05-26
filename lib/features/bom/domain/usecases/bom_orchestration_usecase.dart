@@ -1,19 +1,16 @@
+import '../../../inventory/domain/entities/inventory_alert.dart';
 import 'bom_inventory_integration_usecase.dart';
 import 'bom_procurement_integration_usecase.dart';
-import '../../../procurement/domain/entities/purchase_order.dart';
-import '../../../procurement/domain/services/supplier_quote_service.dart';
-import '../../../inventory/domain/entities/inventory_alert.dart';
-import '../../../inventory/domain/entities/reservation.dart';
 
 class BomOrchestrationUseCase {
-  final BomInventoryIntegrationUseCase _inventoryIntegration;
-  final BomProcurementIntegrationUseCase _procurementIntegration;
 
   BomOrchestrationUseCase({
     required BomInventoryIntegrationUseCase inventoryIntegration,
     required BomProcurementIntegrationUseCase procurementIntegration,
   })  : _inventoryIntegration = inventoryIntegration,
         _procurementIntegration = procurementIntegration;
+  final BomInventoryIntegrationUseCase _inventoryIntegration;
+  final BomProcurementIntegrationUseCase _procurementIntegration;
 
   // Complete BOM production readiness assessment
   Future<BomProductionReadiness> assessProductionReadiness(
@@ -555,15 +552,6 @@ class BomOrchestrationUseCase {
 
 // Supporting classes and enums
 class BomProductionReadiness {
-  final String bomId;
-  final double batchSize;
-  final DateTime plannedStartDate;
-  final ProductionReadinessStatus readinessStatus;
-  final BomAvailabilityResult availabilityResult;
-  final BomProcurementAnalysis? procurementAnalysis;
-  final BomProcurementSchedule? procurementSchedule;
-  final List<String> recommendations;
-  final DateTime assessedAt;
 
   BomProductionReadiness({
     required this.bomId,
@@ -576,21 +564,18 @@ class BomProductionReadiness {
     required this.recommendations,
     required this.assessedAt,
   });
+  final String bomId;
+  final double batchSize;
+  final DateTime plannedStartDate;
+  final ProductionReadinessStatus readinessStatus;
+  final BomAvailabilityResult availabilityResult;
+  final BomProcurementAnalysis? procurementAnalysis;
+  final BomProcurementSchedule? procurementSchedule;
+  final List<String> recommendations;
+  final DateTime assessedAt;
 }
 
 class BomPreparationResult {
-  final String bomId;
-  final String productionOrderId;
-  final double batchSize;
-  final PreparationStatus overallStatus;
-  final List<PreparationStep> steps;
-  final BomAvailabilityResult availabilityResult;
-  final BomReservationResult? reservationResult;
-  final BomPurchaseOrderResult? purchaseOrderResult;
-  final List<String> errors;
-  final List<String> nextSteps;
-  final DateTime preparedAt;
-  final String preparedBy;
 
   BomPreparationResult({
     required this.bomId,
@@ -606,15 +591,21 @@ class BomPreparationResult {
     required this.preparedAt,
     required this.preparedBy,
   });
+  final String bomId;
+  final String productionOrderId;
+  final double batchSize;
+  final PreparationStatus overallStatus;
+  final List<PreparationStep> steps;
+  final BomAvailabilityResult availabilityResult;
+  final BomReservationResult? reservationResult;
+  final BomPurchaseOrderResult? purchaseOrderResult;
+  final List<String> errors;
+  final List<String> nextSteps;
+  final DateTime preparedAt;
+  final String preparedBy;
 }
 
 class BomStatusDashboard {
-  final String bomId;
-  final BomInventoryStatus inventoryStatus;
-  final List<InventoryAlert> activeAlerts;
-  final BomProcurementSummary? procurementSummary;
-  final BomMetrics metrics;
-  final DateTime lastUpdated;
 
   BomStatusDashboard({
     required this.bomId,
@@ -624,16 +615,15 @@ class BomStatusDashboard {
     required this.metrics,
     required this.lastUpdated,
   });
+  final String bomId;
+  final BomInventoryStatus inventoryStatus;
+  final List<InventoryAlert> activeAlerts;
+  final BomProcurementSummary? procurementSummary;
+  final BomMetrics metrics;
+  final DateTime lastUpdated;
 }
 
 class BomOptimizationResult {
-  final String bomId;
-  final double batchSize;
-  final OptimizationObjective objective;
-  final List<BomOptimization> optimizations;
-  final double potentialSavings;
-  final ImplementationComplexity implementationComplexity;
-  final DateTime optimizedAt;
 
   BomOptimizationResult({
     required this.bomId,
@@ -644,15 +634,16 @@ class BomOptimizationResult {
     required this.implementationComplexity,
     required this.optimizedAt,
   });
+  final String bomId;
+  final double batchSize;
+  final OptimizationObjective objective;
+  final List<BomOptimization> optimizations;
+  final double potentialSavings;
+  final ImplementationComplexity implementationComplexity;
+  final DateTime optimizedAt;
 }
 
 class PreparationStep {
-  final String step;
-  final PreparationStepStatus status;
-  final DateTime startedAt;
-  final DateTime? completedAt;
-  final String? result;
-  final String? error;
 
   PreparationStep({
     required this.step,
@@ -662,6 +653,12 @@ class PreparationStep {
     this.result,
     this.error,
   });
+  final String step;
+  final PreparationStepStatus status;
+  final DateTime startedAt;
+  final DateTime? completedAt;
+  final String? result;
+  final String? error;
 
   PreparationStep copyWith({
     String? step,
@@ -683,13 +680,6 @@ class PreparationStep {
 }
 
 class BomMetrics {
-  final int totalItems;
-  final int fullyAvailableItems;
-  final int totalActiveReservations;
-  final int highSeverityAlerts;
-  final int mediumSeverityAlerts;
-  final int activePurchaseOrders;
-  final double pendingProcurementValue;
 
   BomMetrics({
     required this.totalItems,
@@ -700,26 +690,28 @@ class BomMetrics {
     required this.activePurchaseOrders,
     required this.pendingProcurementValue,
   });
+  final int totalItems;
+  final int fullyAvailableItems;
+  final int totalActiveReservations;
+  final int highSeverityAlerts;
+  final int mediumSeverityAlerts;
+  final int activePurchaseOrders;
+  final double pendingProcurementValue;
 }
 
 class BomProcurementSummary {
-  final int activePurchaseOrders;
-  final double pendingValue;
-  final int averageLeadTime;
 
   BomProcurementSummary({
     required this.activePurchaseOrders,
     required this.pendingValue,
     required this.averageLeadTime,
   });
+  final int activePurchaseOrders;
+  final double pendingValue;
+  final int averageLeadTime;
 }
 
 class BomOptimization {
-  final OptimizationType type;
-  final String description;
-  final double potentialSavings;
-  final ImplementationEffort implementationEffort;
-  final List<String> recommendations;
 
   BomOptimization({
     required this.type,
@@ -728,6 +720,11 @@ class BomOptimization {
     required this.implementationEffort,
     required this.recommendations,
   });
+  final OptimizationType type;
+  final String description;
+  final double potentialSavings;
+  final ImplementationEffort implementationEffort;
+  final List<String> recommendations;
 }
 
 enum ProductionReadinessStatus {
@@ -778,8 +775,8 @@ enum ImplementationComplexity {
 }
 
 class BomOrchestrationException implements Exception {
-  final String message;
   BomOrchestrationException(this.message);
+  final String message;
 
   @override
   String toString() => 'BomOrchestrationException: $message';

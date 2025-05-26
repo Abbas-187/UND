@@ -82,8 +82,8 @@ class RoleBasedDrawer extends StatelessWidget {
           ],
         ),
         NavigationItem(
-          title: 'Recipe Management',
-          route: '/factory/recipes',
+          title: 'BOM Management',
+          route: '/bom/list',
           icon: Icons.menu_book,
           allowedRoles: ['system_admin', 'factory_admin'],
         ),
